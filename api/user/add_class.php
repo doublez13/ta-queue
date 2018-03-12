@@ -48,7 +48,6 @@ if ($res < 0)
     "authenticated" => True,
     "success" => "Student Course Added Successfully"
   );
-  $return = return_JSON_error($res);
   http_response_code(200);
 }
 
