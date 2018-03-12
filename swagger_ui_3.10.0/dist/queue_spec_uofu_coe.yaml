@@ -1,0 +1,722 @@
+swagger: "2.0"
+info:
+  title: "Queue API for University of Utah College of Engineering"
+  version: "1.0.0"
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently the only status code returned is 200. All JSON structures shown in the *Responses* sections correspond to successful requests. Be aware that other JSON structures are also possible responses (see *Models* at the bottom of this page).\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your posted arguments are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
+  # termsOfService: "http://swagger.io/terms/"
+  contact:
+    email: "doublezane@gmail.com"
+  # license:
+  #   name: "Apache 2.0"
+  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+
+host: "suzie.eng.utah.edu"
+basePath: "/blakeb/api"
+schemes:
+- "https"
+
+# THESE TWO DECLARATIONS AT THE GLOBAL LEVEL ARE SUPPOSED
+# ELIMINATE THE NEED FOR THEM IN ALL THE POST PATHS. BUT
+# DUE TO A BUG, SOMETIMES IT DOESN'T WORK.
+# consumes:
+#   - "application/x-www-form-urlencoded"
+# produces:
+#   - "application/json"
+
+tags:
+  - name: "Login/Logout"
+  - name: "Courses"
+    description: "Course functionalities"
+  - name: "User"
+    description: "User functionalities"
+  - name: "Queue"
+    description: "Queue functionalities"
+  - name: "Admin"
+    description: "Administrator functionalities"
+
+paths:
+  /login.php:
+    post:
+      summary: "Login a user"
+      description: "Login a user with the specified CADE username and password and get their info."
+      tags:
+        - "Login/Logout"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "username"
+        in: "formData"
+        description: "CADE username"
+        type: "string"
+        required: true
+      - name: "password"
+        in: "formData"
+        description: "CADE password"
+        type: "string"
+        format: "password"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              username:
+                type: "string"
+                # example: "c00lperson"
+              first_name:
+                type: "string"
+                # example: "Morgan"
+              last_name:
+                type: "string"
+                # example: "Thompson"
+              authenticated:
+                type: "boolean"
+                # example: true
+  /logout.php:
+    get:
+      summary: "Logout a user"
+      description: "Logout the user who sent the request. Naturally, the value of `authenticated` will always be false."
+      tags:
+        - "Login/Logout"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+                example: false
+  /classes/all_classes.php:
+    get:
+      summary: "Get all courses"
+      description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *keys* are course names (e.g. \"CS 4150: Algorithms\", represented below as `additionalPropX`) and the *values* are objects: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
+      tags:
+        - "Courses"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              all_courses:
+                type: "object"
+                additionalProperties:
+                  type: "object"
+                  properties:
+                    acc_req:
+                      type: "boolean"
+  /user/get_info.php:
+    get:
+      summary: "Get user info"
+      description: "Get the user's info."
+      tags:
+        - "User"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              student_info:
+                type: "object"
+                properties:
+                  username:
+                    type: "string"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+  /user/add_class.php:
+    post:
+      summary: "Enroll user in a course"
+      description: "Enroll the user in the specified course with the optional specified access code."
+      tags:
+        - "User"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "acc_code"
+        in: "formData"
+        description: "access code if required by course"
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /user/rem_class.php:
+    post:
+      summary: "Unenroll user from a course"
+      description: "Unenroll the user from the specified course."
+      tags:
+        - "User"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /user/my_classes.php:
+    get:
+      summary: "Get user enrolled courses"
+      description: "Get all the courses the user has enrolled in or TAs."
+      tags:
+        - "User"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              student_courses:
+                type: "array"
+                items:
+                  type: "string"
+              ta_courses:
+                type: "array"
+                items:
+                  type: "string"
+  /queue/get_queue.php:
+    post:
+      summary: "Get a queue"
+      description: "Get the queue state for the specified course including the TAs on duty, course announcements, and time limit per student."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              state:
+                type: "string"
+              time_lim:
+                type: "string"
+              queue_length:
+                type: "integer"
+              announce:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    id:
+                      type: "string"
+                    announcement:
+                      type: "string"
+                    tmstmp:
+                      type: "string"
+              TAs:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    username:
+                      type: "string"
+                    duration:
+                      type: "string"
+                    full_name:
+                      type: "string"
+                    helping:
+                      type: "string"
+              queue:
+                type: "array"
+                items:
+                  type: "object"
+                  properties:
+                    username:
+                      type: "string"
+                    full_name:
+                      type: "string"
+                    question:
+                      type: "string"
+                    location:
+                      type: "string"
+  /queue/enqueue_student.php:
+    post:
+      summary: "Enqueue user"
+      description: "Enqueue the user for the specified course with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course\n- course queue must be open\n- TAs cannot enter their own queues"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "question"
+        in: "formData"
+        description: "question/subject for TA"
+        type: "string"
+        required: true
+      - name: "location"
+        in: "formData"
+        description: "location of student"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/dequeue_student.php:
+    post:
+      summary: "Dequeue a user"
+      description: "Dequeue the user from the specified course. If the user is a TA, dequeue the specified user from the specified course. **TAs can only dequeue their own students.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "username"
+        in: "formData"
+        description: "user to dequeue"
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/open.php:
+    post:
+      summary: "Open a queue (TA)"
+      description: "Open the queue for the specified course to allow students to enter."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/freeze.php:
+    post:
+      summary: "Freeze a queue (TA)"
+      description: "Freeze the queue for the specified course so no new students can enter. Open the queue to unfreeze."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/close.php:
+    post:
+      summary: "Close a queue (TA)"
+      description: "Close the queue for the specified course. This removes all students from the queue and prevents new entries until the queue is opened."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/set_limit.php:
+    post:
+      summary: "Set a TA time limit per student (TA)"
+      description: "Set with the specified positive integer the maximum amount of time a TA can spend with a student in the specified course. No time limit is assumed if it is not set. **The queue must be open.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "time_lim"
+        in: "formData"
+        description: "time limit (minutes)"
+        type: "integer"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/enqueue_ta.php:
+    post:
+      summary: "Put TA on duty (TA)"
+      description: "Put the TA on duty for the specified course.**The queue must be open.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/dequeue_ta.php:
+    post:
+      summary: "Take TA off duty (TA)"
+      description: "Take the TA off duty for the specified course."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/inc_priority.php:
+    post:
+      summary: "Move a user up in the queue (TA)"
+      description: "Move the specified user one spot up in the specified course. **Moving the user at the top of the queue up will result in an error.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "student"
+        in: "formData"
+        description: "user to move up"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/dec_priority.php:
+    post:
+      summary: "Move a user down in the queue (TA)"
+      description: "Move the specified user one spot down in the specified course. **Moving the user at the bottom of the queue down will result in an error.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "student"
+        in: "formData"
+        description: "user to move down"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/help_student.php:
+    post:
+      summary: "Help a user (TA)"
+      description: "Set the TA's status to helping the specified user in the specified course. A TA can only help one user at a time; a new user will override the current one. **The TA must be on duty in the specified course.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "student"
+        in: "formData"
+        description: "username to help"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/release_ta.php:
+    post:
+      summary: "Free TA from helping (TA)"
+      description: "Set the TA's status to free (i.e. not helping anyone) in the specified course."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/add_announcement.php:
+    post:
+      summary: "Post an announcement (TA)"
+      description: "Post the specified announcement for the specified course."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "announcement"
+        in: "formData"
+        description: "announcement"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /queue/del_announcement.php:
+    post:
+      summary: "Delete an announcement (TA)"
+      description: "Delete the announcement for the specified course with the specified ID."
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "announcement_id"
+        in: "formData"
+        description: "ID of announcement to delete"
+        type: "integer"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /admin/create_course.php:
+    post:
+      summary: "Create a new course"
+      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
+      tags:
+        - "Admin"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course_name"
+        in: "formData"
+        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
+        type: "string"
+        required: true
+      - name: "depart_prefix"
+        in: "formData"
+        description: "department prefix (e.g. \"CS\" or \"ME\")"
+        type: "string"
+        required: true
+      - name: "course_num"
+        in: "formData"
+        description: "course number (e.g. \"5555\")"
+        type: "string"
+        required: true
+      - name: "professor"
+        in: "formData"
+        description: "username of professor"
+        type: "string"
+        required: true
+      - name: "description"
+        in: "formData"
+        description: "description of the course"
+        type: "string"
+        required: true
+      - name: "ldap_group"
+        in: "formData"
+        description: "LDAP group name for course TAs"
+        type: "string"
+        required: true
+      - name: "acc_code"
+        in: "formData"
+        description: "access code to enroll (optional; 16 character max)"
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+  /admin/delete_course.php:
+    post:
+      summary: "Delete a course"
+      description: "Delete the specifed course."
+      tags:
+        - "Admin"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "full course name to delete (e.g. \"CS 5555: Intro to the Number Five\")"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+
+definitions:
+  success:
+    description: "Many endpoints return this simple JSON structure upon a successful request."
+    properties:
+      authenticated:
+        description: "this will always be 'true' when logged in"
+        type: "boolean"
+      success:
+        description: "the result of your request"
+        type: "string"
+  error:
+    description: "Most endpoints return this JSON structure upon a failed request."
+    properties:
+      authenticated:
+        description: "this will always be 'true' when logged in"
+        type: "boolean"
+      error:
+        description: "what went wrong with your request"
+        type: "string"
+  no_login:
+    description: "This JSON structure indicates you have not logged in."
+    properties:
+      authenticated:
+        description: "this will always be 'false' when not logged in"
+        type: "boolean"
+
+
+# NOT SURE WHAT TO PUT FOR THESE
+
+# Supported authentication methods are:
+# -Basic authentication
+# -API key (as a header or query parameter)
+# -OAuth 2 common flows (implicit, password, application and access code)
+
+# securityDefinitions:
+#   BasicAuth:
+#     type: basic
+
+# THIS MIGHT GO IN EACH OPERATION
+# security:
+#   - BasicAuth: []
