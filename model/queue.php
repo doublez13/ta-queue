@@ -886,7 +886,7 @@ function change_stud_priority($stud_username, $course_name, $operation){
     return -1;
   }
   $result = mysqli_query($sql_conn, $query);
-  $entry = mysqli_fetch_assoc($result);
+  $entry  = mysqli_fetch_assoc($result);
   if(!$entry){
     return 0;//Nobody to switch with
   }
@@ -908,6 +908,7 @@ function change_stud_priority($stud_username, $course_name, $operation){
             VALUES ('".$position1."', '".$username2."', '".$course_id."', '".$question2."', '".$location2."');";
   mysqli_query($sql_conn, $query);
 
+  mysqli_close($sql_conn);
   return 0;
 }
 
