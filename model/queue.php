@@ -158,6 +158,25 @@ function enq_stu($username, $course_name, $question, $location){
     mysqli_close($sql_conn);
     return -1;
   }
+ 
+  #Log the student in the student_log table
+  #If MySQL worked properly, we'd be able to completely implement all logging
+  #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
+  #with uniqueness constraints in MySQL force me to take this route instead.
+  $query = "INSERT INTO student_log (username, course_id, question, location) 
+            VALUES (?, (SELECT course_id FROM courses WHERE course_name=?), ?, ?)"; 
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_param($stmt, "ssss", $username, $course_name, $question, $location);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  } 
+
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
