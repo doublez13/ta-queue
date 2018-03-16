@@ -28,9 +28,11 @@ $username = $_SESSION['username'];
 $all_courses = get_avail_courses();
 if (is_null($all_courses))
 {
+  http_response_code(500);
   $return = course_list_error();
 }else
 {
+  http_response_code(200);
   $return = array(
     "authenticated" => True,
     "all_courses" => $all_courses

@@ -28,6 +28,7 @@ $password = $_POST['password'];
 
 if(!auth($username, $password))
 {
+  http_response_code(401);
   $return = array(
     "authenticated" => False,
     "error" => "Username and/or password is incorrect"
@@ -36,20 +37,22 @@ if(!auth($username, $password))
   die();
 }
 
-$info       = get_info($username);
+$return     = get_info($username);
 $is_admin   = is_admin($username);
 $ta_courses = get_ta_courses($username);
 
-if(is_null($info) || is_null($is_admin) || is_null($ta_courses))
+if(is_null($return) || is_null($is_admin) || is_null($ta_courses))
 {
+  http_response_code(500);
   echo json_encode( ldap_issue() );
   die();
 }
 
-$_SESSION["ta_courses"] = $ta_courses;
-$_SESSION["username"]   = $username;
-$_SESSION["is_admin"]   = $is_admin;
-$info["authenticated"]  = TRUE;
+$_SESSION["ta_courses"]   = $ta_courses;
+$_SESSION["username"]     = $username;
+$_SESSION["is_admin"]     = $is_admin;
+$return["authenticated"]  = TRUE;
 
-echo json_encode($info);
+http_response_code(200);
+echo json_encode($return);
 ?>
