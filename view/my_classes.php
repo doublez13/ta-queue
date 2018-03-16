@@ -58,7 +58,7 @@
                             <a href="#">My Classes</a>
                         </li>
                         <li>
-                            <a href="#" onclick="logout();">Logout</a>
+                            <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
                         </li>
 
                     </ul>

@@ -11,6 +11,9 @@ login = function( event ) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
+      localStorage.setItem("username",   dataParsed.username);
+      localStorage.setItem("first_name", dataParsed.first_name);
+      localStorage.setItem("last_name",  dataParsed.last_name);
 
       var $get_req = $.get("./api/user/my_classes.php");
       $get_req.done( function(data) {

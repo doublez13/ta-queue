@@ -45,25 +45,21 @@ $(document).ready(function(){
 
 function start(){
   $("#title").text(course+' Queue');
-  var url = "../api/user/get_info.php";
+  my_username = localStorage.username;
+  first_name  = localStorage.first_name;
+  last_name   = localStorage.last_name;
+    
+  var url = "../api/user/my_classes.php";
   var get_req = $.get( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    my_username = dataParsed.student_info["username"];
-    var url = "../api/user/my_classes.php";
-    var get_req = $.get( url);
-    var done = function(data){
-      var dataString = JSON.stringify(data);
-      var dataParsed = JSON.parse(dataString);
-      is_TA = false;
-      if($.inArray(course, dataParsed["ta_courses"]) != -1){
-        is_TA = true;
-      }
-      get_queue(course);
-      setInterval(get_queue, 5000, course);
+    is_TA = false;
+    if($.inArray(course, dataParsed["ta_courses"]) != -1){
+      is_TA = true;
     }
-    get_req.done(done);
+    get_queue(course);
+    setInterval(get_queue, 5000, course);
   }
   get_req.done(done);
 }
