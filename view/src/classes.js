@@ -67,7 +67,7 @@ function enrollCourse(course, code) {
   }else{
     var $posting = $.post( url, { course: course, acc_code: code } );
   }
-  $posting.done( function(data) {
+  $posting.always( function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed["error"]){

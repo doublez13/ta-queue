@@ -6,4 +6,6 @@ require_once '../queue.php';
 require_once '../../api/errors.php';
 
 
-echo get_queue("CS 4400: Computer Systems");
+echo enq_stu("rohith","CS 4400: Computer Systems", "dfg", "dfg");
+
+//echo set_cooldown(3, "CS 4400: Computer Systems");

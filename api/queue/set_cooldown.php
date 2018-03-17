@@ -1,5 +1,5 @@
 <?php
-// File: set_limit.php
+// File: set_cooldown.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/auth.php';
@@ -51,7 +51,7 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-$res = set_time_lim($time_lim, $course);
+$res = set_cooldown($time_lim, $course);
 if ($res)
 {
   $return = return_JSON_error($res);
@@ -60,7 +60,7 @@ if ($res)
 {
   $return = array(
     "authenticated" => True,
-    "success" => "Time limit set"
+    "success" => "Cooldown set"
   );
   http_response_code(200);
 }

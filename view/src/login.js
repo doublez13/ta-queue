@@ -7,7 +7,7 @@ login = function( event ) {
   var url = "./api/login.php";
 
   var $posting = $.post( url, { username: username, password: password } );
-  $posting.done(function( data ) {
+  $posting.always(function( data ) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
@@ -16,7 +16,7 @@ login = function( event ) {
       localStorage.setItem("last_name",  dataParsed.last_name);
 
       var $get_req = $.get("./api/user/my_classes.php");
-      $get_req.done( function(data) {
+      $get_req.always( function(data) {
         var dataString = JSON.stringify(data);
         var dataParsed = JSON.parse(dataString);
         if(dataParsed.error){

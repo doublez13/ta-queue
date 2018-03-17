@@ -10,7 +10,8 @@ function return_JSON_error($err_code){
     -3 => "Queue closed for this course",
     -4 => "TA not on duty",
     -5 => "User already registered as TA for course",
-    -6 => "Invalid access code provided"
+    -6 => "Invalid access code provided",
+    -7 => "User in cooldown period"
   );
   return array(
     "authenticated" => True,

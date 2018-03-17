@@ -36,7 +36,8 @@ $(document).ready(function(){
   $("#duty_button").hide();
   $("#state_button").hide();
   $("#freeze_button").hide();
-  $("#time_form").hide(); 
+  $("#time_form").hide();
+  $("#cooldown_form").hide();
   $("#join_button").hide();
   $("#new_ann").hide();
   $("#ann_button").hide(); 
@@ -144,6 +145,7 @@ function render_ta_view(dataParsed){
   $("#duty_button").unbind("click");
   $("#freeze_button").unbind("click");
   $("#time_form").unbind("submit");
+  $("#cooldown_form").unbind("submit");
 
   var queue_state = dataParsed.state;
   if(queue_state == "closed"){
@@ -156,6 +158,7 @@ function render_ta_view(dataParsed){
     $("#duty_button").hide();
     $("#freeze_button").hide();
     $("#time_form").hide();
+    $("#cooldown_form").hide();
   }else{ //open or frozen
     document.getElementById("state_button").style.background='FireBrick';
     $("#state_button").text("CLOSE QUEUE");
@@ -214,6 +217,12 @@ function render_ta_view(dataParsed){
       event.preventDefault();
       var limit = $(this).find( "input[id='time_limit_input']" ).val();
       set_limit(course, limit);
+    });
+    $("#cooldown_form").show();
+    $("#cooldown_form").submit(function(event){
+      event.preventDefault();
+      var limit = $(this).find( "input[id='cooldown_input']" ).val();
+      set_cooldown(course, limit);
     });
   }
   $("#state_button").show();
@@ -353,30 +362,34 @@ function render_queue_table(dataParsed, role){
 
 //API Endpoint calls
 done = function(data){
-  var dataString = JSON.stringify(data);
-  var dataParsed = JSON.parse(dataString);
-  if(dataParsed.error){
-    alert(dataParsed["error"]);
-  }else{
-    get_queue(course); //reloads the content on the page
-  }
+  get_queue(course); //reloads the content on the page
 }
+fail = function(data){
+  var httpStatus = data.status;
+  var dataString = JSON.stringify(data.responseJSON);
+  var dataParsed = JSON.parse(dataString);
+  alert(dataParsed["error"]);
+}
+
 function open_queue(course){
   var url = "../api/queue/open.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function close_queue(course){
   var url = "../api/queue/close.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function freeze_queue(course){
   var url = "../api/queue/freeze.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 
@@ -384,6 +397,7 @@ function enqueue_student(course, question, Location){
   var url = "../api/queue/enqueue_student.php";
   var posting = $.post( url, { course: course, question: question, location: Location } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 /*
@@ -399,64 +413,82 @@ function dequeue_student(course, username){
     posting = $.post( url, { course: course, username: username } );
   }
   posting.done(done);
+  posting.fail(fail);
 }
 
 function release_ta(course){
   var url = "../api/queue/release_ta.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function enqueue_ta(course){
   var url = "../api/queue/enqueue_ta.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function dequeue_ta(course){
   var url = "../api/queue/dequeue_ta.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function inc_priority(course, student){
   var url = "../api/queue/inc_priority.php";
   var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function dec_priority(course, student){
   var url = "../api/queue/dec_priority.php";
   var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
+  posting.fail(fail);
 }
 
-next_student = function(course){
+function next_student(course){
   var url = "../api/queue/next_student.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function help_student(course, username){
   var url = "../api/queue/help_student.php";
   var posting = $.post( url, { course: course, student: username } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function set_limit(course, limit){
   var url = "../api/queue/set_limit.php";
   var posting = $.post( url, { course: course, time_lim: limit.toString() } );
   posting.done(done);
+  posting.fail(fail);
+}
+
+function set_cooldown(course, limit){
+  var url = "../api/queue/set_cooldown.php";
+  var posting = $.post( url, { course: course, time_lim: limit.toString() } );
+  posting.done(done);
+  posting.fail(fail);
 }
 
 function add_announcement(course, announcement){
   var url = "../api/queue/add_announcement.php";
   var posting = $.post( url, { course: course, announcement: announcement } );
   posting.done(done);
+  posting.fail(fail);
 }
 
 function del_announcement(course, announcement_id){
   var url = "../api/queue/del_announcement.php";
   var posting = $.post( url, { course: course, announcement_id: announcement_id } );
   posting.done(done);
+  posting.fail(fail);
 }
