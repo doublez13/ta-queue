@@ -94,12 +94,15 @@ create table announcements(
 create table student_log(
   id             BIGINT AUTO_INCREMENT,
   username       VARCHAR(256) NOT NULL,
-  course_id      int NOT NULL,
+  course_id      int,
   question       TEXT,
   location       VARCHAR(256) NOT NULL,
   enter_tmstmp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   help_tmstmp    TIMESTAMP,
+  helped_by      VARCHAR(256),
+  exit_tmstmp    TIMESTAMP,
   primary key    (id),
+  foreign key    (helped_by) references users(username)    ON DELETE SET NULL,
   foreign key    (username)  references users(username)    ON DELETE CASCADE,
   foreign key    (course_id) references courses(course_id) ON DELETE SET NULL  
 );
@@ -113,6 +116,6 @@ UPDATE student_log SET exit_tmstmp = CURRENT_TIMESTAMP
 WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
 */
 CREATE TRIGGER log_student_help AFTER INSERT ON ta_status FOR EACH ROW
-UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP
-WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id  ORDER BY id DESC LIMIT 1;
+UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP, helped_by = NEW.username
+WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id ORDER BY id DESC LIMIT 1;
 
