@@ -212,12 +212,15 @@ function render_ta_view(dataParsed){
     }
     $("#duty_button").show();
     $("#freeze_button").show();
+
+    $("#time_limit_input").val(dataParsed.time_lim);
     $("#time_form").show();
     $("#time_form").submit(function(event){
       event.preventDefault();
       var limit = $(this).find( "input[id='time_limit_input']" ).val();
       set_limit(course, limit);
     });
+    $("#cooldown_input").val(dataParsed.cooldown);
     $("#cooldown_form").show();
     $("#cooldown_form").submit(function(event){
       event.preventDefault();
