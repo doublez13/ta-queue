@@ -10,23 +10,24 @@ session_start();
 $_SESSION = array();
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] !== "POST"){
+if ($_SERVER['REQUEST_METHOD'] !== "POST")
+{
   http_response_code(405);
-  echo json_encode( invalid_method() );
+  echo json_encode( invalid_method("POST") );
   die();
 }
 
-if(!isset($_POST['username']) || !isset($_POST['password']))
+if (!isset($_POST['username']) || !isset($_POST['password']))
 {
   http_response_code(422);
-  echo json_encode( invalid_auth() );
+  echo json_encode( missing_auth() );
   die();
 }
 
 $username = $_POST['username'];
 $password = $_POST['password'];
 
-if(!auth($username, $password))
+if (!auth($username, $password))
 {
   http_response_code(401);
   $return = array(
@@ -41,7 +42,7 @@ $return     = get_info($username);
 $is_admin   = is_admin($username);
 $ta_courses = get_ta_courses($username);
 
-if(is_null($return) || is_null($is_admin) || is_null($ta_courses))
+if (is_null($return) || is_null($is_admin) || is_null($ta_courses))
 {
   http_response_code(500);
   echo json_encode( ldap_issue() );

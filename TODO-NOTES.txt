@@ -1,5 +1,8 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
+-Notifications for new announcements
+-DEMOS: explicitly display who is TA and who is student
 -SIMPLE WORK AROUND TO 'HOLD POSITION' DILEMA: allow students to move themselves down in the queue
 -Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?

@@ -11,7 +11,7 @@ function return_JSON_error($err_code){
     -4 => "TA not on duty",
     -5 => "User already registered as TA for course",
     -6 => "Invalid access code provided",
-    -7 => "User in cooldown period"
+    -7 => "User in cool-down period"
   );
   return array(
     "authenticated" => True,
@@ -19,13 +19,13 @@ function return_JSON_error($err_code){
   );
 }
 
-function invalid_method($supported){
+function invalid_method($allowed_method){
   return  array(
-    "error" => "Only POST is allowed"
+    "error" => "Only $allowed_method is allowed"
   );
 }
 
-function invalid_auth(){
+function missing_auth(){
   return  array(
     "authenticated" => False,
     "error" => "No username and/or password specified"

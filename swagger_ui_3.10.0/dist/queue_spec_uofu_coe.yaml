@@ -5,9 +5,9 @@ info:
   description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently the only status code returned is 200. All JSON structures shown in the *Responses* sections correspond to successful requests. Be aware that other JSON structures are also possible responses (see *Models* at the bottom of this page).\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your posted arguments are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
   # termsOfService: "http://swagger.io/terms/"
   contact:
-    email: "doublezane@gmail.com"
+    email: "zz@eng.utah.edu"
   # license:
-  #   name: "Apache 2.0"
+  #   name: "GPL 3"
   #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
 
 host: "suzie.eng.utah.edu"
@@ -75,6 +75,22 @@ paths:
               authenticated:
                 type: "boolean"
                 # example: true
+        401:
+          description: "Invalid username and/or password"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing username and/or password"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /logout.php:
     get:
       summary: "Logout a user"
@@ -684,16 +700,26 @@ definitions:
     description: "Many endpoints return this simple JSON structure upon a successful request."
     properties:
       authenticated:
-        description: "this will always be 'true' when logged in"
+        description: "true if logged in"
         type: "boolean"
       success:
         description: "the result of your request"
+        type: "string"
+  bad_method:
+    description: "The HTTP request method is not allowed (e.g. using GET when POST is required)."
+    properties:
+    # IF WE ADD THIS, THERE IS NO NEED FOR THIS DEFINITION; JUST USE 'error'
+      # authenticated:
+      #   description: "true if user is logged in"
+      #   type: "boolean"
+      error:
+        description: "reports allowed method(s)"
         type: "string"
   error:
     description: "Most endpoints return this JSON structure upon a failed request."
     properties:
       authenticated:
-        description: "this will always be 'true' when logged in"
+        description: "true if logged in"
         type: "boolean"
       error:
         description: "what went wrong with your request"
