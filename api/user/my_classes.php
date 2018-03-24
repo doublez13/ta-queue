@@ -9,9 +9,10 @@ require_once '../errors.php';
 session_start(); 
 header('Content-Type: application/json');
 
-if ($_SERVER['REQUEST_METHOD'] !== "GET"){
+if ($_SERVER['REQUEST_METHOD'] !== "GET")
+{
   http_response_code(405);
-  echo json_encode( invalid_method() );
+  echo json_encode( invalid_method("GET") );
   die();
 }
 

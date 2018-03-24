@@ -2,13 +2,13 @@ swagger: "2.0"
 info:
   title: "Queue API for University of Utah College of Engineering"
   version: "1.0.0"
-  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently the only status code returned is 200. All JSON structures shown in the *Responses* sections correspond to successful requests. Be aware that other JSON structures are also possible responses (see *Models* at the bottom of this page).\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your posted arguments are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your posted arguments are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
   # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "zz@eng.utah.edu"
-  # license:
-  #   name: "GPL 3"
-  #   url: "http://www.apache.org/licenses/LICENSE-2.0.html"
+  license:
+    name: "GPL 3"
+    url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
 
 host: "suzie.eng.utah.edu"
 basePath: "/blakeb/api"
@@ -106,6 +106,9 @@ paths:
               authenticated:
                 type: "boolean"
                 example: false
+              success:
+                type: "string"
+                example: "User logged out"
   /classes/all_classes.php:
     get:
       summary: "Get all courses"
@@ -127,6 +130,18 @@ paths:
                   properties:
                     acc_req:
                       type: "boolean"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /user/get_info.php:
     get:
       summary: "Get user info"
@@ -150,6 +165,18 @@ paths:
                     type: "string"
                   last_name:
                     type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /user/add_class.php:
     post:
       summary: "Enroll user in a course"
@@ -175,6 +202,22 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /user/rem_class.php:
     post:
       summary: "Unenroll user from a course"
@@ -196,6 +239,22 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /user/my_classes.php:
     get:
       summary: "Get user enrolled courses"
@@ -218,6 +277,18 @@ paths:
                 type: "array"
                 items:
                   type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/get_queue.php:
     post:
       summary: "Get a queue"
@@ -713,23 +784,25 @@ definitions:
       #   description: "true if user is logged in"
       #   type: "boolean"
       error:
-        description: "reports allowed method(s)"
+        description: "what method(s) are allowed"
         type: "string"
   error:
     description: "Most endpoints return this JSON structure upon a failed request."
     properties:
+    # CURRENTLY, I THINK authenticated IS ALWAYS TRUE WHEN THIS STRUCTURE IS RETURNED. CONSIDER STATING THIS HERE.
       authenticated:
         description: "true if logged in"
         type: "boolean"
       error:
         description: "what went wrong with your request"
         type: "string"
-  no_login:
+  not_authenticated:
     description: "This JSON structure indicates you have not logged in."
     properties:
       authenticated:
-        description: "this will always be 'false' when not logged in"
+        description: "will always be 'false'"
         type: "boolean"
+        example: "false"
 
 
 # NOT SURE WHAT TO PUT FOR THESE
