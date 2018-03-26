@@ -35,7 +35,7 @@ if (!isset($_POST['course']))
 if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 )
 {
   http_response_code(422);
-  echo json_encode( missing_time() );
+  echo json_encode( missing_time("time_lim") );
   die();
 }
 

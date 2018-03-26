@@ -64,10 +64,10 @@ function missing_student(){
   );
 }
 
-function missing_time(){
+function missing_time($param_name){
   return array(
     "authenticated" => True,
-    "error" => "No time_lim specified"
+    "error" => "Missing/bad $param_name (required: integer > 0)"
   );
 }
 

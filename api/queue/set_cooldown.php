@@ -32,16 +32,16 @@ if (!isset($_POST['course']))
   die();
 }
 
-if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 )
+if (!isset($_POST['cooldown_time']) || !is_numeric($_POST['cooldown_time']) || $_POST['cooldown_time'] < 0 )
 {
   http_response_code(422);
-  echo json_encode( missing_time() );
+  echo json_encode( missing_time("cooldown_time") );
   die();
 }
 
 $username   = $_SESSION['username'];
 $course     = $_POST['course'];
-$time_lim   = $_POST['time_lim'];
+$cooldown   = $_POST['cooldown_time'];
 $ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
@@ -51,7 +51,7 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-$res = set_cooldown($time_lim, $course);
+$res = set_cooldown($cooldown, $course);
 if ($res)
 {
   $return = return_JSON_error($res);
@@ -60,7 +60,7 @@ if ($res)
 {
   $return = array(
     "authenticated" => True,
-    "success" => "Cooldown set"
+    "success" => "Cool-down time set"
   );
   http_response_code(200);
 }

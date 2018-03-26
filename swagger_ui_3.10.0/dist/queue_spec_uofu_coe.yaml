@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   title: "Queue API for University of Utah College of Engineering"
   version: "1.0.0"
-  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your posted arguments are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php`. Please remember to logout with `logout.php` when finished.\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your parameters are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
   # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "zz@eng.utah.edu"
@@ -356,6 +356,26 @@ paths:
                       type: "string"
                     location:
                       type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not enrolled/assigned to course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/enqueue_student.php:
     post:
       summary: "Enqueue user"
@@ -387,6 +407,22 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course, question, or location"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/dequeue_student.php:
     post:
       summary: "Dequeue a user"
@@ -412,6 +448,22 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course (and/or username if TA)"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/open.php:
     post:
       summary: "Open a queue (TA)"
@@ -433,6 +485,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/freeze.php:
     post:
       summary: "Freeze a queue (TA)"
@@ -454,6 +526,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/close.php:
     post:
       summary: "Close a queue (TA)"
@@ -475,10 +567,30 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/set_limit.php:
     post:
       summary: "Set a TA time limit per student (TA)"
-      description: "Set with the specified positive integer the maximum amount of time a TA can spend with a student in the specified course. No time limit is assumed if it is not set. **The queue must be open.**"
+      description: "Set with the specified positive integer the maximum amount of time (minutes) a TA can spend with a student in the specified course. No time limit is assumed if it is not set. **The queue must be open.**"
       tags:
         - "Queue"
       consumes:
@@ -501,6 +613,72 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course or missing/incorrect time_lim"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+  /queue/set_cooldown.php:
+    post:
+      summary: "Set a required wait time for re-entering the queue (TA)"
+      description: "Set with the specified positive integer the time (minutes) a student must wait before they can re-enter the queue. No time limit is assumed if it is not set. **The queue must be open.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "cooldown_time"
+        in: "formData"
+        description: "queue re-entry wait time (minutes)"
+        type: "integer"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course or missing/incorrect cooldown_time"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/enqueue_ta.php:
     post:
       summary: "Put TA on duty (TA)"
@@ -522,6 +700,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/dequeue_ta.php:
     post:
       summary: "Take TA off duty (TA)"
@@ -543,6 +741,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/inc_priority.php:
     post:
       summary: "Move a user up in the queue (TA)"
@@ -569,6 +787,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course and/or student"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/dec_priority.php:
     post:
       summary: "Move a user down in the queue (TA)"
@@ -595,6 +833,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course and/or student"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/help_student.php:
     post:
       summary: "Help a user (TA)"
@@ -621,6 +879,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course and/or student"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/release_ta.php:
     post:
       summary: "Free TA from helping (TA)"
@@ -642,6 +920,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/add_announcement.php:
     post:
       summary: "Post an announcement (TA)"
@@ -668,6 +966,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course and/or announcement"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /queue/del_announcement.php:
     post:
       summary: "Delete an announcement (TA)"
@@ -694,6 +1012,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course and/or announcement_id"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /admin/create_course.php:
     post:
       summary: "Create a new course"
@@ -744,6 +1082,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not admin"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing parameter"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
   /admin/delete_course.php:
     post:
       summary: "Delete a course"
@@ -765,7 +1123,26 @@ paths:
           description: "Success"
           schema:
             $ref: '#/definitions/success'
-
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not admin"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
 definitions:
   success:
     description: "Many endpoints return this simple JSON structure upon a successful request."
@@ -775,16 +1152,6 @@ definitions:
         type: "boolean"
       success:
         description: "the result of your request"
-        type: "string"
-  bad_method:
-    description: "The HTTP request method is not allowed (e.g. using GET when POST is required)."
-    properties:
-    # IF WE ADD THIS, THERE IS NO NEED FOR THIS DEFINITION; JUST USE 'error'
-      # authenticated:
-      #   description: "true if user is logged in"
-      #   type: "boolean"
-      error:
-        description: "what method(s) are allowed"
         type: "string"
   error:
     description: "Most endpoints return this JSON structure upon a failed request."
@@ -803,7 +1170,16 @@ definitions:
         description: "will always be 'false'"
         type: "boolean"
         example: "false"
-
+  bad_method:
+    description: "The HTTP request method is not allowed (e.g. using GET when POST is required)."
+    properties:
+    # IF WE ADD THIS, THERE IS NO NEED FOR THIS DEFINITION; JUST USE 'error'
+      # authenticated:
+      #   description: "true if user is logged in"
+      #   type: "boolean"
+      error:
+        description: "what method(s) are allowed"
+        type: "string"
 
 # NOT SURE WHAT TO PUT FOR THESE
 
