@@ -114,9 +114,17 @@ function render_ann_box(anns){
   $("#anns tr").remove();
   $('#anns').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Date</th> <th class='col-sm-6' align='left' style='padding-left:0px; text-decoration:underline;'>Announcement</th> </tr>");
   for(ann in anns){
-    var timestamp    = anns[ann]["tmstmp"].split(" ")[0];
-    var announcement = anns[ann]["announcement"]; 
-    var new_row = $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td> </tr>');
+    var timestamp       = anns[ann]["tmstmp"].split(" ")[0];
+    var announcement    = anns[ann]["announcement"];
+    var announcement_id = anns[ann]["id"];
+    var new_row =  $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td>  </tr>');
+    if(is_TA){
+      var del_ann_button = $('<button class="btn btn-primary"><span> <i class="fa fa-close"></i>  </span> </button>');
+      del_ann_button.click(function(event){
+        del_announcement(course, announcement_id)
+      });
+      new_row.append(del_ann_button);
+    }
     $('#anns').append(new_row);
   }
   if(is_TA){
@@ -164,7 +172,10 @@ function render_ta_view(dataParsed){
     $("#state_button").text("CLOSE QUEUE");
     $("#state_button").click(function( event ) {
       event.preventDefault();
-      close_queue(course);
+      var res = confirm("Are you sure you want to close the queue? All students will be removed.")
+      if(res){
+        close_queue(course);
+      }
     });
    
     if(queue_state == "open"){ 
@@ -273,9 +284,9 @@ function render_queue_table(dataParsed, role){
   var TAs   = dataParsed.TAs;
   $("#queue tr").remove();
   $('#queue').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Pos.</th>"+ 
-                           "<th class='col-sm-2' align='left' style='padding-left:0px; text-decoration:underline;'>Student</th>"+ 
-                           "<th class='col-sm-1' align='left' style='padding-left:0px; text-decoration:underline;'>Location</th>"+ 
-                           "<th class='col-sm-4' align='left' style='padding-left:5px; text-decoration:underline;'>Question</th> </tr>");
+                          "<th class='col-sm-2' align='left' style='padding-left:0px; text-decoration:underline;'>Student</th>"+ 
+                          "<th class='col-sm-1' align='left' style='padding-left:0px; text-decoration:underline;'>Location</th>"+ 
+                          "<th class='col-sm-4' align='left' style='padding-left:5px; text-decoration:underline;'>Question</th> </tr>");
  
   var helping = {};
   for(TA in TAs ){
