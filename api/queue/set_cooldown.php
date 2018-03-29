@@ -32,16 +32,16 @@ if (!isset($_POST['course']))
   die();
 }
 
-if (!isset($_POST['cooldown_time']) || !is_numeric($_POST['cooldown_time']) || $_POST['cooldown_time'] < 0 )
+if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 )
 {
   http_response_code(422);
-  echo json_encode( missing_time("cooldown_time") );
+  echo json_encode( missing_time('time_lim') );
   die();
 }
 
 $username   = $_SESSION['username'];
 $course     = $_POST['course'];
-$cooldown   = $_POST['cooldown_time'];
+$cooldown   = $_POST['time_lim'];
 $ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))

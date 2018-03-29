@@ -107,12 +107,17 @@ function render_stats(dataParsed){
   }else{
      $("#time_limit").text("Time Limit: None");
   }
+  if(dataParsed.cooldown >0){
+     $("#cooldown").text("Cooldown: " + dataParsed.cooldown + " Minutes");
+  }else{
+     $("#cooldown").text("Cooldown: None");
+  }
   $("#in_queue").text("Queue Length: " + dataParsed.queue_length);
 }
 
 function render_ann_box(anns){
   $("#anns tr").remove();
-  $('#anns').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Date</th> <th class='col-sm-6' align='left' style='padding-left:0px; text-decoration:underline;'>Announcement</th> </tr>");
+  $('#anns').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Date</th> <th class='col-sm-6' align='left' style='padding-left:0px; text-decoration:underline;'>Announcement</th>    <th class='col-sm-1' align='left'></th></tr>");
   for(ann in anns){
     var timestamp       = anns[ann]["tmstmp"].split(" ")[0];
     var announcement    = anns[ann]["announcement"];
