@@ -1,5 +1,6 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-TA view doesn't show the cooldown time at the top of the page, but the student view does
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Notifications for new announcements
 -DEMOS: explicitly display who is TA and who is student
@@ -9,7 +10,7 @@
 -Make the 's' dynamic in the 'TA(s) on Duty' box?
 -The 'U' logo in the top left of the screen simply takes you to the page you're on. Disable?
 -Add tool tips for unnamed buttons in the queue (e.g. the help/free button on the queue page)
--It took up more room, but I think the timestamp could be useful for announcments. Also, should we include names?
+-It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
 -Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make
 these integers?
@@ -25,7 +26,6 @@ doesn't exist still in one SQL call. Again, this isn't real high priority and is
 ideally the messages returned from our API will give accurate info, so the caller of the API doesn't think,
 for example, that a queue is closed even though the queue doesn't even exist.
 -max on duty TAs box wider so a name doesn't take two lines to display
--make student question optionally visible to other students?
 -set Announcements and On Duty TA boxes at a constant size (instead of growing/shrinking) and use scroll bar when necessary
 -on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
 -automatic location generation when entering queue
