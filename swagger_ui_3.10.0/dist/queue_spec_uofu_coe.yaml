@@ -426,7 +426,7 @@ paths:
   /queue/dequeue_student.php:
     post:
       summary: "Dequeue a user"
-      description: "Dequeue the user from the specified course. If the user is a TA, dequeue the specified user from the specified course. **TAs can only dequeue their own students.**"
+      description: "Dequeue the user from the specified course. If the user is a TA, dequeue the specified student from the specified course. **TAs can only dequeue their own students.**"
       tags:
         - "Queue"
       consumes:
@@ -439,9 +439,9 @@ paths:
         description: "course name"
         type: "string"
         required: true
-      - name: "username"
+      - name: "student"
         in: "formData"
-        description: "user to dequeue"
+        description: "username to dequeue"
         type: "string"
       responses:
         200:
@@ -467,7 +467,7 @@ paths:
   /queue/move_down.php:
     post:
       summary: "Move a user down in the queue"
-      description: "Move the user down one spot in the specified course. If the user is a TA, move the specified user down one spot in the specified course. **TAs can only move their own students.**"
+      description: "Move the user down one spot in the specified course. If the user is a TA, move the specified student down one spot in the specified course. **TAs can only move their own students.**"
       tags:
         - "Queue"
       consumes:
@@ -480,9 +480,9 @@ paths:
         description: "course name"
         type: "string"
         required: true
-      - name: "username"
+      - name: "student"
         in: "formData"
-        description: "user to move down"
+        description: "username to move down"
         type: "string"
       responses:
         200:
@@ -505,53 +505,6 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-
-    # OLD ENDPOINT (TA RESTRICTED ACCESS)
-    # post:
-    #   summary: "Move a user down in the queue (TA)"
-    #   description: "Move the specified user one spot down in the specified course. **Moving the user at the bottom of the queue down will result in an error.**"
-    #   tags:
-    #     - "Queue"
-    #   consumes:
-    #     - "application/x-www-form-urlencoded"
-    #   produces:
-    #     - "application/json"
-    #   parameters:
-    #   - name: "course"
-    #     in: "formData"
-    #     description: "course name"
-    #     type: "string"
-    #     required: true
-    #   - name: "student"
-    #     in: "formData"
-    #     description: "user to move down"
-    #     type: "string"
-    #     required: true
-    #   responses:
-    #     200:
-    #       description: "Success"
-    #       schema:
-    #         $ref: '#/definitions/success'
-    #     401:
-    #       description: "Not authenticated"
-    #       schema:
-    #         $ref: '#/definitions/not_authenticated'
-    #     403:
-    #       description: "Not TA for course"
-    #       schema:
-    #         $ref: '#/definitions/error'
-    #     405:
-    #       description: "Invalid HTTP request method"
-    #       schema:
-    #         $ref: '#/definitions/bad_method'
-    #     422:
-    #       description: "Missing course and/or student"
-    #       schema:
-    #         $ref: '#/definitions/error'
-    #     500:
-    #       description: "Server-side error"
-    #       schema:
-    #         $ref: '#/definitions/error'
   /queue/open.php:
     post:
       summary: "Open a queue (TA)"
@@ -852,7 +805,7 @@ paths:
   /queue/move_up.php:
     post:
       summary: "Move a user up in the queue (TA)"
-      description: "Move the specified user one spot up in the specified course."
+      description: "Move the specified user up one spot in the specified course."
       tags:
         - "Queue"
       consumes:
