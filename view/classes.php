@@ -79,17 +79,18 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title">All Available Classes</h3>
+                                <!--OLD STYLE-->
+<!--							<h3 class="panel-title">All Available Classes</h3>-->
+                                <h3 class="panel-title" style="font-size:20px;" align="center">All Available Classes</h3>
 							</div>
 							<div class="panel-body">
-								<p>The following table contains the list of available classes.</p>
+                                <p align="center"><b>Select your classes then click My Classes when finished.</b></p>
 							</div>
 								<table class="table table-hover " id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
-                                                                <tr>
-                                                                      <th>Class Name</th>
-                                                                      <th>Enroll</th>
-                                                                </tr>
-
+                                    <tr>
+                                          <th>Class Name</th>
+                                          <th>Enroll</th>
+                                    </tr>
 								<!--classes.js should write here-->
 							</table>
 						</div><!--panel-->

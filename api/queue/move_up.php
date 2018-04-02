@@ -1,5 +1,5 @@
 <?php
-// File: dequeue_ta.php
+// File: move_up.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/auth.php';
@@ -20,8 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST")
 if (!isset($_SESSION['username']))
 {
   http_response_code(401);
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 
@@ -32,8 +31,16 @@ if (!isset($_POST['course']))
   die();
 }
 
+if (!isset($_POST['student']))
+{
+  http_response_code(422);
+  echo json_encode( missing_student() );
+  die();
+}
+
 $username   = $_SESSION['username'];
 $course     = $_POST['course'];
+$student    = $_POST['student'];
 $ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
@@ -43,18 +50,16 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-$res = deq_ta($username, $course);
-if($res)
+$res = increase_stud_priority($student, $course);
+if($res < 0)
+{
+  $return = return_JSON_error($res);
+  http_response_code(500);
+}else
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Unable to dequeue TA"
-  );
-  http_response_code(500);
-}else{
-  $return = array(
-    "authenticated" => True,
-    "success" => "TA dequeued"
+    "success" => "Student priority increased"
   );
   http_response_code(200);
 }

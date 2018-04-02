@@ -1,14 +1,14 @@
 get_classes();
 
 function get_classes(){
-  var $url = "../api/classes/all_classes.php";
+  var $url = "../api/classes/all_courses.php";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     var allCourses = dataParsed.all_courses;
 
-    var $url = "../api/user/my_classes.php";
+    var $url = "../api/user/my_courses.php";
     var $get = $.get( $url );
     $get.done( function(data) {
       var dataString = JSON.stringify(data);
@@ -61,7 +61,7 @@ function prompt_acc_code(course_name){
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/add_class.php";
+  var url = "../api/user/add_course.php";
   if(code == null){
     var $posting = $.post( url, { course: course } );
   }else{
@@ -79,7 +79,7 @@ function enrollCourse(course, code) {
 }
 
 function dropCourse(course) {
-  var url = "../api/user/rem_class.php";
+  var url = "../api/user/rem_course.php";
   var $posting = $.post( url, { course: course} );
   $posting.done( function(data) {
     var dataString = JSON.stringify(data);

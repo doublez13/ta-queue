@@ -1,5 +1,5 @@
 <?php
-// File: all_classes.php
+// File: all_courses.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/courses.php';

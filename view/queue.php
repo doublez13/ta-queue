@@ -71,8 +71,10 @@
         </nav>  
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-			<div align="center" style="margin-top:  -60px; margin-bottom: -50px">	
-				<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; font-family: garamond;"></h1>
+			<div align="center" style="margin-top:  -60px; margin-bottom: -50px">
+                <!--RYAN'S STYLE-->
+<!--			<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; font-family: garamond;"></h1>-->
+                <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;">Queue</h1>
                 <h4 id="queue_state" style="color: #404040;"></h4>
                 <h4 id="time_limit"  style="color: #404040;"></h4>
                 <h4 id="in_queue"    style="color: #404040;"></h4>
@@ -85,7 +87,9 @@
 				<div class="col-sm-2">
 					<div class="panel panel-primary">
                         <div class="panel-heading">
-                			<h3 class="panel-title" style="font-family: garamond; font-size: 20px;">TA(s) on Duty</h3>
+                            <!--RYAN'S STYLE-->
+<!--                		<h3 class="panel-title" style="font-family: garamond; font-size: 20px;">TA(s) on Duty</h3>-->
+                            <h3 class="panel-title" style="font-size:20px;" align="center">TA(s) on Duty</h3>
                 		</div>
                 		<div class="panel-body" id="ta_on_duty">
                 		</div>
@@ -94,7 +98,9 @@
 				<div class="col-sm-8 col-sm-offset-1">
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
-                			<h3 class="panel-title" style="font-family: garamond; font-size:30px;" align="center">Announcements</h3>
+                            <!--RYAN'S STYLE-->
+<!--                		<h3 class="panel-title" style="font-family: garamond; font-size:30px;" align="center">Announcements</h3>-->
+                            <h3 class="panel-title" style="font-size:20px;" align="center">Announcements</h3>
                 		</div>
                         <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 120px; overflow-y: scroll;"> </table>
                         <form>
@@ -122,7 +128,9 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title" style="font-family: garamond; font-size: 30px;" align="center">Queue</h3>
+                                <!--RYAN'S STYLE-->
+<!--							<h3 class="panel-title" style="font-family: garamond; font-size: 30px;" align="center">Queue</h3>-->
+                                <h3 class="panel-title" style="font-size: 20px;" align="center">Queue</h3>
 							</div>
 								<table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto;"> </table>
 						</div><!--panel-->
@@ -142,6 +150,7 @@
                     </div>
 
                     <button class="btn btn-success" id="join_button"></button>
+                    <button class="btn btn-success" id="dec_button">Move Down</button>
                     <div id="dialog-form" title="Location and Question">
                       <p class="validateTips">All form fields are required.</p>
                       <form>

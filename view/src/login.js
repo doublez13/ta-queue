@@ -15,7 +15,7 @@ login = function( event ) {
       localStorage.setItem("first_name", dataParsed.first_name);
       localStorage.setItem("last_name",  dataParsed.last_name);
 
-      var $get_req = $.get("./api/user/my_classes.php");
+      var $get_req = $.get("./api/user/my_courses.php");
       $get_req.always( function(data) {
         var dataString = JSON.stringify(data);
         var dataParsed = JSON.parse(dataString);

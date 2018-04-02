@@ -109,7 +109,7 @@ paths:
               success:
                 type: "string"
                 example: "User logged out"
-  /classes/all_classes.php:
+  /classes/all_courses.php:
     get:
       summary: "Get all courses"
       description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *keys* are course names (e.g. \"CS 4150: Algorithms\", represented below as `additionalPropX`) and the *values* are objects: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
@@ -177,7 +177,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/add_class.php:
+  /user/add_course.php:
     post:
       summary: "Enroll user in a course"
       description: "Enroll the user in the specified course with the optional specified access code."
@@ -218,7 +218,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/rem_class.php:
+  /user/rem_course.php:
     post:
       summary: "Unenroll user from a course"
       description: "Unenroll the user from the specified course."
@@ -255,7 +255,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/my_classes.php:
+  /user/my_courses.php:
     get:
       summary: "Get user enrolled courses"
       description: "Get all the courses the user has enrolled in or TAs."
@@ -464,6 +464,94 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+  /queue/move_down.php:
+    post:
+      summary: "Move a user down in the queue"
+      description: "Move the user down one spot in the specified course. If the user is a TA, move the specified user down one spot in the specified course. **TAs can only move their own students.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "formData"
+        description: "course name"
+        type: "string"
+        required: true
+      - name: "username"
+        in: "formData"
+        description: "user to move down"
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course (and/or username if TA)"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+
+    # OLD ENDPOINT (TA RESTRICTED ACCESS)
+    # post:
+    #   summary: "Move a user down in the queue (TA)"
+    #   description: "Move the specified user one spot down in the specified course. **Moving the user at the bottom of the queue down will result in an error.**"
+    #   tags:
+    #     - "Queue"
+    #   consumes:
+    #     - "application/x-www-form-urlencoded"
+    #   produces:
+    #     - "application/json"
+    #   parameters:
+    #   - name: "course"
+    #     in: "formData"
+    #     description: "course name"
+    #     type: "string"
+    #     required: true
+    #   - name: "student"
+    #     in: "formData"
+    #     description: "user to move down"
+    #     type: "string"
+    #     required: true
+    #   responses:
+    #     200:
+    #       description: "Success"
+    #       schema:
+    #         $ref: '#/definitions/success'
+    #     401:
+    #       description: "Not authenticated"
+    #       schema:
+    #         $ref: '#/definitions/not_authenticated'
+    #     403:
+    #       description: "Not TA for course"
+    #       schema:
+    #         $ref: '#/definitions/error'
+    #     405:
+    #       description: "Invalid HTTP request method"
+    #       schema:
+    #         $ref: '#/definitions/bad_method'
+    #     422:
+    #       description: "Missing course and/or student"
+    #       schema:
+    #         $ref: '#/definitions/error'
+    #     500:
+    #       description: "Server-side error"
+    #       schema:
+    #         $ref: '#/definitions/error'
   /queue/open.php:
     post:
       summary: "Open a queue (TA)"
@@ -679,7 +767,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/enqueue_ta.php:
+  /queue/go_on_duty.php:
     post:
       summary: "Put TA on duty (TA)"
       description: "Put the TA on duty for the specified course.**The queue must be open.**"
@@ -720,7 +808,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/dequeue_ta.php:
+  /queue/go_off_duty.php:
     post:
       summary: "Take TA off duty (TA)"
       description: "Take the TA off duty for the specified course."
@@ -761,10 +849,10 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/inc_priority.php:
+  /queue/move_up.php:
     post:
       summary: "Move a user up in the queue (TA)"
-      description: "Move the specified user one spot up in the specified course. **Moving the user at the top of the queue up will result in an error.**"
+      description: "Move the specified user one spot up in the specified course."
       tags:
         - "Queue"
       consumes:
@@ -780,52 +868,6 @@ paths:
       - name: "student"
         in: "formData"
         description: "user to move up"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: '#/definitions/success'
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course and/or student"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-  /queue/dec_priority.php:
-    post:
-      summary: "Move a user down in the queue (TA)"
-      description: "Move the specified user one spot down in the specified course. **Moving the user at the bottom of the queue down will result in an error.**"
-      tags:
-        - "Queue"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "course name"
-        type: "string"
-        required: true
-      - name: "student"
-        in: "formData"
-        description: "user to move down"
         type: "string"
         required: true
       responses:

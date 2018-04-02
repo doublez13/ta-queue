@@ -13,7 +13,7 @@ $(document).ready(function(){
     }
   }
   if(typeof course === 'undefined'){
-    window.location ='./my_classes.php';
+    window.location ='./my_courses.php';
   }
 
   dialog = $( "#dialog-form" ).dialog({
@@ -39,6 +39,7 @@ $(document).ready(function(){
   $("#time_form").hide();
   $("#cooldown_form").hide();
   $("#join_button").hide();
+  $("#dec_button").hide();
   $("#new_ann").hide();
   $("#ann_button").hide(); 
   start();
@@ -50,7 +51,7 @@ function start(){
   first_name  = localStorage.first_name;
   last_name   = localStorage.last_name;
     
-  var url = "../api/user/my_classes.php";
+  var url = "../api/user/my_courses.php";
   var get_req = $.get( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
@@ -261,10 +262,12 @@ function render_student_view(dataParsed){
   var state = dataParsed.state; 
   if(state == "closed" || (state == "frozen" && !in_queue )){
     $("#join_button").hide();
+    $("#dec_button").hide();
     return;
   }
 
   $("#join_button").unbind("click");
+  $("#dec_button").unbind("click");
   if(!in_queue){//Not in queue
     $("#join_button").text("Enter Queue");
     $("#join_button").show();
@@ -279,6 +282,15 @@ function render_student_view(dataParsed){
     $("#join_button").click(function( event ) {
       event.preventDefault();
       dequeue_student(course);
+    });
+    // Only show dec_button if student not at bottom of queue (position is uniquely identified by username)
+    if(!(document.getElementById(my_username).textContent == dataParsed.queue_length)) {
+        $("#dec_button").show();
+    }
+    $("#dec_button").click(function (event) {
+        event.preventDefault();
+        dec_priority(course, my_username);
+        $("#dec_button").hide(); // BETTER WAY THAN THIS?
     });
   }
 }
@@ -308,7 +320,8 @@ function render_queue_table(dataParsed, role){
     let full_name = queue[row].full_name;
     var question  = queue[row].question;
     var Location  = queue[row].location;
-    var new_row = $("<tr> <td style='padding-left: 10px;'>"+ i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
+    // Set "Pos." id to the username to determine if to show the dec_button (see render_student_view)
+    var new_row = $("<tr> <td style='padding-left: 10px;' id='" + username + "'>" + i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
     i++;   
  
     if( username in helping ){
@@ -443,28 +456,28 @@ function release_ta(course){
 }
 
 function enqueue_ta(course){
-  var url = "../api/queue/enqueue_ta.php";
+  var url = "../api/queue/go_on_duty.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dequeue_ta(course){
-  var url = "../api/queue/dequeue_ta.php";
+  var url = "../api/queue/go_off_duty.php";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function inc_priority(course, student){
-  var url = "../api/queue/inc_priority.php";
+  var url = "../api/queue/move_up.php";
   var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dec_priority(course, student){
-  var url = "../api/queue/dec_priority.php";
+  var url = "../api/queue/move_down.php";
   var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
   posting.fail(fail);

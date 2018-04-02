@@ -1,5 +1,5 @@
 $(function () {
-  var $url = "../api/user/my_classes.php";
+  var $url = "../api/user/my_courses.php";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
@@ -11,9 +11,9 @@ $(function () {
                      return ta_courses.indexOf(n) !== -1;
                    });    
     if(intersection.length){
-      alert("You're registered on the queue as both a student and TA for one or more courses. Unregisting as student...");
+      alert("You're registered on the queue as both a student and TA for one or more courses. Unregistering as student...");
       for(course in intersection){ 
-        var url = "../api/user/rem_class.php";
+        var url = "../api/user/rem_course.php";
         var $posting = $.post( url, { course: intersection[course]} );
       }
       location.reload;
