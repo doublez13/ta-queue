@@ -38,13 +38,13 @@ $ta_courses = $_SESSION["ta_courses"];
 
 // If TA, set username to the posted student
 if (in_array($course, $ta_courses)){
-  if (!isset($_POST['username']))
+  if (!isset($_POST['student']))
   {
     http_response_code(422);
     echo json_encode( missing_student() );
     die();
   }
-  $username = $_POST['username'];
+  $username = $_POST['student'];
 }
 
 $res = decrease_stud_priority($username, $course);
