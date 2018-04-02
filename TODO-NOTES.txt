@@ -1,10 +1,8 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
--TA view doesn't show the cooldown time at the top of the page, but the student view does
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Notifications for new announcements
 -DEMOS: explicitly display who is TA and who is student
--SIMPLE WORK AROUND TO 'HOLD POSITION' DILEMA: allow students to move themselves down in the queue
 -Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?
 -Make the 's' dynamic in the 'TA(s) on Duty' box?
@@ -29,7 +27,6 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -set Announcements and On Duty TA boxes at a constant size (instead of growing/shrinking) and use scroll bar when necessary
 -on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
 -automatic location generation when entering queue
--TA/faculty toggle abilities (e.g. does logging out remove you from queue)
 -Have different background colors for TAs
 -Have CIS handle authentication
 -Spinners or progress/waiting indicators for slow loads
@@ -38,8 +35,6 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
 What convention should we use? 
 -Lock navbar in place when scrolling
--TA/faculty ability to delete announcements
--Consider changing HTTP response status codes for errors to, for example, 400 instead of 200 (200 indicates success)
 -NOT IMPORTANT UNTIL END OF SEMESTER: Swagger lets people test the API, similar to Postman. Ideally I think we should
 allow people to test all endpoints, including those restricted to admins or TAs. But for obvious reasons, we don't want
 Swagger to be messing with the actual DB in use. How do we accomplish this? Set up a sandbox server/directory with its own DB

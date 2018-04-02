@@ -55,7 +55,7 @@ if($res)
 }else{
   $return = array(
     "authenticated" => True,
-    "success" => "Student priority decreased"
+    "success" => "Student moved down one spot"
   );
   http_response_code(200);
 }

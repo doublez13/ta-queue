@@ -59,7 +59,7 @@ if($res < 0)
 {
   $return = array(
     "authenticated" => True,
-    "success" => "Student priority increased"
+    "success" => "Student moved up one spot"
   );
   http_response_code(200);
 }

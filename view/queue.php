@@ -117,8 +117,8 @@
                         <input type="number" id="time_limit_input" style='width:5em'>
                         <input class="btn btn-success" type="submit" value="Set">
                       </form>
-                      <form id="cooldown_form">
-                        <label>Cooldown before reentry</label> </br>
+                      <form id="cooldown_form" title="queue reentry wait time">
+                        <label>Cool-down Time</label> </br>
                         <input type="number" id="cooldown_input" style='width:5em'>
                         <input class="btn btn-success" type="submit" value="Set">
                       </form>
