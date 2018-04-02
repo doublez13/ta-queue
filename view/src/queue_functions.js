@@ -39,7 +39,6 @@ $(document).ready(function(){
   $("#time_form").hide();
   $("#cooldown_form").hide();
   $("#join_button").hide();
-  $("#dec_button").hide();
   $("#new_ann").hide();
   $("#ann_button").hide(); 
   start();
@@ -262,12 +261,10 @@ function render_student_view(dataParsed){
   var state = dataParsed.state; 
   if(state == "closed" || (state == "frozen" && !in_queue )){
     $("#join_button").hide();
-    $("#dec_button").hide();
     return;
   }
 
   $("#join_button").unbind("click");
-  $("#dec_button").unbind("click");
   if(!in_queue){//Not in queue
     $("#join_button").text("Enter Queue");
     $("#join_button").show();
@@ -282,15 +279,6 @@ function render_student_view(dataParsed){
     $("#join_button").click(function( event ) {
       event.preventDefault();
       dequeue_student(course);
-    });
-    // Only show dec_button if student not at bottom of queue (position is uniquely identified by username)
-    if(!(document.getElementById(my_username).textContent == dataParsed.queue_length)) {
-        $("#dec_button").show();
-    }
-    $("#dec_button").click(function (event) {
-        event.preventDefault();
-        dec_priority(course, my_username);
-        $("#dec_button").hide(); // BETTER WAY THAN THIS?
     });
   }
 }
@@ -320,8 +308,7 @@ function render_queue_table(dataParsed, role){
     let full_name = queue[row].full_name;
     var question  = queue[row].question;
     var Location  = queue[row].location;
-    // Set "Pos." id to the username to determine if to show the dec_button (see render_student_view)
-    var new_row = $("<tr> <td style='padding-left: 10px;' id='" + username + "'>" + i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
+    var new_row = $("<tr> <td style='padding-left: 10px;'>"+ i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
     i++;   
  
     if( username in helping ){
@@ -387,7 +374,21 @@ function render_queue_table(dataParsed, role){
       new_row.append("<td>");
       new_row.append(decrease_button);
       new_row.append("</td>");
+    }else{//student
+      if(username == my_username){
+        var decrease_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-down"></i>  </button>');
+        if(row == dataParsed.queue_length -1){
+          decrease_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
+        }
+        decrease_button.click(function(event){
+          dec_priority(course, my_username);
+        });
+        new_row.append("<td>");
+        new_row.append(decrease_button);
+        new_row.append("</td>");
+      }
     }
+
     $('#queue').append(new_row);
   }
 }

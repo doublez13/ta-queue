@@ -150,7 +150,6 @@
                     </div>
 
                     <button class="btn btn-success" id="join_button"></button>
-                    <button class="btn btn-success" id="dec_button">Move Down</button>
                     <div id="dialog-form" title="Location and Question">
                       <p class="validateTips">All form fields are required.</p>
                       <form>
