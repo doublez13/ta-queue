@@ -623,7 +623,7 @@ function set_time_lim($time_lim, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "is", $time_lim, $course_name);
-  if(!mysqli_stmt_execute($stmt){
+  if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
