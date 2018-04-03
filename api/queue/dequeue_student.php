@@ -40,13 +40,13 @@ $ta_courses = $_SESSION["ta_courses"];
 //remove themselves, and TAs to remove students,
 //we check if the request came from a TA
 if (in_array($course, $ta_courses)){
-  if (!isset($_POST['username']))
+  if (!isset($_POST['student']))
   {
     http_response_code(422);
     echo json_encode( missing_student() );
     die();
   }
-  $username = $_POST['username']; // Set to dequeue another student
+  $username = $_POST['student']; // Set to dequeue another student
 }
 
 $res = deq_stu($username, $course);

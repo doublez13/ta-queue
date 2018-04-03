@@ -108,9 +108,9 @@ function render_stats(dataParsed){
      $("#time_limit").text("Time Limit: None");
   }
   if(dataParsed.cooldown >0){
-     $("#cooldown").text("Cooldown: " + dataParsed.cooldown + " Minutes");
+     $("#cooldown").text("Cool-down: " + dataParsed.cooldown + " Minutes");
   }else{
-     $("#cooldown").text("Cooldown: None");
+     $("#cooldown").text("Cool-down: None");
   }
   $("#in_queue").text("Queue Length: " + dataParsed.queue_length);
 }
@@ -229,14 +229,20 @@ function render_ta_view(dataParsed){
     $("#duty_button").show();
     $("#freeze_button").show();
 
-    $("#time_limit_input").val(dataParsed.time_lim);
+    // Don't refresh while editing
+    if (!$("#time_limit_input").is(":focus")) {
+      $("#time_limit_input").val(dataParsed.time_lim);
+    }
     $("#time_form").show();
     $("#time_form").submit(function(event){
       event.preventDefault();
       var limit = $(this).find( "input[id='time_limit_input']" ).val();
       set_limit(course, limit);
     });
-    $("#cooldown_input").val(dataParsed.cooldown);
+
+    if (!$("#cooldown_input").is(":focus")) {
+      $("#cooldown_input").val(dataParsed.cooldown);
+    }
     $("#cooldown_form").show();
     $("#cooldown_form").submit(function(event){
       event.preventDefault();
@@ -437,13 +443,13 @@ function enqueue_student(course, question, Location){
  *Students call dequeue_student(course, null) to dequeue themselves
  *TAs call dequeue_student(course, username) to dequeue student
  */
-function dequeue_student(course, username){
+function dequeue_student(course, student){
   var url = "../api/queue/dequeue_student.php";
-  if(username == null){
+  if(student == null){
     posting = $.post( url, { course: course } );
   }
   else{
-    posting = $.post( url, { course: course, username: username } );
+    posting = $.post( url, { course: course, student: student } );
   }
   posting.done(done);
   posting.fail(fail);
