@@ -19,6 +19,9 @@ function get_queue($course_name){
     return -1; //SQL error
   }
 
+  #Note that we don't have to use SQL Parameters in the 
+  #following functions since the block of code below
+  #sanitizes the input
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
@@ -136,13 +139,11 @@ function enq_stu($username, $course_name, $question, $location){
     return -1;
   }
 
-  //Clean these redundant checks up
   $queue_state = get_queue_state($course_name);
   if($queue_state < 0){
     mysqli_close($sql_conn);
     return $queue_state;
-  }
-  elseif($queue_state != "open"){
+  }elseif($queue_state != "open"){
     mysqli_close($sql_conn);
     return -3;
   }
@@ -154,10 +155,10 @@ function enq_stu($username, $course_name, $question, $location){
   }elseif($course_cooldown){//cooldown period enabled
     $result = check_user_cooldown($username, $course_cooldown, $course_id, $sql_conn);
     if($result < 0){
-      return $result;
+      return $result; //error
     }elseif($result){
       mysqli_close($sql_conn);
-      return -7;
+      return -7; //user on cooldown
     }
   }
 
@@ -170,7 +171,9 @@ function enq_stu($username, $course_name, $question, $location){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "sssss", $username, $course_name, $question, $location, $question);
-  if(!mysqli_stmt_execute($stmt)){
+ 
+  $res = mysqli_stmt_execute($stmt);
+  if(!$res){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -235,19 +238,18 @@ function deq_stu($username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
-  if(!mysqli_stmt_execute($stmt)){
+ 
+  $res = mysqli_stmt_execute($stmt);
+  if(!$res || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
   }
-  #TODO: CHECK TO MAKE SURE A ROW WAS DELETED, EXIT IF IT WAS NOT.
-
 
   #Log the student in the student_log table
   #If MySQL worked properly, we'd be able to completely implement all logging
   #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
   #with uniqueness constraints in MySQL force me to take this route instead.
-
   $query = "UPDATE student_log SET exit_tmstmp = NOW() 
             WHERE username = ? AND course_id = (SELECT course_id FROM courses WHERE course_name = ?) ORDER BY id DESC limit 1;";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -348,7 +350,7 @@ function deq_ta($username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -389,8 +391,7 @@ function get_ta_status($username, $course_name){
 
   $query  = "SELECT helping FROM ta_status 
              WHERE username=? 
-             AND course_id=(SELECT course_id FROM courses WHERE course_name=?)";
-  
+             AND course_id=(SELECT course_id FROM courses WHERE course_name=?)"; 
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -468,7 +469,7 @@ function help_next_student($username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "sis", $username, $course_id, $position);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -524,7 +525,7 @@ function help_student($TA_username, $stud_username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_id, $stud_username, $course_id);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -573,7 +574,7 @@ function free_ta($username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -622,7 +623,7 @@ function set_time_lim($time_lim, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "is", $time_lim, $course_name);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -673,7 +674,7 @@ function set_cooldown($time_lim, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "is", $time_lim, $course_name);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -793,7 +794,7 @@ function add_announcement($course_name, $announcement){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "is", $course_id, $announcement);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -804,6 +805,11 @@ function add_announcement($course_name, $announcement){
   return 0;
 }
 
+/**
+ *
+ *
+ *
+ */
 function del_announcement($course_name, $announcement_id){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -827,7 +833,7 @@ function del_announcement($course_name, $announcement_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ii", $announcement_id, $course_id);
-  if(!mysqli_stmt_execute($stmt)){
+  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -969,11 +975,13 @@ function change_stud_priority($stud_username, $course_name, $operation){
   $query = "SELECT position, username, course_id, question, location FROM queue WHERE username=? AND course_id=(SELECT course_id from courses where course_name=?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
+    mysqli_close($sql_conn);
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $stud_username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
     return -1;
   }
   mysqli_stmt_bind_result($stmt, $position1, $username1, $course_id, $question1, $location1);
@@ -990,11 +998,18 @@ function change_stud_priority($stud_username, $course_name, $operation){
               WHERE position>'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
               ORDER BY position ASC LIMIT 1";
   }else{
+    mysqli_stmt_close($stmt);
     return -1;
   }
+
+
+  #####SQL TRANSACTION#####
+  mysqli_autocommit($sql_conn, false); 
+
   $result = mysqli_query($sql_conn, $query);
   $entry  = mysqli_fetch_assoc($result);
   if(!$entry){
+    mysqli_close($sql_conn);
     return 0;//Nobody to switch with
   }
 
@@ -1004,21 +1019,34 @@ function change_stud_priority($stud_username, $course_name, $operation){
   $location2 = $entry['location'];
 
   $query = "DELETE FROM queue WHERE position = '".$position1."'";
-  $result = mysqli_query($sql_conn, $query);
+  $res = mysqli_query($sql_conn, $query);
   $query = "DELETE FROM queue WHERE position = '".$position2."'";
-  $result = mysqli_query($sql_conn, $query);
+  $res = mysqli_query($sql_conn, $query) && $res;
 
   $query = "INSERT INTO queue (position, username, course_id, question, location) 
             VALUES ('".$position2."', '".$username1."', '".$course_id."', '".$question1."', '".$location1."')";
-  mysqli_query($sql_conn, $query);
+  $res = mysqli_query($sql_conn, $query) && $res;
   $query = "INSERT INTO queue (position, username, course_id, question, location) 
             VALUES ('".$position1."', '".$username2."', '".$course_id."', '".$question2."', '".$location2."');";
-  mysqli_query($sql_conn, $query);
+  $res = mysqli_query($sql_conn, $query) && $res;
+  
+  $ret = 0;
+  if($res){
+    mysqli_commit($sql_conn);
+  }else{
+    mysqli_rollback($sql_conn);
+    $ret = -1;
+  }
+  #########################
 
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
+/**
+ *
+ *
+ */
 function get_course_cooldown($course_id, $sql_conn){
   if(!$sql_conn){
     return -1;
@@ -1043,6 +1071,10 @@ function get_course_cooldown($course_id, $sql_conn){
   return $cooldown;
 }
 
+/**
+ *
+ *
+ */
 function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_conn){
   if(!$sql_conn){
     return -1;
@@ -1070,6 +1102,20 @@ function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_
   }else{
     return 0;
   }
+}
+
+function write_lock_table($table_name, $sql_conn){
+  if(!$sql_conn){
+    return -1;
+  }
+  return mysqli_query($sql_conn, "LOCK TABLES ".$table_name." WRITE");   
+}
+
+function write_unlock_table($sql_conn){
+  if(!$sql_conn){
+    return -1;
+  }
+  return mysqli_query($sql_conn, "UNLOCK TABLES");
 }
 
 ?>
