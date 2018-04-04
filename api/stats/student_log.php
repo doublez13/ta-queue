@@ -1,5 +1,5 @@
 <?php
-// File: dequeue_student.php
+// File: student_log.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/stats.php';

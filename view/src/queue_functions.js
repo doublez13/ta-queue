@@ -147,6 +147,10 @@ function render_ann_box(anns){
 //Shows the TAs that are on duty
 function render_ta_table(TAs){
   $("#ta_on_duty h4").remove();
+  if(TAs.length < 2)
+    $("#tas_header").text("TA on Duty");
+  else
+    $("#tas_header").text("TAs on Duty");
   for(TA in TAs){
     var full_name = TAs[TA]["full_name"];
     $('#ta_on_duty').append("<h4>"+full_name+"</h4>");

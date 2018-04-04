@@ -22,7 +22,7 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-                <script src="./src/logout.js"></script>
+        <script src="./src/logout.js"></script>
 		<script src="./src/my_classes.js"></script>
 	</head>
 	<body>
@@ -31,10 +31,10 @@
                 <!-- Brand and toggle get grouped for better mobile display -->
                 <div class="navbar-header">
                     <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand" href="#">
                         <img alt="Brand" src="../resources/img/UHz.png">
@@ -60,7 +60,6 @@
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
                         </li>
-
                     </ul>
                 </div><!-- /.navbar-collapse -->
             </div><!-- /.container-fluid -->
@@ -84,7 +83,7 @@
                                 <h3 class="panel-title" style="font-size:20px;" align="center">My Classes</h3>
 							</div>
 <!--							<div class="panel-body"></div>-->
-								<table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
+                            <table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
 								<tr>
 									<th>Class</th>
 									<th>Role</th>

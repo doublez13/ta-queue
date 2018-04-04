@@ -22,7 +22,7 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
-                <script src="./src/logout.js"></script>
+        <script src="./src/logout.js"></script>
 		<script src="./src/create_class.js"></script>
 	</head>
 	<body>
@@ -80,49 +80,48 @@
 						<!-- Default panel contents -->
 							<div class="panel-heading">
 								<h3 class="panel-title">Create New Class</h3>
-                                                        </div>
-<style>
-input[type=text], select, textarea {
-    width: 100%; /* Full width */
-    padding: 12px; /* Some padding */  
-    border: 1px solid #ccc; /* Gray border */
-    border-radius: 4px; /* Rounded borders */
-    box-sizing: border-box; /* Make sure that padding and width stays in place */
-    margin-top: 6px; /* Add a top margin */
-    margin-bottom: 16px; /* Bottom margin */
-    resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
-}
-</style>
+                            </div>
+
+                            <style>
+                            input[type=text], select, textarea {
+                                width: 100%; /* Full width */
+                                padding: 12px; /* Some padding */
+                                border: 1px solid #ccc; /* Gray border */
+                                border-radius: 4px; /* Rounded borders */
+                                box-sizing: border-box; /* Make sure that padding and width stays in place */
+                                margin-top: 6px; /* Add a top margin */
+                                margin-bottom: 16px; /* Bottom margin */
+                                resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
+                            }
+                            </style>
                                                          
-  <form id="create_class">
-    <label>Course Name</label>
-    <input type="text" id="course_name" placeholder="Course Name.." required>
+                            <form id="create_class">
+                                <label>Course Name</label>
+                                <input type="text" id="course_name" placeholder="Course Name.." required>
 
-    <label>Department</label>
-    <input type="text" id="depart_prefix" placeholder="CS" required>
+                                <label>Department</label>
+                                <input type="text" id="depart_prefix" placeholder="CS" required>
 
-    <label>Course Number</label>
-    <input type="text" id="course_num" placeholder="4400" required>
+                                <label>Course Number</label>
+                                <input type="text" id="course_num" placeholder="4400" required>
 
-    <label>Instructor username</label>
-    <input type="text" id="professor" placeholder="username" required>
+                                <label>Instructor username</label>
+                                <input type="text" id="professor" placeholder="username" required>
 
-    <label>LDAP group</label>
-    <input type="text" id="ldap_group" placeholder="cs4400" required>
+                                <label>LDAP group</label>
+                                <input type="text" id="ldap_group" placeholder="cs4400" required>
 
-    <label>Access Code</label>
-    <input type="text" id="acc_code">
+                                <label>Access Code</label>
+                                <input type="text" id="acc_code">
 
-    <label>Description</label>
-    <textarea id="description" style="height:200px" required></textarea>
+                                <label>Description</label>
+                                <textarea id="description" style="height:200px" required></textarea>
 
-    <input type="submit" value="Create Course">
-  </form>
-
+                                <input type="submit" value="Create Course">
+                            </form>
 						</div><!--panel-->
 					</div><!--id-->
 				</div><!--col-sm-12-->
-
 			</div><!--row-->
 		</div><!--container-->
 	</body>

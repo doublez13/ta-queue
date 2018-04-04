@@ -5,7 +5,6 @@
 -DEMOS: explicitly display who is TA and who is student
 -Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?
--Make the 's' dynamic in the 'TA(s) on Duty' box?
 -The 'U' logo in the top left of the screen simply takes you to the page you're on. Disable?
 -Add tool tips for unnamed buttons in the queue (e.g. the help/free button on the queue page)
 -It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
