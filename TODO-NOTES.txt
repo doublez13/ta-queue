@@ -1,13 +1,14 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-include link to Canvas?
+-link to non-existent admin page -> edit_class.php
 -TA log to track how long on duty?
--get_course_log(): is exit_tmstmp ever null? Why check?
 -Include student names in ta_log?
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Should students be unenrolled automatically, or manually, from their courses after the semester? Maybe make this an admin functionality?
 -Notifications for new announcements
 -DEMOS: explicitly display who is TA and who is student
--Make questions optionally visible to rest of class?
+//-Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?
 -The 'U' logo in the top left of the screen simply takes you to the page you're on. Disable?
 -Add tool tips for unnamed buttons in the queue (e.g. the help/free button on the queue page)

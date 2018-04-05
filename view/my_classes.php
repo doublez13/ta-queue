@@ -36,7 +36,7 @@
                         <span class="icon-bar"></span>
                         <span class="icon-bar"></span>
                     </button>
-                    <a class="navbar-brand" href="#">
+                    <a class="navbar-brand">
                         <img alt="Brand" src="../resources/img/UHz.png">
                     </a>
                 </div>
