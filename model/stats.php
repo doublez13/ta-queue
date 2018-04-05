@@ -50,7 +50,7 @@ function get_course_log($course_name){
     return -1;
   }
 
-  $query = "SELECT username question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
+  $query = "SELECT username, question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
             FROM student_log WHERE course_id=(SELECT course_id from courses where course_name=?) AND exit_tmstmp IS NOT NULL";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){

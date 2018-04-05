@@ -28,20 +28,20 @@ $ta_courses = $_SESSION["ta_courses"];
 
 //If a course is specified, get the log
 //for the student in that course. If not,
-//get the log for all the student's courses
+//get the log for all the student's courses.
 if (isset($_POST['course']))
 {
   $course = $_POST['course'];
-  //Since this enpoint is used for students and TAs,
-  //we check if the request came from a TA
+  //Since this endpoint is used for students and TAs,
+  //we check if the request came from a TA.
   if (in_array($course, $ta_courses)){
-    if (!isset($_POST['username']))
+    if (!isset($_POST['student']))
     {
       http_response_code(422);
       echo json_encode( missing_student() );
       die();
     }
-    $username = $_POST['username']; // Set to grab the stats for student
+    $username = $_POST['student']; // Set to grab the stats for student
   }
   $res = get_stud_log_for_course($username, $course);
 }
