@@ -3,9 +3,17 @@ require_once 'config.php';
 require_once 'queue.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
+ *
  * Functions for pulling statistics out of the database.
  */
 
+/**
+ * Returns a log of the queue sessions for stud_username
+ *
+ * @param string $stud_username
+ * @return array of student log entries
+ *         int -1 on error
+ */
 function get_stud_log($stud_username){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -45,6 +53,13 @@ function get_stud_log($stud_username){
   return $result;
 }
 
+/**
+ * Returns a log of the queue sessions for course_name
+ *
+ * @param string $course_name
+ * @return array of course log entries
+ *         int -1 on error
+ */
 function get_course_log($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -84,6 +99,14 @@ function get_course_log($course_name){
   return $result;
 }
 
+/**
+ * Returns a log of the queue sessions for stud_username in course_name 
+ * 
+ * @param string $stud_username
+ * @param string $course_name
+ * @return array of student log entries for course
+ *         int -1 on error
+ */
 function get_stud_log_for_course($stud_username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -122,6 +145,14 @@ function get_stud_log_for_course($stud_username, $course_name){
   return $result;
 }
 
+/**
+ * Returns a log of the queue sessions for ta_username in course_name
+ *
+ * @param string $ta_username
+ * @param string $course_name
+ * @return array of ta log entries for course
+ *         int -1 on error
+ */
 function get_ta_log_for_course($ta_username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -160,6 +191,13 @@ function get_ta_log_for_course($ta_username, $course_name){
   return $result;
 }
 
+/**
+ * Returns a list of common statistics for course_name
+ *
+ * @param string $course_name
+ * @return array of course stats
+ *         int -1 on error
+ */
 function get_course_stats($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -184,11 +222,21 @@ function get_course_stats($course_name){
     return -1;
   }
 
-  mysqli_stmt_bind_result($stmt, $help_time);
+  mysqli_stmt_bind_result($stmt, $avg_wait_time, $avg_help_time, $stddev_help_time);
   mysqli_stmt_fetch($stmt);
-  return $help_time;
+  return array("avg_wait_time"    => $avg_wait_time,
+               "avg_help_time"    => $avg_help_time,
+               "stddev_help_time" => $stddev_help_time
+              );
 }
 
+/**
+ * Returns a log of the number of users per day in the queue
+ *
+ * @param string $course_name
+ * @return array of course usage stats by day
+ *         int -1 on error
+ */
 function get_course_usage_by_day($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
