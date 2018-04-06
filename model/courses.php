@@ -4,14 +4,13 @@ require_once 'auth.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Functions for courses.
- *
  */
 
 /**
  * Returns array of all registered courses
  *
  * @return array of course names
- * @return null on fail
+ *         null on fail
  */
 function get_avail_courses(){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -50,7 +49,8 @@ function get_avail_courses(){
   * @param string $ldap_group
   * @param string $professor
   * @param string $acc_code, null if none
-  * @return int 0 on success, 1 on fail
+  * @return int 0 on success
+  *             1 on fail
   */
 function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -82,7 +82,8 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
  * Removes the course from the database
  *
  * @param string $course_name
- * @return int 0 on success, 1 on fail
+ * @return int 0 on success
+ *             1 on fail
  */
 function del_course($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -113,7 +114,7 @@ function del_course($course_name){
   *
   * @param string $course_name
   * @return array of TA usernames
-  * @return null on fail
+  *         null on fail
   */
 function get_tas($course_name){
   $course_group = get_course_group($course_name);
@@ -139,7 +140,7 @@ function get_tas($course_name){
   *
   * @param string $username
   * @return array of courses the user is a TA for 
-  * @return null on error
+  *         null on error
   */
 function get_ta_courses($username){
   $result = srch_by_sam($username);
@@ -277,20 +278,20 @@ function add_stud_course($username, $course_name, $acc_code){
 function rem_stud_course($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
+    return -1;
   }
 
   $query = "DELETE enrolled FROM enrolled NATURAL JOIN courses WHERE username=? AND course_name=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
 
   mysqli_stmt_close($stmt);
@@ -303,8 +304,8 @@ function rem_stud_course($username, $course_name){
 /**
  * Returns the LDAP group for the course
  *
- * @param int $course_name
- * @return string ldap group
+ * @param string $course_name
+ * @return string ldap_group
  * @return null on error
  */
 function get_course_group($course_name){
@@ -333,6 +334,13 @@ function get_course_group($course_name){
   return $ldap_group;
 }
 
+/**
+ * Returns the LDAP group for the course
+ *
+ * @param string $course_name
+ * @return int access_code
+ *         null on error
+ */
 function get_course_acc_code($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){

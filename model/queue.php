@@ -11,9 +11,9 @@ require_once 'config.php';
  * Returns the state of the queue
  *
  * @param string $course
- * @return array
- * @return -1 on error
- * @return -2 on nonexistant class
+ * @return array of queue data on success
+ *         int -1 on error
+ *         int -2 on nonexistant class
  */
 function get_queue($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -103,9 +103,9 @@ function get_queue($course_name){
  *
  * @param string $course_name
  * @return int length of queue
- * @return int -1 on error
- * @return int -2 on nonexistant course
- * @return int -3 on closed queue
+ *         int -1 on error
+ *         int -2 on nonexistant course
+ *         int -3 on closed queue
  */
 function get_queue_length($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -146,10 +146,10 @@ function get_queue_length($course_name){
  * @param string $question
  * @param string $location
  * @return int 0  on success
- * @return int -1 on error
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
- * @return int -7 on user on cooldown state
+ *         int -1 on error
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
+ *         int -7 on user on cooldown state
  */
 function enq_stu($username, $course_name, $question, $location){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -227,10 +227,10 @@ function enq_stu($username, $course_name, $question, $location){
  * 
  * @param string $username
  * @param string $course
- * @return 0  on success
- * @return -1 on error
- * @return -2 on nonexistant course
- * @return -3 on closed course
+ * @return int 0  on success
+ *         int -1 on error
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function deq_stu($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -293,9 +293,9 @@ function deq_stu($username, $course_name){
  * @param string $username
  * @param string $course_name
  * @return int 0  on success
- * @return int -1 on error
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on error
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function enq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -339,9 +339,9 @@ function enq_ta($username, $course_name){
  * @param string $username
  * @param string $course_name
  * @return int 0  on success
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function deq_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -385,11 +385,11 @@ function deq_ta($username, $course_name){
  * @param string $username
  * @param string $course_name
  * @return int -1 on error
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
- * @return int  1 if TA not on duty
- * @return int  2 if on duty, but not helping anyone
- * @return int  3 if on duty, and helping someone
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
+ *         int  1 if TA not on duty
+ *         int  2 if on duty, but not helping anyone
+ *         int  3 if on duty, and helping someone
  */
 function get_ta_status($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -444,10 +444,10 @@ function get_ta_status($username, $course_name){
  * @param string $username
  * @param string $course_name
  * @return int 0  on success
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
- * @return int -4 on TA not on duty
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
+ *         int -4 on TA not on duty
  */
 function help_next_student($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -509,10 +509,10 @@ function help_next_student($username, $course_name){
  * @param string $stud_username
  * @param string $course
  * @return int 0  on success
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
- * @return int -4 on TA not on duty
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
+ *         int -4 on TA not on duty
  */
 function help_student($TA_username, $stud_username, $course_name){
  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -566,11 +566,11 @@ function help_student($TA_username, $stud_username, $course_name){
  * 
  * @param string $username
  * @param string $course_name
- * @return 0  on success
- * @return int -1 on error
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
- * @return int -4 on TA not on duty
+ * @return int 0  on success
+ *         int -1 on error
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
+ *         int -4 on TA not on duty
  */
 function free_ta($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -613,9 +613,9 @@ function free_ta($username, $course_name){
  * @param string $time_lim in minutes
  * @param string $course_name
  * @return int 0  on success,
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function set_time_lim($time_lim, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -664,9 +664,9 @@ function set_time_lim($time_lim, $course_name){
  * @param string $cooldown in minutes
  * @param string $course_name
  * @return int 0  on success,
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function set_cooldown($time_lim, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -714,9 +714,9 @@ function set_cooldown($time_lim, $course_name){
  * @param string $course
  * @param string $operation {increase, decrease}
  * @return int 0  on success
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function increase_stud_priority($stud_username, $course_name){
   return change_stud_priority($stud_username, $course_name, "increase");
@@ -729,9 +729,9 @@ function increase_stud_priority($stud_username, $course_name){
  * @param string $course
  * @param string $operation {increase, decrease}
  * @return int 0  on success
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function decrease_stud_priority($stud_username, $course_name){
   return change_stud_priority($stud_username, $course_name, "decrease");
@@ -742,8 +742,8 @@ function decrease_stud_priority($stud_username, $course_name){
  *
  * @param string $course_name
  * @return string $state of queue
- * @return -1 on error
- * @return -2 on Nonexistant Course
+ *         int -1 on error
+ *         int -2 on Nonexistant Course
  */
 function get_queue_state($course_name){
   return change_queue_state($course_name, NULL);
@@ -754,8 +754,8 @@ function get_queue_state($course_name){
  *
  * @param string $course_name
  * @return string $state of queue
- * @return -1 on error
- * @return -2 on Nonexistant Course 
+ *         int -1 on error
+ *         int -2 on Nonexistant Course 
  */
 function open_queue($course_name){
   return change_queue_state($course_name, "open");
@@ -766,8 +766,8 @@ function open_queue($course_name){
  *
  * @param string $course_name
  * @return string $state of queue
- * @return -1 on error
- * @return -2 on Nonexistant Course
+ *         int -1 on error
+ *         int -2 on Nonexistant Course
  */
 function close_queue($course_name){
   return change_queue_state($course_name, "closed");
@@ -778,8 +778,8 @@ function close_queue($course_name){
  *
  * @param string $course_name
  * @return string $state of queue
- * @return -1 on error
- * @return -2 on Nonexistant Course
+ *        int -1 on error
+ *        int -2 on Nonexistant Course
  */
 function freeze_queue($course_name){
   return change_queue_state($course_name, "frozen");
@@ -789,9 +789,9 @@ function freeze_queue($course_name){
  * Post announcement to the course
  *
  * @param string $course_name
- * @return 0  on success
- * @return -1 on error
- * @return -2 on Nonexistant Course
+ * @return int 0  on success
+ *         int -1 on error
+ *         int -2 on Nonexistant Course
  */
 function add_announcement($course_name, $announcement){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -832,9 +832,9 @@ function add_announcement($course_name, $announcement){
  *
  * @param string $course_name
  * @param int    $announcement_id
- * @return  0 on success
- * @return -1 on error
- * @return -2 on Nonexistant Course
+ * @return int  0 on success
+ *         int -1 on error
+ *         int -2 on Nonexistant Course
  */
 function del_announcement($course_name, $announcement_id){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -881,8 +881,8 @@ function del_announcement($course_name, $announcement_id){
  * @param string $course_name
  * @param string $state
  * @return string $state of queue
- * @return -1 on error
- * @return -2 on Nonexistant Course
+ *         int -1 on error
+ *         int -2 on Nonexistant Course
  */
 function change_queue_state($course_name, $state){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -949,8 +949,8 @@ function change_queue_state($course_name, $state){
  * @param string $course_name
  * @param sql_conn $sql_conn
  * @return int course_id used in SQL
- * @return -1 on error
- * @return -2 on Nonexistant course
+ *         int -1 on error
+ *         int -2 on Nonexistant course
  */
 function course_name_to_id($course_name, $sql_conn){
   if(!$sql_conn){
@@ -983,9 +983,9 @@ function course_name_to_id($course_name, $sql_conn){
  * @param string $course
  * @param string $operation {increase, decrease}
  * @return int 0  on success
- * @return int -1 on fail
- * @return int -2 on nonexistant course
- * @return int -3 on closed course
+ *         int -1 on fail
+ *         int -2 on nonexistant course
+ *         int -3 on closed course
  */
 function change_stud_priority($stud_username, $course_name, $operation){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -1084,8 +1084,8 @@ function change_stud_priority($stud_username, $course_name, $operation){
  * @param string $course_id
  * @param string $sql_conn
  * @return int  0 if no cooldown set
- * @return int -1 on fail
- * @return int >0 in cooldown minutes
+ *         int -1 on fail
+ *         int >0 in cooldown minutes
  */
 function get_course_cooldown($course_id, $sql_conn){
   if(!$sql_conn){
@@ -1119,8 +1119,8 @@ function get_course_cooldown($course_id, $sql_conn){
  * @param string $course_id
  * @param string $sql_conn
  * @return int  0 if able to join
- * @return int -1 on fail
- * @return int >0 in seconds until able to join
+ *         int -1 on fail
+ *         int >0 in seconds until able to join
  */
 function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_conn){
   if(!$sql_conn){

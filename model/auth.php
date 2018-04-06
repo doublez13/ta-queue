@@ -34,6 +34,7 @@ function auth($username, $pass){
  *
  * @param string $username samaccountname
  * @return array consisting of first name, last name, and username
+ *         null on error
  */
 function get_info($username){
   $result = srch_by_sam($username); 
@@ -66,7 +67,8 @@ function get_info($username){
  * Returns whether or not $username is a queue admin
  *
  * @param string $username samaccountname
- * @return true if queue admin, false if not
+ * @return true if queue admin
+ *         false if not queue admin
  */
 function is_admin($username){
   $result = srch_by_sam(ADMIN_GROUP);
@@ -81,17 +83,15 @@ function is_admin($username){
       return true;
     }
   }
-
   return false;
 }
-
-
 
 //Helper Functions for LDAP: No reason to call these from outside the model.
 /**
  * Connect to Active Directory server
  *
- * @return ldap_link
+ * @return ldap_link on success
+ *         null on error
  */
 function _ldap_connect(){
   $ldap_conn = ldap_connect(LDAP_SERVER);
@@ -107,7 +107,7 @@ function _ldap_connect(){
 /**
  * Disconnect from Active Directory server 
  *
- * @param [type] $ldap_conn
+ * @param $ldap_conn
  * @return void
  */
 function _ldap_disconnect($ldap_conn){
@@ -119,6 +119,7 @@ function _ldap_disconnect($ldap_conn){
  *
  * @param string $dn
  * @return string samaccountname
+ *         null on error
  */
 function dn_to_sam($dn){
   $filter = "(distinguishedName=$dn)";
@@ -143,7 +144,8 @@ function dn_to_sam($dn){
  * Returns all LDAP attributes for samaccountname
  *
  * @param string $sam
- * @return array
+ * @return array of user attributes
+ *         null on error
  */
 function srch_by_sam($sam){
   if(empty($sam)){
@@ -175,7 +177,8 @@ function srch_by_sam($sam){
  * @param string $first
  * @param string $last
  * @param string $full
- * @return int 0 on success, 1 on fail
+ * @return int 0 on success
+ *         int 1 on fail
  */
 function touch_user($username, $first, $last, $full){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
