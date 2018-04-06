@@ -3,6 +3,8 @@ require_once 'config.php';
 require_once 'auth.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
+ *
  * Functions for courses.
  */
 

@@ -2,6 +2,7 @@
 require_once 'config.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
  *
  * Functions for manipulating the queues
  * 
