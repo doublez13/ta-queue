@@ -2,6 +2,8 @@
 require_once 'config.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * Functions for manipulating the queues
  * 
  */
 
@@ -37,6 +39,10 @@ function get_queue($course_name){
   #Get the state of the queue, if its not here, it must be closed
   $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return -1;
+  }
   if(!mysqli_num_rows($result)){
     $return["state"]        = "closed";
     $return["queue_length"] = 0;
@@ -53,6 +59,10 @@ function get_queue($course_name){
   #Get the announcements
   $query  = "SELECT id, announcement, tmstmp FROM announcements WHERE course_id ='".$course_id."' ORDER BY id";
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return -1;
+  }
   while($entry = mysqli_fetch_assoc($result)){
     $return["announce"][] = $entry;
   }
@@ -62,6 +72,10 @@ function get_queue($course_name){
              FROM ta_status INNER JOIN users on ta_status.username = users.username 
              WHERE course_id='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return -1;
+  }
   while($entry = mysqli_fetch_assoc($result)){
     $return["TAs"][] = $entry;
   }
@@ -71,6 +85,10 @@ function get_queue($course_name){
              FROM queue INNER JOIN users on queue.username = users.username
              WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return -1;
+  }
   while($entry = mysqli_fetch_assoc($result)){
     $return["queue"][] = $entry;
   }
@@ -460,6 +478,10 @@ function help_next_student($username, $course_name){
             AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
             ORDER BY position LIMIT 1";
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return -1;
+  }
   $position = mysqli_fetch_assoc($result)['position'];
 
   $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES (?,?,?)"; 
@@ -894,6 +916,10 @@ function change_queue_state($course_name, $state){
   }else{//Just querying the state of the queue if $state==NULL
     $query  = "SELECT state FROM queue_state WHERE course_id ='".$course_id."'";
     $result = mysqli_query($sql_conn, $query);
+    if(!$result){
+      mysqli_close($sql_conn);
+      return -1;
+    }
     if(!mysqli_num_rows($result)){
       mysqli_close($sql_conn);
       return "closed";
@@ -1007,6 +1033,11 @@ function change_stud_priority($stud_username, $course_name, $operation){
   mysqli_autocommit($sql_conn, false); 
 
   $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
   $entry  = mysqli_fetch_assoc($result);
   if(!$entry){
     mysqli_close($sql_conn);
