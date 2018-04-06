@@ -47,7 +47,7 @@ function get_queue($course_name){
     $return["state"]        = "closed";
     $return["queue_length"] = 0;
   }else{
-    $entry    = mysqli_fetch_assoc($result);
+    $entry = mysqli_fetch_assoc($result);
     $return["state"]    = $entry["state"];
     $return["time_lim"] = $entry["time_lim"];
     $return["cooldown"] = $entry["cooldown"];
@@ -828,9 +828,13 @@ function add_announcement($course_name, $announcement){
 }
 
 /**
+ * Delete announcement for course
  *
- *
- *
+ * @param string $course_name
+ * @param int    $announcement_id
+ * @return  0 on success
+ * @return -1 on error
+ * @return -2 on Nonexistant Course
  */
 function del_announcement($course_name, $announcement_id){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -1075,8 +1079,13 @@ function change_stud_priority($stud_username, $course_name, $operation){
 }
 
 /**
- *
- *
+ * Retrieves the cooldown setting for a course
+ * 
+ * @param string $course_id
+ * @param string $sql_conn
+ * @return int  0 if no cooldown set
+ * @return int -1 on fail
+ * @return int >0 in cooldown minutes
  */
 function get_course_cooldown($course_id, $sql_conn){
   if(!$sql_conn){
@@ -1103,8 +1112,15 @@ function get_course_cooldown($course_id, $sql_conn){
 }
 
 /**
+ * Checks if a user may join the queue based on the given cooldown time.
  *
- *
+ * @param string $stud_username
+ * @param string $course_cooldown in minutes
+ * @param string $course_id
+ * @param string $sql_conn
+ * @return int  0 if able to join
+ * @return int -1 on fail
+ * @return int >0 in seconds until able to join
  */
 function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_conn){
   if(!$sql_conn){
@@ -1126,15 +1142,17 @@ function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_
   mysqli_stmt_fetch($stmt);
   mysqli_stmt_close($stmt);
 
+  $course_cooldown_min = $course_cooldown * 60;
   if(is_null($user_cooldown)){
     return 0; //Good to go
-  }elseif($course_cooldown * 60 > $user_cooldown){
-    return $course_cooldown * 60 - $user_cooldown;
+  }elseif($course_cooldown_min > $user_cooldown){
+    return $course_cooldown_min - $user_cooldown;
   }else{
     return 0;
   }
 }
 
+//TODO: Implement these where write locks are desirable
 function write_lock_table($table_name, $sql_conn){
   if(!$sql_conn){
     return -1;

@@ -33,7 +33,7 @@ function auth($username, $pass){
  * Returns an array of information on the user
  *
  * @param string $username samaccountname
- * @return array
+ * @return array consisting of first name, last name, and username
  */
 function get_info($username){
   $result = srch_by_sam($username); 
