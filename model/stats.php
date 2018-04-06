@@ -210,7 +210,7 @@ function get_course_stats($course_name){
             AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))     AS avg_help_time, 
             STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))  AS stddev_help_time
             FROM student_log 
-            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=?";
+            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -247,7 +247,7 @@ function get_course_usage_by_day($course_name){
   $query = "SELECT
             DATE(enter_tmstmp), COUNT(*)
             FROM student_log 
-            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=?
+            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)
             GROUP BY DATE(enter_tmstmp)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){

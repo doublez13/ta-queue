@@ -49,7 +49,7 @@ else{
   $res = get_stud_log($username);
 }
 
-if($res == -1)
+if($res < 0)
 {
   $return = return_JSON_error($res);
   http_response_code(500);

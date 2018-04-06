@@ -42,7 +42,7 @@ if (!in_array($course, $ta_courses))
 
 $res = get_course_log($course); 
 
-if($res == -1)
+if($res < 0)
 {
   $return = return_JSON_error($res);
   http_response_code(500);

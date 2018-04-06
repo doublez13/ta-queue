@@ -1,11 +1,10 @@
 <?php
-// File: ta_log.php
+// File: course_log.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/stats.php';
 require_once '../errors.php';
 
-// get the session variables
 session_start();
 header('Content-type: application/json');
 
@@ -41,15 +40,18 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-$res = get_ta_log_for_course($username, $course);
-if($res < 0)
+$stats = get_course_stats($course); 
+$usage = get_course_usage_by_day($course); 
+
+if($stats < 0 || $usage < 0)
 {
-  $return = return_JSON_error($res);
+  $return = return_JSON_error(-1);
   http_response_code(500);
 }else{
   $return = array(
     "authenticated" => True,
-    "ta_log"   => $res
+    "stats"         => $stats,
+    "usage"         => $usage
   );
   http_response_code(200);
 }
