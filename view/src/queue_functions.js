@@ -411,39 +411,7 @@ function render_queue_table(dataParsed, role){
       td.append(button_group)
       new_row.append(td);
 
-      // ORIGINAL SEPARATED BUTTONS
-      // new_row.append("<td>");
-      // new_row.append(help_button);
-      // new_row.append("</td>");
-      //
-      // new_row.append("<td>");
-      // new_row.append(increase_button);
-      // new_row.append("</td>");
-      //
-      // new_row.append("<td>");
-      // new_row.append(decrease_button);
-      // new_row.append("</td>");
-      //
-      // new_row.append("<td>");
-      // new_row.append(dequeue_button);
-      // new_row.append("</td>");
-
     }else{//student
-      // OLD SOLUTION. THE PROBLEM WITH THIS IS THAT THE DIVISION LINES BETWEEN STUDENTS DON'T RENDER
-      // ACROSS THE ENTIRE WIDTH OF THE TABLE.
-      // if(username == my_username){
-      //   var decrease_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-down"></i>  </button>');
-      //   if(row == dataParsed.queue_length -1){
-      //       decrease_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
-      //   }
-      //   decrease_button.click(function(event){
-      //       dec_priority(course, my_username);
-      //   });
-      //   new_row.append("<td>");
-      //   new_row.append(decrease_button);
-      //   new_row.append("</td>");
-      // }
-
       // THIS SOLUTION RENDERS NICELY BUT SEEMS HACKY: MOVE DOWN BUTTON IS RENDERED ON *EVERY* ROW THEN
       // HIDDEN IF IT DOESN'T MATCH THE USER.
       var decrease_button = $('<button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
@@ -455,15 +423,14 @@ function render_queue_table(dataParsed, role){
           dec_priority(course, my_username);
         }
       });
+
       var td = $("<td></td>");
       var button_group = $("<div></div>");
-      button_group.append(decrease_button);
-      td.append(button_group)
-      new_row.append(td);
-
-      if(username !== my_username){ // Hide the button unless it's on the user's row
-        decrease_button.hide();
+      if(username === my_username){ // Hide the button unless it's on the user's row
+        button_group.append(decrease_button);
+        td.append(button_group)
       }
+      new_row.append(td);
     }
 
     $('#queue_body').append(new_row);

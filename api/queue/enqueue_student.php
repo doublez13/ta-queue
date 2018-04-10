@@ -25,7 +25,8 @@ if (!isset($_SESSION['username']))
   die();
 }
 
-if (!isset($_POST["course"]) || !isset($_POST["question"]) || !isset($_POST["location"]))
+if (  !isset($_POST["course"]) || !isset($_POST["question"]) || !isset($_POST["location"])
+   || !$_POST["course"] || !$_POST["question"] || !$_POST["location"])
 {
   http_response_code(422);
   $return = array(
