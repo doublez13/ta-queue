@@ -51,6 +51,17 @@ function renderCourseTable(allCourses, dataParsed) {
   }
 }
 
+
+done = function(data){
+  get_classes(); //reloads the content on the page
+}
+fail = function(data){
+  var httpStatus = data.status;
+  var dataString = JSON.stringify(data.responseJSON);
+  var dataParsed = JSON.parse(dataString);
+  alert(dataParsed["error"]);
+}
+
 function prompt_acc_code(course_name){
   var code = prompt("Please enter the course access code:");
   if(code != null){
@@ -61,31 +72,17 @@ function prompt_acc_code(course_name){
 function enrollCourse(course, code) {
   var url = "../api/user/add_course.php";
   if(code == null){
-    var $posting = $.post( url, { course: course } );
+    var posting = $.post( url, { course: course } );
   }else{
-    var $posting = $.post( url, { course: course, acc_code: code } );
+    var posting = $.post( url, { course: course, acc_code: code } );
   }
-  $posting.always( function(data) {
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){ // DOES NOT WORK (NEITHER DOES dataParsed["error"]). WHY IS THIS UNDEFINED? 'dataParsed.responseJSON.error' DOES WORK, BUT ERRORS WHEN ACCESS CODE IS CORRECT.
-      alert(dataParsed.error);
-    }else{
-      get_classes(); 
-    }
-  });
+  posting.done(done);
+  posting.fail(fail);
 }
 
 function dropCourse(course) {
   var url = "../api/user/rem_course.php";
-  var $posting = $.post( url, { course: course} );
-  $posting.done( function(data) {
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed.error);
-    }else{
-      get_classes();
-    }
-  });
+  var posting = $.post( url, { course: course} );
+  posting.done(done);
+  posting.fail(fail);
 }
