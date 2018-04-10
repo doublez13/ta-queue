@@ -120,7 +120,7 @@ function render_ann_box(anns){
   for(ann in anns){
     var timestamp       = anns[ann]["tmstmp"].split(" ")[0];
     var announcement    = anns[ann]["announcement"];
-    var announcement_id = anns[ann]["id"];
+    let announcement_id = anns[ann]["id"];
     var new_row =  $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td>  </tr>');
     if(is_TA){
       // blue X icon:
