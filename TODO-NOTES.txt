@@ -1,26 +1,30 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-IMPORTANT: in classes.js I had to use 'dataParsed.responseJSON.error'. Why is 'dataParsed.error' undefined?
+Maybe something weird with errors.php->return_JSON_error()? Same issue in other JS files?
+-Occasional console message: "Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2"
+-Noticed this issue sometimes as student on all courses and queue pages but nothing visibly wrong:
+"Failed to load resource: the server responded with a status of 404 (Not Found) /favicon.ico"
+-Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
+-disallow empty fields when entering queue
+-It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
 -include link to Canvas?
 -link to non-existent admin page -> edit_class.php
 -TA log to track how long on duty?
 -Include student names in ta_log?
+-small UI issue: make buttons a fixed width at all times on all courses page
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Should students be unenrolled automatically, or manually, from their courses after the semester? Maybe make this an admin functionality?
 -Notifications for new announcements
+-Sign in button not centered using Edge browser
 -DEMOS: explicitly display who is TA and who is student
 //-Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?
--The 'U' logo in the top left of the screen simply takes you to the page you're on. Disable?
--Add tool tips for unnamed buttons in the queue (e.g. the help/free button on the queue page)
--It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
 -Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make
 these integers?
 -I forget how I even got my CADE credentials in the first place... should we have a link on the login page to some CADE page if
 users don't have a CADE account?
--nitpicky thing but might be easier to do in an IDE: change 'class' to 'course' in endpoint names as that matches the code
-and API documentation
--Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -help_student.php (not the UI) allows two TAs to help the same student. Keep it this way? I sorta think yes, but how would we show this?
 ***Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
 'state:closed'. If we decided to explicitly store closed queues in queue_state, we could return that the course
@@ -30,7 +34,6 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -max on duty TAs box wider so a name doesn't take two lines to display
 -set Announcements and On Duty TA boxes at a constant size (instead of growing/shrinking) and use scroll bar when necessary
 -on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
--automatic location generation when entering queue
 -Have different background colors for TAs
 -Have CIS handle authentication
 -Spinners or progress/waiting indicators for slow loads

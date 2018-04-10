@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>Queue - All Classes</title>
+		<title>Queue - All Courses</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
 		<meta name="keywords"    content="University of Utah, 2017-2018"/>
@@ -53,10 +53,10 @@
                           }
                         ?>
                         <li class="active">
-                            <a href="#">All Classes</a>
+                            <a href="#">All Courses</a>
                         </li>
                         <li>
-                            <a href="my_classes.php">My Classes</a>
+                            <a href="my_classes.php">My Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
@@ -68,7 +68,7 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">All Classes</h1>
+				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">All Courses</h1>
 			</div>
 		</div>
 
@@ -80,17 +80,18 @@
 						<!-- Default panel contents -->
 							<div class="panel-heading">
                                 <!--OLD STYLE-->
-<!--							<h3 class="panel-title">All Available Classes</h3>-->
-                                <h3 class="panel-title" style="font-size:20px;" align="center">All Available Classes</h3>
+<!--							<h3 class="panel-title">All Available Courses</h3>-->
+                                <h3 class="panel-title" style="font-size:20px;" align="center">All Available Courses</h3>
 							</div>
 							<div class="panel-body">
-                                <p align="center"><b>Select your classes then click My Classes when finished.</b></p>
+                                <p align="center"><b>Join/Leave your courses here. Click My Courses when finished.</b></p>
 							</div>
-								<table class="table table-hover " id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
-                                    <tr>
-                                          <th>Class Name</th>
-                                          <th>Enroll</th>
-                                    </tr>
+                            <table class="table table-hover " id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
+<!--                                <tr>-->
+<!--                                      <th>Course Name</th>-->
+<!--                                      <th>Add</th>-->
+<!--                                </tr>-->
+                                <tbody id="all_classes_body"></tbody>
 								<!--classes.js should write here-->
 							</table>
 						</div><!--panel-->

@@ -8,8 +8,8 @@ $(function () {
     var ta_courses   = dataParsed.ta_courses;
   
     var intersection = stud_courses.filter(function(n) {
-                     return ta_courses.indexOf(n) !== -1;
-                   });    
+      return ta_courses.indexOf(n) !== -1;
+    });
     if(intersection.length){
       alert("You're registered on the queue as both a student and TA for one or more courses. Unregistering as student...");
       for(course in intersection){ 

@@ -199,3 +199,18 @@ a:hover
 }
 
 /* ===[ End Glow Animation ]=== */
+
+/*ROLLOVER TA BUTTONS. TO ENABLE, ADD 'rollOverText' IN THE TA BUTTON GROUP CLASS LIST*/
+/*#queue{*/
+
+/*}*/
+
+/*#queue .rollOverText{*/
+    /*display:none;*/
+/*}*/
+
+/*#queue tr:hover .rollOverText{*/
+    /*display:block;*/
+/*}*/
+
+/* ===[ End ROLLOVER TA BUTTONS ]=== */

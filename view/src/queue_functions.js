@@ -96,7 +96,6 @@ var render_view = function(data) {
     render_queue_table(dataParsed, "student");
     render_student_view(dataParsed)
   }
-
 }
 
 function render_stats(dataParsed){
@@ -124,7 +123,10 @@ function render_ann_box(anns){
     var announcement_id = anns[ann]["id"];
     var new_row =  $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td>  </tr>');
     if(is_TA){
-      var del_ann_button = $('<button class="btn btn-primary"><span> <i class="fa fa-close"></i>  </span> </button>');
+      // blue X icon:
+      var del_ann_button = $('<button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button>');
+      // red circle X icon:
+      //var del_ann_button = $('<button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button>');
       del_ann_button.click(function(event){
         del_announcement(course, announcement_id)
       });
@@ -139,6 +141,7 @@ function render_ann_box(anns){
     $("#ann_button").click(function( event ) {
       event.preventDefault();
       var announcement = document.getElementById("new_ann").value;
+      document.getElementById("new_ann").value = "";
       add_announcement(course, announcement)
     });
   }
@@ -166,8 +169,9 @@ function render_ta_view(dataParsed){
 
   var queue_state = dataParsed.state;
   if(queue_state == "closed"){
-    document.getElementById("state_button").style.background='ForestGreen';
-    $("#state_button").text("OPEN QUEUE");
+    //document.getElementById("state_button").style.background='ForestGreen';
+    document.getElementById("state_button").className="btn btn-success";
+    $("#state_button").text("Open Queue");
     $("#state_button").click(function( event ) {
       event.preventDefault();
       open_queue(course);
@@ -177,28 +181,37 @@ function render_ta_view(dataParsed){
     $("#time_form").hide();
     $("#cooldown_form").hide();
   }else{ //open or frozen
-    document.getElementById("state_button").style.background='FireBrick';
-    $("#state_button").text("CLOSE QUEUE");
+    //document.getElementById("state_button").style.background='FireBrick';
+    document.getElementById("state_button").className="btn btn-danger";
+    $("#state_button").text("Close Queue");
     $("#state_button").click(function( event ) {
       event.preventDefault();
-      var res = confirm("Are you sure you want to close the queue? All students will be removed.")
-      if(res){
-        close_queue(course);
+      if (dataParsed.queue_length > 0) {
+        var res = confirm("Are you sure you want to close the queue? All students will be removed.")
+        if (res) {
+          close_queue(course);
+        }
       }
+      else
+        close_queue(course);
     });
    
     if(queue_state == "open"){ 
       //$("body").css("background-image", "-webkit-linear-gradient(top, #808080 0%, #FFFFFF 50%");
-      document.getElementById("freeze_button").style.background='#1B4F72';
-      $("#freeze_button").text("FREEZE QUEUE");
+      //document.getElementById("freeze_button").style.background='#1B4F72';
+      document.getElementById("freeze_button").className="btn btn-primary";
+      document.getElementById("freeze_button").title="Prevent new entries";
+      $("#freeze_button").text("Freeze Queue");
       $("#freeze_button").click(function( event ) {
         event.preventDefault();
         freeze_queue(course);
       });
     }else{ //frozen
       //$("body").css("background-image", "-webkit-linear-gradient(top, #075685 0%, #FFF 50%");
-      document.getElementById("freeze_button").style.background='Orange';
-      $("#freeze_button").text("RESUME QUEUE");
+      //document.getElementById("freeze_button").style.background='Orange';
+      document.getElementById("freeze_button").className="btn btn-warning";
+      document.getElementById("freeze_button").title="Allow new entries";
+      $("#freeze_button").text("Resume Queue");
       $("#freeze_button").click(function( event ) {
         event.preventDefault();
         open_queue(course);
@@ -215,19 +228,21 @@ function render_ta_view(dataParsed){
     } 
     
     if(!on_duty) {
-      document.getElementById("duty_button").style.background='ForestGreen';
-      $("#duty_button").text("GO ON DUTY");
+      //document.getElementById("duty_button").style.background='ForestGreen';
+      document.getElementById("duty_button").className="btn btn-success";
+      $("#duty_button").text("Go On Duty");
       $("#duty_button").click(function(event){
-         event.preventDefault();
-	 enqueue_ta(course); 
+        event.preventDefault();
+        enqueue_ta(course);
       });
     }
     else{
-      document.getElementById("duty_button").style.background='FireBrick';
-      $("#duty_button").text("GO OFF DUTY");
+      //document.getElementById("duty_button").style.background='FireBrick';
+      document.getElementById("duty_button").className="btn btn-danger";
+      $("#duty_button").text("Go Off Duty");
       $("#duty_button").click(function(event){
-	 event.preventDefault();
-         dequeue_ta(course); 
+	    event.preventDefault();
+	    dequeue_ta(course);
       });
     }
     $("#duty_button").show();
@@ -297,11 +312,18 @@ function render_student_view(dataParsed){
 function render_queue_table(dataParsed, role){
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
-  $("#queue tr").remove();
-  $('#queue').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Pos.</th>"+ 
-                          "<th class='col-sm-2' align='left' style='padding-left:0px; text-decoration:underline;'>Student</th>"+ 
-                          "<th class='col-sm-1' align='left' style='padding-left:0px; text-decoration:underline;'>Location</th>"+ 
-                          "<th class='col-sm-4' align='left' style='padding-left:5px; text-decoration:underline;'>Question</th> </tr>");
+  //$("#queue tr").remove();
+  // $('#queue').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Pos.</th>"+
+  //                         "<th class='col-sm-2' align='left' style='padding-left:0px; text-decoration:underline;'>Student</th>"+
+  //                         "<th class='col-sm-1' align='left' style='padding-left:0px; text-decoration:underline;'>Location</th>"+
+  //                         "<th class='col-sm-4' align='left' style='padding-left:5px; text-decoration:underline;'>Question</th> </tr>");
+
+  //$("#queue_head").empty();
+  $("#queue_body").empty();
+  $('#queue_body').append("<tr style='background: none;'> <th class='col-sm-1' align='left'>Pos.</th>"+
+                          "<th class='col-sm-2' align='left'>Student</th>"+
+                          "<th class='col-sm-1' align='left'>Location</th>"+
+                          "<th class='col-sm-4' align='left'>Question</th> </tr>");
  
   var helping = {};
   for(TA in TAs ){
@@ -318,7 +340,8 @@ function render_queue_table(dataParsed, role){
     let full_name = queue[row].full_name;
     var question  = queue[row].question;
     var Location  = queue[row].location;
-    var new_row = $("<tr> <td style='padding-left: 10px;'>"+ i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
+    //var new_row = $("<tr> <td style='padding-left: 10px;'>"+ i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
+    var new_row = $("<tr><td>" + i + "</td><td>" + full_name + "</td><td>" + Location + "</td><td>" + question + "</td></tr>");
     i++;   
  
     if( username in helping ){
@@ -331,75 +354,119 @@ function render_queue_table(dataParsed, role){
 
         if(time_rem <= 0){
           new_row.css("background-color", "#fe2b40"); //User is over time limit
-	  //$("body").css("background-image", "-webkit-linear-gradient(top, #ff9C00 0%, #fFFFBB 50%");
+	      //$("body").css("background-image", "-webkit-linear-gradient(top, #ff9C00 0%, #fFFFBB 50%");
         }
       }
     }
 
     if(is_TA) {
-      var dequeue_button = $('<button class="btn btn-primary"> <i class="fa fa-close"></i>  </button>');
-      dequeue_button.click(function(event) {
-        dequeue_student(course, username);
-      });
+      // HELP BUTTON
       if( username in helping ){
-        var help_button = $('<button class="btn btn-primary"> <i class="fa fa-undo"></i>  </button>');
+        var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
         help_button.click(function(event){
           release_ta(course);
         });
       }else{
-        var help_button = $('<button class="btn btn-primary"><span> <i class="fa fa-clipboard"></i>  </span> </button>');
+        var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
           enqueue_ta(course); //Maybe make this cleaner. 
           help_student(course, username);
         });
       }
-      var increase_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-up"></i>  </button>');
+
+      // MOVE UP BUTTON
+      var increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up"> <i class="fa fa-arrow-up"></i>  </button></div>');
       if(row == 0){
-        increase_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-up"></i>  </button>');
+        increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up" disabled=true> <i class="fa fa-arrow-up"></i>  </button></div>');
       }
       increase_button.click(function(event){
         inc_priority(course, username); 
       });
 
-      var decrease_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-down"></i>  </button>');
+      // MOVE DOWN BUTTON
+      var decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
       if(row == dataParsed.queue_length -1){
-        decrease_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
+        decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
       }
       decrease_button.click(function(event){
         dec_priority(course, username);
       });
 
-      new_row.append("<td>");
-      new_row.append(help_button);
-      new_row.append("</td>");
+      // REMOVE BUTTON
+      // blue X icon:
+      var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
+      // red circle X icon:
+      //var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-danger" title="Remove"> <i class="glyphicon glyphicon-remove-sign"></i>  </button></div>');
+      dequeue_button.click(function(event) {
+          dequeue_student(course, username);
+      });
 
-      new_row.append("<td>");
-      new_row.append(dequeue_button);
-      new_row.append("</td>");
+      // Create TA button group that spans entire td width and append it to the new row
+      var td = $("<td></td>");
+      var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
+      button_group.append(help_button);
+      button_group.append(increase_button);
+      button_group.append(decrease_button);
+      button_group.append(dequeue_button);
+      td.append(button_group)
+      new_row.append(td);
 
-      new_row.append("<td>");
-      new_row.append(increase_button);
-      new_row.append("</td>");
+      // ORIGINAL SEPARATED BUTTONS
+      // new_row.append("<td>");
+      // new_row.append(help_button);
+      // new_row.append("</td>");
+      //
+      // new_row.append("<td>");
+      // new_row.append(increase_button);
+      // new_row.append("</td>");
+      //
+      // new_row.append("<td>");
+      // new_row.append(decrease_button);
+      // new_row.append("</td>");
+      //
+      // new_row.append("<td>");
+      // new_row.append(dequeue_button);
+      // new_row.append("</td>");
 
-      new_row.append("<td>");
-      new_row.append(decrease_button);
-      new_row.append("</td>");
     }else{//student
-      if(username == my_username){
-        var decrease_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-down"></i>  </button>');
-        if(row == dataParsed.queue_length -1){
-          decrease_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
-        }
-        decrease_button.click(function(event){
+      // OLD SOLUTION. THE PROBLEM WITH THIS IS THAT THE DIVISION LINES BETWEEN STUDENTS DON'T RENDER
+      // ACROSS THE ENTIRE WIDTH OF THE TABLE.
+      // if(username == my_username){
+      //   var decrease_button = $('<button class="btn btn-primary"> <i class="fa fa-arrow-down"></i>  </button>');
+      //   if(row == dataParsed.queue_length -1){
+      //       decrease_button = $('<button class="btn btn-primary" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
+      //   }
+      //   decrease_button.click(function(event){
+      //       dec_priority(course, my_username);
+      //   });
+      //   new_row.append("<td>");
+      //   new_row.append(decrease_button);
+      //   new_row.append("</td>");
+      // }
+
+      // THIS SOLUTION RENDERS NICELY BUT SEEMS HACKY: MOVE DOWN BUTTON IS RENDERED ON *EVERY* ROW THEN
+      // HIDDEN IF IT DOESN'T MATCH THE USER.
+      var decrease_button = $('<button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
+      if(row == dataParsed.queue_length -1){
+        decrease_button = $('<button class="btn btn-primary" disabled=true title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
+      }
+      decrease_button.click(function(event){
+        if (confirm("Are you sure you want to move one spot down?")) {
           dec_priority(course, my_username);
-        });
-        new_row.append("<td>");
-        new_row.append(decrease_button);
-        new_row.append("</td>");
+        }
+      });
+      var td = $("<td></td>");
+      var button_group = $("<div></div>");
+      button_group.append(decrease_button);
+      td.append(button_group)
+      new_row.append(td);
+
+      if(username !== my_username){ // Hide the button unless it's on the user's row
+        decrease_button.hide();
       }
     }
 
-    $('#queue').append(new_row);
+    $('#queue_body').append(new_row);
   }
 }
 

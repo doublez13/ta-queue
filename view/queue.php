@@ -57,10 +57,10 @@
                           }
                         ?>
                         <li>
-                            <a href="classes.php">All Classes</a>
+                            <a href="classes.php">All Courses</a>
                         </li>
                         <li>
-                            <a href="my_classes.php">My Classes</a>
+                            <a href="my_classes.php">My Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
@@ -98,8 +98,8 @@
 					<div class="panel panel-primary">
                 		<div class="panel-heading">
                             <!--RYAN'S STYLE-->
-<!--                		<h3 class="panel-title" style="font-family: garamond; font-size:30px;" align="center">Announcements</h3>-->
-                            <h3 class="panel-title" style="font-size:20px;" align="center">Announcements</h3>
+<!--                	    <h3 class="panel-title" style="font-family: garamond; font-size:30px;" align="center">Announcements</h3>-->
+                            <h3 class="panel-title"  style="font-size:20px;" align="center">Announcements</h3>
                 		</div>
                         <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto; display: block; max-height: 120px; overflow-y: scroll;"> </table>
                         <form>
@@ -116,7 +116,7 @@
                         <input type="number" id="time_limit_input" style='width:5em'>
                         <input class="btn btn-success" type="submit" value="Set">
                       </form>
-                      <form id="cooldown_form" title="queue reentry wait time">
+                      <form id="cooldown_form" title="Queue reentry wait time">
                         <label>Cool-down Time</label> </br>
                         <input type="number" id="cooldown_input" style='width:5em'>
                         <input class="btn btn-success" type="submit" value="Set">
@@ -131,7 +131,10 @@
 <!--							<h3 class="panel-title" style="font-family: garamond; font-size: 30px;" align="center">Queue</h3>-->
                                 <h3 class="panel-title" style="font-size: 20px;" align="center">Queue</h3>
 							</div>
-								<table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto;"> </table>
+                            <table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto;">
+<!--                            <thead id="queue_head"></thead>-->
+                                <tbody id="queue_body"></tbody>
+                            </table>
 						</div><!--panel-->
 					</div><!--id-->
 				</div><!--col-sm-8-->
@@ -145,7 +148,7 @@
 				        <button class="btn btn-success" id="state_button"></button>
                     </div>
                     <div class="col-sm-4">
-                        <button class="btn btn-success" id="freeze_button"></button>
+                        <button class="btn btn-info" id="freeze_button"></button>
                     </div>
 
                     <button class="btn btn-success" id="join_button"></button>

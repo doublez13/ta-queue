@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>Queue - My Classes</title>
+		<title>Queue - My Courses</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
 		<meta name="keywords"    content="University of Utah, 2017-2018"/>
@@ -52,10 +52,10 @@
                           }
                         ?>
                         <li>
-                            <a href="classes.php">All Classes</a>
+                            <a href="classes.php">All Courses</a>
                         </li>
                         <li class="active">
-                            <a href="#">My Classes</a>
+                            <a href="#">My Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
@@ -67,7 +67,7 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">My Classes</h1>
+				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">My Courses</h1>
 			</div>
 		</div>
 
@@ -80,12 +80,12 @@
 							<div class="panel-heading">
 <!--                                OLD STYLE-->
 <!--							<h3 class="panel-title">My Classes</h3>-->
-                                <h3 class="panel-title" style="font-size:20px;" align="center">My Classes</h3>
+                                <h3 class="panel-title" style="font-size:20px;" align="center">My Courses</h3>
 							</div>
 <!--							<div class="panel-body"></div>-->
                             <table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
-								<tr>
-									<th>Class</th>
+								<tr style="background: none;">
+									<th>Course</th>
 									<th>Role</th>
 									<th>Queue</th>
 								</tr>

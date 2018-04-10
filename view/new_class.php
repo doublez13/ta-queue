@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>Queue - All Classes</title>
+		<title>Queue - New Course</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
 		<meta name="keywords"    content="University of Utah, 2017-2018"/>
@@ -53,10 +53,10 @@
                           }
                         ?>
                         <li>
-                            <a href="classes.php">All Classes</a>
+                            <a href="classes.php">All Courses</a>
                         </li>
                         <li>
-                            <a href="my_classes.php">My Classes</a>
+                            <a href="my_classes.php">My Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
@@ -68,7 +68,7 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">New Class</h1>
+				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">New Course</h1>
 			</div>
 		</div>
 
@@ -79,7 +79,7 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title">Create New Class</h3>
+								<h3 class="panel-title">Create New Course</h3>
                             </div>
 
                             <style>
