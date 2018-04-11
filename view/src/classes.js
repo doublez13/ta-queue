@@ -19,8 +19,6 @@ function get_classes(){
 }
 
 function renderCourseTable(allCourses, dataParsed) {
-  //$('#all_classes tr').remove();
-  //var table = $('#all_classes');
   $('#all_classes_body').empty();
   var myCourses = dataParsed.student_courses;
   var ta_courses= dataParsed.ta_courses;
@@ -37,16 +35,16 @@ function renderCourseTable(allCourses, dataParsed) {
       tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
     }
     else{
-      var text = " Join"; // extra space on left creates a little separation between icon and text
+      var text = " Enroll"; // extra space on left creates a little separation between icon and text
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
-        tableRow.append('<td> <button class="btn btn-success" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button> </td>');
       }else{
         var action = "enrollCourse('"+course_name+"', null)";
-        tableRow.append('<td> <button class="btn btn-success" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
       }
     }
-    //table.append(tableRow);
+
     $('#all_classes_body').append(tableRow);
   }
 }
@@ -55,6 +53,7 @@ function renderCourseTable(allCourses, dataParsed) {
 done = function(data){
   get_classes(); //reloads the content on the page
 }
+
 fail = function(data){
   var httpStatus = data.status;
   var dataString = JSON.stringify(data.responseJSON);

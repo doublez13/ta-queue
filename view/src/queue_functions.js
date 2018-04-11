@@ -18,7 +18,7 @@ $(document).ready(function(){
 
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
-    height: 400,
+    height: 350,
     width: 350,
     modal: true,
     buttons: {
@@ -123,9 +123,9 @@ function render_ann_box(anns){
     let announcement_id = anns[ann]["id"];
     var new_row =  $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td>  </tr>');
     if(is_TA){
-      // blue X icon:
+      // blue X icon below:
       var del_ann_button = $('<button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button>');
-      // red circle X icon:
+      // red circle X icon below:
       //var del_ann_button = $('<button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button>');
       del_ann_button.click(function(event){
         del_announcement(course, announcement_id)
@@ -169,7 +169,6 @@ function render_ta_view(dataParsed){
 
   var queue_state = dataParsed.state;
   if(queue_state == "closed"){
-    //document.getElementById("state_button").style.background='ForestGreen';
     document.getElementById("state_button").className="btn btn-success";
     $("#state_button").text("Open Queue");
     $("#state_button").click(function( event ) {
@@ -181,7 +180,6 @@ function render_ta_view(dataParsed){
     $("#time_form").hide();
     $("#cooldown_form").hide();
   }else{ //open or frozen
-    //document.getElementById("state_button").style.background='FireBrick';
     document.getElementById("state_button").className="btn btn-danger";
     $("#state_button").text("Close Queue");
     $("#state_button").click(function( event ) {
@@ -198,7 +196,6 @@ function render_ta_view(dataParsed){
    
     if(queue_state == "open"){ 
       //$("body").css("background-image", "-webkit-linear-gradient(top, #808080 0%, #FFFFFF 50%");
-      //document.getElementById("freeze_button").style.background='#1B4F72';
       document.getElementById("freeze_button").className="btn btn-primary";
       document.getElementById("freeze_button").title="Prevent new entries";
       $("#freeze_button").text("Freeze Queue");
@@ -208,7 +205,6 @@ function render_ta_view(dataParsed){
       });
     }else{ //frozen
       //$("body").css("background-image", "-webkit-linear-gradient(top, #075685 0%, #FFF 50%");
-      //document.getElementById("freeze_button").style.background='Orange';
       document.getElementById("freeze_button").className="btn btn-warning";
       document.getElementById("freeze_button").title="Allow new entries";
       $("#freeze_button").text("Resume Queue");
@@ -228,7 +224,6 @@ function render_ta_view(dataParsed){
     } 
     
     if(!on_duty) {
-      //document.getElementById("duty_button").style.background='ForestGreen';
       document.getElementById("duty_button").className="btn btn-success";
       $("#duty_button").text("Go On Duty");
       $("#duty_button").click(function(event){
@@ -237,7 +232,6 @@ function render_ta_view(dataParsed){
       });
     }
     else{
-      //document.getElementById("duty_button").style.background='FireBrick';
       document.getElementById("duty_button").className="btn btn-danger";
       $("#duty_button").text("Go Off Duty");
       $("#duty_button").click(function(event){
@@ -259,6 +253,7 @@ function render_ta_view(dataParsed){
       set_limit(course, limit);
     });
 
+    // Don't refresh while editing
     if (!$("#cooldown_input").is(":focus")) {
       $("#cooldown_input").val(dataParsed.cooldown);
     }
@@ -312,11 +307,6 @@ function render_student_view(dataParsed){
 function render_queue_table(dataParsed, role){
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
-  //$("#queue tr").remove();
-  // $('#queue').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Pos.</th>"+
-  //                         "<th class='col-sm-2' align='left' style='padding-left:0px; text-decoration:underline;'>Student</th>"+
-  //                         "<th class='col-sm-1' align='left' style='padding-left:0px; text-decoration:underline;'>Location</th>"+
-  //                         "<th class='col-sm-4' align='left' style='padding-left:5px; text-decoration:underline;'>Question</th> </tr>");
 
   //$("#queue_head").empty();
   $("#queue_body").empty();
@@ -324,7 +314,6 @@ function render_queue_table(dataParsed, role){
                           "<th class='col-sm-2' align='left'>Student</th>"+
                           "<th class='col-sm-1' align='left'>Location</th>"+
                           "<th class='col-sm-4' align='left'>Question</th> </tr>");
- 
   var helping = {};
   for(TA in TAs ){
     if(TAs[TA].helping != null){
@@ -340,7 +329,6 @@ function render_queue_table(dataParsed, role){
     let full_name = queue[row].full_name;
     var question  = queue[row].question;
     var Location  = queue[row].location;
-    //var new_row = $("<tr> <td style='padding-left: 10px;'>"+ i +"</td> <td>" + full_name + "</td> <td>" + Location + "</td> <td style='padding-left:5px;'>" + question + "</td> </tr>");
     var new_row = $("<tr><td>" + i + "</td><td>" + full_name + "</td><td>" + Location + "</td><td>" + question + "</td></tr>");
     i++;   
  
@@ -393,9 +381,9 @@ function render_queue_table(dataParsed, role){
       });
 
       // REMOVE BUTTON
-      // blue X icon:
+      // blue X icon below:
       var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
-      // red circle X icon:
+      // red circle X icon below:
       //var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-danger" title="Remove"> <i class="glyphicon glyphicon-remove-sign"></i>  </button></div>');
       dequeue_button.click(function(event) {
           dequeue_student(course, username);
@@ -412,8 +400,6 @@ function render_queue_table(dataParsed, role){
       new_row.append(td);
 
     }else{//student
-      // THIS SOLUTION RENDERS NICELY BUT SEEMS HACKY: MOVE DOWN BUTTON IS RENDERED ON *EVERY* ROW THEN
-      // HIDDEN IF IT DOESN'T MATCH THE USER.
       var decrease_button = $('<button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
       if(row == dataParsed.queue_length -1){
         decrease_button = $('<button class="btn btn-primary" disabled=true title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
@@ -425,10 +411,10 @@ function render_queue_table(dataParsed, role){
       });
 
       var td = $("<td></td>");
-      var button_group = $("<div></div>");
-      if(username === my_username){ // Hide the button unless it's on the user's row
-        button_group.append(decrease_button);
-        td.append(button_group)
+      var div = $("<div></div>");
+      if(username === my_username){ // Only add the move down button if it's the user's row
+        div.append(decrease_button);
+        td.append(div)
       }
       new_row.append(td);
     }
@@ -441,6 +427,7 @@ function render_queue_table(dataParsed, role){
 done = function(data){
   get_queue(course); //reloads the content on the page
 }
+
 fail = function(data){
   var httpStatus = data.status;
   var dataString = JSON.stringify(data.responseJSON);

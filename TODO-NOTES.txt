@@ -1,15 +1,7 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
--IMPORTANT: in classes.js I had to use 'dataParsed.responseJSON.error'. Why is 'dataParsed.error' undefined?
-Maybe something weird with errors.php->return_JSON_error()? Same issue in other JS files?
--Occasional console message: "Slow network is detected. See https://www.chromestatus.com/feature/5636954674692096 for more details. Fallback font will be used while loading: https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/fonts/glyphicons-halflings-regular.woff2"
--Noticed this issue sometimes as student on all courses and queue pages but nothing visibly wrong:
-"Failed to load resource: the server responded with a status of 404 (Not Found) /favicon.ico"
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
--disallow empty fields when entering queue
 -It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
--include link to Canvas?
--link to non-existent admin page -> edit_class.php
 -TA log to track how long on duty?
 -Include student names in ta_log?
 -small UI issue: make buttons a fixed width at all times on all courses page

@@ -20,11 +20,11 @@
 		<!-- jQuery CDN -->
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"  integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
 		<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css" integrity="sha384-Nlo8b0yiGl7Dn+BgLn4mxhIIBU6We7aeeiulNCjHdUv/eKHx59s3anfSUjExbDxn" crossorigin="anonymous">
+        <!-- Latest compiled and minified JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- Cool buttons -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha384-Dziy8F2VlJQLMShA6FHWNul/veM9bCkRUaLqr199K94ntO5QUrLJBEbYegdSkkqX" crossorigin="anonymous"></script>
-		<!-- Latest compiled and minified JavaScript -->
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
         <!-- queue source -->
         <script src="./src/queue_functions.js"></script>
         <script src="./src/logout.js"></script>
@@ -153,13 +153,21 @@
 
                     <button class="btn btn-success" id="join_button"></button>
                     <div id="dialog-form" title="Location and Question">
-                      <p class="validateTips">All form fields are required.</p>
+                        <p class="validateTips">Both fields are required.<br>
+                          <i>(50 character max)</i>
+                      </p>
+                      <br>
                       <form>
                         <fieldset>
-                          <label for="location">Location</label>
-                          <input type="text" name="location" id="location" class="text" maxlength="50">
-                          <label for="question">Question</label>
-                          <input type="text" name="question" id="question" value="" class="text" maxlength="50">
+                            <label for="location">Location</label>
+                            <div>
+                              <input type="text" name="location" id="location" style="width: 100%" class="text" maxlength="50">
+                            </div>
+                            <br>
+                            <label for="question">Question</label>
+                            <div>
+                              <input type="text" name="question" id="question" style="width: 100%" class="text" maxlength="50">
+                            </div>
                         </fieldset>
                       </form>
                     </div>
