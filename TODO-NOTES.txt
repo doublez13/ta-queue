@@ -1,5 +1,6 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Modify stats endpoints to let user post date ranges so such massive amounts of data aren't returned?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
 -TA log to track how long on duty?

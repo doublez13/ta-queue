@@ -111,16 +111,36 @@
 			</div>
 			<div class="row">
                 <div class="col-sm-2">
-                      <form id="time_form">
+                    <form id="time_form" title="(minutes)">
                         <label>Time Limit Per Student</label> </br>
                         <input type="number" id="time_limit_input" style='width:5em'>
                         <input class="btn btn-success" type="submit" value="Set">
-                      </form>
-                      <form id="cooldown_form" title="Queue reentry wait time">
+                    </form>
+                    <form id="cooldown_form" title="Queue reentry wait time (minutes)">
                         <label>Cool-down Time</label> </br>
                         <input type="number" id="cooldown_input" style='width:5em'>
                         <input class="btn btn-success" type="submit" value="Set">
-                      </form>
+                    </form>
+
+<!--                FUNCTIONAL SLEEKER ALTERNATIVE, BUT BUTTONS NOT RENDERING PROPERLY-->
+<!--                <form id="time_form" title="(minutes)">-->
+<!--                    <label>Time Limit Per Student</label>-->
+<!--                     <div class="input-group" style='width:8em'>-->
+<!--                        <input type="number" id="time_limit_input" class="form-control">-->
+<!--                        <span class="input-group-btn">-->
+<!--                            <button class="btn btn-success" type="submit" value="Set">-->
+<!--                        </span>-->
+<!--                    </div>-->
+<!--                </form>-->
+<!--                <form id="cooldown_form" title="Queue reentry wait time (minutes)">-->
+<!--                    <label>Cool-down Time</label>-->
+<!--                    <div class="input-group" style='width:8em'>-->
+<!--                        <input type="number" id="cooldown_input" class="form-control">-->
+<!--                        <span class="input-group-btn">-->
+<!--                            <button class="btn btn-success" type="submit" value="Set">-->
+<!--                        </span>-->
+<!--                    </div>-->
+<!--                </form>-->
                 </div>
 				<div class="col-sm-8 col-sm-offset-1">
 					<div id ="queue_table">

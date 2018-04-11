@@ -205,11 +205,16 @@ function get_course_stats($course_name){
     return -1;
   }
 
+  // ~~~~~~~~~~~~~~~ ORIGINAL UNROUNDED STATS (NO STD WAIT TIME) ~~~~~~~~~~~~~
+  // AVG(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp)))    AS avg_wait_time,
+  // AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))     AS avg_help_time,
+  // STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))  AS stddev_help_time
   $query = "SELECT
-            AVG(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp)))    AS avg_wait_time,
-            AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))     AS avg_help_time, 
-            STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))  AS stddev_help_time
-            FROM student_log 
+            ROUND(AVG(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp)))   , 0)  AS avg_wait_time,
+            ROUND(STDDEV(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp))), 0)  AS stddev_wait_time,
+            ROUND(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))    , 0)  AS avg_help_time, 
+            ROUND(STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp))) , 0)  AS stddev_help_time
+            FROM student_log  
             WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -223,9 +228,10 @@ function get_course_stats($course_name){
     return -1;
   }
 
-  mysqli_stmt_bind_result($stmt, $avg_wait_time, $avg_help_time, $stddev_help_time);
+  mysqli_stmt_bind_result($stmt, $avg_wait_time, $stddev_wait_time, $avg_help_time, $stddev_help_time);
   mysqli_stmt_fetch($stmt);
   return array("avg_wait_time"    => $avg_wait_time,
+               "stddev_wait_time" => $stddev_wait_time,
                "avg_help_time"    => $avg_help_time,
                "stddev_help_time" => $stddev_help_time
               );
@@ -264,8 +270,8 @@ function get_course_usage_by_day($course_name){
   mysqli_stmt_bind_result($stmt, $date, $count);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array("date"     => $date,
-                      "count"    => $count
+    $result[] = array("date"            => $date,
+                      "students_helped" => $count
                      );
   }
 

@@ -1,5 +1,5 @@
 <?php
-// File: course_log.php
+// File: course_stats.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 require_once '../../model/stats.php';
@@ -31,14 +31,16 @@ if (!isset($_POST['course']))
 
 $username   = $_SESSION['username'];
 $course     = $_POST['course'];
-$ta_courses = $_SESSION["ta_courses"];
 
-if (!in_array($course, $ta_courses))
-{
-  http_response_code(403);
-  echo json_encode( not_authorized() );
-  die();
-}
+// UNCOMMENT TO RESTRICT ENDPOINT TO TAS
+//$ta_courses = $_SESSION["ta_courses"];
+//
+//if (!in_array($course, $ta_courses))
+//{
+//  http_response_code(403);
+//  echo json_encode( not_authorized() );
+//  die();
+//}
 
 $stats = get_course_stats($course); 
 $usage = get_course_usage_by_day($course); 
