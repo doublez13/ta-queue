@@ -53,7 +53,7 @@ function get_queue($course_name){
     $return["time_lim"] = $entry["time_lim"];
     $return["cooldown"] = $entry["cooldown"];
   }
-  $return["announce"] = [];
+  $return["announcements"] = [];
   $return["TAs"]      = [];
   $return["queue"]    = [];
 
@@ -65,7 +65,7 @@ function get_queue($course_name){
     return -1;
   }
   while($entry = mysqli_fetch_assoc($result)){
-    $return["announce"][] = $entry;
+    $return["announcements"][] = $entry;
   }
 
   #Get the state of the TAs

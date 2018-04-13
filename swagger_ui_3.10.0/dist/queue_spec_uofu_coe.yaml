@@ -325,7 +325,7 @@ paths:
                 description: "TA time limit per student"
               queue_length:
                 type: "integer"
-              announce:
+              announcements:
                 type: "array"
                 items:
                   type: "object"

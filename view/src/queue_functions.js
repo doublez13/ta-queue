@@ -86,7 +86,7 @@ var render_view = function(data) {
   render_stats(dataParsed);
 
   //Render the announcements box
-  render_ann_box(dataParsed.announce);
+  render_ann_box(dataParsed.announcements);
 
   render_ta_table(dataParsed.TAs)
   if(is_TA){
