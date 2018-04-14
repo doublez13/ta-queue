@@ -19,7 +19,7 @@ require_once 'config.php';
  */
 function auth($username, $pass){
   $auth = 0;
-  $username = $username."@".LDAP_DOMAIN;
+  $username = $username.'@'.LDAP_DOMAIN;
   $ldap_conn = ldap_connect(LDAP_SERVER); 
   if($ldap_conn){
     $ldap_bind = ldap_bind($ldap_conn, $username, $pass);
@@ -47,21 +47,21 @@ function get_info($username){
   if(!(array_key_exists('givenname', $result) && array_key_exists('sn', $result))){ 
     return NULL;
   }
-  $first_name = $result["givenname"][0];
-  $last_name  = $result["sn"][0];
+  $first_name = $result['givenname'][0];
+  $last_name  = $result['sn'][0];
   
   $first_name = ucwords(strtolower($first_name));
   $last_name  = ucwords(strtolower($last_name));
   
   #Touches the user entry in the sql table
-  if(touch_user($username, $first_name, $last_name, $first_name." ".$last_name)){
+  if(touch_user($username, $first_name, $last_name, $first_name.' '.$last_name)){
     return NULL;
   }
  
   return array(
-    "username"   => $username,
-    "first_name" => $first_name,
-    "last_name"  => $last_name,
+    'username'   => $username,
+    'first_name' => $first_name,
+    'last_name'  => $last_name,
   );
 }
 
@@ -78,7 +78,7 @@ function is_admin($username){
     return NULL;
   }
 
-  $members = $result["member"];
+  $members = $result['member'];
   foreach($members as &$member) {
     $member = dn_to_sam($member);
     if($member == $username){
@@ -98,7 +98,7 @@ function is_admin($username){
 function _ldap_connect(){
   $ldap_conn = ldap_connect(LDAP_SERVER);
   if($ldap_conn){
-    $ldap_bind = ldap_bind($ldap_conn, BIND_USER."@".LDAP_DOMAIN, BIND_PASSWD);
+    $ldap_bind = ldap_bind($ldap_conn, BIND_USER.'@'.LDAP_DOMAIN, BIND_PASSWD);
     if($ldap_bind){
       return $ldap_conn;
     } 
@@ -134,12 +134,12 @@ function dn_to_sam($dn){
   $results = ldap_search($ldap_conn, BASE_OU, $filter);
   $entries = ldap_get_entries($ldap_conn, $results);
 
-  if(!$entries["count"]){
+  if(!$entries['count']){
     return NULL;
   }
 
   _ldap_disconnect($ldap_conn);
-  return $entries[0]["samaccountname"][0];
+  return $entries[0]['samaccountname'][0];
 }
 
 /**
@@ -164,7 +164,7 @@ function srch_by_sam($sam){
   $entries = ldap_get_entries($ldap_conn, $results);
 
   _ldap_disconnect($ldap_conn);
-  if(!$entries["count"]){
+  if(!$entries['count']){
     return NULL;
   }
 
@@ -196,7 +196,7 @@ function touch_user($username, $first, $last, $full){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, "ssss", $username, $first, $last, $full);
+  mysqli_stmt_bind_param($stmt, 'ssss', $username, $first, $last, $full);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
