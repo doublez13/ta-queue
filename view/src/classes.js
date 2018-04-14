@@ -38,7 +38,7 @@ function renderCourseTable(allCourses, dataParsed) {
       var text = " Enroll"; // extra space on left creates a little separation between icon and text
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
-        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-warning" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button> </td>');
       }else{
         var action = "enrollCourse('"+course_name+"', null)";
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
