@@ -10,6 +10,7 @@ require_once 'config.php';
  *       sAMAccountName, not cn or displayName.
  */
 
+
 /**
  * Authenticates a user
  *
@@ -17,17 +18,11 @@ require_once 'config.php';
  * @param string $pass
  * @return int 1 on success, 0 on failure
  */
-function auth($username, $pass){
+function auth($username, $password){
   $auth = 0;
-  $username = $username.'@'.LDAP_DOMAIN;
-  $ldap_conn = ldap_connect(LDAP_SERVER); 
-  if($ldap_conn){
-    $ldap_bind = ldap_bind($ldap_conn, $username, $pass);
-    if($ldap_bind){
-      $auth = 1;
-    }
+  if(!is_null(_ldap_connect($username, $password))){
+    $auth = 1;
   }
-  ldap_unbind($ldap_conn);
   return $auth; 
 }
 
@@ -95,25 +90,15 @@ function is_admin($username){
  * @return ldap_link on success
  *         null on error
  */
-function _ldap_connect(){
+function _ldap_connect($username, $password){
   $ldap_conn = ldap_connect(LDAP_SERVER);
   if($ldap_conn){
-    $ldap_bind = ldap_bind($ldap_conn, BIND_USER.'@'.LDAP_DOMAIN, BIND_PASSWD);
+    $ldap_bind = ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password);
     if($ldap_bind){
       return $ldap_conn;
     } 
   }
   return NULL;
-}
-
-/**
- * Disconnect from Active Directory server 
- *
- * @param $ldap_conn
- * @return void
- */
-function _ldap_disconnect($ldap_conn){
-  ldap_unbind($ldap_conn);
 }
 
 /**
@@ -125,8 +110,8 @@ function _ldap_disconnect($ldap_conn){
  */
 function dn_to_sam($dn){
   $filter = "(distinguishedName=$dn)";
-  $ldap_conn = _ldap_connect();
 
+  $ldap_conn = _ldap_connect(BIND_USER, BIND_PASSWD);
   if(is_null($ldap_conn)){
     return NULL;
   }
@@ -138,7 +123,7 @@ function dn_to_sam($dn){
     return NULL;
   }
 
-  _ldap_disconnect($ldap_conn);
+  ldap_unbind($ldap_conn);
   return $entries[0]['samaccountname'][0];
 }
 
@@ -154,7 +139,7 @@ function srch_by_sam($sam){
     return NULL;
   }
 
-  $ldap_conn = _ldap_connect();
+  $ldap_conn = _ldap_connect(BIND_USER, BIND_PASSWD);
   if(is_null($ldap_conn)){
     return NULL;
   }
@@ -163,7 +148,7 @@ function srch_by_sam($sam){
   $results = ldap_search($ldap_conn, BASE_OU, $filter);
   $entries = ldap_get_entries($ldap_conn, $results);
 
-  _ldap_disconnect($ldap_conn);
+  ldap_unbind($ldap_conn);
   if(!$entries['count']){
     return NULL;
   }
