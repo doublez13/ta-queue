@@ -116,9 +116,7 @@
                     <div class="col-md-4">
                       <select id="chart" name="chart" class="form-control">
                         <option value="blank"></option>
-                        <option value="average">Average Wait / Help Time</option>
                         <option value="num_student">Number of Students Helped Per Day</option>
-                        <option value="full_Stats">Full Course Stats</option>
                       </select>
                     </div>
                   </div><!--form-group-->
@@ -137,3 +135,6 @@
           </div> <!--col-sm-8-->
         </div><!--row-->
       </div><!--container-->
+
+      <div id="container" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto"></div>
+    </body>
