@@ -29,7 +29,7 @@ function get_stud_log($stud_username){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "s", $stud_username);
+  mysqli_stmt_bind_param($stmt, 's', $stud_username);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -39,13 +39,13 @@ function get_stud_log($stud_username){
   mysqli_stmt_bind_result($stmt, $course_name, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by); 
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array("course_name"  => $course_name, 
-                      "question"     => $question, 
-                      "location"     => $location, 
-                      "enter_tmstmp" => $enter_tmstmp, 
-                      "help_tmstmp"  => $help_tmstmp, 
-                      "exit_tmstmp"  => $exit_tmstmp, 
-                      "helped_by"    => $helped_by,
+    $result[] = array('course_name'  => $course_name, 
+                      'question'     => $question, 
+                      'location'     => $location, 
+                      'enter_tmstmp' => $enter_tmstmp, 
+                      'help_tmstmp'  => $help_tmstmp, 
+                      'exit_tmstmp'  => $exit_tmstmp, 
+                      'helped_by'    => $helped_by,
                      ); 
   }
   
@@ -75,7 +75,7 @@ function get_course_log($course_name){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  mysqli_stmt_bind_param($stmt, 's', $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -85,13 +85,13 @@ function get_course_log($course_name){
   mysqli_stmt_bind_result($stmt, $username, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array("username"     => $username,
-                      "question"     => $question,
-                      "location"     => $location,
-                      "enter_tmstmp" => $enter_tmstmp,
-                      "help_tmstmp"  => $help_tmstmp,
-                      "exit_tmstmp"  => $exit_tmstmp,
-                      "helped_by"    => $helped_by,
+    $result[] = array('username'     => $username,
+                      'question'     => $question,
+                      'location'     => $location,
+                      'enter_tmstmp' => $enter_tmstmp,
+                      'help_tmstmp'  => $help_tmstmp,
+                      'exit_tmstmp'  => $exit_tmstmp,
+                      'helped_by'    => $helped_by,
                      );
   }
 
@@ -122,7 +122,7 @@ function get_stud_log_for_course($stud_username, $course_name){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "ss", $stud_username, $course_name);
+  mysqli_stmt_bind_param($stmt, 'ss', $stud_username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -132,12 +132,12 @@ function get_stud_log_for_course($stud_username, $course_name){
   mysqli_stmt_bind_result($stmt, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array("question"     => $question,
-                      "location"     => $location,
-                      "enter_tmstmp" => $enter_tmstmp,
-                      "help_tmstmp"  => $help_tmstmp,
-                      "exit_tmstmp"  => $exit_tmstmp,
-                      "helped_by"    => $helped_by,
+    $result[] = array('question'     => $question,
+                      'location'     => $location,
+                      'enter_tmstmp' => $enter_tmstmp,
+                      'help_tmstmp'  => $help_tmstmp,
+                      'exit_tmstmp'  => $exit_tmstmp,
+                      'helped_by'    => $helped_by,
                      );
   }
 
@@ -168,7 +168,7 @@ function get_ta_log_for_course($ta_username, $course_name){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "ss", $ta_username, $course_name);
+  mysqli_stmt_bind_param($stmt, 'ss', $ta_username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -178,12 +178,12 @@ function get_ta_log_for_course($ta_username, $course_name){
   mysqli_stmt_bind_result($stmt, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array("question"     => $question,
-                      "location"     => $location,
-                      "enter_tmstmp" => $enter_tmstmp,
-                      "help_tmstmp"  => $help_tmstmp,
-                      "exit_tmstmp"  => $exit_tmstmp,
-                      "helped_by"    => $helped_by,
+    $result[] = array('question'     => $question,
+                      'location'     => $location,
+                      'enter_tmstmp' => $enter_tmstmp,
+                      'help_tmstmp'  => $help_tmstmp,
+                      'exit_tmstmp'  => $exit_tmstmp,
+                      'helped_by'    => $helped_by,
                      );
   }
 
@@ -205,10 +205,6 @@ function get_course_stats($course_name){
     return -1;
   }
 
-  // ~~~~~~~~~~~~~~~ ORIGINAL UNROUNDED STATS (NO STD WAIT TIME) ~~~~~~~~~~~~~
-  // AVG(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp)))    AS avg_wait_time,
-  // AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))     AS avg_help_time,
-  // STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))  AS stddev_help_time
   $query = "SELECT
             ROUND(AVG(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp)))   , 0)  AS avg_wait_time,
             ROUND(STDDEV(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp))), 0)  AS stddev_wait_time,
@@ -221,7 +217,7 @@ function get_course_stats($course_name){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  mysqli_stmt_bind_param($stmt, 's', $course_name);
     if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -230,10 +226,10 @@ function get_course_stats($course_name){
 
   mysqli_stmt_bind_result($stmt, $avg_wait_time, $stddev_wait_time, $avg_help_time, $stddev_help_time);
   mysqli_stmt_fetch($stmt);
-  return array("avg_wait_time"    => $avg_wait_time,
-               "stddev_wait_time" => $stddev_wait_time,
-               "avg_help_time"    => $avg_help_time,
-               "stddev_help_time" => $stddev_help_time
+  return array('avg_wait_time'    => $avg_wait_time,
+               'stddev_wait_time' => $stddev_wait_time,
+               'avg_help_time'    => $avg_help_time,
+               'stddev_help_time' => $stddev_help_time
               );
 }
 
@@ -260,7 +256,7 @@ function get_course_usage_by_day($course_name){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  mysqli_stmt_bind_param($stmt, 's', $course_name);
     if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -270,8 +266,8 @@ function get_course_usage_by_day($course_name){
   mysqli_stmt_bind_result($stmt, $date, $count);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array("date"            => $date,
-                      "students_helped" => $count
+    $result[] = array('date'            => $date,
+                      'students_helped' => $count
                      );
   }
 
