@@ -25,11 +25,8 @@ doesn't exist still in one SQL call. Again, this isn't real high priority and is
 ideally the messages returned from our API will give accurate info, so the caller of the API doesn't think,
 for example, that a queue is closed even though the queue doesn't even exist.
 -max on duty TAs box wider so a name doesn't take two lines to display
--set Announcements and On Duty TA boxes at a constant size (instead of growing/shrinking) and use scroll bar when necessary
--on All Classes page, color code enroll and leave options (e.g. Enroll=green, Leave=red)
 -Have different background colors for TAs
 -Have CIS handle authentication
--Spinners or progress/waiting indicators for slow loads
 -Should logging out remove you from all queues?
 -Not a Problem: Dequeuing a student from a queue they’re not in returns success. Problem?
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
