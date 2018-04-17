@@ -98,8 +98,8 @@
                 <legend>Available Charts</legend>
                 <!-- Select Basic -->
                   <div class="form-group">
-                    <label class="col-md-4 control-label" for="chart">Choose Form</label>
-                    <div class="col-md-4">
+                    <label class="col-md-8 control-label" for="chart">Choose Form</label>
+                    <div class="col-md-8 col-md-offset-2">
                       <select id="chart" name="chart" class="form-control">
                         <option value="blank"></option>
                         <option value="num_student">Number of Students Helped Per Day</option>
@@ -122,5 +122,5 @@
         </div><!--row-->
       </div><!--container-->
 
-      <div id="container" style="min-width: 310px; height: 600px; max-width: 960px; margin: 0 auto"></div>
+      <div id="container" style="min-width: 960px; height: 600px; max-width: 960px; margin: 0 auto"></div>
     </body>
