@@ -29,7 +29,7 @@
         <script src="https://code.highcharts.com/highcharts.src.js"></script>
         <script src="https://code.highcharts.com/modules/exporting.src.js"></script>
         <script src="https://code.highcharts.com/highcharts-3d.src.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js"></script>
+    	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js"></script>
         <!-- queue source -->
         <script src="./src/logout.js"></script>
         <!-- stats source -->
@@ -81,7 +81,7 @@
 			<div align="center" style="margin-top:  -60px; margin-bottom: -50px">
                 <!--RYAN'S STYLE-->
 <!--			<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; font-family: garamond;"></h1>-->
-                <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;">Statistics</h1>
+                <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;">Class Statistics</h1>
                 <h4 id="queue_state" style="color: #404040;"></h4>
                 <h4 id="time_limit"  style="color: #404040;"></h4>
                 <h4 id="in_queue"    style="color: #404040;"></h4>
@@ -122,5 +122,5 @@
         </div><!--row-->
       </div><!--container-->
 
-      <div id="container" style="min-width: 310px; height: 400px; max-width: 800px; margin: 0 auto"></div>
+      <div id="container" style="min-width: 310px; height: 600px; max-width: 960px; margin: 0 auto"></div>
     </body>

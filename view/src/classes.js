@@ -20,28 +20,33 @@ function get_classes(){
 
 function renderCourseTable(allCourses, dataParsed) {
   $('#all_classes_body').empty();
+  
   var myCourses = dataParsed.student_courses;
   var ta_courses= dataParsed.ta_courses;
-  for(course in allCourses){
+
+  for(course in allCourses) {
     var course_name = course;
     var tableRow = $('<tr>');
+    var URI = encodeURI("stats_main.php?course="+course_name);
+    var stats_button = $('<a href="'+URI+'"><button class="btn btn-primary" title="stats"> <i class="fa fa-database"></i>  </button></a>');
+
     tableRow.append($('<td>').text( course_name ));
     if( $.inArray(course_name, ta_courses) >= 0 ){
-      tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button> </td>');
+      tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button>'+stats_button+' </td>');
     }
     else if( $.inArray(course_name, myCourses) >= 0 ){
       var text = "Leave";
       var action = "dropCourse('"+course_name+"')";
-      tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
+      tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button>'+stats_button+' </td>');
     }
     else{
       var text = " Enroll"; // extra space on left creates a little separation between icon and text
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
-        tableRow.append('<td> <button class="btn btn-warning" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-warning" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button>'+stats_button+' </td>');
       }else{
         var action = "enrollCourse('"+course_name+"', null)";
-        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button> </td>');
+        tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button>'+stats_button+' </td>');
       }
     }
 
