@@ -62,13 +62,14 @@
 					<h2 style="padding-bottom: 25px;" align="center"><span style="color: #e8002b;">University of Utah</span> College of Engineering</h2>
 				</div><!--col-sm-12-->
 			</div><!--row-->
+
 			<div class="row">
 				<div class="col-sm-12">
 					<p style="font-size:150%;" align="center"> Please login using your CADE credentials </p>
 				</div><!--col-sm-6-->
 			</div><!--row-->
 
-                <form class="form" id="login_form" align="center" style="width: 350px; margin: auto; position: relative;">
+                <form class="form" id="login_form" style="text-align:center; width: 350px; margin: auto; position: relative;">
                   <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail3">Login</label>
                     <input class="form-control" id="Login" name="username" type="text" pattern="[a-zA-Z0-9]+" placeholder="User Name" required autofocus>
@@ -81,5 +82,10 @@
                 </form>
 		</div><!--container-->
 
-	</body>
+        <!--Loading gif which appears under the sign in button-->
+        <div id="loading" class="padding-top-10" style="vertical-align: center; text-align: center">
+            <img src="./resources/animations/loading2.gif"/>
+        </div>
+
+    </body>
 </html>

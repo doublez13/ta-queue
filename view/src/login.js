@@ -1,5 +1,7 @@
 login = function( event ) {
   event.preventDefault();
+
+  $('#loading').show(); // waiting spinner
   
   var $form = $( this );
   var username = $form.find( "input[name='username']" ).val();
@@ -8,6 +10,7 @@ login = function( event ) {
 
   var $posting = $.post( url, { username: username, password: password } );
   $posting.always(function( data ) {
+    $('#loading').hide();
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
@@ -39,5 +42,6 @@ login = function( event ) {
 }
 
 $(document).ready(function(){
-  $("#login_form").submit( login ); 
+  $('#loading').hide();
+  $("#login_form").submit( login );
 });

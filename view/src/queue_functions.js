@@ -99,41 +99,85 @@ var render_view = function(data) {
 }
 
 function render_stats(dataParsed){
- var state = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
-  $("#queue_state").text("State: "+state);
+  var state = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
+
+  // SET AND COLOR QUEUE STATE
+  $("#queue_state").empty();
+  $("#queue_state").append("<span>State: </span>")
+  $("#queue_state").append("<span id='state'><b>"+state+"</b></span>")
+  if(state == "Open"){
+    $("#state").css('color', 'green');
+  }
+  else if(state == "Closed"){
+    $("#state").css('color', 'red');
+  }
+  else
+    $("#state").css('color', 'blue');
+
+  // SET TIME LIMIT
+  $("#time_limit").empty();
+  $("#time_limit").append("<span id='time_lim'>Time Limit: </span>")
   if(dataParsed.time_lim >0){
-     $("#time_limit").text("Time Limit: " + dataParsed.time_lim + " Minutes");
-  }else{
-     $("#time_limit").text("Time Limit: None");
+    $("#time_lim").append("<b>"+dataParsed.time_lim+" Minutes</b>");
   }
+  else
+    $("#time_lim").append("None");
+
+  // SET COOL DOWN
+  $("#cooldown").empty();
+  $("#cooldown").append("<span id='cd_time'>Cool-Down: </span>")
   if(dataParsed.cooldown >0){
-     $("#cooldown").text("Cool-down: " + dataParsed.cooldown + " Minutes");
-  }else{
-     $("#cooldown").text("Cool-down: None");
+    $("#cd_time").append("<b>"+dataParsed.cooldown+" Minutes</b>");
   }
-  $("#in_queue").text("Queue Length: " + dataParsed.queue_length);
+  else
+    $("#cd_time").append("None");
+
+  // SET QUEUE LENGTH
+  $("#in_queue").text("Length: " + dataParsed.queue_length);
 }
 
 function render_ann_box(anns){
-  $("#anns tr").remove();
-  $('#anns').append("<tr> <th class='col-sm-1' align='left' style='padding-left:10px; text-decoration:underline;'>Date</th> <th class='col-sm-6' align='left' style='padding-left:0px; text-decoration:underline;'>Announcement</th>    <th class='col-sm-1' align='left'></th></tr>");
-  for(ann in anns){
-    var timestamp       = anns[ann]["tmstmp"].split(" ")[0];
+
+  $("#anns_body").empty();
+  $('#anns_body').append('<tr class="flex" style="background: none;"> ' +
+                           '<th class="flex-noShrink" style="width:110px;">Date</th>' +
+                           '<th class="flex-noShrink" style="width:100px;">Time</th>' +
+                           '<th>Announcement</th> </tr>');
+  for(ann in anns.reverse()){
+    var date       = anns[ann]["tmstmp"].split(" ")[0];
+    var time            = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
+
+    // Calculate how hold the announcement is -> ann_age_sec (doesn't work in IE)
+    var current_timestamp = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '));
+    current_timestamp.setHours(current_timestamp.getHours() - 6); // new Date() is 6 hours ahead
+    var announcement_timestamp = new Date(anns[ann]["tmstmp"]);
+    var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000;
+
     var announcement    = anns[ann]["announcement"];
     let announcement_id = anns[ann]["id"];
-    var new_row =  $('<tr>  <td style="padding-left:10px;"><b>'+timestamp+':</b></td>  <td><b>'+announcement+'</b></td>  </tr>');
+    var new_row =  $('<tr class="flex">' +
+                       '<td class="flex-noShrink" style="width:110px;">' + date + '</td>' +
+                       '<td class="flex-noShrink" style="width:100px;">' + time + '</td>' +
+                       '<td class="flex-fillSpace">'+announcement+'</td> </tr>');
     if(is_TA){
       // blue X icon below:
-      var del_ann_button = $('<button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button>');
+      var del_ann_button = $('<td><div align="right"><button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button></div></td>');
       // red circle X icon below:
-      //var del_ann_button = $('<button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button>');
+      //var del_ann_button = $('<td><div align="right"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button></div><td>');
       del_ann_button.click(function(event){
         del_announcement(course, announcement_id)
       });
       new_row.append(del_ann_button);
     }
-    $('#anns').append(new_row);
+
+    // Change color of announcement if it's less than X seconds old (color doesn't show in mobile Safari)
+    if (ann_age_sec < 900) {
+      new_row.css("background-color", "#b3ffb3"); // 00ff00 ccff33
+    }
+
+    $('#anns_body').append(new_row);
   }
+
   if(is_TA){
     $("#ann_button").unbind("click");
     $("#new_ann").show();
@@ -141,10 +185,79 @@ function render_ann_box(anns){
     $("#ann_button").click(function( event ) {
       event.preventDefault();
       var announcement = document.getElementById("new_ann").value;
-      document.getElementById("new_ann").value = "";
-      add_announcement(course, announcement)
+      if (announcement !== "") {
+        document.getElementById("new_ann").value = "";
+        add_announcement(course, announcement)
+      }
     });
   }
+  else
+    $("#new_ann_form").hide();
+
+
+  // ~~~~~~~~~~~~~~ DO NOT DELETE/EDIT: WORKING BACK UP CODE ACROSS ALL BROWSERS  ~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ NO FLEX OR SCROLL BAR OPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  // $("#anns_body").empty();
+  // $('#anns_body').append("<tr style='background: none;'> " +
+  //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Date</th>" +
+  //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Time</th>" +
+  //                          "<th class='col-sm-7' align='left' style='word-wrap:break-word'>Announcement</th>" +
+  //                          "<th class='col-sm-1'></th></tr>");
+  //
+  // for(ann in anns.reverse()){
+  //     var date       = anns[ann]["tmstmp"].split(" ")[0];
+  //     var time            = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
+  //
+  //     // Calculate how hold the announcement is -> ann_age_sec (doesn't work in IE)
+  //     var current_timestamp = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '));
+  //     current_timestamp.setHours(current_timestamp.getHours() - 6); // new Date() is 6 hours ahead
+  //     var announcement_timestamp = new Date(anns[ann]["tmstmp"]);
+  //     var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000;
+  //     var announcement    = anns[ann]["announcement"];
+  //     let announcement_id = anns[ann]["id"]
+  //     var new_row =  $("<tr>" +
+  //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+date+"</td>" +
+  //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+time+"</td>" +
+  //                        "<td class='col-sm-7'>"+announcement+"</td> </tr>");
+  //
+  //     var td = $('<td></td>');
+  //     if(is_TA){
+  //
+  //       // blue X icon below:
+  //       var del_ann_button = $('<div align="right"><button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button></div>');
+  //       // red circle X icon below:
+  //       //var del_ann_button = $('<td><button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button><td>');
+  //       del_ann_button.click(function(event){
+  //           del_announcement(course, announcement_id)
+  //       });
+  //       td.append(del_ann_button);
+  //     }
+  //     new_row.append(td);
+  //
+  //     // Change color of announcement if it's less than X seconds old
+  //     if (ann_age_sec < 900) {
+  //       new_row.css("background-color", "#b3ffb3");//        00ff00 ccff33
+  //     }
+  //
+  //     $('#anns_body').append(new_row);
+  // }
+  // if(is_TA){
+  //     $("#ann_button").unbind("click");
+  //     $("#new_ann").show();
+  //     $("#ann_button").show();
+  //     $("#ann_button").click(function( event ) {
+  //         event.preventDefault();
+  //         var announcement = document.getElementById("new_ann").value;
+  //         document.getElementById("new_ann").value = "";
+  //         add_announcement(course, announcement)
+  //     });
+  // }
+  // else
+  //     $("#new_ann_form").hide();
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
 }
 
 //Shows the TAs that are on duty
@@ -222,7 +335,7 @@ function render_ta_view(dataParsed){
         break;
       }
     } 
-    
+
     if(!on_duty) {
       document.getElementById("duty_button").className="btn btn-success";
       $("#duty_button").text("Go On Duty");
@@ -286,6 +399,7 @@ function render_student_view(dataParsed){
 
   $("#join_button").unbind("click");
   if(!in_queue){//Not in queue
+    document.getElementById("join_button").className="margin-top-5 btn btn-success";
     $("#join_button").text("Enter Queue");
     $("#join_button").show();
     $("#join_button").click(function( event ) {
@@ -294,7 +408,8 @@ function render_student_view(dataParsed){
     });
   }
   else{ //In queue
-    $("#join_button").text("Leave Queue");
+    document.getElementById("join_button").className="margin-top-5 btn btn-danger";
+    $("#join_button").text("Exit Queue");
     $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
@@ -305,15 +420,19 @@ function render_student_view(dataParsed){
 
 //Displays the queue table
 function render_queue_table(dataParsed, role){
+
+  // ~~~~~~~~~~~~~~ DO NOT EDIT/DELETE: WORKING BACK UP CODE ACROSS ALL BROWSERS  ~~~~~~~~~~~~~~~~~~~~~~~~~
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ NO FLEX OR SCROLL BAR OPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
 
-  //$("#queue_head").empty();
   $("#queue_body").empty();
-  $('#queue_body').append("<tr style='background: none;'> <th class='col-sm-1' align='left'>Pos.</th>"+
-                          "<th class='col-sm-2' align='left'>Student</th>"+
-                          "<th class='col-sm-1' align='left'>Location</th>"+
-                          "<th class='col-sm-4' align='left'>Question</th> </tr>");
+  $('#queue_body').append("<tr style='background: none;'>" +
+                            "<th class='col-sm-1' align='left'>Pos.</th>"+
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Student</th>"+
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Location</th>"+
+                            "<th class='col-sm-4' align='left' style='word-wrap: break-word'>Question</th>+" +
+                            "<th class='col-sm-3'></th> </tr>");
   var helping = {};
   for(TA in TAs ){
     if(TAs[TA].helping != null){
@@ -327,13 +446,17 @@ function render_queue_table(dataParsed, role){
   for(row in queue){
     let username  = queue[row].username;
     let full_name = queue[row].full_name;
-    var question  = queue[row].question;
     var Location  = queue[row].location;
-    var new_row = $("<tr><td>" + i + "</td><td>" + full_name + "</td><td>" + Location + "</td><td>" + question + "</td></tr>");
-    i++;   
+    var question  = queue[row].question;
+    var new_row = $("<tr>" +
+                      "<td class='col-sm-1' align='left'>" + i + "</td>" +
+                      "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + full_name + "</td>" +
+                      "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + Location + "</td>" +
+                      "<td class='col-sm-4' align='left' style='word-wrap:break-word'>" + question + "</td></tr>");
+    i++;
  
     if( username in helping ){
-      new_row.css("background-color", "#b3ffb3");
+      new_row.css("background-color", "#99ccff");//  b3ffb3
       if(time_lim > 0){
         var duration = helping[username];
         var fields = duration.split(':');
@@ -373,8 +496,10 @@ function render_queue_table(dataParsed, role){
 
       // MOVE DOWN BUTTON
       var decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
+      //var decrease_button = $('<button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
       if(row == dataParsed.queue_length -1){
         decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
+        //decrease_button = $('<button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
       }
       decrease_button.click(function(event){
         dec_priority(course, username);
@@ -383,6 +508,7 @@ function render_queue_table(dataParsed, role){
       // REMOVE BUTTON
       // blue X icon below:
       var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
+      //var dequeue_button = $('<button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button>');
       // red circle X icon below:
       //var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-danger" title="Remove"> <i class="glyphicon glyphicon-remove-sign"></i>  </button></div>');
       dequeue_button.click(function(event) {
@@ -390,37 +516,40 @@ function render_queue_table(dataParsed, role){
       });
 
       // Create TA button group that spans entire td width and append it to the new row
-      var td = $("<td></td>");
+      //var td = $("<td class='flex-fillSpace' style='width:370px;'></td>");
+      var td = $("<td class='col-sm-3'></td>");
       var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
+      //var button_group = $("<div class='btn-group' role='group' aria-label='...'></div>");
       button_group.append(help_button);
       button_group.append(increase_button);
       button_group.append(decrease_button);
       button_group.append(dequeue_button);
-      td.append(button_group)
+      td.append(button_group);
       new_row.append(td);
 
     }else{//student
-      var decrease_button = $('<button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
-      if(row == dataParsed.queue_length -1){
-        decrease_button = $('<button class="btn btn-primary" disabled=true title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
-      }
-      decrease_button.click(function(event){
-        if (confirm("Are you sure you want to move one spot down?")) {
-          dec_priority(course, my_username);
-        }
-      });
-
-      var td = $("<td></td>");
-      var div = $("<div></div>");
+      var td = $('<td></td>');
       if(username === my_username){ // Only add the move down button if it's the user's row
-        div.append(decrease_button);
-        td.append(div)
+        var decrease_button = $('<div align="right"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
+        if(row == dataParsed.queue_length -1){
+          decrease_button = $('<div align="right"><button class="btn btn-primary" disabled=true title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
+        }
+        decrease_button.click(function(event){
+          if (confirm("Are you sure you want to move one spot down?")) {
+            dec_priority(course, my_username);
+          }
+        });
+        td.append(decrease_button);
       }
+
       new_row.append(td);
     }
 
     $('#queue_body').append(new_row);
   }
+
+  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 }
 
 //API Endpoint calls
@@ -555,4 +684,17 @@ function del_announcement(course, announcement_id){
   var posting = $.post( url, { course: course, announcement_id: announcement_id } );
   posting.done(done);
   posting.fail(fail);
+}
+
+// source: stackoverflow.com/questions/13898423/javascript-convert-24-hour-time-of-day-string-to-12-hour-time-with-am-pm-and-no
+function tConvert (time) {
+    // Check correct time format and split into components
+    time = time.toString ().match (/^([01]\d|2[0-3])(:)([0-5]\d)(:[0-5]\d)?$/) || [time];
+
+    if (time.length > 1) { // If time format correct
+        time = time.slice (1);  // Remove full string match value
+        time[5] = +time[0] < 12 ? ' am' : ' pm'; // Set AM/PM
+        time[0] = +time[0] % 12 || 12; // Adjust hours
+    }
+    return time.join (''); // return adjusted time or original string
 }
