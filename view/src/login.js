@@ -42,6 +42,5 @@ login = function( event ) {
 }
 
 $(document).ready(function(){
-  $('#loading').hide();
   $("#login_form").submit( login );
 });

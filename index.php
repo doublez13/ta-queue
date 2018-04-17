@@ -69,21 +69,21 @@
 				</div><!--col-sm-6-->
 			</div><!--row-->
 
-                <form class="form" id="login_form" style="text-align:center; width: 350px; margin: auto; position: relative;">
-                  <div class="form-group">
+            <form class="form" id="login_form" style="text-align:center; width: 350px; margin: auto; position: relative;">
+                <div class="form-group">
                     <label class="sr-only" for="exampleInputEmail3">Login</label>
                     <input class="form-control" id="Login" name="username" type="text" pattern="[a-zA-Z0-9]+" placeholder="User Name" required autofocus>
-                  </div>
-                  <div class="form-group">
+                </div>
+                <div class="form-group">
                     <label class="sr-only" for="exampleInputPassword3">Password</label>
                     <input class="form-control" id="password" name="password" type="password" minlength="8"  placeholder="Password" required>
-                  </div>
-                  <button id="saveForm" name="saveForm" type="submit" value="Submit" class="btn btn-primary">Sign in</button>
-                </form>
+                </div>
+                <button id="saveForm" name="saveForm" type="submit" value="Submit" class="btn btn-primary">Sign in</button>
+            </form>
 		</div><!--container-->
 
         <!--Loading gif which appears under the sign in button-->
-        <div id="loading" class="padding-top-10" style="vertical-align: center; text-align: center">
+        <div id="loading" class="padding-top-10" style="vertical-align: center; text-align: center; display: none">
             <img src="./resources/animations/loading2.gif"/>
         </div>
 
