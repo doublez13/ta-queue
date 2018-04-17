@@ -35,19 +35,7 @@
         <!-- queue source -->
         <script src="./src/logout.js"></script>
         <!-- stats source -->
-        // <script src="./src/stats_graphs.js"></script>
-
-        <script type="text/JavaScript">
-            // $(document).on("change", "#Student", function(e){
-            //     val = $("#Student").val();
-            //     $("#table_result").load("student_info.php?id=" +val);
-            // });
-
-            // $(document).on("change", "#chart", function(e){
-            //     val = $("#chart").val();
-            //     $("#chart_result").load("charts.php?chart=" +val);
-            // });
-        </script>
+        <script src="./src/stats_graph.js"></script>
 
 	</head>
 	<body>

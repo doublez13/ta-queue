@@ -30,7 +30,7 @@ function average_plot(course_data) {
       },
       xAxis: {
           title: {
-              text: 'Year'
+              text: 'Dates'
           },
           startOnTick: true,
           endOnTick: true,
@@ -38,7 +38,7 @@ function average_plot(course_data) {
       },
       yAxis: {
           title: {
-              text: 'Number Enrolled'
+              text: 'Number of Students Helped'
           }
       },
       plotOptions: {
@@ -66,17 +66,26 @@ function average_plot(course_data) {
           }
       },
       series: [{
-          name: 'Number Admitted',
+          name: 'Students Helped',
           color: 'rgba(223, 83, 83, .5)',
           data: course_data
       }], 
   });
-});
+};
 
-// $(document).on("change", "#Student", function(e){
-//     val = $("#Student").val();
-//     $("#table_result").load("student_info.php?id=" +val);
-// });
+function parse_it(data) {
+debugger;
+var dataString = JSON.stringify(data.usage);
+var dataParsed = JSON.parse(dataString);
+average_plot(dataParsed);
+
+};
+
+$(document).on("change", "#chart", function(e){
+    get_number(course);
+     //val = $("#Student").val();
+     //$("#table_result").load("student_info.php?id=" +val);
+ });
 
 // $(document).on("change", "#chart", function(e){
 //     val = $("#chart").val();
@@ -86,11 +95,11 @@ function average_plot(course_data) {
 function get_number(course) {
   var url = "../api/stats/course_stats.php";
   var posting = $.post( url, { course: course } );
-  posting.done(average_plot);
-}
+  posting.done(parse_it);
+};
 
-function get_full(course) {
-  var url = "../api/stats/course_stats.php";
-  var posting = $.post( url, { course: course } );
-  posting.done(render_view);
-}
+//function get_full(course) {
+//  var url = "../api/stats/course_stats.php";
+//  var posting = $.post( url, { course: course } );
+//  posting.done(render_view);
+//}
