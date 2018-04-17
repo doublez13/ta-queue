@@ -19,6 +19,28 @@ $(document).ready(function(){
   }
 });
 
+$(document).on("change", "#chart", function(e){
+    get_number(course);
+ });
+
+
+function get_number(course) {
+  var url = "../api/stats/course_stats.php";
+  var posting = $.post( url, { course: course } );
+  posting.done(parse_it);
+};
+
+function parse_it(data) {
+	var dataString = JSON.stringify(data.usage);
+	var dataParsed = JSON.parse(dataString);
+	var new_arr = $.map(data.usage, function(element, index) {
+    	return [new Date(element.date), element.students_helped]
+	}):
+	average_plot(new_arr);
+};
+
+
+
 function average_plot(course_data) {
   $('#container').highcharts({
       chart: {
@@ -73,33 +95,3 @@ function average_plot(course_data) {
   });
 };
 
-function parse_it(data) {
-debugger;
-var dataString = JSON.stringify(data.usage);
-var dataParsed = JSON.parse(dataString);
-average_plot(dataParsed);
-
-};
-
-$(document).on("change", "#chart", function(e){
-    get_number(course);
-     //val = $("#Student").val();
-     //$("#table_result").load("student_info.php?id=" +val);
- });
-
-// $(document).on("change", "#chart", function(e){
-//     val = $("#chart").val();
-//     $("#chart_result").load("charts.php?chart=" +val);
-// });
-
-function get_number(course) {
-  var url = "../api/stats/course_stats.php";
-  var posting = $.post( url, { course: course } );
-  posting.done(parse_it);
-};
-
-//function get_full(course) {
-//  var url = "../api/stats/course_stats.php";
-//  var posting = $.post( url, { course: course } );
-//  posting.done(render_view);
-//}
