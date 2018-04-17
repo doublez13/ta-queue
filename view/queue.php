@@ -107,9 +107,9 @@
                     <button class="btn btn-info" id="freeze_button"></button>
                 </div>
 
-                <div align="center">
-                <button class="margin-top-5 btn btn-success" id="join_button"></button>
-                </div>
+<!--                <div align="center">-->
+                    <button class="margin-top-5 btn btn-success" id="join_button"></button>
+<!--                </div>-->
 
                 <div class="col-xs-12 margin-top-15 padding-0" align="left">
 
@@ -144,6 +144,8 @@
                         </div>
                     </form>
                 </div>
+
+                <a href="stats_main.php?course=CS%204400:%20Computer%20Systems"><button class="btn btn-primary" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button></a>
 
             </div>
 

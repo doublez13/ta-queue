@@ -36,6 +36,7 @@ $(document).ready(function(){
   $("#duty_button").hide();
   $("#state_button").hide();
   $("#freeze_button").hide();
+  $("#state_button").hide();
   $("#time_form").hide();
   $("#cooldown_form").hide();
   $("#join_button").hide();
@@ -551,6 +552,7 @@ function render_queue_table(dataParsed, role){
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 }
+
 
 //API Endpoint calls
 done = function(data){
