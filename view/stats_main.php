@@ -26,12 +26,10 @@
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js" integrity="sha384-Dziy8F2VlJQLMShA6FHWNul/veM9bCkRUaLqr199K94ntO5QUrLJBEbYegdSkkqX" crossorigin="anonymous"></script>
         <!-- Highcharts CDN -->
-        
         <script src="https://code.highcharts.com/highcharts.src.js"></script>
-        
         <script src="https://code.highcharts.com/modules/exporting.src.js"></script>
-        
         <script src="https://code.highcharts.com/highcharts-3d.src.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js"></script>
         <!-- queue source -->
         <script src="./src/logout.js"></script>
         <!-- stats source -->
