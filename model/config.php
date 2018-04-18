@@ -19,7 +19,7 @@ define("DATABASE",    "");
  *plaintext auth, which is NOT RECOMMENDED.
  *
  *This flag is meaningless on php >= 7.0.5, since we
- *force the flag to be set in via php-ldap
+ *force the flag to be set via php-ldap
  */
 define("TLS_REQCERT_DISABLED", true);
 ?>
