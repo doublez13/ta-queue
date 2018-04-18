@@ -143,7 +143,7 @@
                     </form>
                 </div>
 
-                <a href="stats_main.php?course=CS%204400:%20Computer%20Systems"><button class="btn btn-primary" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button></a>
+                <button class="btn btn-primary" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button>
 
             </div>
 

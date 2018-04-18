@@ -33,6 +33,12 @@ $(document).ready(function(){
       }
     }
   });
+
+  $("#stats_button").click(function( event ) {
+    event.preventDefault();
+    window.location = "stats.php?course="+course;
+  });
+
   $("#duty_button").hide();
   $("#state_button").hide();
   $("#freeze_button").hide();
