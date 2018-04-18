@@ -36,7 +36,6 @@ $(document).ready(function(){
   $("#duty_button").hide();
   $("#state_button").hide();
   $("#freeze_button").hide();
-  $("#state_button").hide();
   $("#time_form").hide();
   $("#cooldown_form").hide();
   $("#join_button").hide();
@@ -430,9 +429,9 @@ function render_queue_table(dataParsed, role){
   $("#queue_body").empty();
   $('#queue_body').append("<tr style='background: none;'>" +
                             "<th class='col-sm-1' align='left'>Pos.</th>"+
-                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Student</th>"+
-                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Location</th>"+
-                            "<th class='col-sm-4' align='left' style='word-wrap: break-word'>Question</th>+" +
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Student</th>" +
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Location</th>" +
+                            "<th class='col-sm-4' align='left' style='word-wrap: break-word'>Question</th>" +
                             "<th class='col-sm-3'></th> </tr>");
   var helping = {};
   for(TA in TAs ){
@@ -529,7 +528,9 @@ function render_queue_table(dataParsed, role){
       new_row.append(td);
 
     }else{//student
-      var td = $('<td></td>');
+
+      // SEEMS TO HAVE ROW RENDERING ISSUES: BUTTON ONLY RENDERED ON USER'S ROW
+      var td = $("<td class='col-sm-3'></td>");
       if(username === my_username){ // Only add the move down button if it's the user's row
         var decrease_button = $('<div align="right"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
         if(row == dataParsed.queue_length -1){
@@ -544,6 +545,31 @@ function render_queue_table(dataParsed, role){
       }
 
       new_row.append(td);
+
+
+
+
+      // ALSO SEEMS TO HAVE ROW RENDERING ISSUES: CREATE BUTTON BUT THEN HIDE IT IF IT'S NOT THE USER'S ROW
+      // var td = $("<td class='col-sm-3'></td>");
+      // var div = $("<div align='right'></div>");
+      // td.append(div);
+      // var decrease_button = $('<button id="dec_button" class="btn btn-primary" title="Move Down"><i class="fa fa-arrow-down"></i></button>');
+      // if(row == dataParsed.queue_length -1){
+      //   decrease_button = $('<button id="dec_button" class="btn btn-primary" disabled=true title="Move Down"><i class="fa fa-arrow-down"></i></div>');
+      // }
+      // decrease_button.click(function(event){
+      //   if (confirm("Are you sure you want to move one spot down?")) {
+      //     dec_priority(course, my_username);
+      //   }
+      // });
+      // div.append(decrease_button);
+      // new_row.append(td);
+      // if (username !== my_username)
+      //     decrease_button.hide();
+
+
+
+
     }
 
     $('#queue_body').append(new_row);

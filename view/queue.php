@@ -107,9 +107,7 @@
                     <button class="btn btn-info" id="freeze_button"></button>
                 </div>
 
-<!--                <div align="center">-->
-                    <button class="margin-top-5 btn btn-success" id="join_button"></button>
-<!--                </div>-->
+                <button class="margin-top-5 btn btn-success" id="join_button"></button>
 
                 <div class="col-xs-12 margin-top-15 padding-0" align="left">
 
