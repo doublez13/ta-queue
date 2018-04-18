@@ -10,7 +10,6 @@ require_once 'config.php';
  *       sAMAccountName, not cn or displayName.
  */
 
-
 /**
  * Authenticates a user
  *
@@ -95,9 +94,13 @@ function _ldap_connect($username, $password){
   ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
   ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
   
-  //TODO: Requires php 7.0.5+
-  //ldap_set_option($ldap_conn, LDAP_OPT_X_TLS_REQUIRE_CERT, 0);
-  //ldap_start_tls($ldap_conn);
+  //TLS cert disabling code requires php 7.0.5+
+  if(version_compare(phpversion(), '7.0.5') > 0){
+    ldap_set_option($ldap_conn, LDAP_OPT_X_TLS_REQUIRE_CERT, 0);
+    ldap_start_tls($ldap_conn);
+  }elseif(TLS_REQCERT_DISABLED){
+    ldap_start_tls($ldap_conn);
+  }
 
   if($ldap_conn){
     $ldap_bind = ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password);
