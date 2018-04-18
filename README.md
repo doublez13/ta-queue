@@ -45,7 +45,7 @@ TAs may wish to impose cool-down timers for students. This means that if a stude
 #### Reordering
 TAs may wish to reorder the queue. In this case, TAs can use the up and down buttons next to a student to shift their position in the queue.
 
-##Technical Documentation
+## Technical Documentation
 ### Example Setup:
 The queue is written to allow for a fairly flexible setup. At the most basic level, the queue is hosted on a standard web server like Apache or NGINX. Additionally, all the data is stored in a MySQL database. Finally, all user authentication and information is done off of an external Active Directory (LDAP) server.
 
