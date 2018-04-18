@@ -436,7 +436,9 @@ function render_queue_table(dataParsed, role){
   var helping = {};
   for(TA in TAs ){
     if(TAs[TA].helping != null){
-      helping[TAs[TA].helping] = TAs[TA].duration;  
+      helping[TAs[TA].helping] = {}; //Maps student being helped to info about their session in the queue
+      helping[TAs[TA].helping]["duration"] = TAs[TA].duration;  //Time student has been helped
+      helping[TAs[TA].helping]["TA"] = TAs[TA].username;        //TA helping the student
     }
   }
   
@@ -458,7 +460,7 @@ function render_queue_table(dataParsed, role){
     if( username in helping ){
       new_row.css("background-color", "#99ccff");//  b3ffb3
       if(time_lim > 0){
-        var duration = helping[username];
+        var duration = helping[username]["duration"];
         var fields = duration.split(':');
         duration = parseInt(fields[0])*3600 + parseInt(fields[1])*60 + parseInt(fields[2]);
         var time_rem = time_lim*60-duration;
@@ -472,12 +474,18 @@ function render_queue_table(dataParsed, role){
 
     if(is_TA) {
       // HELP BUTTON
-      if( username in helping ){
-        var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
-        help_button.click(function(event){
-          release_ta(course);
-        });
-      }else{
+      if( username in helping ){ //Student is currently being helped
+        var TA_helping_them = helping[username]["TA"];
+        if(my_username === TA_helping_them){ //The TA is currently helping student
+          var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
+          help_button.click(function(event){
+            release_ta(course);
+          });
+        }
+        else{ //The student is currently being helped, but not by this TA, so don't let them end the other TA's help session
+          var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping" disabled=true> <i class="fa fa-undo"></i>  </button></div>');
+        }
+      }else{ //Student is not being helped
         var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
           enqueue_ta(course); //Maybe make this cleaner. 
