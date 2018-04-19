@@ -1209,6 +1209,9 @@ paths:
                 items:
                   type: "object"
                   properties:
+                    student:
+                      description: "username of student that was helped"
+                      type: "string"
                     question:
                       description: "question asked by student"
                       type: "string"
@@ -1278,7 +1281,7 @@ paths:
                 items:
                   type: "object"
                   properties:
-                    username:
+                    student:
                       description: "username of student"
                       type: "string"
                     question:
