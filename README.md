@@ -65,7 +65,7 @@ Optionally SQL port(s)
 
 ### Version requirements
 MySQL/MariaDB 5.5 or greater   
-PHP 5.4 or greater (PHP 7.0.5) recommended for utilizing some features of php-ldap
+PHP 5.4 or greater (PHP 7.0.5 or later) recommended for utilizing some features of php-ldap
 
 ### Configuration file (config.php)
 LDAP_SERVER: FQDN or IP address of the LDAP server.  
@@ -79,3 +79,5 @@ SQL_USER:    User to connect to MySQL with.
 SQL_PASSWD:  Password for SQL_USER.  
 DATABASE:    Database for the queue.  
 
+### LDAP TLS 
+By default, LDAP prefers to verify server certificates before connecting. The queue does not make use of server certificates, and disables them. In PHP >= 7.0.5, the php-ldap library respects this setting, and disables certificate checking. In PHP versions < 7.0.5, the TLS_REQCERT_DISABLED flag should be set to true in the system ldap config. After this is done, the TLS_REQCERT_DISABLED flag can be set to true in the queue configuration indicating that cert checking is disabled on the system side. If this flag is NOT set in the queue config with PHP < 7.0.5, the queue will fall back to unencrypted LDAP communication with is NOT RECOMMENDED.
