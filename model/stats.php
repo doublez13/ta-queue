@@ -23,7 +23,7 @@ function get_stud_log($stud_username){
 
   $query = "SELECT (SELECT course_name FROM courses WHERE course_id=student_log.course_id) AS course_name, question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
             FROM student_log 
-            WHERE username=? AND exit_tmstmp !='0' AND help_tmstmp !='0'";
+            WHERE username = ? AND exit_tmstmp != '0' AND help_tmstmp != '0'";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);

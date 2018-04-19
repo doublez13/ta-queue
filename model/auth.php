@@ -82,7 +82,8 @@ function is_admin($username){
   return false;
 }
 
-//Helper Functions for LDAP: No reason to call these from outside the model.
+
+######### HELPER METHODS #########
 /**
  * Connect to Active Directory server
  *

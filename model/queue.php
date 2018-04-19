@@ -9,7 +9,7 @@ require_once 'config.php';
  */
 
 /**
- * Returns the state of the queue
+ * Returns the state of a queue
  *
  * @param string $course
  * @return array of queue data on success
@@ -167,6 +167,7 @@ function enq_stu($username, $course_name, $question, $location){
     return -3;
   }
 
+  //Check cooldown settings for queue
   $course_id = course_name_to_id($course_name, $sql_conn);
   $course_cooldown = get_course_cooldown($course_id, $sql_conn);
   if($course_cooldown < 0){ //error
@@ -175,9 +176,9 @@ function enq_stu($username, $course_name, $question, $location){
     $result = check_user_cooldown($username, $course_cooldown, $course_id, $sql_conn);
     if($result < 0){
       return $result; //error
-    }elseif($result){
+    }elseif($result){ //user still has time left on cooldown
       mysqli_close($sql_conn);
-      return -7; //user on cooldown
+      return -7;
     }
   }
 
@@ -524,10 +525,10 @@ function help_student($TA_username, $stud_username, $course_name){
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
-    return -1; //SQL error
+    return -1;
   }elseif($course_id == -2){
     mysqli_close($sql_conn);
-    return -2; //Nonexistant course
+    return -2;
   }
 
   if(get_queue_state($course_name) == "closed"){
@@ -589,8 +590,8 @@ function free_ta($username, $course_name){
   }
 
   $query = "UPDATE ta_status SET helping = NULL 
-            WHERE username=? 
-            AND course_id=(SELECT course_id FROM courses WHERE course_name=?)";
+            WHERE username = ? 
+            AND course_id=(SELECT course_id FROM courses WHERE course_name = ?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -639,7 +640,7 @@ function set_time_lim($time_lim, $course_name){
   }
 
   $query = "UPDATE queue_state SET time_lim = ? 
-            WHERE course_id=(SELECT course_id FROM courses WHERE course_name=?)";
+            WHERE course_id=(SELECT course_id FROM courses WHERE course_name = ?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -690,7 +691,7 @@ function set_cooldown($time_lim, $course_name){
   }
 
   $query = "UPDATE queue_state SET cooldown = ? 
-            WHERE course_id=(SELECT course_id FROM courses WHERE course_name=?)";
+            WHERE course_id=(SELECT course_id FROM courses WHERE course_name = ?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -853,7 +854,7 @@ function del_announcement($course_name, $announcement_id){
   }
 
   $query = "DELETE FROM announcements 
-            WHERE id=? AND course_id=?";
+            WHERE id = ? AND course_id = ?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -879,6 +880,8 @@ function del_announcement($course_name, $announcement_id){
  * I'd like to move the input and output states
  * from strings to ints
  *
+ * TODO: This function should be rewritten. It's not clean.
+ *
  * @param string $course_name
  * @param string $state
  * @return string $state of queue
@@ -891,6 +894,9 @@ function change_queue_state($course_name, $state){
     return -1;
   }
 
+  #Note that we don't have to use SQL Parameters in the 
+  #following functions since the block of code below
+  #sanitizes the input
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
@@ -901,7 +907,7 @@ function change_queue_state($course_name, $state){
   }
 
   if($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
-    $query = "DELETE FROM queue_state WHERE course_id='".$course_id."'";
+    $query = "DELETE FROM queue_state WHERE course_id = '".$course_id."'";
     if(!mysqli_query($sql_conn, $query)){
       mysqli_close($sql_conn);
       return -1;
@@ -1019,7 +1025,6 @@ function change_stud_priority($stud_username, $course_name, $operation){
   mysqli_stmt_fetch($stmt);
   mysqli_stmt_close($stmt);
 
-
   if($operation == "increase"){
     $query = "SELECT position, username, course_id, question, location FROM queue 
               WHERE position<'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
@@ -1032,7 +1037,6 @@ function change_stud_priority($stud_username, $course_name, $operation){
     mysqli_stmt_close($stmt);
     return -1;
   }
-
 
   #####SQL TRANSACTION#####
   mysqli_autocommit($sql_conn, false); 

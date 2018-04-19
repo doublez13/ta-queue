@@ -1,5 +1,4 @@
 drop database ta_queue;
-
 create database ta_queue;
 
 use ta_queue;
@@ -76,8 +75,6 @@ create table ta_status(
   foreign key  (helping) references queue(position) ON DELETE SET NULL
 );
 
-
-
 --Announcements--
 create table announcements(
   id             BIGINT AUTO_INCREMENT,
@@ -87,8 +84,6 @@ create table announcements(
   primary key    (id),
   foreign key    (course_id) references courses(course_id) ON DELETE CASCADE
 );
-
-
 
 --LOGS--
 create table student_log(
@@ -118,4 +113,3 @@ WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1
 CREATE TRIGGER log_student_help AFTER INSERT ON ta_status FOR EACH ROW
 UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP, helped_by = NEW.username
 WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id ORDER BY id DESC LIMIT 1;
-

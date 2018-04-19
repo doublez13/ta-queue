@@ -368,5 +368,4 @@ function get_course_acc_code($course_name){
   mysqli_close($sql_conn);
   return $access_code;
 }
-
 ?>
