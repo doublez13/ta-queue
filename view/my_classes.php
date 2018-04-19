@@ -78,8 +78,6 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-<!--                                OLD STYLE-->
-<!--							<h3 class="panel-title">My Classes</h3>-->
                                 <h3 class="panel-title" style="font-size:20px;" align="center">My Courses</h3>
 							</div>
                             <table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
