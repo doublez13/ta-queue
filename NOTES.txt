@@ -33,11 +33,6 @@ for example, that a queue is closed even though the queue doesn't even exist.
 -Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
 What convention should we use? 
 -Lock navbar in place when scrolling
--NOT IMPORTANT UNTIL END OF SEMESTER: Swagger lets people test the API, similar to Postman. Ideally I think we should
-allow people to test all endpoints, including those restricted to admins or TAs. But for obvious reasons, we don't want
-Swagger to be messing with the actual DB in use. How do we accomplish this? Set up a sandbox server/directory with its own DB
-and point Swagger to that? For each new/updated edition of the API, the sandbox directory would have to be/should be
-updated.
 
 ~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
 
