@@ -1,65 +1,22 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
--fix the failed to load favicon error. this might do it, add to each page head: '<link rel="shortcut icon" href="">'
+-Fix the failed to load favicon error. This might do it, add to each page head: '<link rel="shortcut icon" href="">'
 -Modify stats endpoints to let user post date ranges so such massive amounts of data aren't returned?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
--It took up more room, but I think the timestamp could be useful for announcements. Also, should we include names?
+-It took up more room, but I think the TA name could be useful for announcements.
 -TA log to track how long on duty?
--Include student names in ta_log?
--small UI issue: make buttons a fixed width at all times on all courses page
+-Small UI issue: make buttons a fixed width at all times on all courses page
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
--Should students be unenrolled automatically, or manually, from their courses after the semester? Maybe make this an admin functionality?
--Notifications for new announcements
--Sign in button not centered using Edge browser
--DEMOS: explicitly display who is TA and who is student
-//-Make questions optionally visible to rest of class?
+-Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
--Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make
-these integers?
--I forget how I even got my CADE credentials in the first place... should we have a link on the login page to some CADE page if
-users don't have a CADE account?
--help_student.php (not the UI) allows two TAs to help the same student. Keep it this way? I sorta think yes, but how would we show this?
-***Similar to all the 'Not a Problem's below, getting the queue for a course that doesn't exist simply returns
-'state:closed'. If we decided to explicitly store closed queues in queue_state, we could return that the course
-doesn't exist still in one SQL call. Again, this isn't real high priority and is sorta convention. But I think
-ideally the messages returned from our API will give accurate info, so the caller of the API doesn't think,
-for example, that a queue is closed even though the queue doesn't even exist.
--max on duty TAs box wider so a name doesn't take two lines to display
+-Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make these integers?
+-Should we have a link on the login page to some CADE page if users don't have a CADE account?
+-help_student.php (not the UI) allows two TAs to help the same student. How would we show this using colors.
 -Have different background colors for TAs
 -Have CIS handle authentication
 -Should logging out remove you from all queues?
--Not a Problem: Dequeuing a student from a queue they’re not in returns success. Problem?
--Not a Problem: Removing a course that a student’s not enrolled in returns success. Problem?
-What convention should we use? 
 -Lock navbar in place when scrolling
-
-~~~~~~~~~~~~~~~~~~~~~~~~ EMAIL FROM ERIN PARKER ~~~~~~~~~~~~~~~~~~~~~~~~
-
-Daniel,
-In a meeting with some of my TAs this morning, the topic of the TA call queue came up and I took the opportunity to get
-some ideas from them on what they would like to see in a new app.  Here are some notes.  Feel free to ask about anything
-that does not make sense.
-
-Done: -Ensure that only students currently enrolled in the class can sign in (with an access code or something). It doesn't
-happen much, but occasionally students from the wrong class sign in.
-
--Include a utility for TAs to directly message students currently in the queue (collectively or individually). This can be
-useful if a student's location is incorrect, or to warn that TA hours are ending soon.
-
--(This is a bit specific to CS at the U, but...)  Have a map of the CADE lab to show where students in the queue are sitting,
-so the TA can locate them quickly.
-
--Include push notifications to the TAs on duty for when a student enters the queue.  During slow times, when the queue is empty,
-some TAs are late noticing that a student has entered.
-
--Allow a TA-supplied list of common issues/questions for students to choose from when entering the queue, to make it easier to
-answer for a group of students.
-
-Done: -When students enter the queue, have a "subject" line to fill (in addition to name and location).
-
--Allow TAs to reorder the queue and undo removing a student.
-
--Capture a history/activity log for a session, for TAs and instructors to look at later and assess things like how long a TA is
-spending with students, which students use the queue most often, etc.
-
+-Include a utility for TAs to directly message students currently in the queue (collectively or individually). This can be useful if a student's location is incorrect, or to warn that TA hours are ending soon.
+-Include push notifications to the TAs on duty for when a student enters the queue.  During slow times, when the queue is empty, some TAs are late noticing that a student has entered.
+-Undo removing a student.

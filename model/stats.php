@@ -85,7 +85,7 @@ function get_course_log($course_name){
   mysqli_stmt_bind_result($stmt, $username, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array('username'     => $username,
+    $result[] = array('student'     => $username,
                       'question'     => $question,
                       'location'     => $location,
                       'enter_tmstmp' => $enter_tmstmp,
@@ -160,7 +160,7 @@ function get_ta_log_for_course($ta_username, $course_name){
     return -1;
   }
 
-  $query = "SELECT question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
+  $query = "SELECT username, question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
             FROM student_log 
             WHERE helped_by=? AND course_id=(SELECT course_id from courses where course_name=?) AND exit_tmstmp !='0' AND help_tmstmp !='0'";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -175,10 +175,11 @@ function get_ta_log_for_course($ta_username, $course_name){
     return -1;
   }
 
-  mysqli_stmt_bind_result($stmt, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
+  mysqli_stmt_bind_result($stmt, $username, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array('question'     => $question,
+    $result[] = array('student'      => $username,
+                      'question'     => $question,
                       'location'     => $location,
                       'enter_tmstmp' => $enter_tmstmp,
                       'help_tmstmp'  => $help_tmstmp,
