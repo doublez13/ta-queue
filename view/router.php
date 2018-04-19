@@ -7,8 +7,8 @@ $is_admin    = $_SESSION["is_admin"];
 if(strpos($REQUEST_URI, 'index.php')){
   if($_SESSION["username"]){
     header("Location: ./classes.php");
-    die();
   }
+  die();
 }
 else{ //Authenticated Page
   if (!$_SESSION["username"]){
