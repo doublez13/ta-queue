@@ -224,12 +224,12 @@
                 <fieldset>
                     <label for="location">Location</label>
                     <div>
-                        <input type="text" name="location" id="location" style="width: 100%" class="text" maxlength="50">
+                        <input type="text" name="location" id="location" style="width: 100%" class="text" maxlength="50" required>
                     </div>
                     <br>
                     <label for="question">Question</label>
                     <div>
-                        <input type="text" name="question" id="question" style="width: 100%" class="text" maxlength="50">
+                        <input type="text" name="question" id="question" style="width: 100%" class="text" maxlength="50" required>
                     </div>
                 </fieldset>
             </form>

@@ -23,13 +23,28 @@ $(document).ready(function(){
     modal: true,
     buttons: {
       "Enter Queue": function() {
-	  lab_location = document.getElementById("location").value;
-	  question = document.getElementById("question").value;
-	  enqueue_student(course, question, lab_location);
-	  dialog.dialog( "close" );
+	      lab_location = document.getElementById("location").value;
+	      question = document.getElementById("question").value;
+        var cont = true;
+        document.getElementById('location').style.borderColor = "black";
+        document.getElementById('question').style.borderColor = "black";
+        if(lab_location == ""){
+          document.getElementById('location').style.borderColor = "red";
+          cont = false;
+        }
+        if(question == ""){
+          document.getElementById('question').style.borderColor = "red";
+          cont = false;
+        }
+        if(cont){
+	        enqueue_student(course, question, lab_location);
+	        dialog.dialog( "close" );
+        }
       },
       Cancel: function() {
         dialog.dialog( "close" );
+        document.getElementById('location').style.borderColor = "black";
+        document.getElementById('question').style.borderColor = "black";
       }
     }
   });
