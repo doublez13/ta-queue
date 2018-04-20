@@ -79,7 +79,7 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title">Create New Course</h3>
+								<h3 class="panel-title" style="font-size:20px; text-align: center">Create New Course</h3>
                             </div>
 
                             <style>
@@ -94,30 +94,36 @@
                                 resize: vertical /* Allow the user to vertically resize the textarea (not horizontally) */
                             }
                             </style>
-                                                         
-                            <form id="create_class">
-                                <label>Course Name</label>
-                                <input type="text" id="course_name" placeholder="Course Name.." required>
 
-                                <label>Department</label>
-                                <input type="text" id="depart_prefix" placeholder="CS" required>
+                            <form id="create_class" class="padding-left-15 padding-right-15">
+                                
+                                <div class="col-sm-6 padding-top-15 padding-left-0">
+                                    <label>Course Name</label>
+                                    <input type="text" id="course_name" placeholder="e.g. &quot;CS 4400: Computer Systems&quot;" maxlength="128" required>
 
-                                <label>Course Number</label>
-                                <input type="text" id="course_num" placeholder="4400" required>
+                                    <label>Department</label>
+                                    <input type="text" id="depart_prefix" placeholder="e.g. &quot;CS&quot;" maxlength="16" required>
 
-                                <label>Instructor username</label>
-                                <input type="text" id="professor" placeholder="username" required>
+                                    <label>Course Number</label>
+                                    <input type="text" id="course_num" placeholder="e.g. &quot;4400&quot;" maxlength="16" required>
+                                </div>
+                                <div class="col-sm-6 padding-top-15 padding-left-0 padding-right-0">
+                                    <label>Instructor Username</label>
+                                    <input type="text" id="professor" placeholder="username of instructor" maxlength="128" required>
 
-                                <label>LDAP group</label>
-                                <input type="text" id="ldap_group" placeholder="cs4400" required>
+                                    <label>LDAP Group</label>
+                                    <input type="text" id="ldap_group" placeholder="TA membership group" maxlength="256" required>
 
-                                <label>Access Code</label>
-                                <input type="text" id="acc_code">
+                                    <label>Access Code</label>
+                                    <input type="text" id="acc_code" placeholder="16 character max" maxlength="16">
+                                </div>
+                                <div class="col-sm-12 padding-left-0 padding-right-0">
+                                    <label>Description</label>
+                                    <textarea id="description" style="height:100px" required></textarea>
+                                </div>
 
-                                <label>Description</label>
-                                <textarea id="description" style="height:200px" required></textarea>
+                                <button class="btn btn-success" type="submit">Create Course</button>
 
-                                <input type="submit" value="Create Course">
                             </form>
 						</div><!--panel-->
 					</div><!--id-->

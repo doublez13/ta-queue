@@ -1,3 +1,7 @@
+$(document).ready(function(){
+    $("#create_class").submit( create_class );
+});
+
 create_class = function( event ) {
   event.preventDefault();
   
@@ -31,7 +35,3 @@ create_class = function( event ) {
   }
   posting.done(done);
 }
-
-$(document).ready(function(){
-  $("#create_class").submit( create_class ); 
-});
