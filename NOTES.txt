@@ -1,11 +1,9 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
--Fix the failed to load favicon error. This might do it, add to each page head: '<link rel="shortcut icon" href="">'
 -Modify stats endpoints to let user post date ranges so such massive amounts of data aren't returned?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -It took up more room, but I think the TA name could be useful for announcements.
 -TA log to track how long on duty?
--Small UI issue: make buttons a fixed width at all times on all courses page
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?

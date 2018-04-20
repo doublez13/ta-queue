@@ -5,11 +5,16 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>Queue - My Courses</title>
+		<title>TA Help Queue - My Courses</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
-		<meta name="keywords"    content="University of Utah, 2017-2018"/>
+		<meta name="keywords"    content="University of Utah, 2017-2018, College of Engineering"/>
 		<meta name="description" content="Senior Project"/>
+
+        <!--U icon for browser tabs-->
+        <link rel="icon" type="image/png" href="../resources/img/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" href="../resources/img/favicon-16x16.png"/>
+        <link rel="icon" type="image/png" href="../resources/img/favicon.ico"/>
 
 		<!-- ALL CSS FILES -->
 		<link rel="stylesheet" type="text/css" href="../resources/CSS/global.css">
