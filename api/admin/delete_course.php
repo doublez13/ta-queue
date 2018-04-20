@@ -43,7 +43,10 @@ $course_name = $_POST['course'];
 $res = del_course($course_name);
 if ($res)
 {
-  $return = return_JSON_error($res);
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to create course"
+  );
   http_response_code(500);
 }else
 {

@@ -53,9 +53,12 @@ if ($_POST['acc_code'])
 }
 
 $res = new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code);
-if ($res < 0)
+if ($res)
 {
-  $return = return_JSON_error($res);
+  $return = array(
+    "authenticated" => True,
+    "error" => "Unable to create course"
+  );
   http_response_code(500);
 }else
 {

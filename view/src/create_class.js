@@ -2,6 +2,17 @@ $(document).ready(function(){
     $("#create_class").submit( create_class );
 });
 
+done = function(data){
+  window.location = "./classes.php";
+}
+
+fail = function(data){
+  var httpStatus = data.status;
+  var dataString = JSON.stringify(data.responseJSON);
+  var dataParsed = JSON.parse(dataString);
+  alert(dataParsed["error"]);
+}
+
 create_class = function( event ) {
   event.preventDefault();
   
@@ -24,14 +35,6 @@ create_class = function( event ) {
                                acc_code:      acc_code,
                              } );
 
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    if(dataParsed.error){
-      alert(dataParsed["error"]);
-    }else{
-      window.location("./classes.php");
-    }
-  }
   posting.done(done);
+  posting.fail(fail);
 }
