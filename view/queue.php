@@ -96,34 +96,17 @@
                     </div>
                 </div>
 
-                <!--INDIVIDUAL BUTTONS: NO BUTTON GROUP-->
-                <!--<button class="margin-top-5 btn btn-success" id="state_button"></button>-->
-                <!--<button class="margin-top-5 btn btn-success" id="duty_button"></button>-->
-                <!--<button class="margin-top-5 btn btn-info" id="freeze_button"></button>-->
-
                 <div class='btn-group-vertical' role='group' align="left" aria-label='...'>
-                    <button class="btn btn-success" id="state_button"></button>
-                    <button class="btn btn-success" id="duty_button"></button>
-                    <button class="btn btn-info" id="freeze_button"></button>
+                    <button class="btn btn-success" id="state_button" style="display: none"></button>
+                    <button class="btn btn-success" id="duty_button" style="display: none"></button>
+                    <button class="btn btn-info" id="freeze_button" style="display: none"></button>
                 </div>
 
-                <button class="margin-top-5 btn btn-success" id="join_button"></button>
+                <button class="margin-top-5 btn btn-success" id="join_button" style="display: none"></button>
 
                 <div class="col-xs-12 margin-top-15 padding-0" align="left">
 
-                    <!--ORIGINAL TIME LIMIT AND COOL DOWN BUTTONS (SEPARATED INPUT BOX AND BUTTON)-->
-<!--                <form id="time_form" title="(minutes)">-->
-<!--                    <label>Time Limit Per Student</label> </br>-->
-<!--                    <input type="number" id="time_limit_input" style='width:5em'>-->
-<!--                    <input class="btn btn-success" type="submit" value="Set">-->
-<!--                </form>-->
-<!--                <form id="cooldown_form" title="Queue reentry wait time (minutes)">-->
-<!--                    <label>Cool-down Time</label> </br>-->
-<!--                    <input type="number" id="cooldown_input" style='width:5em'>-->
-<!--                    <input class="btn btn-success" type="submit" value="Set">-->
-<!--                </form>-->
-
-                    <form id="time_form" title="(minutes)">
+                    <form id="time_form" title="(minutes)" style="display: none">
                         <label>Time Limit Per Student</label>
                          <div class="input-group" style='width:8em'>
                             <input type="number" min="0" id="time_limit_input" class="form-control">
@@ -132,7 +115,7 @@
                             </span>
                         </div>
                     </form>
-                    <form id="cooldown_form" title="Queue reentry wait time (minutes)">
+                    <form id="cooldown_form" title="Queue reentry wait time (minutes)" style="display: none">
                         <label>Cool-down Time</label>
                         <div class="input-group" style='width:8em'>
                             <input type="number" min="0" id="cooldown_input" class="form-control">
@@ -163,14 +146,8 @@
                         </table>
                     </div>
 
-                    <!--ORIGINAL POST ANNOUNCEMENT BOX/BUTTON (SEPARATED INPUT BOX AND BUTTON)-->
-<!--                <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form">-->
-<!--                    <input type="text" id="new_ann" class="flex-fillSpace">-->
-<!--                    <input class="btn btn-success flex-noShrink margin-left-10" id="ann_button" type="submit" value="Post">-->
-<!--                </form>-->
-
                     <!--POST ANNOUNCEMENT BOX (ONLY SHOWN FOR TAS)-->
-                    <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form">
+                    <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form" style="display: none">
                         <div class="input-group">
                             <input type="text" id="new_ann" class="flex-fillSpace form-control">
                             <span class="input-group-btn">
@@ -208,7 +185,7 @@
 <!--                    </table>-->
 <!---->
                     <!--POST ANNOUNCEMENT BOX (ONLY SHOWN FOR TAS)-->
-<!--                    <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form">-->
+<!--                    <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form" style="display: none">-->
 <!--                        <div class="input-group">-->
 <!--                            <input type="text" id="new_ann" class="flex-fillSpace form-control">-->
 <!--                            <span class="input-group-btn">-->

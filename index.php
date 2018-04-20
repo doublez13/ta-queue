@@ -84,7 +84,7 @@
 
         <!--Loading gif which appears under the sign in button-->
         <div id="loading" class="padding-top-10" style="vertical-align: center; text-align: center; display: none">
-            <img src="./resources/animations/loading2.gif"/>
+            <img src="resources/animations/loading.gif"/>
         </div>
 
     </body>
