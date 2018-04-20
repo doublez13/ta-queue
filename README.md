@@ -1,5 +1,4 @@
 # suzie-queue
-
 ## User Documentation
 Suzie Queue is an attempt to replace the current TA queue with a better looking, more reliable, and feature rich system. Starting from scratch, we are building a new queue using standard web technologies. On the front end, our queue is making use of jQuery, CSS5, and Bootstrap. The backend is written entirely in PHP, leveraging MySQL for all database work, and LDAP for all authentication and authorization.
 
@@ -45,27 +44,30 @@ TAs may wish to impose cool-down timers for students. This means that if a stude
 #### Reordering
 TAs may wish to reorder the queue. In this case, TAs can use the up and down buttons next to a student to shift their position in the queue.
 
-## Technical Documentation
+
+
+## Technical Documentation and Setup
 ### Example Setup:
 The queue is written to allow for a fairly flexible setup. At the most basic level, the queue is hosted on a standard web server like Apache or NGINX. Additionally, all the data is stored in a MySQL database. Finally, all user authentication and information is done off of an external Active Directory (LDAP) server.
 
 ### Web Server:
-The queue requires a web server for hosting. We have chosen to develop against Apache 2.6. However, we are not making use of any Apache specific features/settings, so in theory any web server should be able to host the queue. Since user credentials are being sent over the network, SSL is a must.
+The queue requires a web server for hosting. We have chosen to test against Apache 2.4. However, we are not making use of any Apache specific features/settings, so in theory any web server should be able to host the queue. Since user credentials are being sent over the network, SSL is a must.
 
 ### MySQL Server:
 All SQL code is written using the standard php-mysql library. As so, a MySQL server is needed for all the backend data. At this point in time (2018), MaraiDB is considered a drop in replacement for MySQL, and should work as well. On our testing setup, we host a MariaDB server on the same machine as the web server. However, the code is written so that these two servers are not coupled, and may reside on different machines. In this case, the corresponding SQL port(s) will need to be opened on the machine hosting the database. When the SQL server resides on the same machine as the web server, localhost may be entered for the SQL_SERVER global variable in the config.php file, and no corresponding firewall ports need to be opened for SQL.
 
 ### LDAP Server:
-All authentication and authorization is done against Active Directory using the standard php-ldap library. Because of this, switching to a different Active Directory domain is as simple as modifying the master config.php file. Switching to a different LDAP provider (like OpenLDAP) should be fairly straight forward. In the future, I'd like to take out all Active Directory specific code, allowing the LDAP code to be as generic as possible. All authentication is done using LDAP by simply attempting to bind to the LDAP server with the given username and password. Additionally, all user information (currently first and last name) is pulled from LDAP and stored locally in SQL the first time a user logs in. When creating a course, all authorization is handeled via LDAP. This means that each course needs to have an LDAP group created in the LDAP server. This LDAP group is required on the course creation page. Changing a users role in a course is as simple as adding them to, or removing them from the LDAP group that corresponds to the course. 
+All authentication and authorization is done against Active Directory using the standard php-ldap library. Because of this, switching to a different Active Directory domain is as simple as modifying the master config.php file. All authentication is done using LDAP by simply attempting to bind to the LDAP server with the given username and password. Additionally, all user information (currently first and last name) is pulled from LDAP and stored locally in SQL the first time a user logs in. When creating a course, all authorization is handeled via LDAP. This means that each course needs to have an LDAP group created in the LDAP server. This LDAP group is required on the course creation page. Changing a users role in a course is as simple as adding them to, or removing them from the LDAP group that corresponds to the course. 
 
 ### Network Ports
-Port 80: HTTPS redirect  
-Port 443: HTTPS  
-Optionally SQL port(s)  
+Port 80:   HTTP redirect  
+Port 443:  HTTPS  
+Port 3306: MySQL (Only needed if running on different server)
 
-### Version requirements
-MySQL/MariaDB 5.5 or greater   
-PHP 5.4 or greater (PHP 7.0.5 or later) recommended for utilizing some features of php-ldap
+### Dependencies
+Apache >= 2.4 (Ealier versions most likely work, but haven't been tested)  
+MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaDB should work too)  
+PHP    >= 5.4 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
 
 ### Configuration file (config.php)
 LDAP_SERVER: FQDN or IP address of the LDAP server.  
@@ -79,5 +81,8 @@ SQL_USER:    User to connect to MySQL with.
 SQL_PASSWD:  Password for SQL_USER.  
 DATABASE:    Database for the queue.  
 
-### LDAP TLS 
+### LDAP TLS Note 
 By default, LDAP prefers to verify server certificates before connecting. The queue does not make use of server certificates, and disables them. In PHP >= 7.0.5, the php-ldap library respects this setting, and disables certificate checking. In PHP versions < 7.0.5, the TLS_REQCERT_DISABLED flag should be set to true in the system ldap config. After this is done, the TLS_REQCERT_DISABLED flag can be set to true in the queue configuration indicating that cert checking is disabled on the system side. If this flag is NOT set in the queue config with PHP < 7.0.5, the queue will fall back to unencrypted LDAP communication with is NOT RECOMMENDED.
+
+### MySQL Database Setup
+In the resources directory at the root of the project is the DB_setup.sql file that initializes the queue database. Simply set the database name at the top of the file to match what's set in the config.php file. In a mysql shell, the script can be ran using 'mysql> source path/to/DB_setup.sql'.

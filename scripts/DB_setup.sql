@@ -50,7 +50,7 @@ create table queue_state(
 
 --Master queue for all courses;
 --foreign key contraints guarantee student is enrolled in course
---  and queue is open
+--and queue is open
 create table queue(
   position   BIGINT AUTO_INCREMENT,
   username   VARCHAR(256) NOT NULL,
