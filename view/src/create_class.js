@@ -1,9 +1,11 @@
 $(document).ready(function(){
     $("#create_class").submit( create_class );
+    $("#course_name").focus();
 });
 
 done = function(data){
   window.location = "./classes.php";
+  alert("Course created successfully.\n\nRedirecting to All Courses...");
 }
 
 fail = function(data){

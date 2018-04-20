@@ -414,7 +414,9 @@ function render_student_view(dataParsed){
     $("#join_button").text("Exit Queue");
     $("#join_button").click(function( event ) {
       event.preventDefault();
-      dequeue_student(course);
+      if (confirm("Are you sure you want to exit the queue?")) {
+        dequeue_student(course);
+      }
     });
   }
   $("#join_button").show();
