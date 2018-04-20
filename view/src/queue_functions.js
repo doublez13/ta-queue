@@ -39,14 +39,6 @@ $(document).ready(function(){
     window.location = "stats.php?course="+course;
   });
 
-  $("#duty_button").hide();
-  $("#state_button").hide();
-  $("#freeze_button").hide();
-  $("#time_form").hide();
-  $("#cooldown_form").hide();
-  $("#join_button").hide();
-  $("#new_ann").hide();
-  $("#ann_button").hide(); 
   start();
 });
 
@@ -76,8 +68,6 @@ function get_queue(course) {
   var posting = $.post( url, { course: course } );
   posting.done(render_view);
 }
-
-
 
 //This function renders the view from the data
 var render_view = function(data) {
@@ -184,10 +174,10 @@ function render_ann_box(anns){
     $('#anns_body').append(new_row);
   }
 
+  // show new announcement form if TA
   if(is_TA){
     $("#ann_button").unbind("click");
-    $("#new_ann").show();
-    $("#ann_button").show();
+    $("#new_ann_form").show();
     $("#ann_button").click(function( event ) {
       event.preventDefault();
       var announcement = document.getElementById("new_ann").value;
@@ -197,9 +187,6 @@ function render_ann_box(anns){
       }
     });
   }
-  else
-    $("#new_ann_form").hide();
-
 
   // ~~~~~~~~~~~~~~ DO NOT DELETE/EDIT: WORKING BACK UP CODE ACROSS ALL BROWSERS  ~~~~~~~~~~~~~~~~~~~~~~~~
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ NO FLEX OR SCROLL BAR OPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -249,8 +236,7 @@ function render_ann_box(anns){
   // }
   // if(is_TA){
   //     $("#ann_button").unbind("click");
-  //     $("#new_ann").show();
-  //     $("#ann_button").show();
+  //     $("#new_ann_form").show();
   //     $("#ann_button").click(function( event ) {
   //         event.preventDefault();
   //         var announcement = document.getElementById("new_ann").value;
@@ -258,8 +244,6 @@ function render_ann_box(anns){
   //         add_announcement(course, announcement)
   //     });
   // }
-  // else
-  //     $("#new_ann_form").hide();
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -407,7 +391,6 @@ function render_student_view(dataParsed){
   if(!in_queue){//Not in queue
     document.getElementById("join_button").className="margin-top-5 btn btn-success";
     $("#join_button").text("Enter Queue");
-    $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
       dialog.dialog( "open" );
@@ -416,19 +399,16 @@ function render_student_view(dataParsed){
   else{ //In queue
     document.getElementById("join_button").className="margin-top-5 btn btn-danger";
     $("#join_button").text("Exit Queue");
-    $("#join_button").show();
     $("#join_button").click(function( event ) {
       event.preventDefault();
       dequeue_student(course);
     });
   }
+  $("#join_button").show();
 }
 
 //Displays the queue table
 function render_queue_table(dataParsed, role){
-
-  // ~~~~~~~~~~~~~~ DO NOT EDIT/DELETE: WORKING BACK UP CODE ACROSS ALL BROWSERS  ~~~~~~~~~~~~~~~~~~~~~~~~~
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ NO FLEX OR SCROLL BAR OPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
 
@@ -588,9 +568,6 @@ function render_queue_table(dataParsed, role){
 
     $('#queue_body').append(new_row);
   }
-
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
 }
 
 
