@@ -173,8 +173,6 @@ function render_ann_box(anns){
     if(is_TA){
       // blue X icon below:
       var del_ann_button = $('<td><div align="right"><button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button></div></td>');
-      // red circle X icon below:
-      //var del_ann_button = $('<td><div align="right"><button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button></div><td>');
       del_ann_button.click(function(event){
         del_announcement(course, announcement_id)
       });
@@ -505,10 +503,8 @@ function render_queue_table(dataParsed, role){
 
       // MOVE DOWN BUTTON
       var decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
-      //var decrease_button = $('<button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button>');
       if(row == dataParsed.queue_length -1){
         decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
-        //decrease_button = $('<button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button>');
       }
       decrease_button.click(function(event){
         dec_priority(course, username);
@@ -517,18 +513,13 @@ function render_queue_table(dataParsed, role){
       // REMOVE BUTTON
       // blue X icon below:
       var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
-      //var dequeue_button = $('<button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button>');
-      // red circle X icon below:
-      //var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-danger" title="Remove"> <i class="glyphicon glyphicon-remove-sign"></i>  </button></div>');
       dequeue_button.click(function(event) {
           dequeue_student(course, username);
       });
 
       // Create TA button group that spans entire td width and append it to the new row
-      //var td = $("<td class='flex-fillSpace' style='width:370px;'></td>");
       var td = $("<td class='col-sm-3'></td>");
       var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
-      //var button_group = $("<div class='btn-group' role='group' aria-label='...'></div>");
       button_group.append(help_button);
       button_group.append(increase_button);
       button_group.append(decrease_button);
