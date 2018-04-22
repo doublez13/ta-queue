@@ -1,5 +1,7 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-Do we need an API endpoint for 'is_user_admin'? We check this with embedded php, but how would an independent interface check this? Maybe add this to get_info.php?
+-The alert() in the fail function in queue_functions.js prints 'undefined' instead of the error.
 -Modify stats endpoints to let user post date ranges so such massive amounts of data aren't returned?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -It took up more room, but I think the TA name could be useful for announcements.

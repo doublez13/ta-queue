@@ -60,6 +60,17 @@
 
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="../about.html">About</a>
+                        </li>
+                        <li>
+                            <a href="../swagger/index.html" target="_blank">Public API</a>
+                        </li>
+                        <li>
+                            <a href="../tutorial.html">Tutorial</a>
+                        </li>
+                    </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php
                           session_start();

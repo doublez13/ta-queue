@@ -241,6 +241,7 @@ a:hover
 
     .table-scrollOnOverflow-sm {overflow-y:auto;}
 }
+#announcements-wrapper td {word-break: break-all;}
 
 .bgColor-grey-1 {background-color:#eee;}
 
