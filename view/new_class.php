@@ -120,7 +120,7 @@
                                     <input type="text" id="ldap_group" placeholder="TA membership group" maxlength="256" required>
 
                                     <label>Access Code</label>
-                                    <input type="text" id="acc_code" placeholder="16 character max" maxlength="16">
+                                    <input type="text" id="acc_code" placeholder="(optional) 16 character max" maxlength="16">
                                 </div>
                                 <div class="col-sm-12 padding-left-0 padding-right-0">
                                     <label>Description</label>
