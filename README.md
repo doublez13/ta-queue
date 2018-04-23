@@ -15,6 +15,9 @@ Corresponding to each course is a TA group. If a user is in the group for that c
 The queue also has an administrator group defined. If a user is in this group, the user is granted administrative permissions. In this case, the Admin dropdown menu appears which allows them to create courses.  
 NOTE: Administrators also have access to a wider range of statistics. Unfortunately these are not visible graphically yet.
 
+### Enrolling and Unenrolling in Courses
+If a user is not enrolled in any courses, either as a student or a TA, they are dropped on the All Courses page after login. Here they can enroll in any course by simply clicking enroll. If an access code is required to enter the course, students must enter this before proceeding. This page is also where a student would unenroll from a course. In this case, the user can simply select Leave for a particular course. If a user is enrolled in at least one course, they are dropped on the My Courses page after login. 
+
 ### Creating a new course
 #### Access Codes
 If desired, administrators may require an access code in order to enroll in a course. In this case, the course will appear yellow on the All Courses page, and have a padlock icon next to it. Students will be required to enter an access code in order to join the course. Access codes can include any ascii character and be up to 16 characters long. 
