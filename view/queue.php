@@ -119,7 +119,7 @@
 
                 <button class="margin-top-5 btn btn-success" id="join_button" style="display: none"></button>
 
-                <div class="col-xs-12 margin-top-15 padding-0" align="left">
+                <div class="col-xs-12 margin-top-15 padding-0 padding-bottom-15" align="left">
 
                     <form id="time_form" title="(minutes)" style="display: none">
                         <label>Time Limit Per Student</label>
@@ -139,9 +139,11 @@
                             </span>
                         </div>
                     </form>
+
+                    <button class="btn btn-primary" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button>
                 </div>
 
-                <button class="btn btn-primary" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button>
+
 
             </div>
 
@@ -198,7 +200,7 @@
 <!--                    <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto;">-->
 <!--                        <tbody id="anns_body"></tbody>-->
 <!--                    </table>-->
-<!---->
+
                     <!--POST ANNOUNCEMENT BOX (ONLY SHOWN FOR TAS)-->
 <!--                    <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form" style="display: none">-->
 <!--                        <div class="input-group">-->
@@ -213,12 +215,11 @@
                 <!--NO SCROLL BAR: GROWING/SHRINKING QUEUE-->
 <!--                <div id ="queue_table">-->
 <!--                    <div class="panel panel-primary">-->
-                        <!-- Default panel contents -->
 <!--                        <div class="panel-heading">-->
 <!--                            <h3 class="panel-title" style="font-size: 20px;" align="center">Queue</h3>-->
 <!--                        </div>-->
 <!--                        <table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto; table-layout: fixed;">-->
-                            <!--<thead id="queue_head"></thead>-->
+<!--                            <thead id="queue_head"></thead>-->
 <!--                            <tbody id="queue_body"></tbody>-->
 <!--                        </table>-->
 <!--                    </div>-->

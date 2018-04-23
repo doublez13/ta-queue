@@ -241,7 +241,7 @@ a:hover
 
     .table-scrollOnOverflow-sm {overflow-y:auto;}
 }
-#announcements-wrapper td {word-break: break-all;}
+/*#announcements-wrapper td {word-break: break-all;} !*CORRECTS HORIZONTAL SCROLLBAR FOR A LONG STRING OF CONTINUOUS CHARACTERS, BUT BREAKS IN WORDS*!*/
 
 .bgColor-grey-1 {background-color:#eee;}
 
