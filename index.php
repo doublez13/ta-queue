@@ -49,13 +49,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="about.html">About</a>
+                            <a href="view/about.html">About</a>
                         </li>
                         <li>
                             <a href="swagger/index.html" target="_blank">Public API</a>
                         </li>
                         <li>
-                            <a href="tutorial.html">Tutorial</a>
+                            <a href="view/tutorial.html">Tutorial</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -94,9 +94,13 @@
             </form>
 		</div><!--container-->
 
-        <!--Loading gif which appears under the sign in button-->
-        <div id="loading" class="padding-top-10" style="vertical-align: center; text-align: center; display: none">
+        <!--Waiting gif which appears under the sign in button-->
+        <div id="waiting_spinner" class="padding-top-10" style="text-align: center; visibility: hidden">
             <img src="resources/animations/loading.gif"/>
+        </div>
+
+        <div class="padding-top-10" style="text-align: center">
+            <a style="color: #e8002b; font-size:130%;" href="https://webhandin.eng.utah.edu/cade/create_account/index.php" target="_blank">No CADE account? Create one here.</a>
         </div>
 
     </body>

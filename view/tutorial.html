@@ -1,10 +1,180 @@
+<?php
+  include "router.php"
+?>
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
         "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
     <title>TA Help Queue - Tutorial</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
+    <meta name="keywords"    content="University of Utah, 2017-2018, College of Engineering"/>
+    <meta name="description" content="Senior Project"/>
+
+    <!--U icon for browser tabs-->
+    <link rel="icon" type="image/png" href="../resources/img/favicon-32x32.png"/>
+    <link rel="icon" type="image/png" href="../resources/img/favicon-16x16.png"/>
+    <link rel="icon" type="image/png" href="../resources/img/favicon.ico"/>
+
+    <!-- ALL CSS FILES -->
+    <link rel="stylesheet" type="text/css" href="../resources/CSS/global.css">
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">-->
+    <!-- jQuery CDN -->
+    <!--<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>-->
+    <!-- Latest compiled and minified JavaScript -->
+    <!--<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>-->
 </head>
 <body>
-WRITE ME!!!
+
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header">
+                <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">-->
+                    <!--<span class="sr-only">Toggle navigation</span>-->
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                    <!--<span class="icon-bar"></span>-->
+                <!--</button>-->
+                <a class="navbar-brand">
+                    <img alt="Brand" src="../resources/img/UHz.png">
+                </a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <!--<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">-->
+                <!--<ul class="nav navbar-nav navbar-left">-->
+                    <!--<li>-->
+                        <!--<a href="./about.html">About</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="../swagger/index.html" target="_blank">Public API</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="./tutorial.html">Tutorial</a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+                <!--<ul class="nav navbar-nav navbar-right">-->
+                    <!--<?php-->
+                              <!--session_start();-->
+                              <!--$is_admin    = $_SESSION["is_admin"];-->
+                              <!--if($is_admin){-->
+                                <!--readFile("./adminHeader.html");-->
+                              <!--}-->
+                            <!--?>-->
+                    <!--<li>-->
+                        <!--<a href="classes.php">All Courses</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="my_classes.php">My Courses</a>-->
+                    <!--</li>-->
+                    <!--<li>-->
+                        <!--<a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>-->
+                    <!--</li>-->
+                <!--</ul>-->
+            <!--</div>&lt;!&ndash; /.navbar-collapse &ndash;&gt;-->
+        </div><!-- /.container-fluid -->
+    </nav>
+
+    <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
+        <div align="center" style="margin-top:  -40px; margin-bottom: -20px">
+            <h1 style="color: #404040; text-shadow: 2px 2px #000000;">TA Help Queue Tutorial</h1>
+        </div>
+    </div>
+
+    <container>
+        <div class="col-md-12">
+            <h1 style="color: #cc0000">Account Creation</h1>
+            <p style="font-size: 17px">
+                The queue currently makes use of College of Engineering CADE accounts. Any student with a CADE account can login using their credentials and their personal information will be pulled from the servers. Students without a CADE account can create one
+                <a style="color: #e8002b" href="https://webhandin.eng.utah.edu/cade/create_account/index.php"> here.</a>
+            </p>
+
+            <h1 style="color: #cc0000">Access Control</h1>
+            <p style="font-size: 17px">
+                TA and administrative privileges are granted via CADE Active Directory LDAP groups. TAs must be members of the corresponding course group to receive TA privileges. Professors must be members of the group <span style="font-weight: bold">queue-admin-GROUP</span> to receive administrative privileges. (see "Assigning and Removing TAs" below for more details)
+            </p>
+
+            <h1 style="color: #cc0000">User Roles</h1>
+            <p style="font-size: 17px">
+                The queue currently has three major roles: Student, Teaching Assistant (TA), and Administrator.
+            </p>
+
+            <h3>Student</h3>
+            <p style="font-size: 17px">
+                On the All Courses page, students may enroll in any course. At the professor's discretion, some courses may require an access code to enroll.
+            </p>
+
+            <h3>Teaching Assistant</h3>
+            <p style="font-size: 17px">
+                Users may not enroll in a course if they belong to its TA group. If the user was already enrolled as a student in a course before being added to its TA group, they are automatically unenrolled as a student and assume their TA role.
+            </p>
+
+            <h3>Administrator</h3>
+            <p style="font-size: 17px">
+                If the user is an admin, a dropdown menu appears in the navbar which allows them to create courses.
+            </p>
+
+            <h1 style="color: #cc0000">Enrolling and Unenrolling in Courses</h1>
+            <p style="font-size: 17px">
+                If a user is not enrolled in any courses, either as a student or a TA, they are routed to the All Courses page after login. Here they can enroll in any course by simply clicking Enroll. If an access code is required, students must enter this before proceeding. This page is also where a student would unenroll from a course. In this case, the user can simply click Leave for the desired course. If a user is enrolled in at least one course, they are routed to the My Courses page after login.
+            </p>
+
+            <h1 style="color: #cc0000">Creating a New Course</h1>
+            <h3>Access Codes</h3>
+            <p style="font-size: 17px">
+                If desired, administrators may require an access code to enroll in a course. In this case, the course will appear yellow on the All Courses page, and have a padlock icon next to it. Students will be required to enter the code to enroll. Access codes can include any ASCII character and be up to 16 characters long.
+            </p>
+            <h3>Assigning and Removing TAs</h3>
+            <p style="font-size: 17px">
+                Administrators specify the TA LDAP group for a particular course. This group should exist before creating the course. After the group is specified, adding and removing TAs is then done completely via an LDAP interface. The most common way administrators update groups is via the
+                <a style="color: #e8002b" href="https://webhandin.eng.utah.edu/cade/create_account/index.php"> web interface </a>
+                or by sending an email to <span style="font-style: italic">opers@eng.utah.edu</span>. To request an LDAP group for a new course, send an email to <span style="font-style: italic">opers@eng.utah.edu</span>.
+            </p>
+
+            <h1 style="color: #cc0000">Statistics</h1>
+            <p style="font-size: 17px">
+                Nearly every queue operation is logged. When a student enters a queue, logged data includes the student's name, course, question, and timestamps for entering, getting helped, and exiting the queue, as well as the TA that helped them.
+                The only metrics that are currently visible via the web interface are the number of students helped per day for a particular course.
+                However, <a style="color: #e8002b" href="../swagger/index.html" target="_blank">public API endpoints</a> are available that give much more detailed information on a per course, per student, and per TA basis.
+            </p>
+
+            <h1 style="color: #cc0000">Queue Functionality</h1>
+            <h3>Queue States</h3>
+            <h4 style="color: green">Open</h4>
+            <p style="font-size: 17px">
+                Students can enter the queue. However, students on cool-down cannot enter. NOTE: The queue can be open, even if no TAs are on duty.
+            </p>
+            <h4 style="color: red">Closed</h4>
+            <p style="font-size: 17px">
+                Students cannot enter the queue, and no TAs are on duty.
+            </p>
+            <h4 style="color: blue">Frozen</h4>
+            <p style="font-size: 17px">
+                No new students can enter the queue. Students in the queue when it was frozen remain in the queue.
+            </p>
+            <h3>Announcements</h3>
+            <p style="font-size: 17px">
+                TAs are allowed to post announcements for their course. All announcements appear at the top of the screen, with newer announcements appearing towards the top. Announcements within the last fifteen minutes appear in green. TAs can delete an announcement by clicking the X next to it.
+            </p>
+            <h3>Reordering</h3>
+            <p style="font-size: 17px">
+                TAs may wish to reorder the queue. In this case, TAs can use the up and down arrow buttons next to a student to shift their position in the queue. Students also have the ability to move themselves down by clicking the down arrow on their row.
+            </p>
+            <h3>Time Limits</h3>
+            <p style="font-size: 17px">
+                TAs may choose to impose time limits when helping students. In this case, TAs can set the time limit using the Time Limit Per Student feature. When a student's time has passed, the row corresponding to that student turns red.
+            </p>
+            <h3>Cool-down Timers</h3>
+            <p style="font-size: 17px">
+                TAs may wish to impose cool-down timers for students. This means that if a student gets helped, they are not allowed to enter the queue again until the specified amount of minutes has passed. TAs can set the cool-down time using the Cool-down feature.
+            </p>
+        </div>
+    </container>
+
 </body>
 </html>

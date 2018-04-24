@@ -1,7 +1,7 @@
 login = function( event ) {
   event.preventDefault();
 
-  $('#loading').show(); // waiting spinner
+  $('#waiting_spinner').css("visibility", "visible"); // show waiting spinner
   
   var $form = $( this );
   var username = $form.find( "input[name='username']" ).val();
@@ -10,7 +10,9 @@ login = function( event ) {
 
   var $posting = $.post( url, { username: username, password: password } );
   $posting.always(function( data ) {
-    $('#loading').hide();
+
+    $('#waiting_spinner').css("visibility", "hidden"); // hide waiting spinner
+
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
