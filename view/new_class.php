@@ -139,7 +139,7 @@
                                 </div>
                                 <row>
                                     <button class="btn btn-success" type="submit">Create Course</button>
-                                    <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/cade/create_account/index.php">Update LDAP groups here</a>
+                                    <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify">Update LDAP groups here</a>
                                     <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
                                 </row>
                             </form>
