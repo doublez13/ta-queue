@@ -86,7 +86,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="container  padding-bottom-20">
         <div class="col-md-12">
             <h1 style="color: #cc0000">Account Creation</h1>
             <p style="font-size: 17px">
@@ -95,12 +95,12 @@
                 <span style="font-weight: bold">Logging out does not remove students from queues or take TAs off duty</span>.
             </p>
 
-            <h1 style="color: #cc0000">Access Control</h1>
+            <h1 class="padding-top-20" style="color: #cc0000">Access Control</h1>
             <p style="font-size: 17px">
                 TA and administrative privileges are granted via CADE Active Directory LDAP groups. TAs must be members of the corresponding course group to receive TA privileges. Professors must be members of the group <span style="font-weight: bold">queue-admin-GROUP</span> to receive administrative privileges. (see "Assigning and Removing TAs" below for more details)
             </p>
 
-            <h1 style="color: #cc0000">User Roles</h1>
+            <h1 class="padding-top-20" style="color: #cc0000">User Roles</h1>
             <p style="font-size: 17px">
                 The queue currently has three major roles: Student, Teaching Assistant (TA), and Administrator.
             </p>
@@ -120,17 +120,19 @@
                 If the user is an admin, a dropdown menu appears in the navbar which allows them to create courses.
             </p>
 
-            <h1 style="color: #cc0000">Enrolling and Unenrolling in Courses</h1>
+            <!--<img src="../resources/img/screenshots/admin_dropdown.JPG" alt="admin_dropdown" title="admin dropdown">-->
+
+            <h1 class="padding-top-20" style="color: #cc0000">Enrolling and Unenrolling in Courses</h1>
             <p style="font-size: 17px">
                 If a user is not enrolled in any courses, either as a student or a TA, they are routed to the All Courses page after login. Here they can enroll in any course by simply clicking Enroll. If an access code is required, students must enter this before proceeding. This page is also where a student would unenroll from a course. In this case, the user can simply click Leave for the desired course. If a user is enrolled in at least one course, they are routed to the My Courses page after login.
             </p>
 
-            <h1 style="color: #cc0000">Viewing and Entering Queues</h1>
+            <h1 class="padding-top-20" style="color: #cc0000">Viewing Queues</h1>
             <p style="font-size: 17px">
-                Queues are viewed from the My Courses page. Simply click GoTo to view a queue. Naturally, students and TAs have different functionalities available on a queue page.
+                Queues are accessed from the My Courses page. Simply click GoTo to view a queue. Naturally, students and TAs have different functionalities available on a queue page.
             </p>
 
-            <h1 style="color: #cc0000">Queue Functionality</h1>
+            <h1 class="padding-top-20" style="color: #cc0000">Queue Functionality</h1>
             <h3>Queue States</h3>
             <h4 style="color: green">Open</h4>
             <p style="font-size: 17px">
@@ -161,7 +163,7 @@
                 TAs may wish to impose cool-down timers for students. This means that if a student gets helped, they are not allowed to enter the queue again until the specified amount of minutes has passed. TAs can set the cool-down time using the Cool-down feature.
             </p>
 
-            <h1 style="color: #cc0000">Creating a New Course</h1>
+            <h1 class="padding-top-20" style="color: #cc0000">Creating a New Course</h1>
             <h3>Assigning and Removing TAs</h3>
             <p style="font-size: 17px">
                 Administrators specify the TA LDAP group for a particular course. This group should exist before creating the course. After the group is specified, adding and removing TAs is then done completely via an LDAP interface. The most common way administrators update groups is via the
@@ -173,14 +175,14 @@
                 If desired, administrators may require an access code to enroll in a course. In this case, the course will appear yellow on the All Courses page, and have a padlock icon next to it. Students will be required to enter the code to enroll. Access codes can include any ASCII character and be up to 16 characters long.
             </p>
 
-            <h1 style="color: #cc0000">Statistics</h1>
+            <h1 class="padding-top-20" style="color: #cc0000">Statistics</h1>
             <p style="font-size: 17px">
                 Nearly every queue operation is logged. When a student enters a queue, logged data includes the student's name, course, question, and timestamps for entering, getting helped, and exiting the queue, as well as the TA that helped them.
                 The only metrics that are currently visible via the web interface are the number of students helped per day for a particular course.
                 However, <a style="color: #e8002b" href="../swagger/index.html" target="_blank">public API endpoints</a> are available that give much more detailed information on a per course, per student, and per TA basis.
             </p>
         </div>
-    </container>
+     </div>
 
 </body>
 </html>

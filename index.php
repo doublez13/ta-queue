@@ -103,10 +103,11 @@
             <a style="color: #e8002b; font-size:130%;" href="https://webhandin.eng.utah.edu/cade/create_account/index.php" target="_blank">No CADE account? Create one here.</a>
         </div>
 
-	<div style="text-align: center; margin-top: 10px;">
-	<a href="view/about.html">About |</a>
-	<a href="view/tutorial.html"> Tutorial</a>
-	</div>
+            <!--THERE ARE LINKS IN THE NAVBAR FOR THESE, I PERSONALLY PREFER THEM THERE-->
+<!--        <div style="text-align: center; margin-top: 10px;">-->
+<!--            <a href="view/about.html">About |</a>-->
+<!--            <a href="view/tutorial.html"> Tutorial</a>-->
+<!--        </div>-->
 
     </body>
 </html>
