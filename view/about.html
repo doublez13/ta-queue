@@ -28,62 +28,104 @@
 </head>
 <body>
     <nav class="navbar navbar-default">
-        <div class="container-fluid">
-            <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
-                <!--<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">-->
-                <!--<span class="sr-only">Toggle navigation</span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--<span class="icon-bar"></span>-->
-                <!--</button>-->
-                <a class="navbar-brand">
-                    <img alt="Brand" src="../resources/img/UHz.png">
-                </a>
-            </div>
-        </div><!-- /.container-fluid -->
-    </nav>
+            <div class="container-fluid">
+                <!-- Brand and toggle get grouped for better mobile display -->
+                <div class="navbar-header">
+                    <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand">
+                        <img alt="Brand" src="../resources/img/UHz.png">
+                    </a>
+                </div>
+
+                <!-- Collect the nav links, forms, and other content for toggling -->
+                <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav navbar-left">
+                        <li>
+                            <a href="./about.html">About</a>
+                        </li>
+                        <li>
+                            <a href="../swagger/index.html" target="_blank">Public API</a>
+                        </li>
+                        <li>
+                            <a href="./tutorial.html">Tutorial</a>
+                        </li>
+                    </ul>
+                    <ul class="nav navbar-nav navbar-right">
+                        <?php
+                          session_start();
+                          $is_admin    = $_SESSION["is_admin"];
+                          if($is_admin){
+                            readFile("./adminHeader.html");
+                          }
+                        ?>
+                        <li>
+                            <a href="classes.php">All Courses</a>
+                        </li>
+                        <li class="active">
+                            <a href="#">My Courses</a>
+                        </li>
+                        <li>
+                            <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
+                        </li>
+                    </ul>
+                </div><!-- /.navbar-collapse -->
+            </div><!-- /.container-fluid -->
+        </nav> 
 
     <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
         <div align="center" style="margin-top:  -40px; margin-bottom: -20px">
-            <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Team Suzie Queue</h1>
+            <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Team Suzie Queue</h>
+	    <img src="../resources/img/Untitled-1.png" alt="Suzie Queue Logo"style="height:70px;">
         </div>
     </div>
 
     <div class="container">
-        <div class="col-sm-12">
+        <div class="col-sm-6">
             <h1 style="color: #cc0000">Team Members</h1>
-                <p style="font-size: 17px">
-                    <h3 style="text-decoration: underline;">Blake Burton</h3> </br>
-                    -API </br>
-                    -Worked on user interface </br>
+                <h3 style="text-decoration: underline;">Blake Burton</h3> </br>
+		<p style="font-size: 17px">
+                    -API Design and Implementation </br>
+                    -UI / UX Polishing </br>
                     -Quality Assurance </br>
                     </br>
                     Email: <a href="mailto:blakesterburt@gmail.com">blakesterburt@gmail.com</a>
                 </p>
             
-                <p style="font-size: 17px">
-                    <h3 style="text-decoration: underline;">Ryan Welling</h3> </br>
+                <h3 style="text-decoration: underline;">Ryan Welling</h3> </br>
+		<p style="font-size: 17px">
                     -Product Manager </br>
                     -Front-end Design and Implementation</br>
                     -UI / UX Polishing </br>
+		    -Documentation and Reports </br>
                     </br>
                     Email: <a href="mailto:welling.ryan@gmail.com">welling.ryan@gmail.com</a>
                 </p>
             
-                <p style="font-size: 17px">
-                    <h3 style="text-decoration: underline;">Zane Zakraisek</h3> </br>
-                    -Lead DevOps </br>
+                <h3 style="text-decoration: underline;">Zane Zakraisek</h3> </br>
+		<p style="font-size: 17px">
+                    -DevOps </br>
                     -Back-end Design Implementation</br>
                     -Database Design and Implementation</br>
                     -API Design and Implementation </br>
                     -Security Validation </br>
                     -Front-End Queue Implementation </br>
-                    -UI / UX Polishing
+                    -UI / UX Polishing </br>
                     </br>
                     Email: <a href="mailto:zz@eng.utah.edu">zz@eng.utah.edu</a>
                 </p>
             </div><!--col-sm-12-->
+	    <div class="col-sm-6">
+	      <img src="../resources/img/SuzieQueueTeamPhoto.jpg" alt="Team Photo" style="width:600px; height:400px; margin-top:50px;">
+	      <p>
+		</br>
+		Team Members L-R: Blake Burton, Ryan Welling, Matt Damon, Zane Zakraisek
+	      </p>
+	    </div>
         </div><!--container-->
 </body>
 </html>

@@ -99,9 +99,14 @@
             <img src="resources/animations/loading.gif"/>
         </div>
 
-        <div class="padding-top-10" style="text-align: center">
+        <div class="padding-top-10" style="text-align: center;">
             <a style="color: #e8002b; font-size:130%;" href="https://webhandin.eng.utah.edu/cade/create_account/index.php" target="_blank">No CADE account? Create one here.</a>
         </div>
+
+	<div style="text-align: center; margin-top: 10px;">
+	<a href="view/about.html">About |</a>
+	<a href="view/tutorial.html"> Tutorial</a>
+	</div>
 
     </body>
 </html>
