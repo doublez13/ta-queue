@@ -114,5 +114,9 @@
 <!--            <a href="view/tutorial.html"> Tutorial</a>-->
 <!--        </div>-->
 
+<div id="footer">
+    <img src="https://www.gnu.org/graphics/gplv3-127x51.png">
+</div>
+
     </body>
 </html>
