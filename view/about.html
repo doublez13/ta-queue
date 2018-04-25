@@ -45,7 +45,7 @@
                 <!-- Collect the nav links, forms, and other content for toggling -->
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-left">
-                        <li>
+                        <li class="active">
                             <a href="./about.html">About</a>
                         </li>
                         <li>
@@ -56,21 +56,8 @@
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <?php
-                          session_start();
-                          $is_admin    = $_SESSION["is_admin"];
-                          if($is_admin){
-                            readFile("./adminHeader.html");
-                          }
-                        ?>
                         <li>
-                            <a href="classes.php">All Courses</a>
-                        </li>
-                        <li class="active">
-                            <a href="#">My Courses</a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
+                            <a href="my_classes.php">Home</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->

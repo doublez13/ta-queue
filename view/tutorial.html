@@ -54,26 +54,13 @@
                         <li>
                             <a href="../swagger/index.html" target="_blank">Public API</a>
                         </li>
-                        <li>
+                        <li class="active">
                             <a href="./tutorial.html">Tutorial</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <?php
-                          session_start();
-                          $is_admin    = $_SESSION["is_admin"];
-                          if($is_admin){
-                            readFile("./adminHeader.html");
-                          }
-                        ?>
                         <li>
-                            <a href="classes.php">All Courses</a>
-                        </li>
-                        <li class="active">
-                            <a href="#">My Courses</a>
-                        </li>
-                        <li>
-                            <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
+                            <a href="my_classes.php">Home</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
