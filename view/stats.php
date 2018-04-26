@@ -138,5 +138,5 @@
         </div><!--row-->
       </div><!--container-->
 
-      <div id="container" style="min-width: 960px; height: 600px; max-width: 960px; margin: 0 auto"></div>
+      <div id="container" class="padding-bottom-30" style="min-width: 960px; height: 600px; max-width: 960px; margin: 0 auto"></div>
     </body>

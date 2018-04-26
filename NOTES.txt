@@ -1,5 +1,6 @@
 ﻿~~~~~~~~~~~~~~~~~~~~~~~~ NOTES/TODO ~~~~~~~~~~~~~~~~~~~~~~~~
 
+-IMPORTANT IF QUEUE IS PUT INTO REAL USE: the "host" and "basePath" values near the top of the Swagger spec (swagger/queue_spec_uofu_coe.yaml) should be modified to point to the real API, not the one in "blakeb"
 -Admins, unless they are also members of their TA groups, will NOT have access to many endpoints. Should we modify the TA endpoints to also allow admins? The problem is, we probably don't want to give admins access to all courses, only their own. Therefore, instead of one admin group (queue-admin-GROUP), should there be one for each course?
 -In Edge on the queue page I noticed this error every ~20 seconds, but no visible issue: "SCRIPT12030: SCRIPT12030: WebSocket Error: Network Error 12030, The connection with the server was terminated abnormally"
 -Do we need an API endpoint for 'is_user_admin'? We check this with embedded php, but how would an independent interface check this? Maybe add this to get_info.php?
