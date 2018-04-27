@@ -52,15 +52,10 @@
                             <a href="view/about.html">About</a>
                         </li>
                         <li>
-                            <a href="swagger/index.html" target="_blank">Public API</a>
+                            <a href="view/tutorial.html" target="_blank">Tutorial</a>
                         </li>
                         <li>
-                            <a href="view/tutorial.html">Tutorial</a>
-                        </li>
-                    </ul>
-                    <ul class="nav navbar-nav navbar-right">
-                        <li class="active">
-                            <a href="index.php">Home</a>
+                            <a href="swagger/index.html" target="_blank">Public API</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->

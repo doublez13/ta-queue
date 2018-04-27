@@ -65,10 +65,10 @@
                             <a href="./about.html">About</a>
                         </li>
                         <li>
-                            <a href="../swagger/index.html" target="_blank">Public API</a>
+                            <a href="./tutorial.html" target="_blank">Tutorial</a>
                         </li>
                         <li>
-                            <a href="./tutorial.html">Tutorial</a>
+                            <a href="../swagger/index.html" target="_blank">Public API</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">

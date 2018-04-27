@@ -54,20 +54,28 @@
                             <a href="./about.html">About</a>
                         </li>
                         <li>
-                            <a href="../swagger/index.html" target="_blank">Public API</a>
+                            <a href="./tutorial.html" target="_blank">Tutorial</a>
                         </li>
                         <li>
-                            <a href="./tutorial.html">Tutorial</a>
+                            <a href="../swagger/index.html" target="_blank">Public API</a>
                         </li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <?php
-                          session_start();
-                          $is_admin    = $_SESSION["is_admin"];
-                          if($is_admin){
-                            readFile("./adminHeader.html");
-                          }
-                        ?>
+                        <li class="nav-item dropdown active" id="admin_menu">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Admin
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                                <ul>
+                                    <li>
+                                        <a class="dropdown-item" href="new_class.php">Create Course</a>
+                                    </li>
+                                    <!--<li>-->
+                                    <!--<a class="dropdown-item" href="edit_class.php">Edit Course</a>-->
+                                    <!--</li>-->
+                                </ul>
+                            </div>
+                        </li>
                         <li>
                             <a href="classes.php">All Courses</a>
                         </li>
@@ -139,7 +147,7 @@
                                 </div>
                                 <row>
                                     <button class="btn btn-success" type="submit">Create Course</button>
-                                    <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify">Update LDAP groups here</a>
+                                    <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
                                     <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
                                 </row>
                             </form>
