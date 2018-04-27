@@ -30,6 +30,24 @@ if (!isset($_POST['course']))
   die();
 }
 
+// Optional date range parameters
+$start_date = $_POST['start_date'];
+$end_date = $_POST['end_date'];
+$date_format = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"; // yyyy-mm-dd
+
+if (!is_null($start_date))
+  $bad_start_date = !((bool)preg_match($date_format, $start_date)); // MOVE FORMAT CHECKS TO MODEL?
+if (!is_null($end_date))
+  $bad_end_date = !((bool)preg_match($date_format, $end_date));
+
+// Make sure start_date was sent if end_date was sent and ensure correct formats
+if ((is_null($start_date) && !is_null($end_date)) || $bad_start_date || $bad_end_date)
+{
+  http_response_code(422);
+  echo json_encode( missing_date() );
+  die();
+}
+
 $username   = $_SESSION['username'];
 $course     = $_POST['course'];
 $ta_courses = $_SESSION["ta_courses"];
@@ -41,7 +59,7 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-$res = get_ta_log_for_course($username, $course);
+$res = get_ta_log_for_course($username, $course, $start_date, $end_date);
 if($res < 0)
 {
   $return = return_JSON_error($res);

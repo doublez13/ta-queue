@@ -71,6 +71,13 @@ function missing_time($param_name){
   );
 }
 
+function missing_date(){
+  return array(
+    "authenticated" => True,
+    "error" => "Missing or bad date (required: yyyy-mm-dd)"
+  );
+}
+
 function missing_announcement(){
   return array(
     "authenticated" => True,

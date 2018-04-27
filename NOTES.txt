@@ -6,7 +6,6 @@
 -In Edge on the queue page I noticed this error every ~20 seconds, but no visible issue: "SCRIPT12030: SCRIPT12030: WebSocket Error: Network Error 12030, The connection with the server was terminated abnormally"
 -Do we need an API endpoint for 'is_user_admin'? We check this with embedded php, but how would an independent interface check this? Maybe add this to get_info.php?
 -The alert() in the fail function in queue_functions.js prints 'undefined' instead of the error.
--Modify stats endpoints to let user post date ranges so such massive amounts of data aren't returned?
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -It took up more room, but I think the TA name could be useful for announcements.
 -Small UI issue in Edge: when announcements word wrap and the last line has only a small amount of text, only the announcement column is fully highlighted.
