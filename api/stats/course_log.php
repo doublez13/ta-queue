@@ -42,7 +42,7 @@ if (!is_null($end_date))
 // Make sure start_date was sent if end_date was sent and ensure correct formats
 if ((is_null($start_date) && !is_null($end_date)) || $bad_start_date || $bad_end_date)
 {
-  http_response_code(422);
+  http_response_code(422); // 400 FOR BAD DATE?
   echo json_encode( missing_date() );
   die();
 }

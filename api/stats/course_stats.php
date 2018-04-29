@@ -42,7 +42,7 @@ if (!is_null($end_date))
 // Make sure start_date was sent if end_date was sent and ensure correct formats
 if ((is_null($start_date) && !is_null($end_date)) || $bad_start_date || $bad_end_date)
 {
-  http_response_code(422);
+  http_response_code(422); // 400 FOR BAD DATE?
   echo json_encode( missing_date() );
   die();
 }
@@ -65,7 +65,7 @@ $usage = get_course_usage_by_day($course, $start_date, $end_date);
 
 if($stats < 0 || $usage < 0)
 {
-  $return = return_JSON_error($stats);
+  $return = return_JSON_error($stats < 0 ? $stats : $usage);
   http_response_code(500);
 }else{
   $return = array(

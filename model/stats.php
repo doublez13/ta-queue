@@ -214,7 +214,7 @@ function get_stud_log_for_course($stud_username, $course_name, $start_date, $end
 
 /**
  * Returns a log of the helped students by ta_username in course_name. If no dates are
- * specified, a log for the entire history of the ta is returned. If start_date is
+ * specified, a log for the entire history of the TA is returned. If start_date is
  * specified, a log from start_date (inclusive) to the present is returned. If start_date and
  * end_date are specified, a log from start_date (inclusive) to end_date (exclusive) is returned.
  *

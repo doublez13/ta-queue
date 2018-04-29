@@ -1,6 +1,53 @@
 # suzie-queue
-## User Documentation
+
+## Technical Documentation and Setup
 Suzie Queue is an attempt to replace the current TA queue with a better looking, more reliable, and feature rich system. Starting from scratch, we are building a new queue using standard web technologies. On the front end, our queue is making use of jQuery, CSS5, and Bootstrap. The backend is written entirely in PHP, leveraging MySQL for all database work, and LDAP for all authentication and authorization.
+
+### Example Setup
+The queue is written to allow for a fairly flexible setup. At the most basic level, the queue is hosted on a standard web server like Apache or NGINX. Additionally, all the data is stored in a MySQL database. Finally, all user authentication and information is done off of an external Active Directory (LDAP) server.
+
+### Web Server
+The queue requires a web server for hosting. We have chosen to test against Apache 2.4. However, we are not making use of any Apache specific features/settings, so in theory any web server should be able to host the queue. Since user credentials are being sent over the network, TLS is a must.
+
+### MySQL Server
+All SQL code is written using the standard php-mysql library. As so, a MySQL server is needed for all the backend data. At this point in time (2018), MaraiDB is considered a drop in replacement for MySQL, and should work as well. On our testing setup, we host a MariaDB server on the same machine as the web server. However, the code is written so that these two servers are not coupled, and may reside on different machines. In this case, the corresponding SQL port(s) will need to be opened on the machine hosting the database. When the SQL server resides on the same machine as the web server, localhost may be entered for the SQL_SERVER global variable in the config.php file, and no corresponding firewall ports need to be opened for SQL.
+
+### LDAP Server
+All authentication and authorization is done against Active Directory using the standard php-ldap library. Because of this, switching to a different Active Directory domain is as simple as modifying the master config.php file. All authentication is done using LDAP by simply attempting to bind to the LDAP server with the given username and password. Additionally, all user information (currently first and last name) is pulled from LDAP and stored locally in SQL the first time a user logs in. When creating a course, all authorization is handled via LDAP. This means that each course needs to have an LDAP group created in the LDAP server. This LDAP group is required on the course creation page. Changing a users role in a course is as simple as adding them to, or removing them from the LDAP group that corresponds to the course. Because of the generic LDAP schema in use, the queue could be moved to CIS accounts by simply changing a few lines in the config file if desired. Additionally, because of the sensitive information going over the network, all LDAP traffic should be using TLS.
+
+#### LDAP TLS Note 
+By default, LDAP prefers to verify server certificates before connecting. The queue does not make use of server certificates, and disables them. In PHP >= 7.0.5, the php-ldap library respects this setting, and disables certificate checking. In PHP versions < 7.0.5, the TLS_REQCERT flag should be set to false in the system ldap config. After this is done, the TLS_REQCERT_DISABLED flag can be set to true in the queue configuration indicating that cert checking is disabled on the system side. If this flag is NOT set in the queue config with PHP < 7.0.5, the queue will fall back to unencrypted LDAP communication with is NOT RECOMMENDED.
+
+### Network Ports
+Port 80:   HTTP redirect  
+Port 443:  HTTPS  
+Port 3306: MySQL (Only needed if running on different server)
+
+### Dependencies
+Apache >= 2.4 (Ealier versions most likely work, but haven't been tested)  
+MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaDB should work too)  
+PHP    >= 5.4 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
+
+### Configuration file (config.php)
+LDAP_SERVER: FQDN or IP address of the LDAP server.  
+LDAP_DOMAIN: Active Directory domain FQDN.  
+BIND_USER:   User to bind to LDAP with. Simple username, not DN format.  
+BIND_PASSWD: Password for BIND_USER.  
+BASE_OU:     LDAP OU where all searches start. DN format.  
+ADMIN_GROUP: LDAP groups for queue admins. Simple group name, not DN format.  
+SQL_SERVER:  FQDN or IP address of the MySQL server.  
+SQL_USER:    User to connect to MySQL with.  
+SQL_PASSWD:  Password for SQL_USER.  
+DATABASE:    Database for the queue.  
+
+### MySQL Database Setup
+In the resources directory at the root of the project is the DB_setup.sql file that initializes the queue database. Simply set the database name at the top of the file to match what's set in the config.php file. In a mysql shell, the script can be ran using 'mysql> source path/to/DB_setup.sql'.
+
+### Swagger API Documentation
+The public API is documented according to the Swagger 2.0 specification. The documentation file is found at "/swagger/queue_spec_uofu_coe.yaml". CHANGES TO THE API SHOULD BE UPDATED ACCORDINGLY IN THIS FILE. The Swagger webpage is viewed by browsing to "/swagger/index.html" (the Swagger UI version is 3.10.0). The webpage has a "Try it out" feature which allows users to actually use each endpoint. For this to work correctly, the "host" and "basePath" values at the top of the documentation file should point to the desired API (perhaps the real one).
+
+#
+## User Documentation
 
 ### Account Creation
 The queue currently makes use of College of Engineering CADE accounts. Any student that has a CADE account can log into the queue using their CADE credentials, and their personal information will automatically be pulled from the servers. Students without a CADE account can create one here: https://webhandin.eng.utah.edu/cade/create_account/index.php
@@ -46,45 +93,3 @@ TAs may choose to impose time limits when helping students. In this case, TAs ca
 TAs may wish to impose cool-down timers for students. This means that if a student gets helped, they are not allowed to enter the queue again until X minutes after they left the queue. TAs can get the cool-down time using the Cool-down setting.
 #### Reordering
 TAs may wish to reorder the queue. In this case, TAs can use the up and down arrow buttons next to a student to shift their position in the queue.
-
-
-
-## Technical Documentation and Setup
-### Example Setup:
-The queue is written to allow for a fairly flexible setup. At the most basic level, the queue is hosted on a standard web server like Apache or NGINX. Additionally, all the data is stored in a MySQL database. Finally, all user authentication and information is done off of an external Active Directory (LDAP) server.
-
-### Web Server:
-The queue requires a web server for hosting. We have chosen to test against Apache 2.4. However, we are not making use of any Apache specific features/settings, so in theory any web server should be able to host the queue. Since user credentials are being sent over the network, TLS is a must.
-
-### MySQL Server:
-All SQL code is written using the standard php-mysql library. As so, a MySQL server is needed for all the backend data. At this point in time (2018), MaraiDB is considered a drop in replacement for MySQL, and should work as well. On our testing setup, we host a MariaDB server on the same machine as the web server. However, the code is written so that these two servers are not coupled, and may reside on different machines. In this case, the corresponding SQL port(s) will need to be opened on the machine hosting the database. When the SQL server resides on the same machine as the web server, localhost may be entered for the SQL_SERVER global variable in the config.php file, and no corresponding firewall ports need to be opened for SQL.
-
-### LDAP Server:
-All authentication and authorization is done against Active Directory using the standard php-ldap library. Because of this, switching to a different Active Directory domain is as simple as modifying the master config.php file. All authentication is done using LDAP by simply attempting to bind to the LDAP server with the given username and password. Additionally, all user information (currently first and last name) is pulled from LDAP and stored locally in SQL the first time a user logs in. When creating a course, all authorization is handled via LDAP. This means that each course needs to have an LDAP group created in the LDAP server. This LDAP group is required on the course creation page. Changing a users role in a course is as simple as adding them to, or removing them from the LDAP group that corresponds to the course. Because of the generic LDAP schema in use, the queue could be moved to CIS accounts by simply changing a few lines in the config file if desired. Additionally, because of the sensitive information going over the network, all LDAP traffic should be using TLS.
-#### LDAP TLS Note 
-By default, LDAP prefers to verify server certificates before connecting. The queue does not make use of server certificates, and disables them. In PHP >= 7.0.5, the php-ldap library respects this setting, and disables certificate checking. In PHP versions < 7.0.5, the TLS_REQCERT flag should be set to false in the system ldap config. After this is done, the TLS_REQCERT_DISABLED flag can be set to true in the queue configuration indicating that cert checking is disabled on the system side. If this flag is NOT set in the queue config with PHP < 7.0.5, the queue will fall back to unencrypted LDAP communication with is NOT RECOMMENDED.
-
-### Network Ports
-Port 80:   HTTP redirect  
-Port 443:  HTTPS  
-Port 3306: MySQL (Only needed if running on different server)
-
-### Dependencies
-Apache >= 2.4 (Ealier versions most likely work, but haven't been tested)  
-MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaDB should work too)  
-PHP    >= 5.4 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
-
-### Configuration file (config.php)
-LDAP_SERVER: FQDN or IP address of the LDAP server.  
-LDAP_DOMAIN: Active Directory domain FQDN.  
-BIND_USER:   User to bind to LDAP with. Simple username, not DN format.  
-BIND_PASSWD: Password for BIND_USER.  
-BASE_OU:     LDAP OU where all searches start. DN format.  
-ADMIN_GROUP: LDAP groups for queue admins. Simple group name, not DN format.  
-SQL_SERVER:  FQDN or IP address of the MySQL server.  
-SQL_USER:    User to connect to MySQL with.  
-SQL_PASSWD:  Password for SQL_USER.  
-DATABASE:    Database for the queue.  
-
-### MySQL Database Setup
-In the resources directory at the root of the project is the DB_setup.sql file that initializes the queue database. Simply set the database name at the top of the file to match what's set in the config.php file. In a mysql shell, the script can be ran using 'mysql> source path/to/DB_setup.sql'.

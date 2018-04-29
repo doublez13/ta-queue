@@ -11,7 +11,7 @@ info:
     url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
 
 host: "suzie.eng.utah.edu"
-basePath: "/blakeb/api"
+basePath: "/zakraise/api"
 schemes:
 - "https"
 
@@ -194,7 +194,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "acc_code"
@@ -235,7 +235,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -306,7 +306,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -397,7 +397,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "question"
@@ -444,7 +444,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "student"
@@ -485,7 +485,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "student"
@@ -526,7 +526,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -567,7 +567,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -608,7 +608,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -649,7 +649,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "time_lim"
@@ -695,7 +695,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "cooldown_time"
@@ -741,7 +741,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -782,7 +782,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -823,7 +823,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "student"
@@ -869,7 +869,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "student"
@@ -915,7 +915,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       responses:
@@ -956,7 +956,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "announcement"
@@ -1002,7 +1002,7 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "announcement_id"
@@ -1038,7 +1038,7 @@ paths:
   /stats/course_stats.php:
     post:
       summary: "Get statistics for a course"
-      description: "Get statistics for the specified course including average wait/help times (seconds) and a total students helped daily log."
+      description: "Get statistics for the specified course including average wait/help times (seconds) and a total students helped daily log.<br><br>If no dates are specified, the returned info accounts for the entire history of the course. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
       tags:
         - "Stats"
       consumes:
@@ -1048,9 +1048,17 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
+      - name: "start_date"
+        in: "formData"
+        description: "queue entry date (yyyy-mm-dd) (inclusive)"
+        type: "string"
+      - name: "end_date"
+        in: "formData"
+        description: "queue entry date (yyyy-mm-dd) (exclusive)"
+        type: "string"
       responses:
         200:
           description: "Success"
@@ -1099,7 +1107,7 @@ paths:
           schema:
             $ref: '#/definitions/bad_method'
         422:
-          description: "Missing course"
+          description: "Missing course or missing/bad date"
           schema:
             $ref: '#/definitions/error'
         500:
@@ -1109,7 +1117,7 @@ paths:
   /stats/student_log.php:
     post:
       summary: "Get user queue log"
-      description: "Get info regarding every instance the user entered any queue, or if `course` is specifed, only that particular queue. If a course is specified for which the user is a TA, get info regarding each instance the specifed student entered that queue. Each instance includes info such as the question that was asked, when the student entered the queue, and when/if the student was helped."
+      description: "Get info regarding every instance the user was helped in any queue, or if `course` is specifed, only that particular queue. If a course is specified for which the user is a TA, get info regarding each instance the specifed student was helped in that queue. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the student. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
       tags:
         - "Stats"
       consumes:
@@ -1119,11 +1127,19 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name (if desired)"
+        description: "full course name (e.g. CS 4400: Computer Systems) (if desired)"
         type: "string"
       - name: "student"
         in: "formData"
         description: "username of student TA is getting info for"
+        type: "string"
+      - name: "start_date"
+        in: "formData"
+        description: "queue entry date (yyyy-mm-dd) (inclusive)"
+        type: "string"
+      - name: "end_date"
+        in: "formData"
+        description: "queue entry date (yyyy-mm-dd) (exclusive)"
         type: "string"
       responses:
         200:
@@ -1171,7 +1187,7 @@ paths:
           schema:
             $ref: '#/definitions/bad_method'
         422:
-          description: "Missing student (if user is TA and course is specified)"
+          description: "Missing student (if user is TA and course is specified) or missing/bad date"
           schema:
             $ref: '#/definitions/error'
         500:
@@ -1181,7 +1197,7 @@ paths:
   /stats/ta_log.php:
     post:
       summary: "Get TA's helped students log (TA)"
-      description: "Get info regarding each instance a student was helped by the TA in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped."
+      description: "Get info regarding each instance a student was helped by the TA in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the TA. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
       tags:
         - "Stats"
       consumes:
@@ -1191,9 +1207,17 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
+      - name: "start_date"
+        in: "formData"
+        description: "student helped date (yyyy-mm-dd) (inclusive)"
+        type: "string"
+      - name: "end_date"
+        in: "formData"
+        description: "student helped date (yyyy-mm-dd) (exclusive)"
+        type: "string"
       responses:
         200:
           description: "Success"
@@ -1243,7 +1267,7 @@ paths:
           schema:
             $ref: '#/definitions/bad_method'
         422:
-          description: "Missing course"
+          description: "Missing course or missing/bad date"
           schema:
             $ref: '#/definitions/error'
         500:
@@ -1253,7 +1277,7 @@ paths:
   /stats/course_log.php:
     post:
       summary: "Get a course queue log (TA)"
-      description: "Get info regarding each instance a student entered the queue in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when/if the student was helped."
+      description: "Get info regarding each instance a student was helped in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the course. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
       tags:
         - "Stats"
       consumes:
@@ -1263,9 +1287,17 @@ paths:
       parameters:
       - name: "course"
         in: "formData"
-        description: "course name"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
+      - name: "start_date"
+        in: "formData"
+        description: "queue entry date (yyyy-mm-dd) (inclusive)"
+        type: "string"
+      - name: "end_date"
+        in: "formData"
+        description: "queue entry date (yyyy-mm-dd) (exclusive)"
+        type: "string"
       responses:
         200:
           description: "Success"
@@ -1315,7 +1347,7 @@ paths:
           schema:
             $ref: '#/definitions/bad_method'
         422:
-          description: "Missing course"
+          description: "Missing course or missing/bad date"
           schema:
             $ref: '#/definitions/error'
         500:
