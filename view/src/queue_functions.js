@@ -154,7 +154,7 @@ function render_ann_box(anns){
                            '<th class="flex-noShrink" style="width:110px;">Date</th>' +
                            '<th class="flex-noShrink" style="width:100px;">Time</th>' +
                            '<th>Announcement</th> </tr>');
-  for(ann in anns.reverse()){
+  for(ann in anns){
     var date       = anns[ann]["tmstmp"].split(" ")[0];
     var time            = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
 
@@ -210,7 +210,7 @@ function render_ann_box(anns){
   //                          "<th class='col-sm-7' align='left' style='word-wrap:break-word'>Announcement</th>" +
   //                          "<th class='col-sm-1'></th></tr>");
   //
-  // for(ann in anns.reverse()){
+  // for(ann in anns){
   //     var date       = anns[ann]["tmstmp"].split(" ")[0];
   //     var time            = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
   //

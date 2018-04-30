@@ -31,7 +31,7 @@ function get_queue($course_name){
     return -1; //SQL error
   }elseif($course_id == -2){
     mysqli_close($sql_conn);
-    return -2; //Nonexistant course
+    return -2; //Nonexistent course
   }
 
   #Build return array
@@ -58,7 +58,7 @@ function get_queue($course_name){
   $return["queue"]    = [];
 
   #Get the announcements
-  $query  = "SELECT id, announcement, tmstmp FROM announcements WHERE course_id ='".$course_id."' ORDER BY id";
+  $query  = "SELECT id, announcement, tmstmp FROM announcements WHERE course_id ='".$course_id."' ORDER BY id DESC";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
     mysqli_close($sql_conn);
