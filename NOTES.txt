@@ -8,20 +8,20 @@
 -Do we need an API endpoint for 'is_user_admin'? We check this with embedded php, but how would an independent interface check this? Maybe add this to get_info.php?
 -The alert() in the fail function in queue_functions.js prints 'undefined' instead of the error.
 -Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
--It took up more room, but I think the TA name could be useful for announcements.
+-Small UI issue in Chrome and Firefox: the rows don't render across the entire queue table in the student view.
 -Small UI issue in Edge: when announcements word wrap and the last line has only a small amount of text, only the announcement column is fully highlighted.
+-Small UI issue in mobile Safari: in the TA view the Course Stats button is not same width as the button group above.
 -TA log to track how long on duty?
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Make questions optionally visible to rest of class?
 -Make 'description' optional for courses? What did we want to use this for?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
 -Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make these integers?
--Should we have a link on the login page to some CADE page if users don't have a CADE account?
 -help_student.php (not the UI) allows two TAs to help the same student. How would we show this using colors.
--Have different background colors for TAs
--Have CIS handle authentication
+-Have different background colors for TAs?
+-Have CIS handle authentication?
 -Should logging out remove you from all queues?
--Lock navbar in place when scrolling
+-Lock navbar in place when scrolling?
 -Include a utility for TAs to directly message students currently in the queue (collectively or individually). This can be useful if a student's location is incorrect, or to warn that TA hours are ending soon.
 -Include push notifications to the TAs on duty for when a student enters the queue.  During slow times, when the queue is empty, some TAs are late noticing that a student has entered.
 -Undo removing a student.

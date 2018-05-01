@@ -100,7 +100,7 @@
 		<div class="container flex-fillSpace flex-md" style="width: 100%; max-width:1500px;">
 
             <!--TAS ON DUTY AND QUEUE BUTTONS COLUMN-->
-            <div class="col-xs-12 col-sm-3 flex flex-column flex-alignItems-stretch">
+            <div class="col-xs-12 col-sm-3 col-md-2  padding-bottom-15 flex flex-column flex-alignItems-stretch">
 
                 <div class="col-xs-12 padding-0 flex-noShrink">
                     <div id="onDutyTA-wrapper" class="panel panel-primary flex-sm flex-column">
@@ -119,7 +119,7 @@
 
                 <button class="margin-top-5 btn btn-success" id="join_button" style="display: none"></button>
 
-                <div class="col-xs-12 margin-top-15 padding-0 padding-bottom-15" align="left">
+                <div class="col-xs-12 margin-top-15 padding-0" align="left">
 
                     <form id="time_form" title="(minutes)" style="display: none">
                         <label>Time Limit Per Student</label>
@@ -140,17 +140,15 @@
                         </div>
                     </form>
 
-                    <button class="btn btn-primary" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button>
+                    <button class="btn btn-primary" style="width: 100%" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button>
+
                 </div>
-
-
 
             </div>
 
 
-
             <!--ANNOUNCEMENTS AND QUEUE COLUMN-->
-            <div class="col-xs-12 col-sm-9 flex flex-column">
+            <div class="col-xs-12 col-sm-9 col-md-10 flex flex-column">
 
                 <!--ANNOUNCEMENTS WITH SCROLL BAR-->
                 <div id="announcements-wrapper" class="panel panel-primary flex flex-column flex-noShrink">

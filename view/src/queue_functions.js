@@ -153,25 +153,27 @@ function render_ann_box(anns){
   $('#anns_body').append('<tr class="flex" style="background: none;"> ' +
                            '<th class="flex-noShrink" style="width:110px;">Date</th>' +
                            '<th class="flex-noShrink" style="width:100px;">Time</th>' +
+                           '<th class="flex-noShrink" style="width:180px;">Poster</th>' +
                            '<th>Announcement</th> </tr>');
   for(ann in anns){
-    var date       = anns[ann]["tmstmp"].split(" ")[0];
-    var time            = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
+    var date = anns[ann]["tmstmp"].split(" ")[0];
+    var time = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
 
     // Calculate how hold the announcement is -> ann_age_sec (doesn't work in IE)
     var current_timestamp = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '));
     current_timestamp.setHours(current_timestamp.getHours() - 6); // new Date() is 6 hours ahead
     var announcement_timestamp = new Date(anns[ann]["tmstmp"]);
-    var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000;
+    var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000; // ms -> s
 
+    var poster          = anns[ann]["poster"];
     var announcement    = anns[ann]["announcement"];
     let announcement_id = anns[ann]["id"];
     var new_row =  $('<tr class="flex">' +
                        '<td class="flex-noShrink" style="width:110px;">' + date + '</td>' +
                        '<td class="flex-noShrink" style="width:100px;">' + time + '</td>' +
-                       '<td class="flex-fillSpace">'+announcement+'</td> </tr>');
+                       '<td class="flex-noShrink" style="width:180px; word-wrap:break-word;">' + poster + '</td>' +
+                       '<td class="flex-fillSpace">' + announcement + '</td> </tr>');
     if(is_TA){
-      // blue X icon below:
       var del_ann_button = $('<td><div align="right"><button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button></div></td>');
       del_ann_button.click(function(event){
         del_announcement(course, announcement_id)
@@ -180,7 +182,7 @@ function render_ann_box(anns){
     }
 
     // Change color of announcement if it's less than X seconds old (color doesn't show in mobile Safari)
-    if (ann_age_sec < 900) {
+    if (ann_age_sec < 3600) {
       new_row.css("background-color", "#b3ffb3"); // 00ff00 ccff33
     }
 
@@ -207,26 +209,29 @@ function render_ann_box(anns){
   // $('#anns_body').append("<tr style='background: none;'> " +
   //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Date</th>" +
   //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Time</th>" +
-  //                          "<th class='col-sm-7' align='left' style='word-wrap:break-word'>Announcement</th>" +
+  //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Poster</th>" +
+  //                          "<th class='col-sm-5' align='left' style='word-wrap:break-word'>Announcement</th>" +
   //                          "<th class='col-sm-1'></th></tr>");
   //
   // for(ann in anns){
   //     var date       = anns[ann]["tmstmp"].split(" ")[0];
-  //     var time            = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
+  //     var time       = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
   //
   //     // Calculate how hold the announcement is -> ann_age_sec (doesn't work in IE)
   //     var current_timestamp = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '));
   //     current_timestamp.setHours(current_timestamp.getHours() - 6); // new Date() is 6 hours ahead
   //     var announcement_timestamp = new Date(anns[ann]["tmstmp"]);
-  //     var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000;
+  //     var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000; // ms -> s
+  //     var poster          = anns[ann]["poster"];
   //     var announcement    = anns[ann]["announcement"];
   //     let announcement_id = anns[ann]["id"]
   //     var new_row =  $("<tr>" +
   //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+date+"</td>" +
   //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+time+"</td>" +
-  //                        "<td class='col-sm-7'>"+announcement+"</td> </tr>");
+  //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+poster+"</td>" +
+  //                        "<td class='col-sm-5'>"+announcement+"</td> </tr>");
   //
-  //     var td = $('<td></td>');
+  //     var td = $('<td class='col-sm-1'></td>');
   //     if(is_TA){
   //
   //       // blue X icon below:
@@ -513,7 +518,6 @@ function render_queue_table(dataParsed, role){
       });
 
       // REMOVE BUTTON
-      // blue X icon below:
       var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
       dequeue_button.click(function(event) {
           dequeue_student(course, username);
@@ -531,7 +535,7 @@ function render_queue_table(dataParsed, role){
 
     }else{//student
 
-      // SEEMS TO HAVE ROW RENDERING ISSUES: BUTTON ONLY RENDERED ON USER'S ROW
+      // BUTTON ONLY RENDERED ON USER'S ROW (ROW DOESN'T RENDER ACROSS ENTIRE BOX IN CHROME AND FIREFOX)
       var td = $("<td class='col-sm-3'></td>");
       if(username === my_username){ // Only add the move down button if it's the user's row
         var decrease_button = $('<div align="right"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
@@ -547,8 +551,6 @@ function render_queue_table(dataParsed, role){
       }
 
       new_row.append(td);
-
-
 
 
       // ALSO SEEMS TO HAVE ROW RENDERING ISSUES: CREATE BUTTON BUT THEN HIDE IT IF IT'S NOT THE USER'S ROW
@@ -568,10 +570,6 @@ function render_queue_table(dataParsed, role){
       // new_row.append(td);
       // if (username !== my_username)
       //     decrease_button.hide();
-
-
-
-
     }
 
     $('#queue_body').append(new_row);
