@@ -29,9 +29,15 @@ $end_date = $_POST['end_date'];
 $date_format = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"; // yyyy-mm-dd
 
 if (!is_null($start_date))
+{
+  $start_date = filter_var($start_date, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH); // NECESSARY?
   $bad_start_date = !((bool)preg_match($date_format, $start_date)); // MOVE FORMAT CHECKS TO MODEL?
+}
 if (!is_null($end_date))
+{
+  $end_date = filter_var($end_date, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
   $bad_end_date = !((bool)preg_match($date_format, $end_date));
+}
 
 // Make sure start_date was sent if end_date was sent and ensure correct formats
 if ((is_null($start_date) && !is_null($end_date)) || $bad_start_date || $bad_end_date)
