@@ -58,7 +58,7 @@ elseif (in_array($course, get_stud_courses($username))) //Student
 
 if($return < 0)
 {
-  $return = return_JSON_error($res);
+  $return = return_JSON_error($return);
   http_response_code(500);
 }else
 {

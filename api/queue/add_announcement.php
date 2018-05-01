@@ -52,7 +52,7 @@ if (!in_array($course, $ta_courses))
 
 $announcement = filter_var($announcement, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
 
-$res = add_announcement($course, $announcement);
+$res = add_announcement($course, $announcement, $username);
 if($res < 0)
 {
   $return = return_JSON_error($res);

@@ -80,9 +80,11 @@ create table announcements(
   id             BIGINT AUTO_INCREMENT,
   course_id      int NOT NULL,
   announcement   TEXT,
+  poster         VARCHAR(256),
   tmstmp         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   primary key    (id),
-  foreign key    (course_id) references courses(course_id) ON DELETE CASCADE
+  foreign key    (course_id) references courses(course_id) ON DELETE CASCADE,
+  foreign key    (poster) references users(username) ON DELETE SET NULL
 );
 
 --LOGS--
