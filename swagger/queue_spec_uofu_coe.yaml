@@ -334,6 +334,9 @@ paths:
                       type: "string"
                     announcement:
                       type: "string"
+                    poster:
+                      type: "string"
+                      description: "full name of user who posted announcement"
                     tmstmp:
                       type: "string"
               TAs:
