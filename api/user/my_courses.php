@@ -27,7 +27,7 @@ $username     = $_SESSION['username'];
 $stud_courses = get_stud_courses($username);
 $ta_courses   = $_SESSION['ta_courses'];
 
-if (is_null(stud_courses) || is_null(ta_courses))
+if (is_null($stud_courses) || is_null($ta_courses))
 {
   $return = my_course_list_error();
   http_response_code(500);
