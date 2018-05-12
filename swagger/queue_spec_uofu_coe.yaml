@@ -10,8 +10,8 @@ info:
     name: "GPL 3"
     url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
 
-host: "suzie.eng.utah.edu"
-basePath: "/zakraise/api"
+host: "ta-queue.eng.utah.edu"
+basePath: "/api"
 schemes:
 - "https"
 
