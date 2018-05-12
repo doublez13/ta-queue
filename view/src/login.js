@@ -16,6 +16,7 @@ login = function( event ) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
+      //TODO: check for dataParsed.error
       localStorage.setItem("username",   dataParsed.username);
       localStorage.setItem("first_name", dataParsed.first_name);
       localStorage.setItem("last_name",  dataParsed.last_name);
