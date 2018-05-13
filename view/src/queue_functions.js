@@ -78,20 +78,27 @@ function start(){
   get_req.done(done);
 }
 
+//This function is called every X seconds,
+//and is what updates the dataParsed  
 function get_queue(course) {
   var url = "../api/queue/get_queue.php";
   var posting = $.post( url, { course: course } );
-  posting.done(render_view);
+  var done = function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    if(dataParsed.error){
+      alert(dataParsed.error);
+      return;
+    }
+    renderView(dataParsed);
+  }
+  posting.done(done);
 }
 
 //This function renders the view from the data
-var render_view = function(data) {
-  var dataString = JSON.stringify(data);
-  var dataParsed = JSON.parse(dataString);
-  if(dataParsed.error){
-    alert(dataParsed.error);
-    return;
-  }
+//TODO: Put this on its own timer
+//      Then only update the page when it changes
+function renderView(dataParsed) {
 
   //Render the top stats: state, time, length
   render_stats(dataParsed);
@@ -99,12 +106,16 @@ var render_view = function(data) {
   //Render the announcements box
   render_ann_box(dataParsed.announcements);
 
+  //Render the TA side box
   render_ta_table(dataParsed.TAs)
+ 
+  //Render the queue table
+  render_queue_table(dataParsed);
+
+  //Render buttons, and so on
   if(is_TA){
-    render_queue_table(dataParsed, "ta");
     render_ta_view(dataParsed)
   }else{
-    render_queue_table(dataParsed, "student");
     render_student_view(dataParsed)
   }
 }
@@ -264,8 +275,6 @@ function render_ann_box(anns){
   // }
 
   // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-
 }
 
 //Shows the TAs that are on duty
@@ -428,7 +437,7 @@ function render_student_view(dataParsed){
 }
 
 //Displays the queue table
-function render_queue_table(dataParsed, role){
+function render_queue_table(dataParsed){
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
 
