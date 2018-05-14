@@ -143,7 +143,7 @@
                                 </div>
                                 <div class="col-sm-12 padding-left-0 padding-right-0">
                                     <label>Description</label>
-                                    <textarea id="description" style="height:100px" required></textarea>
+                                    <textarea id="description" placeholder="(optional)" style="height:100px" ></textarea>
                                 </div>
                                 <row>
                                     <button class="btn btn-success" type="submit">Create Course</button>
