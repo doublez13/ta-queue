@@ -119,7 +119,7 @@
                                 <h3 class="panel-title" style="font-size:20px;" align="center">All Available Courses</h3>
 							</div>
 							<div class="panel-body">
-                                <p align="center"><b>Enroll/Leave your courses here. Click My Courses when finished.</b></p>
+                                <p align="center"><b>Enroll/Leave your courses here.</b></p>
 							</div>
                             <table class="table table-hover " id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
                                 <tbody id="all_classes_body"></tbody>
