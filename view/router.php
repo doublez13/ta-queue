@@ -10,8 +10,17 @@ if(strpos($REQUEST_URI, 'index.php') || $REQUEST_URI == '/'){
 }
 else{ //Authenticated Page
 
-  if (!isset($_SESSION["username"])){
+  //Not authenticated
+  if(!isset($_SESSION["username"])){
+    $_SESSION["redirect_url"] = $REQUEST_URI;
     header("Location: ../index.php");
+    die();
+  }
+
+  if(isset($_SESSION["redirect_url"])){
+    $url = $_SESSION["redirect_url"]; 
+    unset($_SESSION["redirect_url"]);
+    header("Location: $url");
     die();
   }
 
