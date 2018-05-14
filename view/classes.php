@@ -5,7 +5,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
-		<title>TA Help Queue - All Courses</title>
+		<title>TA Help Queue - Courses</title>
 		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 		<meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
 		<meta name="keywords"    content="University of Utah, 2017-2018, College of Engineering"/>
@@ -69,10 +69,7 @@
                           }
                         ?>
                         <li class="active">
-                            <a href="#">All Courses</a>
-                        </li>
-                        <li>
-                            <a href="my_classes.php">My Courses</a>
+                            <a href="#">Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
@@ -84,9 +81,33 @@
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">All Courses</h1>
+				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">Courses</h1>
 			</div>
 		</div>
+
+               <div class="container">
+                        <div class="row">
+                                <div class="col-sm-8 col-sm-offset-2">
+                                        <div id ="class_table">
+                                                <div class="panel panel-primary">
+                                                <!-- Default panel contents -->
+                                                        <div class="panel-heading">
+                                <h3 class="panel-title" style="font-size:20px;" align="center">My Courses</h3>
+                                                        </div>
+                            <table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
+                              <tr style="background: none;">
+                                <th>Course</th>
+                                <th>Role</th>
+                                <th>Queue</th>
+                              </tr>
+                              <tbody id="my_classes_body"></tbody>
+                                                                <!--classes.js should write here-->
+                                                        </table>
+                                                </div><!--panel-->
+                                        </div><!--id-->
+                                </div><!--col-sm-12-->
+                        </div><!--row-->
+                </div><!--container-->
 
 		<div class="container">
 			<div class="row">
@@ -95,8 +116,6 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-                                <!--OLD STYLE-->
-<!--							<h3 class="panel-title">All Available Courses</h3>-->
                                 <h3 class="panel-title" style="font-size:20px;" align="center">All Available Courses</h3>
 							</div>
 							<div class="panel-body">
@@ -112,5 +131,6 @@
 
 			</div><!--row-->
 		</div><!--container-->
+
 	</body>
 </html>

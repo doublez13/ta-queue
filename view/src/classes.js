@@ -23,13 +23,15 @@ function get_my_classes(){
       location.reload;
     }
 
+    $('#my_classes_body tr').remove();
     renderMyCourseTable(ta_courses, "TA");
     renderMyCourseTable(stud_courses, "Student");
   });
 }
 
 function renderMyCourseTable(courses, role) {
-  var table = $('#my_classes');
+  var table = $('#my_classes_body'); 
+
   courses.forEach(function (course) {
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));
@@ -94,6 +96,7 @@ function renderAllCourseTable(allCourses, dataParsed) {
 
 done = function(data){
   get_all_classes(); //reloads the content on the page
+  get_my_classes();  
 }
 
 fail = function(data){

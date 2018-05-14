@@ -29,12 +29,7 @@ login = function( event ) {
           alert(dataParsed.error);
           window.location.href = './index.php';
         }
-        if(dataParsed.student_courses.length + dataParsed.ta_courses.length === 0){
-          window.location.href = './view/classes.php';
-        }
-        else{
-          window.location.href = './view/my_classes.php';
-        }
+        window.location.href = './view/classes.php';
       });
 
     }

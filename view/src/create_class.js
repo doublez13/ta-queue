@@ -5,7 +5,7 @@ $(document).ready(function(){
 
 done = function(data){
   window.location = "./classes.php";
-  alert("Course created successfully.\n\nRedirecting to All Courses...");
+  alert("Course created successfully.\n\nRedirecting to Courses...");
 }
 
 fail = function(data){

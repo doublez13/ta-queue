@@ -77,10 +77,7 @@
                             </div>
                         </li>
                         <li>
-                            <a href="classes.php">All Courses</a>
-                        </li>
-                        <li>
-                            <a href="my_classes.php">My Courses</a>
+                            <a href="classes.php">Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>

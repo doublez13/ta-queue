@@ -5,7 +5,7 @@ $REQUEST_URI = $_SERVER["REQUEST_URI"];
 
 if(strpos($REQUEST_URI, 'index.php') || $REQUEST_URI == '/'){
   if(isset($_SESSION["username"])){
-    header("Location: ./view/my_classes.php");
+    header("Location: ./view/classes.php");
   }
 }
 else{ //Authenticated Page

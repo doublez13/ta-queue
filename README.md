@@ -55,7 +55,7 @@ The queue currently makes use of College of Engineering CADE accounts. Any stude
 ### Roles
 The queue currently has three major roles: Student, Teaching Assistant and Administrator
 #### Student
-On the All Courses page, students may enroll in any course. If desired, Administrators may require an access code in order to enroll in a course, or see any statistics. 
+On the Courses page, students may enroll in any course. If desired, Administrators may require an access code in order to enroll in a course, or see any statistics. 
 #### Teaching Assistant
 Corresponding to each course is a TA group. If a user is in the group for that course, the user is then granted TA permissions for that course, and may not register as a student. If the user was already enrolled as a student in the course before being added to the TA group, they are automatically unenrolled as a student, and maintain their TA role.
 #### Administrator
@@ -63,11 +63,11 @@ The queue also has an administrator group defined. If a user is in this group, t
 NOTE: Administrators also have access to a wider range of statistics. Unfortunately these are not visible graphically yet.
 
 ### Enrolling and Unenrolling in Courses
-If a user is not enrolled in any courses, either as a student or a TA, they are dropped on the All Courses page after login. Here they can enroll in any course by simply clicking enroll. If an access code is required to enter the course, students must enter this before proceeding. This page is also where a student would unenroll from a course. In this case, the user can simply select Leave for a particular course. If a user is enrolled in at least one course, they are dropped on the My Courses page after login. 
+If a user is not enrolled in any courses, either as a student or a TA, they are dropped on the Courses page after login. Here they can enroll in any course by simply clicking enroll. If an access code is required to enter the course, students must enter this before proceeding. This page is also where a student would unenroll from a course. In this case, the user can simply select Leave for a particular course. If a user is enrolled in at least one course, they are dropped on the My Courses page after login. 
 
 ### Creating a new course
 #### Access Codes
-If desired, administrators may require an access code in order to enroll in a course. In this case, the course will appear yellow on the All Courses page, and have a padlock icon next to it. Students will be required to enter an access code in order to join the course. Access codes can include any ascii character and be up to 16 characters long. 
+If desired, administrators may require an access code in order to enroll in a course. In this case, the course will appear yellow on the Courses page, and have a padlock icon next to it. Students will be required to enter an access code in order to join the course. Access codes can include any ascii character and be up to 16 characters long. 
 #### Assigning and Removing Teaching Assistants
 Corresponding to each course is a TA group. If a user is in the group corresponding to the course, the user is then seen as a TA for that course. During course creation, an administrator sets the LDAP group for a particular course. This LDAP group needs to be present before creating the course. After mapping the LDAP group for the course TAs, adding and removing TAs is then done completely via an LDAP interface. The most common ways administrators update groups is via the web interface at https://webhandin.eng.utah.edu/groupmodify/ or sending an email to opers@eng.utah.edu. To request an LDAP group for a new course, send an email to opers@eng.utah.edu.
 
