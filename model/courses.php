@@ -59,6 +59,11 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
   if(!$sql_conn){
     return 1;
   }
+
+  //If the prof has never logged in, they're not in the users table
+  //and therefore fail the Foreign Key Constraint.
+  //Calling get_info(user) automatically adds a valid user to the users table.
+  get_info($professor);
  
   $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group, professor, access_code)
             VALUES (?, ?, ?, ?, ?, ?, ?)
