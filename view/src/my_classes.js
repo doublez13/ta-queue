@@ -1,4 +1,6 @@
-$(function () {
+get_my_classes();
+
+function get_my_classes(){
   var $url = "../api/user/my_courses.php";
   var $get = $.get( $url );
   $get.done(function(data){
@@ -6,7 +8,8 @@ $(function () {
     var dataParsed = JSON.parse(dataString);
     var stud_courses = dataParsed.student_courses;
     var ta_courses   = dataParsed.ta_courses;
-  
+ 
+    //Edge case where a user may somehow be registered as a student AND a TA 
     var intersection = stud_courses.filter(function(n) {
       return ta_courses.indexOf(n) !== -1;
     });
@@ -19,12 +22,12 @@ $(function () {
       location.reload;
     }
 
-    renderCourseTable(ta_courses, "TA");
-    renderCourseTable(stud_courses, "Student");
+    renderMyCourseTable(ta_courses, "TA");
+    renderMyCourseTable(stud_courses, "Student");
   });
-});
+}
 
-function renderCourseTable(courses, role) {
+function renderMyCourseTable(courses, role) {
   var table = $('#my_classes');
   courses.forEach(function (course) {
     var tableRow = $('<tr>');

@@ -1,6 +1,6 @@
-get_classes();
+get_all_classes();
 
-function get_classes(){
+function get_all_classes(){
   var $url = "../api/classes/all_courses.php";
   var $get = $.get( $url );
   $get.done(function(data){
@@ -13,12 +13,12 @@ function get_classes(){
     $get.done( function(data) {
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      renderCourseTable(allCourses, dataParsed);
+      renderAllCourseTable(allCourses, dataParsed);
     });
   });
 }
 
-function renderCourseTable(allCourses, dataParsed) {
+function renderAllCourseTable(allCourses, dataParsed) {
   $('#all_classes_body').empty();
   
   var myCourses = dataParsed.student_courses;
@@ -52,9 +52,8 @@ function renderCourseTable(allCourses, dataParsed) {
   }
 }
 
-
 done = function(data){
-  get_classes(); //reloads the content on the page
+  get_all_classes(); //reloads the content on the page
 }
 
 fail = function(data){
