@@ -13,7 +13,7 @@ $(document).ready(function(){
     }
   }
   if(typeof course === 'undefined'){
-    window.location ='./my_courses.php';
+    window.location ='/';
   }
 
   dialog = $( "#dialog-form" ).dialog({
@@ -87,8 +87,15 @@ function get_queue(course) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.error){
-      alert(dataParsed.error);
-      return;
+      var error = dataParsed.error;
+      //If they're not enrolled in the course, attempt to
+      //enroll them with no access code
+      if(error == "Not enrolled in course"){
+        enrollCourse(course, null);
+      }else{
+        alert(dataParsed.error);
+        return;
+      }
     }
     renderView(dataParsed);
   }
@@ -732,3 +739,15 @@ function tConvert (time) {
     }
     return time.join (''); // return adjusted time or original string
 }
+
+function enrollCourse(course, code) {
+  var url = "../api/user/add_course.php";
+  if(code == null){
+    var posting = $.post( url, { course: course } );
+  }else{
+    var posting = $.post( url, { course: course, acc_code: code } );
+  }
+  posting.done(done);
+  posting.fail( function(data){ window.location = '/'; });
+}
+
