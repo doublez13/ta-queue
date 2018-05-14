@@ -21,17 +21,8 @@ login = function( event ) {
       localStorage.setItem("first_name", dataParsed.first_name);
       localStorage.setItem("last_name",  dataParsed.last_name);
 
-      var $get_req = $.get("./api/user/my_courses.php");
-      $get_req.always( function(data) {
-        var dataString = JSON.stringify(data);
-        var dataParsed = JSON.parse(dataString);
-        if(dataParsed.error){
-          alert(dataParsed.error);
-          window.location.href = './index.php';
-        }
-        window.location.href = './view/classes.php';
-      });
-
+      //let router.php figure out where to route
+      location.reload();
     }
     else{
       alert("Invalid username or password");
