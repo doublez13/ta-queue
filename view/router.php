@@ -16,19 +16,14 @@ else{ //Authenticated Page
   }
 
   //Admin access needed
-  $is_admin = isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
-  if(strpos($REQUEST_URI, 'new_class.php')){
-    if(!$is_admin){
-      header("Location: ./classes.php");
-      die();
-    }
-  }  
-  if(strpos($REQUEST_URI, 'edit_class.php')){
+  if(strpos($REQUEST_URI, 'new_class.php') || strpos($REQUEST_URI, 'edit_class.php')){
+    $is_admin = isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
     if(!$is_admin){
       header("Location: ./classes.php");
       die();
     }
   }
+ 
 }
 
 ?>
