@@ -567,25 +567,6 @@ function render_queue_table(dataParsed){
       }
 
       new_row.append(td);
-
-
-      // ALSO SEEMS TO HAVE ROW RENDERING ISSUES: CREATE BUTTON BUT THEN HIDE IT IF IT'S NOT THE USER'S ROW
-      // var td = $("<td class='col-sm-3'></td>");
-      // var div = $("<div align='right'></div>");
-      // td.append(div);
-      // var decrease_button = $('<button id="dec_button" class="btn btn-primary" title="Move Down"><i class="fa fa-arrow-down"></i></button>');
-      // if(row == dataParsed.queue_length -1){
-      //   decrease_button = $('<button id="dec_button" class="btn btn-primary" disabled=true title="Move Down"><i class="fa fa-arrow-down"></i></div>');
-      // }
-      // decrease_button.click(function(event){
-      //   if (confirm("Are you sure you want to move one spot down?")) {
-      //     dec_priority(course, my_username);
-      //   }
-      // });
-      // div.append(decrease_button);
-      // new_row.append(td);
-      // if (username !== my_username)
-      //     decrease_button.hide();
     }
 
     $('#queue_body').append(new_row);
