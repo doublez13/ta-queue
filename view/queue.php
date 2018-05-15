@@ -172,7 +172,7 @@
                             <h3 class="panel-title" style="font-size: 20px;" align="center">Queue</h3>
                         </div>
                         <div class="flex-fillSpace table-scrollOnOverflow-sm">
-                        <table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto; display: block; overflow-y:auto; table-layout: fixed;">
+                        <table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto; overflow-y:auto; table-layout: fixed;">
                             <tbody id="queue_body"></tbody>
                         </table>
                         </div>
