@@ -7,11 +7,11 @@ $source      = './view'.$path.'.php';
 
 //Open access pages
 if(is_open_page($path)){
-  readfile($source);
+  require_once $source;
 }
 elseif(is_root_dir($path)){
   if(!is_authenticated()){
-    readfile('./view/index.php');
+    require_once './view/index.php';
   }elseif(is_redirect()){
     $url = $_SESSION["redirect_url"];
     unset($_SESSION["redirect_url"]);
@@ -28,14 +28,14 @@ elseif(!is_authenticated()){
 //Admin access needed
 elseif(is_admin_page($path)){
   if(is_admin()){
-    readfile($source);
+    require_once $source;
   }else{
     header("Location: classes");
   }
 }
 //Regular pages
 elseif(file_exists($source)){
-  readfile($source);
+  require_once $source;
 }
 //Nonexistant page
 else{

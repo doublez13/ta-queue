@@ -72,7 +72,7 @@
                           session_start();
                           $is_admin    = $_SESSION["is_admin"];
                           if($is_admin){
-                            readFile("./adminHeader.html");
+                            readFile("./view/adminHeader.html");
                           }
                         ?>
                         <li>
