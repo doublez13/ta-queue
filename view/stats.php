@@ -69,7 +69,6 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <?php
-                          session_start();
                           $is_admin    = $_SESSION["is_admin"];
                           if($is_admin){
                             readFile("./view/adminHeader.html");
