@@ -15,7 +15,7 @@ $(document).ready(function(){
 	}
     }
     if(typeof course === 'undefined'){
-	window.location ='./my_courses.php';
+	window.location ='./my_courses';
     }
 });
 

@@ -1,7 +1,3 @@
-<?php
-  include "./view/router.php"
-?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
@@ -26,7 +22,7 @@
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script> 
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <script src="./view/src/login.js"></script>
+        <script src="./src/login.js"></script>
 	</head>
 	<body>
 
@@ -49,13 +45,13 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="view/about.html">About</a>
+                            <a href="about">About</a>
                         </li>
                         <li>
-                            <a href="view/tutorial.html" target="_blank">Tutorial</a>
+                            <a href="tutorial" target="_blank">Tutorial</a>
                         </li>
                         <li>
-                            <a href="swagger/index.html" target="_blank">Public API</a>
+                            <a href="../api" target="_blank">Public API</a>
                         </li>
                     </ul>
                 </div><!-- /.navbar-collapse -->
@@ -102,12 +98,6 @@
         <div class="padding-top-10" style="text-align: center;">
             <a style="color: #e8002b; font-size:130%;" href="https://webhandin.eng.utah.edu/cade/create_account/index.php" target="_blank">No CADE account? Create one here.</a>
         </div>
-
-            <!--THERE ARE LINKS IN THE NAVBAR FOR THESE, I PERSONALLY PREFER THEM THERE-->
-<!--        <div style="text-align: center; margin-top: 10px;">-->
-<!--            <a href="view/about.html">About |</a>-->
-<!--            <a href="view/tutorial.html"> Tutorial</a>-->
-<!--        </div>-->
 
 <div id="footer">
     <img src="https://www.gnu.org/graphics/gplv3-127x51.png">

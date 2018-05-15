@@ -51,7 +51,7 @@ $(document).ready(function(){
 
   $("#stats_button").click(function( event ) {
     event.preventDefault();
-    window.location = "stats.php?course="+course;
+    window.location = "stats?course="+course;
   });
 
   start();

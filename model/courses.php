@@ -241,7 +241,8 @@ function add_stud_course($username, $course_name, $acc_code){
   }
 
   //Don't allow user to enroll in course if they're a TA
-  if (in_array($username, get_tas($course_name))){
+  $TAs = get_tas($course_name);
+  if (!is_null($TAs) && in_array($username, $TAs)){
     mysqli_close($sql_conn);
     return -5;
   }

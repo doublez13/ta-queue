@@ -36,7 +36,7 @@ function renderMyCourseTable(courses, role) {
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));
     tableRow.append($('<td>').text(role));
-    var URI = encodeURI("queue.php?course="+course);
+    var URI = encodeURI("queue?course="+course);
     tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>GoTo</span> </button></a> </td> '  );
     table.append(tableRow);
   });

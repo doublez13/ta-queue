@@ -4,7 +4,7 @@ $(document).ready(function(){
 });
 
 done = function(data){
-  window.location = "./classes.php";
+  window.location = "./classes";
   alert("Course created successfully.\n\nRedirecting to Courses...");
 }
 

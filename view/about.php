@@ -9,12 +9,12 @@
         <meta name="description" content="Senior Project"/>
 
         <!--U icon for browser tabs-->
-        <link rel="icon" type="image/png" href="../resources/img/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" href="../resources/img/favicon-16x16.png"/>
-        <link rel="icon" type="image/png" href="../resources/img/favicon.ico"/>
+        <link rel="icon" type="image/png" href="./resources/img/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" href="./resources/img/favicon-16x16.png"/>
+        <link rel="icon" type="image/png" href="./resources/img/favicon.ico"/>
 
         <!-- ALL CSS FILES -->
-        <link rel="stylesheet" type="text/css" href="../resources/CSS/global.css">
+        <link rel="stylesheet" type="text/css" href="./resources/CSS/global.css">
         <!-- Latest compiled and minified CSS -->
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
         <!-- Optional theme -->
@@ -38,7 +38,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand">
-                        <img alt="Brand" src="../resources/img/UHz.png">
+                        <img alt="Brand" src="./resources/img/UHz.png">
                     </a>
                 </div>
 
@@ -49,7 +49,7 @@
                             <a href="#">About</a>
                         </li>
                         <li>
-                            <a href="./tutorial.html" target="_blank">Tutorial</a>
+                            <a href="./tutorial" target="_blank">Tutorial</a>
                         </li>
                         <li>
                             <a href="../swagger/index.html" target="_blank">Public API</a>
@@ -57,7 +57,7 @@
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li>
-                            <a href="../index.php">Home</a>
+                            <a href="/">Home</a>
                         </li>
                     </ul>
 
@@ -68,7 +68,7 @@
     <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
         <div align="center" style="margin-top:  -40px; margin-bottom: -20px">
             <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Team Suzie Queue</h1>
-	        <img src="../resources/img/Untitled-1.png" alt="Suzie Queue Logo"style="height:70px;">
+	        <img src="./resources/img/Untitled-1.png" alt="Suzie Queue Logo"style="height:70px;">
         </div>
     </div>
 
@@ -108,7 +108,7 @@
                 </p>
             </div><!--col-sm-12-->
 	    <div class="col-sm-6">
-	      <img src="../resources/img/SuzieQueueTeamPhoto.jpg" alt="Team Photo" style="width:600px; height:400px; margin-top:50px;">
+	      <img src="./resources/img/SuzieQueueTeamPhoto.jpg" alt="Team Photo" style="width:600px; height:400px; margin-top:50px;">
 	      <p>
 		</br>
 		Team Members L-R: Blake Burton, Ryan Welling, Matt Damon, Zane Zakraisek

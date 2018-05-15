@@ -1,7 +1,3 @@
-<?php
-  include "router.php"
-?>
-
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
 	<head>
@@ -12,12 +8,12 @@
 		<meta name="description" content="Senior Project"/>
 
         <!--U icon for browser tabs-->
-        <link rel="icon" type="image/png" href="../resources/img/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" href="../resources/img/favicon-16x16.png"/>
-        <link rel="icon" type="image/png" href="../resources/img/favicon.ico"/>
+        <link rel="icon" type="image/png" href="./resources/img/favicon-32x32.png"/>
+        <link rel="icon" type="image/png" href="./resources/img/favicon-16x16.png"/>
+        <link rel="icon" type="image/png" href="./resources/img/favicon.ico"/>
 
 		<!-- ALL CSS FILES -->
-		<link rel="stylesheet" type="text/css" href="../resources/CSS/global.css">
+		<link rel="stylesheet" type="text/css" href="./resources/CSS/global.css">
 		<!-- Latest compiled and minified CSS -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 		<!-- Optional theme -->
@@ -43,7 +39,7 @@
                         <span class="icon-bar"></span>
                     </button>
                     <a class="navbar-brand">
-                        <img alt="Brand" src="../resources/img/UHz.png">
+                        <img alt="Brand" src="./resources/img/UHz.png">
                     </a>
                 </div>
 
@@ -51,10 +47,10 @@
                 <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav navbar-left">
                         <li>
-                            <a href="./about.html">About</a>
+                            <a href="./about">About</a>
                         </li>
                         <li>
-                            <a href="./tutorial.html" target="_blank">Tutorial</a>
+                            <a href="./tutorial" target="_blank">Tutorial</a>
                         </li>
                         <li>
                             <a href="../swagger/index.html" target="_blank">Public API</a>
@@ -68,16 +64,16 @@
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                                 <ul>
                                     <li>
-                                        <a class="dropdown-item" href="new_class.php">Create Course</a>
+                                        <a class="dropdown-item" href="new_class">Create Course</a>
                                     </li>
                                     <!--<li>-->
-                                    <!--<a class="dropdown-item" href="edit_class.php">Edit Course</a>-->
+                                    <!--<a class="dropdown-item" href="edit_class">Edit Course</a>-->
                                     <!--</li>-->
                                 </ul>
                             </div>
                         </li>
                         <li>
-                            <a href="classes.php">Courses</a>
+                            <a href="classes">Courses</a>
                         </li>
                         <li>
                             <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>

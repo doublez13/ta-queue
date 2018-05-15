@@ -1,0 +1,6 @@
+Options -MultiViews
+RewriteEngine On
+
+RewriteRule ^(api|resources|src|swagger)($|/) - [L]
+
+RewriteRule ^ router.php [L]
