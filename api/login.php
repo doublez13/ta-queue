@@ -7,10 +7,13 @@ require_once '../model/courses.php';
 require_once './errors.php';
 
 session_start();
-
-$redirect_url = $_SESSION["redirect_url"];
+if(isset($_SESSION["redirect_url"])){
+  $redirect_url = $_SESSION["redirect_url"];
+}
 $_SESSION = array();
-$_SESSION["redirect_url"] = $redirect_url;
+if(isset($redirect_url)){
+  $_SESSION["redirect_url"] = $redirect_url;
+}
 
 header('Content-Type: application/json');
 
