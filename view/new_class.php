@@ -4,7 +4,6 @@
 <head>
   <title>TA Help Queue - New Course</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/logout.js"></script>
   <script src="./src/create_class.js"></script>
 </head>
 <body>

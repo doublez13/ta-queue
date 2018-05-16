@@ -5,7 +5,6 @@
   <title>TA Help Queue - Main</title>
   <?php include('./view/head.html'); ?>
   <script src="./src/queue_functions.js"></script>
-  <script src="./src/logout.js"></script>
 </head>
 
 <body>

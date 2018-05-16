@@ -11,7 +11,6 @@
   <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-yYHfGKTlXFMrQe8uQPl37NB5145K3wGM4E0NueblXUuuBbVBPtsn36f4D4Ph5WzT" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js" integrity="sha384-jTMy6EIZUv6UQkT/OrJic59RKQRr8cYNcNBBsHUAlAdKt3sSMfCaf5V2YE97wLkB" crossorigin="anonymous"></script>
         
-  <script src="./src/logout.js"></script>
   <script src="./src/stats_graph.js"></script>
 </head>
 
