@@ -20,7 +20,7 @@
                <div class="container">
                         <div class="row">
                                 <div class="col-sm-8 col-sm-offset-2">
-                                        <div id ="class_table">
+                                        <div id ="my_class_table">
                                                 <div class="panel panel-primary">
                                                 <!-- Default panel contents -->
                                                         <div class="panel-heading">
