@@ -47,6 +47,13 @@ if (in_array($course, $ta_courses)){
     die();
   }
   $username = $_POST['student']; // Set to dequeue another student
+}else{//Came from student
+  if (isset($_POST['student']) && $_POST['student'] != $username)
+  {
+    http_response_code(422);
+    echo json_encode( not_authorized() );
+    die();
+  }
 }
 
 $res = deq_stu($username, $course);
