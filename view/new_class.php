@@ -1,31 +1,13 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html>
-	<head>
-		<title>TA Help Queue - New Course</title>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<meta name="AUTHOR"      content="Ryan Welling, Blake Burton, Zane Zakraisek"/>
-		<meta name="keywords"    content="University of Utah, 2017-2018, College of Engineering"/>
-		<meta name="description" content="Senior Project"/>
 
-        <!--U icon for browser tabs-->
-        <link rel="icon" type="image/png" href="./resources/img/favicon-32x32.png"/>
-        <link rel="icon" type="image/png" href="./resources/img/favicon-16x16.png"/>
-        <link rel="icon" type="image/png" href="./resources/img/favicon.ico"/>
+<head>
+  <title>TA Help Queue - New Course</title>
+  <?php include('./view/head.html'); ?>
+  <script src="./src/logout.js"></script>
+  <script src="./src/create_class.js"></script>
+</head>
 
-		<!-- ALL CSS FILES -->
-		<link rel="stylesheet" type="text/css" href="./resources/CSS/global.css">
-		<!-- Latest compiled and minified CSS -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<!-- Optional theme -->
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
-        <!-- jQuery CDN -->
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"    integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-        <!-- Latest compiled and minified JavaScript -->
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-        <!-- queue source -->
-        <script src="./src/logout.js"></script>
-		<script src="./src/create_class.js"></script>
-	</head>
 	<body>
 
 		<nav class="navbar navbar-default">
