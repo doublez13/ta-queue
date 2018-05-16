@@ -47,7 +47,7 @@
             <a href="classes">Courses</a>
           </li>
           <li>
-            <a href="#" onclick="logout();">Logout <script> document.write(localStorage.first_name)</script></a>
+            <a href="#" onclick="logout();">Logout <?php echo $_SESSION["username"] ?></a>
           </li>
         <?php }else{ ?>
           <li>

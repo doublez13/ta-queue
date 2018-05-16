@@ -39,9 +39,7 @@
                                         </div><!--id-->
                                 </div><!--col-sm-12-->
                         </div><!--row-->
-                </div><!--container-->
 
-		<div class="container">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
 					<div id ="class_table">
