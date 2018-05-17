@@ -1,0 +1,12 @@
+{
+  "short_name": "TA Queue",
+  "name": "TA Queue",
+  "icons": [
+    {
+      "src": "/resources/img/favicon-32x32.png",
+      "type": "image/png",
+      "sizes": "32x32"
+    }
+  ],
+  "display": "standalone"
+}
