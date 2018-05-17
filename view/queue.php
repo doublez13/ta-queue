@@ -46,7 +46,7 @@
                 <div class="col-xs-12 margin-top-15 padding-0" align="left">
 
                     <form id="time_form" title="(minutes)" style="display: none">
-                        <label>Time Limit Per Student</label>
+                        <label for="time_limit_input">Time Limit Per Student</label>
                          <div class="input-group" style='width:8em'>
                             <input type="number" min="0" id="time_limit_input" class="form-control">
                             <span class="input-group-btn">
@@ -55,7 +55,7 @@
                         </div>
                     </form>
                     <form id="cooldown_form" title="Queue reentry wait time (minutes)" style="display: none">
-                        <label>Cool-down Time</label>
+                        <label for="cooldown_input" >Cool-down Time</label>
                         <div class="input-group" style='width:8em'>
                             <input type="number" min="0" id="cooldown_input" class="form-control">
                             <span class="input-group-btn">
@@ -88,7 +88,7 @@
                     <!--POST ANNOUNCEMENT BOX (ONLY SHOWN FOR TAS)-->
                     <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form" style="display: none">
                         <div class="input-group">
-                            <input type="text" id="new_ann" class="flex-fillSpace form-control">
+                            <input type="text" id="new_ann" class="flex-fillSpace form-control" aria-label='...'>
                             <span class="input-group-btn">
                                 <input class="btn btn-success flex-noShrink" id="ann_button" type="submit" value="Post">
                             </span>
