@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   title: "Queue API for University of Utah College of Engineering"
   version: "1.0.0"
-  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login.php` (if you have not already done so on the website). Please remember to logout with `logout.php` when finished. **Logging out does not remove you from queues or take TAs off duty.**\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your parameters are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login` (if you have not already done so on the website). Please remember to logout with `logout` when finished. **Logging out does not remove you from queues or take TAs off duty.**\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- Currently it is possible to receive somewhat misleading, `success` responses when in reality nothing happened (i.e. no state changed in database). This can occur in requests that are bad (e.g. a TA dequeuing a non-existent user) or incorrect (e.g. a user dequeuing themselves from a course they are not enrolled in). In short, the server will not always report your errors so be sure your parameters are correct and make logical sense.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
   # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "zz@eng.utah.edu"
@@ -38,7 +38,7 @@ tags:
 
 
 paths:
-  /login.php:
+  /login:
     post:
       summary: "Login a user"
       description: "Login a user with the specified CADE username and password and get their info."
@@ -94,7 +94,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /logout.php:
+  /logout:
     get:
       summary: "Logout a user"
       description: "Logout the user who sent the request. Naturally, the value of `authenticated` will always be false."
@@ -112,7 +112,7 @@ paths:
               success:
                 type: "string"
                 example: "User logged out"
-  /classes/all_courses.php:
+  /classes/all_courses:
     get:
       summary: "Get all courses"
       description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *keys* are course names (e.g. \"CS 4150: Algorithms\", represented below as `additionalProp#`) and the *values* are objects: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
@@ -146,7 +146,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/get_info.php:
+  /user/get_info:
     get:
       summary: "Get user info"
       description: "Get the user's info."
@@ -181,7 +181,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/add_course.php:
+  /user/add_course:
     post:
       summary: "Enroll user in a course"
       description: "Enroll the user in the specified course with the specified access code (if required)."
@@ -222,7 +222,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/rem_course.php:
+  /user/rem_course:
     post:
       summary: "Unenroll user from a course"
       description: "Unenroll the user from the specified course."
@@ -259,7 +259,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/my_courses.php:
+  /user/my_courses:
     get:
       summary: "Get user enrolled courses"
       description: "Get all the courses the user has enrolled in or TAs."
@@ -293,7 +293,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/get_queue.php:
+  /queue/get_queue:
     post:
       summary: "Get a queue"
       description: "Get the queue state for the specified course including info regarding the TAs on duty, course announcements, and the TA time limit per student."
@@ -387,7 +387,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/enqueue_student.php:
+  /queue/enqueue_student:
     post:
       summary: "Enqueue user"
       description: "Enqueue the user for the specified course with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course\n- course queue must be open\n- TAs cannot enter their own queues"
@@ -434,7 +434,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/dequeue_student.php:
+  /queue/dequeue_student:
     post:
       summary: "Dequeue a user"
       description: "Dequeue the user from the specified course. If the user is a TA, dequeue the specified student from the specified course. **TAs can only dequeue their own students.**"
@@ -475,7 +475,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/move_down.php:
+  /queue/move_down:
     post:
       summary: "Move a user down in the queue"
       description: "Move the user down one spot in the specified course. If the user is a TA, move the specified student down one spot in the specified course. **TAs can only move their own students.**"
@@ -516,7 +516,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/open.php:
+  /queue/open:
     post:
       summary: "Open a queue (TA)"
       description: "Open the queue for the specified course to allow students to enter."
@@ -557,7 +557,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/freeze.php:
+  /queue/freeze:
     post:
       summary: "Freeze a queue (TA)"
       description: "Freeze the queue for the specified course so no new students can enter. Open the queue to unfreeze."
@@ -598,7 +598,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/close.php:
+  /queue/close:
     post:
       summary: "Close a queue (TA)"
       description: "Close the queue for the specified course. This removes all students from the queue and prevents new entries until the queue is opened."
@@ -639,7 +639,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/set_limit.php:
+  /queue/set_limit:
     post:
       summary: "Set a TA time limit per student (TA)"
       description: "Set with the specified positive integer the maximum amount of time (minutes) a TA can spend with a student in the specified course. No time limit is assumed if it is not set. **The queue must be open.**"
@@ -685,7 +685,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/set_cooldown.php:
+  /queue/set_cooldown:
     post:
       summary: "Set a required wait time for re-entering the queue (TA)"
       description: "Set with the specified positive integer the time (minutes) a student must wait before they can re-enter the queue. No time limit is assumed if it is not set. **The queue must be open.**"
@@ -731,7 +731,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/go_on_duty.php:
+  /queue/go_on_duty:
     post:
       summary: "Put TA on duty (TA)"
       description: "Put the TA on duty for the specified course.**The queue must be open.**"
@@ -772,7 +772,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/go_off_duty.php:
+  /queue/go_off_duty:
     post:
       summary: "Take TA off duty (TA)"
       description: "Take the TA off duty for the specified course."
@@ -813,7 +813,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/move_up.php:
+  /queue/move_up:
     post:
       summary: "Move a user up in the queue (TA)"
       description: "Move the specified user up one spot in the specified course."
@@ -859,7 +859,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/help_student.php:
+  /queue/help_student:
     post:
       summary: "Help a user (TA)"
       description: "Set the TA's status to helping the specified user in the specified course. A TA can only help one user at a time; a new user will override the current one. **The TA must be on duty in the specified course.**"
@@ -905,7 +905,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/release_ta.php:
+  /queue/release_ta:
     post:
       summary: "Free TA from helping (TA)"
       description: "Set the TA's status to free (i.e. not helping anyone) in the specified course."
@@ -946,7 +946,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/add_announcement.php:
+  /queue/add_announcement:
     post:
       summary: "Post an announcement (TA)"
       description: "Post the specified announcement for the specified course."
@@ -992,7 +992,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/del_announcement.php:
+  /queue/del_announcement:
     post:
       summary: "Delete an announcement (TA)"
       description: "Delete the announcement for the specified course with the specified ID."
@@ -1038,7 +1038,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /stats/course_stats.php:
+  /stats/course_stats:
     post:
       summary: "Get statistics for a course"
       description: "Get statistics for the specified course including average wait/help times (seconds) and a total students helped daily log.<br><br>If no dates are specified, the returned info accounts for the entire history of the course. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
@@ -1117,7 +1117,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /stats/student_log.php:
+  /stats/student_log:
     post:
       summary: "Get user queue log"
       description: "Get info regarding every instance the user was helped in any queue, or if `course` is specifed, only that particular queue. If a course is specified for which the user is a TA, get info regarding each instance the specifed student was helped in that queue. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the student. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
@@ -1197,7 +1197,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /stats/ta_log.php:
+  /stats/ta_log:
     post:
       summary: "Get TA's helped students log (TA)"
       description: "Get info regarding each instance a student was helped by the TA in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the TA. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
@@ -1277,7 +1277,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /stats/course_log.php:
+  /stats/course_log:
     post:
       summary: "Get a course queue log (TA)"
       description: "Get info regarding each instance a student was helped in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the course. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
@@ -1357,7 +1357,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /admin/create_course.php:
+  /admin/create_course:
     post:
       summary: "Create a new course"
       description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
@@ -1427,7 +1427,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /admin/delete_course.php:
+  /admin/delete_course:
     post:
       summary: "Delete a course"
       description: "Delete the specifed course."
