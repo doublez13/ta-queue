@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,7 +12,6 @@
 
 		<div class="jumbotron jumbotron-billboard padding-left-20 padding-right-20 flex flex-column flex-alignItems-center flex-noShrink" style="margin-top: -15px; opacity: 0.75; padding:0px;">
             <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; word-wrap: break-word; text-align: center">Queue</h1>
-<!--        <h2 id="title" style="color: #404040; font-weight: bold; word-wrap: break-word; text-align: center">Queue</h2>-->
 			<div class="flex flex-justifyContent-center flex-alignItems-center">
                 <h4 class="margin-left-10 margin-right-10" id="queue_state" style="color: #404040;"></h4>|
                 <h4 class="margin-left-10 margin-right-10" id="in_queue"    style="color: #404040;"></h4>|
