@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -10,7 +10,7 @@
   <?php include('./view/navbar.php'); ?>
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
+			<div style="margin-top: -40px; margin-bottom: -20px; text-align: center;">	
 				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">New Course</h1>
 			</div>
 		</div>
@@ -64,11 +64,11 @@
                                     <label>Description</label>
                                     <textarea id="description" placeholder="(optional)" style="height:100px" ></textarea>
                                 </div>
-                                <row>
-                                    <button class="btn btn-success" type="submit">Create Course</button>
-                                    <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
-                                    <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
-                                </row>
+                                <div class="padding-bottom-10">
+                                  <button class="btn btn-success" type="submit">Create Course</button>
+                                  <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
+                                  <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
+                                </div>
                             </form>
 						</div><!--panel-->
 					</div><!--id-->
