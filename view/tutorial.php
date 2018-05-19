@@ -1,5 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-        "http://www.w3.org/TR/html4/loose.dtd">
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -11,7 +10,7 @@
   <?php include('./view/navbar.php'); ?>
  
     <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-        <div align="center" style="margin-top:  -40px; margin-bottom: -20px">
+        <div style="margin-top:  -40px; margin-bottom: -20px; text-align: center;">
             <h1 style="color: #404040; text-shadow: 2px 2px #000000;">TA Help Queue Tutorial</h1>
         </div>
     </div>
