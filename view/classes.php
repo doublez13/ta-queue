@@ -1,4 +1,4 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -12,7 +12,7 @@
 
 
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-			<div align="center" style="margin-top:  -40px; margin-bottom: -20px">	
+			<div style="margin-top:  -40px; margin-bottom: -20px; text-align: center;">	
 				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">Courses</h1>
 			</div>
 		</div>
@@ -24,9 +24,9 @@
                                                 <div class="panel panel-primary">
                                                 <!-- Default panel contents -->
                                                         <div class="panel-heading">
-                                <h3 class="panel-title" style="font-size:20px;" align="center">My Courses</h3>
+                                <h3 class="panel-title" style="font-size:20px; text-align: center;">My Courses</h3>
                                                         </div>
-                            <table class="table table-hover" id="my_classes" align="center" style="margin-left:auto; margin-right:auto;">
+                            <table class="table table-hover" id="my_classes" style="margin-left:auto; margin-right:auto;">
                               <tr style="background: none;">
                                 <th>Course</th>
                                 <th>Role</th>
@@ -46,12 +46,12 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-                                <h3 class="panel-title" style="font-size:20px;" align="center">All Available Courses</h3>
+                                <h3 class="panel-title" style="font-size:20px; text-align: center;">All Available Courses</h3>
 							</div>
 							<div class="panel-body">
-                                <p align="center"><b>Enroll/Leave your courses here.</b></p>
+                                <p style="text-align: center;"><b>Enroll/Leave your courses here.</b></p>
 							</div>
-                            <table class="table table-hover " id="all_classes" align="center" style="margin-left:auto; margin-right:auto;">
+                            <table class="table table-hover " id="all_classes" style="margin-left:auto; margin-right:auto;">
                                 <tbody id="all_classes_body"></tbody>
 								<!--classes.js should write here-->
 							</table>
