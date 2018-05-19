@@ -27,7 +27,7 @@ create_class = function( event ) {
   var professor     = $form.find( "input[id='professor']" ).val();
   var acc_code      = $form.find( "input[id='acc_code']" ).val();
 
-  url = "../api/admin/create_course.php";
+  url = "../api/admin/create_course";
   var posting = $.post( url, { course_name:   course_name, 
                                depart_prefix: depart_prefix,
                                course_num:    course_num,

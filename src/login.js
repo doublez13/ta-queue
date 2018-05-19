@@ -6,7 +6,7 @@ login = function( event ) {
   var $form = $( this );
   var username = $form.find( "input[name='username']" ).val();
   var password = $form.find( "input[name='password']" ).val();
-  var url = "./api/login.php";
+  var url = "./api/login";
 
   var $posting = $.post( url, { username: username, password: password } );
   $posting.always(function( data ) {

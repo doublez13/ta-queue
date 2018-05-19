@@ -63,7 +63,7 @@ function start(){
   first_name  = localStorage.first_name;
   last_name   = localStorage.last_name;
     
-  var url = "../api/user/my_courses.php";
+  var url = "../api/user/my_courses";
   var get_req = $.get( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
@@ -81,7 +81,7 @@ function start(){
 //This function is called every X seconds,
 //and is what updates the dataParsed  
 function get_queue(course) {
-  var url = "../api/queue/get_queue.php";
+  var url = "../api/queue/get_queue";
   var posting = $.post( url, { course: course } );
   var done = function(data){
     var dataString = JSON.stringify(data);
@@ -587,21 +587,21 @@ fail = function(data){
 }
 
 function open_queue(course){
-  var url = "../api/queue/open.php";
+  var url = "../api/queue/open";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function close_queue(course){
-  var url = "../api/queue/close.php";
+  var url = "../api/queue/close";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function freeze_queue(course){
-  var url = "../api/queue/freeze.php";
+  var url = "../api/queue/freeze";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
@@ -609,7 +609,7 @@ function freeze_queue(course){
 
 
 function enqueue_student(course, question, Location){
-  var url = "../api/queue/enqueue_student.php";
+  var url = "../api/queue/enqueue_student";
   var posting = $.post( url, { course: course, question: question, location: Location } );
   posting.done(done);
   posting.fail(fail);
@@ -620,7 +620,7 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, student){
-  var url = "../api/queue/dequeue_student.php";
+  var url = "../api/queue/dequeue_student";
   if(student == null){
     posting = $.post( url, { course: course } );
   }
@@ -632,77 +632,77 @@ function dequeue_student(course, student){
 }
 
 function release_ta(course){
-  var url = "../api/queue/release_ta.php";
+  var url = "../api/queue/release_ta";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function enqueue_ta(course){
-  var url = "../api/queue/go_on_duty.php";
+  var url = "../api/queue/go_on_duty";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dequeue_ta(course){
-  var url = "../api/queue/go_off_duty.php";
+  var url = "../api/queue/go_off_duty";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function inc_priority(course, student){
-  var url = "../api/queue/move_up.php";
+  var url = "../api/queue/move_up";
   var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dec_priority(course, student){
-  var url = "../api/queue/move_down.php";
+  var url = "../api/queue/move_down";
   var posting = $.post( url, { course: course, student: student } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function next_student(course){
-  var url = "../api/queue/next_student.php";
+  var url = "../api/queue/next_student";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function help_student(course, username){
-  var url = "../api/queue/help_student.php";
+  var url = "../api/queue/help_student";
   var posting = $.post( url, { course: course, student: username } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function set_limit(course, limit){
-  var url = "../api/queue/set_limit.php";
+  var url = "../api/queue/set_limit";
   var posting = $.post( url, { course: course, time_lim: limit.toString() } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function set_cooldown(course, limit){
-  var url = "../api/queue/set_cooldown.php";
+  var url = "../api/queue/set_cooldown";
   var posting = $.post( url, { course: course, time_lim: limit.toString() } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function add_announcement(course, announcement){
-  var url = "../api/queue/add_announcement.php";
+  var url = "../api/queue/add_announcement";
   var posting = $.post( url, { course: course, announcement: announcement } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function del_announcement(course, announcement_id){
-  var url = "../api/queue/del_announcement.php";
+  var url = "../api/queue/del_announcement";
   var posting = $.post( url, { course: course, announcement_id: announcement_id } );
   posting.done(done);
   posting.fail(fail);
@@ -722,7 +722,7 @@ function tConvert (time) {
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/add_course.php";
+  var url = "../api/user/add_course";
   if(code == null){
     var posting = $.post( url, { course: course } );
   }else{

@@ -2,11 +2,6 @@
 // File: login.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../model/auth.php';
-require_once '../model/courses.php';
-require_once './errors.php';
-
-session_start();
 if(isset($_SESSION["redirect_url"])){
   $redirect_url = $_SESSION["redirect_url"];
 }
@@ -14,8 +9,6 @@ $_SESSION = array();
 if(isset($redirect_url)){
   $_SESSION["redirect_url"] = $redirect_url;
 }
-
-header('Content-Type: application/json');
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST")
 {

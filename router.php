@@ -3,8 +3,23 @@ session_start();
 
 $REQUEST_URI = $_SERVER["REQUEST_URI"];
 $path        = parse_url($REQUEST_URI, PHP_URL_PATH);
-$source      = './view'.$path.'.php'; 
 
+if( substr($path, 0, 5) === "/api/" ){
+  $source = ".".$path.".php";
+  if(file_exists($source)){
+    header('Content-Type: application/json');
+    require_once "model/auth.php";
+    require_once "model/config.php";
+    require_once "model/courses.php";
+    require_once "model/queue.php";
+    require_once "model/stats.php";
+    require_once "api/errors.php";
+    require_once $source;
+  }
+  die();
+}
+
+$source      = './view'.$path.'.php';
 //Open access pages
 if(is_open_page($path)){
   require_once $source;
@@ -27,7 +42,7 @@ elseif(!is_authenticated()){
 }
 //Admin access needed
 elseif(is_admin_page($path)){
-  if(is_admin()){
+  if(is_administrator()){
     require_once $source;
   }else{
     header("Location: classes");
@@ -49,7 +64,7 @@ function is_authenticated(){
 function is_redirect(){
   return isset($_SESSION["redirect_url"]);
 }
-function is_admin(){
+function is_administrator(){
   return isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
 }
 function is_open_page($path){

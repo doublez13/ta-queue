@@ -23,9 +23,8 @@ $(document).on("change", "#chart", function(e){
     get_number(course);
 });
 
-
 function get_number(course) {
-    var url = "../api/stats/course_stats.php";
+    var url = "../api/stats/course_stats";
     var posting = $.post( url, { course: course } );
     posting.done(parse_it);
 };

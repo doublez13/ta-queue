@@ -2,12 +2,6 @@
 // File: course_stats.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-require_once '../../model/stats.php';
-require_once '../errors.php';
-
-session_start();
-header('Content-type: application/json');
-
 if ($_SERVER['REQUEST_METHOD'] !== "POST")
 {
   http_response_code(405);
