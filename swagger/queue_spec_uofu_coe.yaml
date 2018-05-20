@@ -1356,7 +1356,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /admin/create_course:
+  /admin/courses:
     post:
       summary: "Create a new course"
       description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
@@ -1426,8 +1426,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /admin/delete_course:
-    post:
+    delete:
       summary: "Delete a course"
       description: "Delete the specifed course."
       tags:
@@ -1438,7 +1437,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "query"
         description: "full course name to delete (e.g. \"CS 5555: Intro to the Number Five\")"
         type: "string"
         required: true
