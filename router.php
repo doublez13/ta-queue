@@ -4,6 +4,7 @@ session_start();
 $REQUEST_URI = $_SERVER["REQUEST_URI"];
 $path        = parse_url($REQUEST_URI, PHP_URL_PATH);
 
+//REQUESTS FOR API
 if( substr($path, 0, 5) === "/api/" ){
   $source = ".".$path.".php";
   if(file_exists($source)){
@@ -15,10 +16,13 @@ if( substr($path, 0, 5) === "/api/" ){
     require_once "model/stats.php";
     require_once "api/errors.php";
     require_once $source;
+  }else{
+    //direct to swagger page
   }
   die();
 }
 
+//REQUESTS FOR PAGES
 $source      = './view'.$path.'.php';
 //Open access pages
 if(is_open_page($path)){

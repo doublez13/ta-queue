@@ -2,10 +2,10 @@
 // File: get_queue.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-if ($_SERVER['REQUEST_METHOD'] !== "POST")
+if ($_SERVER['REQUEST_METHOD'] !== "GET")
 {
   http_response_code(405);
-  echo json_encode( invalid_method("POST") );
+  echo json_encode( invalid_method("GET") );
   die();
 }
 
@@ -17,7 +17,7 @@ if (!isset($_SESSION['username']))
   die();
 }
 
-if (!isset($_POST['course']))
+if (!isset($_GET['course']))
 {
   http_response_code(422);
   echo json_encode( missing_course() );
@@ -25,7 +25,7 @@ if (!isset($_POST['course']))
 }
 
 $username   = $_SESSION['username'];
-$course     = $_POST['course'];
+$course     = $_GET['course'];
 $ta_courses = $_SESSION["ta_courses"];
 
 //For now, these return the same information.

@@ -81,8 +81,8 @@ function start(){
 //This function is called every X seconds,
 //and is what updates the dataParsed  
 function get_queue(course) {
-  var url = "../api/queue/get_queue";
-  var posting = $.post( url, { course: course } );
+  var url = "../api/queue/queue";
+  var posting = $.get( url, { course: course } );
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -695,17 +695,19 @@ function set_cooldown(course, limit){
 }
 
 function add_announcement(course, announcement){
-  var url = "../api/queue/add_announcement";
+  var url = "../api/queue/announcements";
   var posting = $.post( url, { course: course, announcement: announcement } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function del_announcement(course, announcement_id){
-  var url = "../api/queue/del_announcement";
-  var posting = $.post( url, { course: course, announcement_id: announcement_id } );
-  posting.done(done);
-  posting.fail(fail);
+  var del = $.ajax({
+              method: "DELETE",
+              url: "../api/queue/announcements?course="+course+"&announcement_id="+announcement_id,
+            });
+  del.done(done);
+  del.fail(fail);
 }
 
 // source: stackoverflow.com/questions/13898423/javascript-convert-24-hour-time-of-day-string-to-12-hour-time-with-am-pm-and-no

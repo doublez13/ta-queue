@@ -293,8 +293,8 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/get_queue:
-    post:
+  /queue/queue:
+    get:
       summary: "Get a queue"
       description: "Get the queue state for the specified course including info regarding the TAs on duty, course announcements, and the TA time limit per student."
       tags:
@@ -305,7 +305,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "query"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -946,7 +946,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/add_announcement:
+  /queue/announcements:
     post:
       summary: "Post an announcement (TA)"
       description: "Post the specified announcement for the specified course."
@@ -992,8 +992,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/del_announcement:
-    post:
+    delete:
       summary: "Delete an announcement (TA)"
       description: "Delete the announcement for the specified course with the specified ID."
       tags:
@@ -1004,12 +1003,12 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "query"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "announcement_id"
-        in: "formData"
+        in: "query"
         description: "ID of announcement to delete"
         type: "integer"
         required: true
