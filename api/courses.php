@@ -9,15 +9,19 @@ if (!isset($_SESSION['username']))
   die();
 }
 
-if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin'])
-{
-  http_response_code(403);
-  echo json_encode( not_authorized() );
-  die();
-}
-
 switch( $_SERVER['REQUEST_METHOD'] ){
-  case "POST":
+  case "GET": //Get the course list
+    $res   = get_avail_courses();
+    $field = "all_courses";
+    $text  = $res; 
+    break;
+  case "POST": //Create a course
+    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin'])
+    {
+      http_response_code(403);
+      echo json_encode( not_authorized() );
+      die();
+    }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_prefix']) || !isset($_POST['course_num']) || 
         !isset($_POST['description']) || !isset($_POST['ldap_group'])    || !isset($_POST['professor']))
     {
@@ -38,10 +42,17 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }else{
       $acc_code    = null;
     }
-    $res  = new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code);
-    $text = "Course created/updated"; 
+    $res   = new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code);
+    $field = "success";
+    $text  = "Course created/updated"; 
     break;
-  case "DELETE":
+  case "DELETE": //Delete a course
+    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin'])
+    {
+      http_response_code(403);
+      echo json_encode( not_authorized() );
+      die();
+    }
     if (!isset($_GET['course']))
     {
       http_response_code(422);
@@ -49,8 +60,9 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
     $course_name = $_GET['course'];
-    $res  = del_course($course_name);
-    $text = "Course deleted";
+    $res   = del_course($course_name);
+    $field = "success"; 
+    $text  = "Course deleted";
     break;
   default:
     http_response_code(405);
@@ -58,18 +70,19 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     die();
 }
 
-if ($res)
+//TODO: convert get_avail_courses() to error codes, and not null on error
+if ( (is_int($res) && $res) || is_null($res) )
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Unable to create/delete course"
+    "error" => "Unable to process course request"
   );
   http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
-    "success" => $text
+    $field => $text
   );
   http_response_code(200);
 }

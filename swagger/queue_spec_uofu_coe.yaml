@@ -112,40 +112,7 @@ paths:
               success:
                 type: "string"
                 example: "User logged out"
-  /classes/all_courses:
-    get:
-      summary: "Get all courses"
-      description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *keys* are course names (e.g. \"CS 4150: Algorithms\", represented below as `additionalProp#`) and the *values* are objects: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
-      tags:
-        - "Courses"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-                type: "boolean"
-              all_courses:
-                type: "object"
-                description: "hashmap: course name -> {access code required -> bool}"
-                additionalProperties:
-                  type: "object"
-                  properties:
-                    acc_req:
-                      type: "boolean"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
+
   /user/get_info:
     get:
       summary: "Get user info"
@@ -1356,12 +1323,46 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /admin/courses:
+
+  /courses:
+    get:
+      summary: "Get all courses"
+      description: "Get all the courses that can be enrolled in (i.e. courses with queues). `all_courses` is a hashmap: the *keys* are course names (e.g. \"CS 4150: Algorithms\", represented below as `additionalProp#`) and the *values* are objects: an `acc_req` key with a boolean value indicating whether or not the course requires an access code to enroll."
+      tags:
+        - "Courses"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              all_courses:
+                type: "object"
+                description: "hashmap: course name -> {access code required -> bool}"
+                additionalProperties:
+                  type: "object"
+                  properties:
+                    acc_req:
+                      type: "boolean"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
     post:
       summary: "Create a new course"
       description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
       tags:
-        - "Admin"
+        - "Courses"
       consumes:
         - "application/x-www-form-urlencoded"
       produces:
@@ -1430,7 +1431,7 @@ paths:
       summary: "Delete a course"
       description: "Delete the specifed course."
       tags:
-        - "Admin"
+        - "Courses"
       consumes:
         - "application/x-www-form-urlencoded"
       produces:

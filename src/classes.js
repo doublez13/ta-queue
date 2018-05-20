@@ -43,7 +43,7 @@ function renderMyCourseTable(courses, role) {
 }
 
 function get_all_classes(){
-  var $url = "../api/classes/all_courses";
+  var $url = "../api/courses";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
