@@ -2,9 +2,6 @@
 // File: add_announcement.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-$username     = $_SESSION['username'];
-$ta_courses   = $_SESSION["ta_courses"];
-
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "POST":
     if (!isset($_POST['course']))

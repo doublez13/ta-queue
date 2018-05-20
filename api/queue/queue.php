@@ -16,9 +16,7 @@ if (!isset($_GET['course']))
   die();
 }
 
-$username   = $_SESSION['username'];
 $course     = $_GET['course'];
-$ta_courses = $_SESSION["ta_courses"];
 
 //For now, these return the same information.
 //Later, we may want the TAs to see more,

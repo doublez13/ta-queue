@@ -17,6 +17,8 @@ if( substr($path, 0, 5) === "/api/" ){
       echo json_encode($return);
       die();
     }
+    $username   = $_SESSION['username'];
+    $ta_courses = $_SESSION["ta_courses"];
 
     require_once "model/auth.php";
     require_once "model/config.php";

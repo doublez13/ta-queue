@@ -16,9 +16,7 @@ if (!isset($_POST['course']))
   die();
 }
 
-$username   = $_SESSION['username'];
 $course     = $_POST['course'];
-$ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
 {

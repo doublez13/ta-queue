@@ -25,7 +25,6 @@ if (!isset($_POST['state']))
 
 $course     = $_POST['course'];
 $state      = $_POST['state'];
-$ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
 {

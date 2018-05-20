@@ -21,7 +21,6 @@ if (  !isset($_POST["course"]) || !isset($_POST["question"]) || !isset($_POST["l
   die();
 }
 
-$username = $_SESSION['username'];
 $course   = $_POST['course'];
 $question = $_POST['question'];
 $location = $_POST['location'];

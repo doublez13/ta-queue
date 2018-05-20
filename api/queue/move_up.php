@@ -23,10 +23,8 @@ if (!isset($_POST['student']))
   die();
 }
 
-$username   = $_SESSION['username'];
 $course     = $_POST['course'];
 $student    = $_POST['student'];
-$ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
 {

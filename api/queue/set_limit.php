@@ -23,10 +23,8 @@ if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['tim
   die();
 }
 
-$username   = $_SESSION['username'];
 $course     = $_POST['course'];
 $time_lim   = $_POST['time_lim'];
-$ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
 {
