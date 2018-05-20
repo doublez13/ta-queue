@@ -2,7 +2,7 @@ get_all_classes();
 get_my_classes();
 
 function get_my_classes(){
-  var $url = "../api/user/my_courses";
+  var $url = "../api/user/courses";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
@@ -50,7 +50,7 @@ function get_all_classes(){
     var dataParsed = JSON.parse(dataString);
     var allCourses = dataParsed.all_courses;
 
-    var $url = "../api/user/my_courses";
+    var $url = "../api/user/courses";
     var $get = $.get( $url );
     $get.done( function(data) {
       var dataString = JSON.stringify(data);

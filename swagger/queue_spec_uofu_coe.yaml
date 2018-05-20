@@ -33,8 +33,6 @@ tags:
     description: "Queue functionalities"
   - name: "Stats"
     description: "Statistical functionalities"
-  - name: "Admin"
-    description: "Administrator functionalities"
 
 
 paths:
@@ -226,7 +224,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/my_courses:
+  /user/courses:
     get:
       summary: "Get user enrolled courses"
       description: "Get all the courses the user has enrolled in or TAs."
@@ -260,6 +258,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+ 
   /queue/queue:
     get:
       summary: "Get a queue"
