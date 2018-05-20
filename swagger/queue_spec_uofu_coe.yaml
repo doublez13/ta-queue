@@ -483,10 +483,10 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/open:
+  /queue/state:
     post:
-      summary: "Open a queue (TA)"
-      description: "Open the queue for the specified course to allow students to enter."
+      summary: "Change the state of a queue (TA)"
+      description: "Open, close, or freeze the queue for the specified course."
       tags:
         - "Queue"
       consumes:
@@ -498,6 +498,15 @@ paths:
         in: "formData"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
+        required: true
+      - name: "state"
+        in: "formData"
+        description: "State to change to queue to (open/closed/frozen)"
+        type: "string"
+        enum:
+          - "open" 
+          - "closed"
+          - "frozen"
         required: true
       responses:
         200:
@@ -524,88 +533,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/freeze:
-    post:
-      summary: "Freeze a queue (TA)"
-      description: "Freeze the queue for the specified course so no new students can enter. Open the queue to unfreeze."
-      tags:
-        - "Queue"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: '#/definitions/success'
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-  /queue/close:
-    post:
-      summary: "Close a queue (TA)"
-      description: "Close the queue for the specified course. This removes all students from the queue and prevents new entries until the queue is opened."
-      tags:
-        - "Queue"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: '#/definitions/success'
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
+      
   /queue/set_limit:
     post:
       summary: "Set a TA time limit per student (TA)"

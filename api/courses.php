@@ -1,5 +1,5 @@
 <?php
-// File: create_course.php
+// File: courses.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 if (!isset($_SESSION['username']))
@@ -66,7 +66,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     break;
   default:
     http_response_code(405);
-    echo json_encode( invalid_method("POST or DELETE") );
+    echo json_encode( invalid_method("GET, POST, DELETE") );
     die();
 }
 

@@ -587,22 +587,22 @@ fail = function(data){
 }
 
 function open_queue(course){
-  var url = "../api/queue/open";
-  var posting = $.post( url, { course: course } );
+  var url = "../api/queue/state";
+  var posting = $.post( url, { course: course, state: "open" } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function close_queue(course){
-  var url = "../api/queue/close";
-  var posting = $.post( url, { course: course } );
+  var url = "../api/queue/state";
+  var posting = $.post( url, { course: course, state: "closed" } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function freeze_queue(course){
-  var url = "../api/queue/freeze";
-  var posting = $.post( url, { course: course } );
+  var url = "../api/queue/state";
+  var posting = $.post( url, { course: course, state: "frozen" } );
   posting.done(done);
   posting.fail(fail);
 }

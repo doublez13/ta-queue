@@ -1,5 +1,5 @@
 <?php
-// File: freeze.php
+// File: close.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST")
@@ -12,8 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST")
 if (!isset($_SESSION['username']))
 {
   http_response_code(401);
-  $return = array("authenticated" => False);
-  echo json_encode($return);
+  echo json_encode( not_authenticated() );
   die();
 }
 
@@ -24,8 +23,15 @@ if (!isset($_POST['course']))
   die();
 }
 
-$username   = $_SESSION['username'];
+if (!isset($_POST['state']))
+{
+  http_response_code(422);
+  echo json_encode( missing_course() );
+  die();
+}
+
 $course     = $_POST['course'];
+$state      = $_POST['state'];
 $ta_courses = $_SESSION["ta_courses"];
 
 if (!in_array($course, $ta_courses))
@@ -35,19 +41,34 @@ if (!in_array($course, $ta_courses))
   die();
 }
 
-$res = freeze_queue($course);
-if ($res != "frozen")
+switch($state){
+  case "closed":
+    $res = close_queue($course);
+    break;
+  case "frozen":
+    $res = freeze_queue($course);
+    break;
+  case "open":
+    $res = open_queue($course);
+    break;
+  default:
+    http_response_code(422);
+    echo json_encode( missing_course() );
+    die();
+}
+
+if($res != $state)
 {
   $return = array(
     "authenticated" => True,
-    "error" => "Unable to freeze queue"
+    "error" => "Unable to change queue state"
   );
   http_response_code(500);
 }else
 {
   $return = array(
     "authenticated" => True,
-    "success" => "Queue frozen"
+    "success" => "Queue " + $state
   );
   http_response_code(200);
 }
