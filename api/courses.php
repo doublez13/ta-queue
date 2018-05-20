@@ -2,13 +2,6 @@
 // File: courses.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-if (!isset($_SESSION['username']))
-{
-  http_response_code(401);
-  echo json_encode( not_authenticated() );
-  die();
-}
-
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
     $res   = get_avail_courses();

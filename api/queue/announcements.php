@@ -2,13 +2,6 @@
 // File: add_announcement.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-if (!isset($_SESSION['username']))
-{
-  http_response_code(401);
-  echo json_encode( not_authenticated() );
-  die();
-}
-
 $username     = $_SESSION['username'];
 $ta_courses   = $_SESSION["ta_courses"];
 

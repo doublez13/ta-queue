@@ -1,18 +1,11 @@
 <?php
-// File: close.php
+// File: state.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 if ($_SERVER['REQUEST_METHOD'] !== "POST")
 {
   http_response_code(405);
   echo json_encode( invalid_method("POST") );
-  die();
-}
-
-if (!isset($_SESSION['username']))
-{
-  http_response_code(401);
-  echo json_encode( not_authenticated() );
   die();
 }
 

@@ -9,6 +9,15 @@ if( substr($path, 0, 5) === "/api/" ){
   $source = ".".$path.".php";
   if(file_exists($source)){
     header('Content-Type: application/json');
+
+    if (!is_authenticated() && $path !== '/api/login' && $path !== '/api/logout'){
+      //TODO: Allow them to login on any POST request if they send creds?
+      http_response_code(401);
+      $return = array("authenticated" => False);
+      echo json_encode($return);
+      die();
+    }
+
     require_once "model/auth.php";
     require_once "model/config.php";
     require_once "model/courses.php";
@@ -70,6 +79,9 @@ function is_redirect(){
 }
 function is_administrator(){
   return isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
+}
+function credentials_provided(){
+  return isset($_POST['username']) && isset($_POST['password']);
 }
 function is_open_page($path){
   return $path == "/about"       ||

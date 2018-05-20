@@ -9,13 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST")
   die();
 }
 
-if (!isset($_SESSION['username']))
-{
-  http_response_code(401);
-  echo json_encode( not_authenticated() );
-  die();
-}
-
 if (!isset($_POST['course']))
 {
   http_response_code(422);

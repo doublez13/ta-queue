@@ -9,14 +9,6 @@ if ($_SERVER['REQUEST_METHOD'] !== "GET")
   die();
 }
 
-if (!isset($_SESSION['username']))
-{
-  http_response_code(401);
-  $return = array("authenticated" => False);
-  echo json_encode($return);
-  die();
-}
-
 if (!isset($_GET['course']))
 {
   http_response_code(422);
