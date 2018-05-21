@@ -658,15 +658,15 @@ function dequeue_ta(course){
 }
 
 function inc_priority(course, student){
-  var url = "../api/queue/move_up";
-  var posting = $.post( url, { course: course, student: student } );
+  var url = "../api/queue/position";
+  var posting = $.post( url, { course: course, student: student, operation: "up" } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dec_priority(course, student){
-  var url = "../api/queue/move_down";
-  var posting = $.post( url, { course: course, student: student } );
+  var url = "../api/queue/position";
+  var posting = $.post( url, { course: course, student: student, operation: "down" } );
   posting.done(done);
   posting.fail(fail);
 }
