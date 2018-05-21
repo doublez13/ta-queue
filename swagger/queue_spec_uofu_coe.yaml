@@ -624,7 +624,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/go_on_duty:
+  /queue/ta:
     post:
       summary: "Put TA on duty (TA)"
       description: "Put the TA on duty for the specified course.**The queue must be open.**"
@@ -665,8 +665,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/go_off_duty:
-    post:
+    delete:
       summary: "Take TA off duty (TA)"
       description: "Take the TA off duty for the specified course."
       tags:
@@ -677,7 +676,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "query"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true

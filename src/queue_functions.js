@@ -641,17 +641,20 @@ function release_ta(course){
 }
 
 function enqueue_ta(course){
-  var url = "../api/queue/go_on_duty";
+  var url = "../api/queue/ta";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dequeue_ta(course){
-  var url = "../api/queue/go_off_duty";
-  var posting = $.post( url, { course: course } );
-  posting.done(done);
-  posting.fail(fail);
+  var url = "../api/queue/ta?course="+course;
+  var del = $.ajax({
+              method: "DELETE",
+              url: url,
+            });
+  del.done(done);
+  del.fail(fail);
 }
 
 function inc_priority(course, student){
