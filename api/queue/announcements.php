@@ -23,7 +23,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       echo json_encode( not_authorized() );
       die();
     }
-    $announcement = $_GET['announcement'];
+    $announcement = $_POST['announcement'];
     $announcement = filter_var($announcement, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $res  = add_announcement($course, $announcement, $username);
     $text = "Announcement set";
