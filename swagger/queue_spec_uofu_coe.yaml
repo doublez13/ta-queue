@@ -532,7 +532,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
       
-  /queue/set_limit:
+  /queue/limit:
     post:
       summary: "Set a TA time limit per student (TA)"
       description: "Set with the specified positive integer the maximum amount of time (minutes) a TA can spend with a student in the specified course. No time limit is assumed if it is not set. **The queue must be open.**"
@@ -578,7 +578,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/set_cooldown:
+  /queue/cooldown:
     post:
       summary: "Set a required wait time for re-entering the queue (TA)"
       description: "Set with the specified positive integer the time (minutes) a student must wait before they can re-enter the queue. No time limit is assumed if it is not set. **The queue must be open.**"

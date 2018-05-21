@@ -686,14 +686,14 @@ function help_student(course, username){
 }
 
 function set_limit(course, limit){
-  var url = "../api/queue/set_limit";
+  var url = "../api/queue/limit";
   var posting = $.post( url, { course: course, time_lim: limit.toString() } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function set_cooldown(course, limit){
-  var url = "../api/queue/set_cooldown";
+  var url = "../api/queue/cooldown";
   var posting = $.post( url, { course: course, time_lim: limit.toString() } );
   posting.done(done);
   posting.fail(fail);
