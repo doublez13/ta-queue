@@ -146,7 +146,41 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/add_course:
+  
+  /user/courses:
+    get:
+      summary: "Get user enrolled courses"
+      description: "Get all the courses the user has enrolled in or TAs."
+      tags:
+        - "User"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              student_courses:
+                type: "array"
+                items:
+                  type: "string"
+              ta_courses:
+                type: "array"
+                items:
+                  type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
     post:
       summary: "Enroll user in a course"
       description: "Enroll the user in the specified course with the specified access code (if required)."
@@ -187,8 +221,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/rem_course:
-    post:
+    delete:
       summary: "Unenroll user from a course"
       description: "Unenroll the user from the specified course."
       tags:
@@ -199,7 +232,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "url"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -224,40 +257,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/courses:
-    get:
-      summary: "Get user enrolled courses"
-      description: "Get all the courses the user has enrolled in or TAs."
-      tags:
-        - "User"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-                type: "boolean"
-              student_courses:
-                type: "array"
-                items:
-                  type: "string"
-              ta_courses:
-                type: "array"
-                items:
-                  type: "string"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
+
  
   /queue/queue:
     get:

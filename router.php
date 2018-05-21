@@ -12,6 +12,7 @@ if( substr($path, 0, 5) === "/api/" ){
 
     if (!is_authenticated() && $path !== '/api/login' && $path !== '/api/logout'){
       //TODO: Allow them to login on any POST request if they send creds?
+      //header('WWW-Authenticate: Basic realm="TA Queue"');
       http_response_code(401);
       $return = array("authenticated" => False);
       echo json_encode($return);
