@@ -626,8 +626,8 @@ paths:
             $ref: '#/definitions/error'
   /queue/ta:
     post:
-      summary: "Put TA on duty (TA)"
-      description: "Put the TA on duty for the specified course.**The queue must be open.**"
+      summary: "Put TA on duty (TA) and free TA"
+      description: "Put the TA on duty for the specified course.**The queue must be open.** In the TA is already on duty, this will free them."
       tags:
         - "Queue"
       consumes:

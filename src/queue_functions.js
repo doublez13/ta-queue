@@ -634,7 +634,7 @@ function dequeue_student(course, student){
 }
 
 function release_ta(course){
-  var url = "../api/queue/release_ta";
+  var url = "../api/queue/ta";
   var posting = $.post( url, { course: course } );
   posting.done(done);
   posting.fail(fail);
