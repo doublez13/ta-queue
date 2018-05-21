@@ -540,10 +540,10 @@ paths:
           schema:
             $ref: '#/definitions/error'
       
-  /queue/limit:
+  /queue/settings:
     post:
-      summary: "Set a TA time limit per student (TA)"
-      description: "Set with the specified positive integer the maximum amount of time (minutes) a TA can spend with a student in the specified course. No time limit is assumed if it is not set. **The queue must be open.**"
+      summary: "Change a setting in the queue"
+      description: "Current queue settings are time_lim and cooldown. Set with the specified positive integer the maximum amount of time (minutes) for each setting. No time limit is assumed if it is not set. **The queue must be open.**"
       tags:
         - "Queue"
       consumes:
@@ -556,6 +556,14 @@ paths:
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
+      - name: "setting"
+        in: "formData"
+        description: "Setting to be changed"
+        type: "string"
+        required: true
+        enum:
+          - "time_lim"
+          - "cooldown"
       - name: "time_lim"
         in: "formData"
         description: "time limit (minutes)"
@@ -580,52 +588,6 @@ paths:
             $ref: '#/definitions/bad_method'
         422:
           description: "Missing course or missing/incorrect time_lim"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-  /queue/cooldown:
-    post:
-      summary: "Set a required wait time for re-entering the queue (TA)"
-      description: "Set with the specified positive integer the time (minutes) a student must wait before they can re-enter the queue. No time limit is assumed if it is not set. **The queue must be open.**"
-      tags:
-        - "Queue"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      - name: "cooldown_time"
-        in: "formData"
-        description: "queue re-entry wait time (minutes)"
-        type: "integer"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: '#/definitions/success'
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course or missing/incorrect cooldown_time"
           schema:
             $ref: '#/definitions/error'
         500:
