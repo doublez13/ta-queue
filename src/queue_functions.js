@@ -671,13 +671,6 @@ function dec_priority(course, student){
   posting.fail(fail);
 }
 
-function next_student(course){
-  var url = "../api/queue/next_student";
-  var posting = $.post( url, { course: course } );
-  posting.done(done);
-  posting.fail(fail);
-}
-
 function help_student(course, username){
   var url = "../api/queue/help_student";
   var posting = $.post( url, { course: course, student: username } );
