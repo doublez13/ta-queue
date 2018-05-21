@@ -2,37 +2,48 @@
 session_start();
 
 $REQUEST_URI = $_SERVER["REQUEST_URI"];
-$path        = parse_url($REQUEST_URI, PHP_URL_PATH);
+$path        = urldecode(parse_url($REQUEST_URI, PHP_URL_PATH));
 
 //REQUESTS FOR API
 if( substr($path, 0, 5) === "/api/" ){
-  $source = ".".$path.".php";
-  if(file_exists($source)){
-    header('Content-Type: application/json');
+  header('Content-Type: application/json');
 
-    if (!is_authenticated() && $path !== '/api/login' && $path !== '/api/logout'){
-      //TODO: Allow them to login on any POST request if they send creds?
-      //header('WWW-Authenticate: Basic realm="TA Queue"');
-      http_response_code(401);
-      $return = array("authenticated" => False);
-      echo json_encode($return);
+  if (!is_authenticated() && $path !== '/api/login' && $path !== '/api/logout'){
+    //TODO: Allow them to login on any POST request if they send creds?
+    //header('WWW-Authenticate: Basic realm="TA Queue"');
+    http_response_code(401);
+    $return = array("authenticated" => False);
+    echo json_encode($return);
+    die();
+  }
+  $username   = $_SESSION['username'];
+  $ta_courses = $_SESSION["ta_courses"];
+
+  require_once "model/auth.php";
+  require_once "model/config.php";
+  require_once "model/courses.php";
+  require_once "model/queue.php";
+  require_once "model/stats.php";
+  require_once "api/errors.php";
+
+  if( substr($path, 0, 11) === "/api/queue/" ){
+    $path_split = explode("/", $path);
+    if(empty($path_split[3])){
+      http_response_code(422);
+      echo json_encode( missing_course() );
       die();
     }
-    $username   = $_SESSION['username'];
-    $ta_courses = $_SESSION["ta_courses"];
-
-    require_once "model/auth.php";
-    require_once "model/config.php";
-    require_once "model/courses.php";
-    require_once "model/queue.php";
-    require_once "model/stats.php";
-    require_once "api/errors.php";
-    require_once $source;
-  }else{
-    //direct to swagger page
+    $course = $path_split[3];
+    $source = "./api/queue/$path_split[4].php";
   }
+  else{
+    $source = ".".$path.".php";
+  }
+
+  require_once $source;
   die();
 }
+
 
 //REQUESTS FOR PAGES
 $source      = './view'.$path.'.php';

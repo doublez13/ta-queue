@@ -4,18 +4,12 @@
 
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "POST":
-    if (!isset($_POST['course'])){
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
     if (!isset($_POST['setting'])){
       http_response_code(422);
       echo json_encode( missing_course() );
       die();
     }
 
-    $course  = $_POST['course'];
     $setting = $_POST['setting'];
     
     if (!in_array($course, $ta_courses)){

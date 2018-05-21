@@ -259,7 +259,7 @@ paths:
             $ref: '#/definitions/error'
 
  
-  /queue/queue:
+  /queue/{course}/queue:
     get:
       summary: "Get a queue"
       description: "Get the queue state for the specified course including info regarding the TAs on duty, course announcements, and the TA time limit per student."
@@ -271,7 +271,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "query"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -353,7 +353,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/student:
+  /queue/{course}/student:
     post:
       summary: "Enqueue user"
       description: "Enqueue the user for the specified course with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course\n- course queue must be open\n- TAs cannot enter their own queues"
@@ -365,7 +365,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -411,7 +411,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "query"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -440,7 +440,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/position:
+  /queue/{course}/position:
     post:
       summary: "Changes a user's position in the queue"
       description: "Move the specified user one spot up or down in the specified course. **TAs can only move their own students, and students can only move themselves**"
@@ -452,7 +452,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -489,7 +489,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/state:
+  /queue/{course}/state:
     post:
       summary: "Change the state of a queue (TA)"
       description: "Open, close, or freeze the queue for the specified course."
@@ -501,7 +501,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -540,7 +540,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
       
-  /queue/settings:
+  /queue/{course}/settings:
     post:
       summary: "Change a setting in the queue"
       description: "Current queue settings are time_lim and cooldown. Set with the specified positive integer the maximum amount of time (minutes) for each setting. No time limit is assumed if it is not set. **The queue must be open.**"
@@ -552,7 +552,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -594,7 +594,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/ta:
+  /queue/{course}/ta:
     post:
       summary: "Put TA on duty (TA) and free TA"
       description: "Put the TA on duty for the specified course.**The queue must be open.** In the TA is already on duty, this will free them."
@@ -606,7 +606,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -646,7 +646,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "query"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -676,7 +676,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /queue/help_student:
+  /queue/{course}/help_student:
     post:
       summary: "Help a user (TA)"
       description: "Set the TA's status to helping the specified user in the specified course. A TA can only help one user at a time; a new user will override the current one. **The TA must be on duty in the specified course.**"
@@ -688,7 +688,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -722,7 +722,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/announcements:
+  /queue/{course}/announcements:
     post:
       summary: "Post an announcement (TA)"
       description: "Post the specified announcement for the specified course."
@@ -734,7 +734,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -779,7 +779,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "query"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true

@@ -4,13 +4,6 @@
 
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET":
-    if (!isset($_GET['course'])){
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
-    $course     = $_GET['course'];
-
     //For now, these return the same information.
     //Later, we may want the TAs to see more,
     //or the students to see less.

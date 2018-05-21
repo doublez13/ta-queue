@@ -4,9 +4,7 @@
 
 switch($_SERVER['REQUEST_METHOD']){
   case "POST":
-    if (  !isset($_POST["course"]) || !isset($_POST["question"]) || !isset($_POST["location"])
-       || !$_POST["course"]        || !$_POST["question"]        || !$_POST["location"])
-    {
+    if (  !isset($_POST["question"]) || !isset($_POST["location"]) || !$_POST["question"] || !$_POST["location"]){
       http_response_code(422);
       $return = array(
         "authenticated" => True,
@@ -15,7 +13,6 @@ switch($_SERVER['REQUEST_METHOD']){
       echo json_encode($return);
       die();
     }
-    $course   = $_POST['course'];
     $question = filter_var($_POST['question'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $location = filter_var($_POST['location'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $res  = enq_stu($username, $course, $question, $location);
@@ -23,12 +20,6 @@ switch($_SERVER['REQUEST_METHOD']){
     break;
 
   case "DELETE":
-    if (!isset($_GET['course'])){
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
-    $course = $_GET['course'];
     //Since this enpoint is used for students to
     //remove themselves, and TAs to remove students,
     //we check if the request came from a TA

@@ -4,19 +4,12 @@
 
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "POST":
-    if (!isset($_POST['course']))
-    {
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
     if (!isset($_POST['announcement']))
     {
       http_response_code(422);
       echo json_encode( missing_announcement() );
       die();
     }
-    $course = $_POST['course'];
     if (!in_array($course, $ta_courses))
     {
       http_response_code(403);
@@ -29,19 +22,12 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text = "Announcement set";
     break;
   case "DELETE":  
-    if (!isset($_GET['course']))
-    {
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
     if (!isset($_GET['announcement_id']))
     {
       http_response_code(422);
       echo json_encode( missing_announcement() );
       die();
     }
-    $course = $_GET['course'];
     if (!in_array($course, $ta_courses))
     {
       http_response_code(403);

@@ -4,12 +4,6 @@
 
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "POST":
-    if (!isset($_POST['course'])){
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
-    $course = $_POST['course'];
     if (!in_array($course, $ta_courses)){
       http_response_code(403);
       echo json_encode( not_authorized() );
@@ -20,14 +14,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     break;
  
   case "DELETE":
-    if (!isset($_GET['course'])){
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
-    $course  = $_GET['course'];
-    $res     = deq_ta($username, $course);
-    $text    = "TA off duty";
+    $res  = deq_ta($username, $course);
+    $text = "TA off duty";
     break;
 
   default:
