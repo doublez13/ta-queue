@@ -33,13 +33,13 @@ if( substr($path, 0, 5) === "/api/" ){
       echo json_encode( missing_course() );
       die();
     }
-    $course = $path_split[3];
-    $source = "./api/queue/$path_split[4].php";
-  }
-  else{
-    $source = ".".$path.".php";
+    $course   = $path_split[3];
+    $endpoint = $path_split[4];
+    require_once './api/queueRouter.php';
+    die();
   }
 
+  $source = ".".$path.".php";
   require_once $source;
   die();
 }
