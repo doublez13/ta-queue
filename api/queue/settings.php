@@ -2,7 +2,6 @@
 // File: set_cooldown.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "POST":
     if (!isset($_POST['course'])){

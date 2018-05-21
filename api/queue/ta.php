@@ -2,7 +2,6 @@
 // File: go_on_duty.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
-
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "POST":
     if (!isset($_POST['course'])){
