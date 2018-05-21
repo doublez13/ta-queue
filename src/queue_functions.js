@@ -609,7 +609,7 @@ function freeze_queue(course){
 
 
 function enqueue_student(course, question, Location){
-  var url = "../api/queue/enqueue_student";
+  var url = "../api/queue/student";
   var posting = $.post( url, { course: course, question: question, location: Location } );
   posting.done(done);
   posting.fail(fail);
@@ -620,15 +620,17 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, student){
-  var url = "../api/queue/dequeue_student";
-  if(student == null){
-    posting = $.post( url, { course: course } );
+  var url = "../api/queue/student?course="+course;
+  if(student != null){
+    url = url + '&student='+student;
   }
-  else{
-    posting = $.post( url, { course: course, student: student } );
-  }
-  posting.done(done);
-  posting.fail(fail);
+
+  var del = $.ajax({
+              method: "DELETE",
+              url: url,
+            });
+  del.done(done);
+  del.fail(fail);
 }
 
 function release_ta(course){

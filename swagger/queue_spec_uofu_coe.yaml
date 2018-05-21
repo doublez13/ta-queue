@@ -232,7 +232,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "url"
+        in: "query"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -353,7 +353,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/enqueue_student:
+  /queue/student:
     post:
       summary: "Enqueue user"
       description: "Enqueue the user for the specified course with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course\n- course queue must be open\n- TAs cannot enter their own queues"
@@ -400,8 +400,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/dequeue_student:
-    post:
+    delete:
       summary: "Dequeue a user"
       description: "Dequeue the user from the specified course. If the user is a TA, dequeue the specified student from the specified course. **TAs can only dequeue their own students.**"
       tags:
@@ -412,12 +411,12 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "query"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "student"
-        in: "formData"
+        in: "query"
         description: "username to dequeue"
         type: "string"
       responses:
