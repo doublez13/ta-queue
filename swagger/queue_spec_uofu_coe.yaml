@@ -797,47 +797,6 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/release_ta:
-    post:
-      summary: "Free TA from helping (TA)"
-      description: "Set the TA's status to free (i.e. not helping anyone) in the specified course."
-      tags:
-        - "Queue"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: '#/definitions/success'
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
   /queue/announcements:
     post:
       summary: "Post an announcement (TA)"
