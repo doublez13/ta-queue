@@ -791,6 +791,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+  /queue/{course}/announcements/{id}:
     delete:
       summary: "Delete an announcement (TA)"
       description: "Delete the announcement for the specified course with the specified ID."
@@ -806,8 +807,8 @@ paths:
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
-      - name: "announcement_id"
-        in: "query"
+      - name: "id"
+        in: "path"
         description: "ID of announcement to delete"
         type: "integer"
         required: true

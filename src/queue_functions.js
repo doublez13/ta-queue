@@ -702,7 +702,7 @@ function add_announcement(course, announcement){
 function del_announcement(course, announcement_id){
   var del = $.ajax({
               method: "DELETE",
-              url: "../api/queue/"+course+"/announcements?announcement_id="+announcement_id,
+              url: "../api/queue/"+course+"/announcements/"+announcement_id,
             });
   del.done(done);
   del.fail(fail);

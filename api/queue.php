@@ -1,5 +1,5 @@
 <?php
-// File: queueRouter.php
+// File: queue.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
 $path_split = explode("/", $path);
@@ -34,8 +34,9 @@ case "announcements":
       $res  = add_announcement($course, $announcement, $username);
       $text = "Announcement set";
       break;
-    case "DELETE":  
-      if (!isset($_GET['announcement_id'])){
+    case "DELETE":
+      //if (!isset($_GET['announcement_id'])){
+      if( !isset($path_split[5]) ){ //announcement_id in url
         http_response_code(422);
         echo json_encode( missing_announcement() );
         die();
@@ -45,7 +46,8 @@ case "announcements":
         echo json_encode( not_authorized() );
         die();
       }
-      $announcement_id = $_GET['announcement_id'];
+      //$announcement_id = $_GET['announcement_id'];
+      $announcement_id = $path_split[5];
       $res  = del_announcement($course, $announcement_id);
       $text = "Announcement deleted";
       break; 

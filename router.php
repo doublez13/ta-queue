@@ -4,7 +4,7 @@ session_start();
 $REQUEST_URI = $_SERVER["REQUEST_URI"];
 $path        = urldecode(parse_url($REQUEST_URI, PHP_URL_PATH));
 
-//REQUESTS FOR API ENDPOINTS
+//////// REQUESTS FOR API ////////
 if( substr($path, 0, 5) === "/api/" ){
   header('Content-Type: application/json');
 
@@ -40,65 +40,57 @@ if( substr($path, 0, 5) === "/api/" ){
 
   if( is_user_endpoint($path) ){
     require_once './api/user.php';
-    die();
   }
-
-  if( is_queue_endpoint($path) ){
+  elseif( is_queue_endpoint($path) ){
     require_once './api/queue.php';
-    die();
   }
-  if( is_courses_endpoint($path) ){
+  elseif( is_courses_endpoint($path) ){
     require_once './api/courses.php';
-    die();
-
-  }
-  //TODO: Add stats
-  
-  //header('Location: /swagger');
-
-  die();
-}
-
-
-//REQUESTS FOR PAGES
-$source      = './view'.$path.'.php';
-//Open access pages
-if(is_open_page($path)){
-  require_once $source;
-}
-elseif(is_root_dir($path)){
-  if(!is_authenticated()){
-    require_once './view/index.php';
-  }elseif(is_redirect()){
-    $url = $_SESSION["redirect_url"];
-    unset($_SESSION["redirect_url"]);
-    header("Location: $url");
-  }else{
-    header("Location: classes");
+  }//TODO: Add stats
+  else{
+    header('Location: /swagger');
   }
 }
-//Not authenticated
-elseif(!is_authenticated()){
-  $_SESSION["redirect_url"] = $REQUEST_URI;
-  header("Location: /");
-}
-//Admin access needed
-elseif(is_admin_page($path)){
-  if(is_administrator()){
-    require_once $source;
-  }else{
-    header("Location: classes");
-  }
-}
-//Regular pages
-elseif(file_exists($source)){
-  require_once $source;
-}
-//Nonexistant page
+//////// REQUESTS FOR PAGES ////////
 else{
-  header("Location: classes");
+  $source = './view'.$path.'.php';
+  //Open access pages
+  if(is_open_page($path)){
+    require_once $source;
+  }
+  elseif(is_root_dir($path)){
+    if(!is_authenticated()){
+      require_once './view/index.php';
+    }elseif(is_redirect()){
+      $url = $_SESSION["redirect_url"];
+      unset($_SESSION["redirect_url"]);
+      header("Location: $url");
+    }else{
+      header("Location: classes");
+    }
+  }
+  //Not authenticated
+  elseif(!is_authenticated()){
+    $_SESSION["redirect_url"] = $REQUEST_URI;
+    header("Location: /");
+  }
+  //Admin access needed
+  elseif(is_admin_page($path)){
+    if(is_administrator()){
+      require_once $source;
+    }else{
+      header("Location: classes");
+    }
+  }
+  //Regular pages
+  elseif(file_exists($source)){
+    require_once $source;
+  }
+  //Nonexistant page
+  else{
+    header("Location: classes");
+  }
 }
-
 
 function is_authenticated(){
   return isset($_SESSION["username"]);
