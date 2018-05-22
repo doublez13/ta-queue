@@ -239,6 +239,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+  /user/{username}/courses/{course}:
     delete:
       summary: "Unenroll user from a course"
       description: "Unenroll the user from the specified course."
@@ -251,11 +252,11 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
+        description: "username"
         type: "string"
         required: true
       - name: "course"
-        in: "query"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true

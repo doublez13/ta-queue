@@ -128,7 +128,7 @@ function enrollCourse(course, code) {
 function dropCourse(course) {
   var del = $.ajax({
                   method: "DELETE",
-                  url: "../api/user/"+username+"/courses?course="+course
+                  url: "../api/user/"+username+"/courses/"+course
                   });
   del.done(done);
   del.fail(fail);

@@ -63,12 +63,12 @@ switch($endpoint){
         break;
 
       case "DELETE":
-        if (!isset($_GET['course'])){
+        if ( !isset($path_split[5]) ){
           http_response_code(422);
           echo json_encode( missing_course() );
           die();
         }
-        $course = $_GET['course'];
+        $course = $path_split[5];
         $res = rem_stud_course($req_username, $course);
         if ($res < 0){
           $return = return_JSON_error($res);
