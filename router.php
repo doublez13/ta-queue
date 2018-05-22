@@ -19,22 +19,14 @@ if( substr($path, 0, 5) === "/api/" ){
   $username   = $_SESSION['username'];
   $ta_courses = $_SESSION["ta_courses"];
 
-  require_once "model/auth.php";
   require_once "model/config.php";
+  require_once "model/auth.php";
   require_once "model/courses.php";
   require_once "model/queue.php";
   require_once "model/stats.php";
   require_once "api/errors.php";
 
   if( substr($path, 0, 11) === "/api/queue/" ){
-    $path_split = explode("/", $path);
-    if(empty($path_split[3])){
-      http_response_code(422);
-      echo json_encode( missing_course() );
-      die();
-    }
-    $course   = $path_split[3];
-    $endpoint = $path_split[4];
     require_once './api/queueRouter.php';
     die();
   }

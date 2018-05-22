@@ -757,36 +757,48 @@ function get_queue_state($course_name){
  * Open the queue
  *
  * @param string $course_name
- * @return string $state of queue
+ * @return int  0 on success
  *         int -1 on error
  *         int -2 on Nonexistent Course
  */
 function open_queue($course_name){
-  return change_queue_state($course_name, "open");
+  $ret = change_queue_state($course_name, "open");
+  if($ret == "open"){
+    return 0;
+  }
+  return $ret;
 }
 
 /**
  * Close the queue
  *
  * @param string $course_name
- * @return string $state of queue
+ * @return int  0 on success
  *         int -1 on error
  *         int -2 on Nonexistent Course
  */
 function close_queue($course_name){
-  return change_queue_state($course_name, "closed");
+  $ret = change_queue_state($course_name, "closed");
+  if($ret == "closed"){
+    return 0;
+  }
+  return $ret;
 }
 
 /**
  * Freeze the queue
  *
  * @param string $course_name
- * @return string $state of queue
- *        int -1 on error
- *        int -2 on Nonexistent Course
+ * @return int  0 on success
+ *         int -1 on error
+ *         int -2 on Nonexistent Course
  */
 function freeze_queue($course_name){
-  return change_queue_state($course_name, "frozen");
+  $ret = change_queue_state($course_name, "frozen");
+  if($ret == "frozen"){
+    return 0;
+  }
+  return $ret;
 }
 
 /**
