@@ -47,9 +47,14 @@ if( substr($path, 0, 5) === "/api/" ){
     require_once './api/queue.php';
     die();
   }
+  if( is_courses_endpoint($path) ){
+    require_once './api/courses.php';
+    die();
+
+  }
   //TODO: Add stats
   
-  header('Location: /swagger');
+  //header('Location: /swagger');
 
   die();
 }
@@ -116,10 +121,13 @@ function is_login_endpoint($path){
          $path == '/api/logout';
 }
 function is_user_endpoint($path){
-  return substr($path, 0, 10) == "/api/user/";
+  return substr($path, 0, 9) == "/api/user";
 }
 function is_queue_endpoint($path){
-  return substr($path, 0, 11) == "/api/queue/";
+  return substr($path, 0, 10) == "/api/queue";
+}
+function is_courses_endpoint($path){
+  return substr($path, 0, 12) == "/api/courses";
 }
 function is_root_dir($path){
   return $path == '/';
