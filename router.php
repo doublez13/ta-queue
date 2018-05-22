@@ -47,9 +47,10 @@ if( substr($path, 0, 5) === "/api/" ){
     require_once './api/queue.php';
     die();
   }
+  //TODO: Add stats
+  
+  header('Location: /swagger');
 
-  $source = ".".$path.".php";
-  require_once $source;
   die();
 }
 

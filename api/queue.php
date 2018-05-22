@@ -9,8 +9,10 @@ if(empty($path_split[3])){
   die();
 }
 $course   = $path_split[3];
-$endpoint = $path_split[4];
-
+$endpoint = "queue";
+if(isset($path_split[4])){
+  $endpoint = $path_split[4];
+}
 
 switch( $endpoint ){
 

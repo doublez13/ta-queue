@@ -81,7 +81,7 @@ function start(){
 //This function is called every X seconds,
 //and is what updates the dataParsed  
 function get_queue(course) {
-  var url = "../api/queue/"+course+"/queue";
+  var url = "../api/queue/"+course+"";
   var posting = $.get( url );
   var done = function(data){
     var dataString = JSON.stringify(data);

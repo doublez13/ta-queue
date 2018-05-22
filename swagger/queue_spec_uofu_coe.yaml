@@ -282,7 +282,7 @@ paths:
             $ref: '#/definitions/error'
 
  
-  /queue/{course}/queue:
+  /queue/{course}:
     get:
       summary: "Get a queue"
       description: "Get the queue state for the specified course including info regarding the TAs on duty, course announcements, and the TA time limit per student."
