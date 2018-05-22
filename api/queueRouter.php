@@ -1,10 +1,18 @@
 <?php
-// File: add_announcement.php
+// File: queueRouter.php
 // SPDX-License-Identifier: GPL-3.0-or-later
+
+$path_split = explode("/", $path);
+if(empty($path_split[3])){
+  http_response_code(422);
+  echo json_encode( missing_course() );
+  die();
+}
+$course   = $path_split[3];
+$endpoint = $path_split[4];
 
 
 switch( $endpoint ){
-
 
 case "announcements":
   switch( $_SERVER['REQUEST_METHOD'] ){
@@ -55,7 +63,6 @@ case "help_student":
         echo json_encode( missing_student() );
         die();
       }
-
       $student    = $_POST['student'];
 
       if (!in_array($course, $ta_courses)){
@@ -82,8 +89,8 @@ case "position":
         echo json_encode( missing_course() );
         die();
       }
-
       $operation = $_POST['operation']; 
+
       switch( $operation ){
         case "up":
           if (!isset($_POST['student'])){
@@ -134,36 +141,25 @@ case "queue":
       //Later, we may want the TAs to see more,
       //or the students to see less.
       if (in_array($course, $ta_courses)){ //TA
-        $return = get_queue($course);
-      }
-      elseif (in_array($course, get_stud_courses($username))){ //Student
-        $return = get_queue($course);
+        $ret = get_queue($course);
+      }elseif (in_array($course, get_stud_courses($username))){ //Student
+        $ret = get_queue($course);
       }else{ //Not in course
         http_response_code(403);
-        $return = array(
-          "authenticated" => True,
-          "error" => "Not enrolled in course"
-        );
+        echo json_encode( not_authorized() );
+        die();
       }
       break;
     default:
       http_response_code(405);
       echo json_encode( invalid_method("GET") );
       die();
+  }//TODO: Not the cleanest way to do it, but it works
+  $text = "Queue fetched";
+  $res = $ret;
+  if(!is_int($ret)){
+    $res = 0; 
   }
-
-  if($return < 0)
-  {
-    $return = return_JSON_error($return);
-    http_response_code(500);
-  }else
-  {
-    $return["authenticated"] = True;
-    http_response_code(200);  
-  }
-  echo json_encode($return);
-  die();
-
 
 case "settings":
   switch( $_SERVER['REQUEST_METHOD'] ){
@@ -241,28 +237,14 @@ case "state":
           echo json_encode( missing_course() );
           die();
       }
+      $text = "Queue state changed";
       break;
     default:
       http_response_code(405);
       echo json_encode( invalid_method("POST") );
       die();
   }
-
-  if($res != $state){
-    $return = array(
-      "authenticated" => True,
-      "error" => "Unable to change queue state"
-    );
-    http_response_code(500);
-  }else{
-    $return = array(
-      "authenticated" => True,
-      "success" => "Queue " + $state
-    );
-    http_response_code(200);
-  }
-  echo json_encode($return);
-  die();
+  break;
 
 
 case "student":
@@ -301,7 +283,8 @@ case "student":
           die();
         }
       }
-      $res = deq_stu($username, $course);
+      $res  = deq_stu($username, $course);
+      $text = "Student dequeued";
       break;
 
     default:
@@ -348,6 +331,9 @@ if($res){
     "authenticated" => True,
     "success" => $text
   );
+  if(isset($ret)){//Any additional info
+    $return = array_merge($return, $ret);
+  }
   http_response_code(200);
 }
 echo json_encode($return);
