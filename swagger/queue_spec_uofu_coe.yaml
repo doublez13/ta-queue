@@ -24,7 +24,8 @@ schemes:
 #   - "application/json"
 
 tags:
-  - name: "Login/Logout"
+  - name: "Authentication"
+    description: "Endpoint authentication"
   - name: "Courses"
     description: "Course functionalities"
   - name: "User"
@@ -41,7 +42,7 @@ paths:
       summary: "Login a user"
       description: "Login a user with the specified CADE username and password and get their info."
       tags:
-        - "Login/Logout"
+        - "Authentication"
       consumes:
         - "application/x-www-form-urlencoded"
       produces:
@@ -97,7 +98,7 @@ paths:
       summary: "Logout a user"
       description: "Logout the user who sent the request. Naturally, the value of `authenticated` will always be false."
       tags:
-        - "Login/Logout"
+        - "Authentication"
       responses:
         200:
           description: "Success"
