@@ -2,15 +2,28 @@
 // File: courses.php
 // SPDX-License-Identifier: GPL-3.0-or-later
 
+$path_split = explode("/", $path);
+
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
     $res   = get_avail_courses();
     $field = "all_courses";
     $text  = $res; 
     break;
+  case "PUT":  //Edit a course
+    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
+      http_response_code(403);
+      echo json_encode( not_authorized() );
+      die();
+    }
+    if ( !isset($path_split[3]) ){
+      http_response_code(422);
+      echo json_encode( missing_info() );
+      die();
+    }
+    $_POST['course_name'] = $path_split[3]; //Fall through
   case "POST": //Create a course
-    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin'])
-    {
+    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
       http_response_code(403);
       echo json_encode( not_authorized() );
       die();
@@ -29,8 +42,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $description   = $_POST['description'];
     $ldap_group    = $_POST['ldap_group'];
     $professor     = $_POST['professor'];
-    if ($_POST['acc_code'])
-    {
+    if ($_POST['acc_code']){
       $acc_code    = $_POST['acc_code'];
     }else{
       $acc_code    = null;
@@ -40,19 +52,17 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text  = "Course created/updated"; 
     break;
   case "DELETE": //Delete a course
-    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin'])
-    {
+    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
       http_response_code(403);
       echo json_encode( not_authorized() );
       die();
     }
-    if (!isset($_GET['course']))
-    {
+    if ( !isset($path_split[3]) ){
       http_response_code(422);
       echo json_encode( missing_info() );
       die();
     }
-    $course_name = $_GET['course'];
+    $course_name = $path_split[3];
     $res   = del_course($course_name);
     $field = "success"; 
     $text  = "Course deleted";
@@ -64,15 +74,13 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 }
 
 //TODO: convert get_avail_courses() to error codes, and not null on error
-if ( (is_int($res) && $res) || is_null($res) )
-{
+if ( (is_int($res) && $res) || is_null($res) ){
   $return = array(
     "authenticated" => True,
     "error" => "Unable to process course request"
   );
   http_response_code(500);
-}else
-{
+}else{
   $return = array(
     "authenticated" => True,
     $field => $text

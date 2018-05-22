@@ -722,7 +722,7 @@ function tConvert (time) {
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/"+my_username+"/courses";
+  var url = "../api/user/"+my_username+"/courses/"+course;
   if(code == null){
     var posting = $.post( url );
   }else{

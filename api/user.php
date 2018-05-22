@@ -39,12 +39,12 @@ switch($endpoint){
         break;
 
       case "POST":
-        if (!isset($_POST['course'])){
+        if ( !isset($path_split[5]) ){
           http_response_code(422);
           echo json_encode( missing_course() );
           die();
         }
-        $course   = $_POST['course'];
+        $course   = $path_split[5];
         $acc_code = NULL;
         if (isset($_POST['acc_code'])){
           $acc_code = $_POST['acc_code'];

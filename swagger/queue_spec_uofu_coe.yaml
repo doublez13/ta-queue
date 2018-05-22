@@ -194,6 +194,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+  /user/{username}/courses/{course}:
     post:
       summary: "Enroll user in a course"
       description: "Enroll the user in the specified course with the specified access code (if required)."
@@ -210,7 +211,7 @@ paths:
         type: "string"
         required: true
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
@@ -239,7 +240,6 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/{username}/courses/{course}:
     delete:
       summary: "Unenroll user from a course"
       description: "Unenroll the user from the specified course."
@@ -1261,6 +1261,76 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+  /courses/{course}:
+    put:
+      summary: "Edit an existing course"
+      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
+      tags:
+        - "Courses"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course_name"
+        in: "formData"
+        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
+        type: "string"
+        required: true
+      - name: "depart_prefix"
+        in: "formData"
+        description: "department prefix (e.g. \"CS\" or \"ME\")"
+        type: "string"
+        required: true
+      - name: "course_num"
+        in: "formData"
+        description: "course number (e.g. \"5555\")"
+        type: "string"
+        required: true
+      - name: "professor"
+        in: "formData"
+        description: "username of professor"
+        type: "string"
+        required: true
+      - name: "description"
+        in: "formData"
+        description: "description of the course"
+        type: "string"
+        required: true
+      - name: "ldap_group"
+        in: "formData"
+        description: "LDAP group name for course TAs"
+        type: "string"
+        required: true
+      - name: "acc_code"
+        in: "formData"
+        description: "access code to enroll (optional; 16 character max)"
+        type: "string"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not admin"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing parameter"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
     delete:
       summary: "Delete a course"
       description: "Delete the specifed course."
@@ -1272,7 +1342,7 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "query"
+        in: "path"
         description: "full course name to delete (e.g. \"CS 5555: Intro to the Number Five\")"
         type: "string"
         required: true

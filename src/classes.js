@@ -115,11 +115,11 @@ function prompt_acc_code(course_name){
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/"+username+"/courses";
+  var url = "../api/user/"+username+"/courses/"+course;
   if(code == null){
-    var posting = $.post( url, { course: course } );
+    var posting = $.post( url );
   }else{
-    var posting = $.post( url, { course: course, acc_code: code } );
+    var posting = $.post( url, { acc_code: code } );
   }
   posting.done(done);
   posting.fail(fail);
