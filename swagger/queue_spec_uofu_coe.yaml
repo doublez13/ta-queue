@@ -112,12 +112,18 @@ paths:
                 type: "string"
                 example: "User logged out"
 
-  /user/get_info:
+  /user/{username}:
     get:
       summary: "Get user info"
       description: "Get the user's info."
       tags:
         - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of student"
+        type: "string"
+        required: true
       responses:
         200:
           description: "Success"
@@ -148,12 +154,18 @@ paths:
           schema:
             $ref: '#/definitions/error'
   
-  /user/courses:
+  /user/{username}/courses:
     get:
       summary: "Get user enrolled courses"
       description: "Get all the courses the user has enrolled in or TAs."
       tags:
         - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of student"
+        type: "string"
+        required: true
       responses:
         200:
           description: "Success"
@@ -192,6 +204,11 @@ paths:
       produces:
         - "application/json"
       parameters:
+      - name: "username"
+        in: "path"
+        description: "username of student"
+        type: "string"
+        required: true
       - name: "course"
         in: "formData"
         description: "full course name (e.g. CS 4400: Computer Systems)"
@@ -232,6 +249,11 @@ paths:
       produces:
         - "application/json"
       parameters:
+      - name: "username"
+        in: "path"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
+        type: "string"
+        required: true
       - name: "course"
         in: "query"
         description: "full course name (e.g. CS 4400: Computer Systems)"

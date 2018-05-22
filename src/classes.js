@@ -1,8 +1,10 @@
+username = localStorage.username;
 get_all_classes();
 get_my_classes();
 
+
 function get_my_classes(){
-  var $url = "../api/user/courses";
+  var $url = "../api/user/"+username+"/courses";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
@@ -17,8 +19,7 @@ function get_my_classes(){
     if(intersection.length){ 
       alert("You're registered on the queue as both a student and TA for one or more courses. Unregistering as student...");
       for(course in intersection){
-        var url = "../api/user/rem_course";
-        var $posting = $.post( url, { course: intersection[course]} );
+        dropCourse(course);
       }
       location.reload;
     }
@@ -50,7 +51,7 @@ function get_all_classes(){
     var dataParsed = JSON.parse(dataString);
     var allCourses = dataParsed.all_courses;
 
-    var $url = "../api/user/courses";
+    var $url = "../api/user/"+username+"/courses";
     var $get = $.get( $url );
     $get.done( function(data) {
       var dataString = JSON.stringify(data);
@@ -114,7 +115,7 @@ function prompt_acc_code(course_name){
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/courses";
+  var url = "../api/user/"+username+"/courses";
   if(code == null){
     var posting = $.post( url, { course: course } );
   }else{
@@ -127,7 +128,7 @@ function enrollCourse(course, code) {
 function dropCourse(course) {
   var del = $.ajax({
                   method: "DELETE",
-                  url: "../api/user/courses?course="+course
+                  url: "../api/user/"+username+"/courses?course="+course
                   });
   del.done(done);
   del.fail(fail);

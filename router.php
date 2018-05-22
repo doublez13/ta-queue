@@ -4,20 +4,9 @@ session_start();
 $REQUEST_URI = $_SERVER["REQUEST_URI"];
 $path        = urldecode(parse_url($REQUEST_URI, PHP_URL_PATH));
 
-//REQUESTS FOR API
+//REQUESTS FOR API ENDPOINTS
 if( substr($path, 0, 5) === "/api/" ){
   header('Content-Type: application/json');
-
-  if (!is_authenticated() && $path !== '/api/login' && $path !== '/api/logout'){
-    //TODO: Allow them to login on any POST request if they send creds?
-    //header('WWW-Authenticate: Basic realm="TA Queue"');
-    http_response_code(401);
-    $return = array("authenticated" => False);
-    echo json_encode($return);
-    die();
-  }
-  $username   = $_SESSION['username'];
-  $ta_courses = $_SESSION["ta_courses"];
 
   require_once "model/config.php";
   require_once "model/auth.php";
@@ -26,8 +15,36 @@ if( substr($path, 0, 5) === "/api/" ){
   require_once "model/stats.php";
   require_once "api/errors.php";
 
-  if( substr($path, 0, 11) === "/api/queue/" ){
-    require_once './api/queueRouter.php';
+  if( is_login_endpoint($path) ){
+    require_once './api/auth.php';
+    die();
+  }
+
+  if ( !is_authenticated() ){    //Trying to access protected endpoint
+    if( basic_auth_provided() ){ //They provided Basic authentication
+      $username = $_SERVER['PHP_AUTH_USER'];
+      $password = $_SERVER['PHP_AUTH_PW'];
+      if(!authenticate($username, $password)){
+        invalid_auth_reply();
+        die();
+      } //Successful auth falls through
+    }else{ //Deny Access, but present opportinity to provide Basic authentication
+      access_denied_reply();
+      die();
+    }
+  }
+
+  $username   = $_SESSION['username'];
+  $ta_courses = $_SESSION["ta_courses"];
+  $is_admin   = $_SESSION["is_admin"];
+
+  if( is_user_endpoint($path) ){
+    require_once './api/user.php';
+    die();
+  }
+
+  if( is_queue_endpoint($path) ){
+    require_once './api/queue.php';
     die();
   }
 
@@ -93,6 +110,16 @@ function is_open_page($path){
   return $path == "/about"       ||
          $path == "/tutorial";
 }
+function is_login_endpoint($path){
+  return $path == '/api/login'   || 
+         $path == '/api/logout';
+}
+function is_user_endpoint($path){
+  return substr($path, 0, 10) == "/api/user/";
+}
+function is_queue_endpoint($path){
+  return substr($path, 0, 11) == "/api/queue/";
+}
 function is_root_dir($path){
   return $path == '/';
 }
@@ -100,4 +127,46 @@ function is_admin_page($path){
   return $path == "/new_class"   || 
          $path == "/edit_class";
 }
+function basic_auth_provided(){
+  return isset($_SERVER['PHP_AUTH_USER']) && 
+         isset($_SERVER['PHP_AUTH_PW']);
+}
+
+function invalid_auth_reply(){
+  http_response_code(401);
+  $return = array(
+    "authenticated" => False,
+    "error" => "Username and/or password is incorrect"
+  );
+  echo json_encode($return);
+}
+function access_denied_reply(){
+  header('WWW-Authenticate: Basic realm="TA Queue"');
+  http_response_code(401);
+  $return = array("authenticated" => False);
+  echo json_encode($return);
+}
+
+//Only used for BASIC auth.
+//login endpoint does not use this.
+function authenticate($username, $password){
+  require_once "model/auth.php";
+  require_once "model/courses.php";
+  if(auth($username, $password)){
+    $info       = get_info($username);
+    $is_admin   = is_admin($username);
+    $ta_courses = get_ta_courses($username);
+
+    if (is_null($info) || is_null($is_admin) || is_null($ta_courses)){
+      return false;
+    }
+
+    $_SESSION["ta_courses"]   = $ta_courses;
+    $_SESSION["username"]     = $username;
+    $_SESSION["is_admin"]     = $is_admin;
+      return true;
+  }
+  return false;
+}
+
 ?>

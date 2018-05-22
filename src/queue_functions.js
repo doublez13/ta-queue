@@ -63,7 +63,7 @@ function start(){
   first_name  = localStorage.first_name;
   last_name   = localStorage.last_name;
     
-  var url = "../api/user/courses";
+  var url = "../api/user/"+my_username+"/courses";
   var get_req = $.get( url);
   var done = function(data){
     var dataString = JSON.stringify(data);
@@ -722,7 +722,7 @@ function tConvert (time) {
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/courses";
+  var url = "../api/user/"+my_username+"/courses";
   if(code == null){
     var posting = $.post( url );
   }else{
