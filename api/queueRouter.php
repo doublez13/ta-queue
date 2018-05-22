@@ -160,6 +160,8 @@ case "queue":
   if(!is_int($ret)){
     $res = 0; 
   }
+  break;
+
 
 case "settings":
   switch( $_SERVER['REQUEST_METHOD'] ){
