@@ -104,6 +104,24 @@ switch($endpoint){
           http_response_code(200);
         }
         break;
+      case "DELETE":
+        if (!$is_admin){
+          http_response_code(403);
+          echo json_encode( not_authorized() );
+          die();
+        }
+        $res = del_user($req_username);
+        if ($res < 0){
+          $return = return_JSON_error($res);
+          http_response_code(500);
+        }else{
+          $return = array(
+            "authenticated" => True,
+            "success" => "Student Course Removed Successfully"
+          );
+          http_response_code(200);
+        }
+        break;
       default:
         http_response_code(405);
         echo json_encode( invalid_method("iGET") );

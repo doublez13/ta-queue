@@ -276,11 +276,11 @@ function add_stud_course($username, $course_name, $acc_code){
 }
 
  /**
-  * Remove user (student) from course 
+  * Remove student from course 
   *
   * @param string $username
   * @param string $course_name
-  * @return int 0 on success, 
+  * @return int  0 on success, 
   *             -1 on fail
   */
 function rem_stud_course($username, $course_name){

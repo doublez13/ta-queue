@@ -35,7 +35,6 @@ case "announcements":
       $text = "Announcement set";
       break;
     case "DELETE":
-      //if (!isset($_GET['announcement_id'])){
       if( !isset($path_split[5]) ){ //announcement_id in url
         http_response_code(422);
         echo json_encode( missing_announcement() );
@@ -46,7 +45,6 @@ case "announcements":
         echo json_encode( not_authorized() );
         die();
       }
-      //$announcement_id = $_GET['announcement_id'];
       $announcement_id = $path_split[5];
       $res  = del_announcement($course, $announcement_id);
       $text = "Announcement deleted";
@@ -272,27 +270,20 @@ case "student":
       break;
 
     case "DELETE":
-      //Since this enpoint is used for students to
-      //remove themselves, and TAs to remove students,
-      //we check if the request came from a TA
-      if (in_array($course, $ta_courses)){
-        if (!isset($_GET['student'])){
-          http_response_code(422);
-          echo json_encode( missing_student() );
-          die();
-        }
-        $username = $_GET['student']; // Set to dequeue student
-      }else{//Request came from student
-        if (isset($_GET['student']) && $_GET['student'] != $username){
-          http_response_code(422);
-          echo json_encode( not_authorized() );
-          die();
-        }
+      if (!isset($path_split[5])){
+        http_response_code(422);
+        echo json_encode( missing_student() );
+        die();
       }
-      $res  = deq_stu($username, $course);
+      $student = $path_split[5];
+      if (!in_array($course, $ta_courses) && $student != $username){ //Not a TA
+        http_response_code(422);
+        echo json_encode( not_authorized() );
+        die();
+      }
+      $res  = deq_stu($student, $course);
       $text = "Student dequeued";
       break;
-
     default:
       http_response_code(405);
       echo json_encode( invalid_method("POST") );

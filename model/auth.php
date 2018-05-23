@@ -82,6 +82,39 @@ function is_admin($username){
   return false;
 }
 
+/**
+ * Deletes a user in the database.
+ *
+ * @param string $username
+ * @param string $first
+ * @param string $last
+ * @param string $full
+ * @return int 0 on success
+ *         int 1 on fail
+ */
+function del_user($username){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  $query = "DELETE FROM users WHERE username=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, 's', $username);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
+}
 
 ######### HELPER METHODS #########
 /**

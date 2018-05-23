@@ -620,11 +620,7 @@ function enqueue_student(course, question, Location){
  *TAs call dequeue_student(course, username) to dequeue student
  */
 function dequeue_student(course, student){
-  var url = "../api/queue/"+course+"/student";
-  if(student != null){
-    url = url + '?student='+student;
-  }
-
+  var url = "../api/queue/"+course+"/student/"+student;
   var del = $.ajax({
               method: "DELETE",
               url: url,

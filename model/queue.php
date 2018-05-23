@@ -262,10 +262,17 @@ function deq_stu($username, $course_name){
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
  
   $res = mysqli_stmt_execute($stmt);
-  if(!$res || !mysqli_stmt_affected_rows($stmt)){
+  if(!$res){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
+  }
+  //If nobody was effected, return gracefully
+  //instead of trying to log the deletion.
+  if(!mysqli_stmt_affected_rows($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 0;
   }
 
   #Log the student in the student_log table
@@ -372,7 +379,7 @@ function deq_ta($username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
-  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
+  if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -876,7 +883,7 @@ function del_announcement($course_name, $announcement_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ii", $announcement_id, $course_id);
-  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
+  if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -886,7 +893,6 @@ function del_announcement($course_name, $announcement_id){
   mysqli_close($sql_conn);
   return 0;
 }
-
 
 //HELPER FUNCTIONS
 /**

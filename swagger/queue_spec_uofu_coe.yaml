@@ -117,7 +117,7 @@ paths:
       summary: "Get user info"
       description: "Get the user's info."
       tags:
-        - "User"
+      - "User"
       parameters:
       - name: "username"
         in: "path"
@@ -132,6 +132,46 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
+              student_info:
+                type: "object"
+                properties:
+                  username:
+                    type: "string"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+    delete:
+      summary: "Delete a user"
+      description: "Get the user's info."
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of student"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+               	type: "boolean"
               student_info:
                 type: "object"
                 properties:
@@ -424,9 +464,10 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+  /queue/{course}/student/{username}:
     delete:
-      summary: "Dequeue a user"
-      description: "Dequeue the user from the specified course. If the user is a TA, dequeue the specified student from the specified course. **TAs can only dequeue their own students.**"
+      summary: "Dequeue a student"
+      description: "Dequeue the student from the specified queue. If the user is a TA for the course, dequeue the specified student from the specified course. **TAs can only dequeue their own students.**"
       tags:
         - "Queue"
       consumes:
@@ -439,10 +480,11 @@ paths:
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
-      - name: "student"
-        in: "query"
-        description: "username to dequeue"
+      - name: "username"
+        in: "path"
+        description: "username of student to dequeue"
         type: "string"
+        required: true
       responses:
         200:
           description: "Success"
