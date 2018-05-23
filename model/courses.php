@@ -45,7 +45,7 @@ function get_avail_courses(){
   * Adds a new course to the database
   *
   * @param string $course_name
-  * @param string $depart_prefix
+  * @param string $depart_pref
   * @param string $course_num
   * @param string $description
   * @param string $ldap_group
@@ -54,7 +54,7 @@ function get_avail_courses(){
   * @return int 0 on success
   *             1 on fail
   */
-function new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code){
+function new_course($course_name, $depart_pref, $course_num, $description, $ldap_group, $professor, $acc_code){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
@@ -73,7 +73,7 @@ function new_course($course_name, $depart_prefix, $course_num, $description, $ld
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, "sssssssssss", $depart_prefix, $course_num, $course_name, $description, $ldap_group, $professor, $acc_code, $description, $ldap_group, $professor, $acc_code);
+  mysqli_stmt_bind_param($stmt, "sssssssssss", $depart_pref, $course_num, $course_name, $description, $ldap_group, $professor, $acc_code, $description, $ldap_group, $professor, $acc_code);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -114,6 +114,46 @@ function del_course($course_name){
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
+}
+
+/**
+ * Returns all settings for a course
+ *
+ * @param string $course_name
+ * @return array course settings on success
+ *         null on error
+ */
+function get_course($course_name){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return null;
+  }
+  $query = "SELECT depart_pref, course_num, course_name, professor, description, ldap_group, access_code FROM courses WHERE course_name=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return null;
+  }
+  mysqli_stmt_bind_param($stmt, "s",$course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return null;
+  }
+  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $professor, $description, $ldap_group, $access_code);
+  if(mysqli_stmt_fetch($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return array("depart_pref" => $depart_pref, 
+                 "course_num"  => $course_num, 
+                 "course_name" => $course_name, 
+                 "professor"   => $professor, 
+                 "description" => $description, 
+                 "ldap_group"  => $ldap_group, 
+                 "access_code" => $access_code
+           );
+  }
+  return null;
 }
 
  /**

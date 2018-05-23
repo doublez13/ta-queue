@@ -1250,7 +1250,7 @@ paths:
         description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
         type: "string"
         required: true
-      - name: "depart_prefix"
+      - name: "depart_pref"
         in: "formData"
         description: "department prefix (e.g. \"CS\" or \"ME\")"
         type: "string"
@@ -1305,6 +1305,50 @@ paths:
           schema:
             $ref: '#/definitions/error'
   /courses/{course}:
+    get:
+      summary: "Get all settings for a course"
+      description: "Get all the settings for a course (e.g. \"CS 4150: Algorithms"
+      tags:
+        - "Courses"
+      parameters:
+      - name: "course"
+        in: "path"
+        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              all_courses:
+                type: "object"
+                description: "hashmap: course name -> {access code required -> bool}"
+                additionalProperties:
+                  type: "object"
+                  properties:
+                    acc_req:
+                      type: "boolean"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not admin"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+
     put:
       summary: "Edit an existing course"
       description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
@@ -1320,7 +1364,7 @@ paths:
         description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
         type: "string"
         required: true
-      - name: "depart_prefix"
+      - name: "depart_pref"
         in: "formData"
         description: "department prefix (e.g. \"CS\" or \"ME\")"
         type: "string"

@@ -6,9 +6,22 @@ $path_split = explode("/", $path);
 
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
-    $res   = get_avail_courses();
-    $field = "all_courses";
-    $text  = $res; 
+    if ( isset($path_split[3])  ){  //Admin endpoint: Get all settings for specific course
+      if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
+        http_response_code(403);
+        echo json_encode( not_authorized() );
+        die();
+      }
+      $course = $path_split[3];
+      $res    = get_course($course);
+      $field  = "parameters";
+      $text   = $res; 
+    }
+    else{                          //Get all availible courses
+      $res   = get_avail_courses();
+      $field = "all_courses";
+      $text  = $res;
+    }
     break;
   case "PUT":  //Edit a course
     if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
@@ -28,7 +41,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       echo json_encode( not_authorized() );
       die();
     }
-    if (!isset($_POST['course_name']) || !isset($_POST['depart_prefix']) || !isset($_POST['course_num']) || 
+    if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || !isset($_POST['course_num']) || 
         !isset($_POST['description']) || !isset($_POST['ldap_group'])    || !isset($_POST['professor']))
     {
       http_response_code(422);
@@ -36,18 +49,18 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
 
-    $course_name   = $_POST['course_name'];
-    $depart_prefix = $_POST['depart_prefix'];
-    $course_num    = $_POST['course_num'];
-    $description   = $_POST['description'];
-    $ldap_group    = $_POST['ldap_group'];
-    $professor     = $_POST['professor'];
+    $course_name = $_POST['course_name'];
+    $depart_pref = $_POST['depart_pref'];
+    $course_num  = $_POST['course_num'];
+    $description = $_POST['description'];
+    $ldap_group  = $_POST['ldap_group'];
+    $professor   = $_POST['professor'];
     if ($_POST['acc_code']){
       $acc_code    = $_POST['acc_code'];
     }else{
       $acc_code    = null;
     }
-    $res   = new_course($course_name, $depart_prefix, $course_num, $description, $ldap_group, $professor, $acc_code);
+    $res   = new_course($course_name, $depart_pref, $course_num, $description, $ldap_group, $professor, $acc_code);
     $field = "success";
     $text  = "Course created/updated"; 
     break;

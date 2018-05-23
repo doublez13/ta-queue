@@ -117,18 +117,6 @@ function is_login_endpoint($path){
   return $path == '/api/login'   || 
          $path == '/api/logout';
 }
-function is_user_endpoint($path){
-  return substr($path, 0, 9) == "/api/user";
-}
-function is_queue_endpoint($path){
-  return substr($path, 0, 10) == "/api/queue";
-}
-function is_courses_endpoint($path){
-  return substr($path, 0, 12) == "/api/courses";
-}
-function is_stats_endpoint($path){
-    return false; //TODO
-}
 function is_root_dir($path){
   return $path == '/';
 }

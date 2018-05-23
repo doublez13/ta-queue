@@ -2,18 +2,18 @@
 <html lang="en">
 
 <head>
-  <title>TA Help Queue - New Course</title>
+  <title>TA Help Queue - Course Admin</title>
   <?php include('./view/head.html'); ?>
   <script src="./src/create_class.js"></script>
 </head>
 <body>
   <?php include('./view/navbar.php'); ?>
 
-		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-			<div style="margin-top: -40px; margin-bottom: -20px; text-align: center;">	
-				<h1 style="color: #404040; text-shadow: 2px 2px #000000;">New Course</h1>
-			</div>
-		</div>
+	<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
+    <div style="margin-top: -40px; margin-bottom: -20px; text-align: center;">	
+      <h1 id="page_title" style="color: #404040; text-shadow: 2px 2px #000000;"></h1>
+    </div>
+  </div>
 
 		<div class="container">
 			<div class="row">
@@ -22,7 +22,7 @@
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
-								<h3 class="panel-title" style="font-size:20px; text-align: center">Create New Course</h3>
+								<h3 id="panel_title" class="panel-title" style="font-size:20px; text-align: center">Create New Course</h3>
                             </div>
 
                             <style>
@@ -45,7 +45,7 @@
                                     <input type="text" id="course_name" placeholder="e.g. &quot;CS 4400: Computer Systems&quot;" maxlength="128" required>
 
                                     <label>Department</label>
-                                    <input type="text" id="depart_prefix" placeholder="e.g. &quot;CS&quot;" maxlength="16" required>
+                                    <input type="text" id="depart_pref" placeholder="e.g. &quot;CS&quot;" maxlength="16" required>
 
                                     <label>Course Number</label>
                                     <input type="text" id="course_num" placeholder="e.g. &quot;4400&quot;" maxlength="16" required>
