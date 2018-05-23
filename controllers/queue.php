@@ -28,8 +28,7 @@ switch( $endpoint ){
           echo json_encode( not_authorized() );
           die();
         }
-        $announcement = $_POST['announcement'];
-        $announcement = filter_var($announcement, FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+        $announcement = filter_var($_POST['announcement'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
         $res  = add_announcement($course, $announcement, $username);
         $text = "Announcement set";
         break;
@@ -64,7 +63,7 @@ switch( $endpoint ){
           echo json_encode( missing_student() );
           die();
         }
-        $student    = $_POST['student'];
+        $student = $_POST['student'];
 
         if (!in_array($course, $ta_courses)){
           http_response_code(403);
@@ -100,6 +99,7 @@ switch( $endpoint ){
               die();
             }
             $student = $_POST['student'];
+
             if (!in_array($course, $ta_courses)){
               http_response_code(403);
               echo json_encode( not_authorized() );
@@ -126,7 +126,6 @@ switch( $endpoint ){
         }
         $text = "Student position switched";
         break;
-
       default:
         http_response_code(405);
         echo json_encode( invalid_method("POST") );
@@ -221,8 +220,7 @@ switch( $endpoint ){
           http_response_code(403);
           echo json_encode( not_authorized() );
           die();
-        }
-    
+        }    
         switch($state){
           case "closed":
             $res = close_queue($course);
@@ -265,7 +263,6 @@ switch( $endpoint ){
         $res  = enq_stu($username, $course, $question, $location);
         $text = "Student enqueued";
         break;
-
       case "DELETE":
         if (!isset($path_split[5])){
           http_response_code(422);
@@ -300,12 +297,10 @@ switch( $endpoint ){
         $res  = enq_ta($username, $course);
         $text = "TA on duty";
         break;
- 
       case "DELETE":
         $res  = deq_ta($username, $course);
         $text = "TA off duty";
         break;
-
       default:
         http_response_code(405);
         echo json_encode( invalid_method("POST or DELETE") );

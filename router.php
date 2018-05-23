@@ -38,21 +38,22 @@ if( substr($path, 0, 5) === "/api/" ){
   $ta_courses = $_SESSION["ta_courses"];
   $is_admin   = $_SESSION["is_admin"];
 
-  //TODO: Convert to controller switch
-  if( is_user_endpoint($path) ){
-    require_once './controllers/user.php';
-  }
-  elseif( is_queue_endpoint($path) ){
-    require_once './controllers/queue.php';
-  }
-  elseif( is_courses_endpoint($path) ){
-    require_once './controllers/courses.php';
-  }
-  elseif( is_stats_endpoint($path) ){
-    require_once './controllers/stats.php';
-  }
-  else{
-    header('Location: /swagger');
+  $controller = explode("/", $path)[2];
+  switch($controller){
+    case "user": 
+      require_once './controllers/user.php';
+      break;
+    case "queue":
+      require_once './controllers/queue.php';
+      break;
+    case "courses":
+      require_once './controllers/courses.php';
+      break;
+    case "stats":
+      require_once './controllers/stats.php';
+      break;
+    default:
+      header('Location: /swagger');
   }
 }
 //////// REQUESTS FOR PAGES ////////

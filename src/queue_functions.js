@@ -62,7 +62,7 @@ function start(){
   my_username = localStorage.username;
   first_name  = localStorage.first_name;
   last_name   = localStorage.last_name;
-    
+
   var url = "../api/user/"+my_username+"/courses";
   var get_req = $.get( url);
   var done = function(data){
@@ -436,7 +436,7 @@ function render_student_view(dataParsed){
     $("#join_button").click(function( event ) {
       event.preventDefault();
       if (confirm("Are you sure you want to exit the queue?")) {
-        dequeue_student(course);
+        dequeue_student(course, my_username);
       }
     });
   }
