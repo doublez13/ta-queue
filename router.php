@@ -13,10 +13,10 @@ if( substr($path, 0, 5) === "/api/" ){
   require_once "model/courses.php";
   require_once "model/queue.php";
   require_once "model/stats.php";
-  require_once "api/errors.php";
+  require_once "controllers/errors.php";
 
   if( is_login_endpoint($path) ){
-    require_once './api/auth.php';
+    require_once './controllers/auth.php';
     die();
   }
 
@@ -38,15 +38,19 @@ if( substr($path, 0, 5) === "/api/" ){
   $ta_courses = $_SESSION["ta_courses"];
   $is_admin   = $_SESSION["is_admin"];
 
+  //TODO: Convert to controller switch
   if( is_user_endpoint($path) ){
-    require_once './api/user.php';
+    require_once './controllers/user.php';
   }
   elseif( is_queue_endpoint($path) ){
-    require_once './api/queue.php';
+    require_once './controllers/queue.php';
   }
   elseif( is_courses_endpoint($path) ){
-    require_once './api/courses.php';
-  }//TODO: Add stats
+    require_once './controllers/courses.php';
+  }
+  elseif( is_stats_endpoint($path) ){
+    require_once './controllers/stats.php';
+  }
   else{
     header('Location: /swagger');
   }
@@ -120,6 +124,9 @@ function is_queue_endpoint($path){
 }
 function is_courses_endpoint($path){
   return substr($path, 0, 12) == "/api/courses";
+}
+function is_stats_endpoint($path){
+    return false; //TODO
 }
 function is_root_dir($path){
   return $path == '/';
