@@ -526,6 +526,7 @@ paths:
         in: "formData"
         description: "username to move"
         type: "string"
+        required: true
       - name: "operation"
         in: "formData"
         description: "up or down"
@@ -1314,8 +1315,8 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course_name"
-        in: "formData"
+      - name: "course"
+        in: "path"
         description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
         type: "string"
         required: true
