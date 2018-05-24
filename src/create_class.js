@@ -12,9 +12,10 @@ $(document).ready(function(){
   if(typeof course === 'undefined'){ //Create new course
     document.getElementById("page_title").innerHTML = "New Course";
     document.getElementById("panel_title").innerHTML = "New Course";
+    document.getElementById("create_class_button").innerText= "Create Course";
     $("#create_class").submit( create_class );
   }
-  else{//Edit exsisting course
+  else{                              //Edit exsisting course
     document.getElementById("page_title").innerHTML = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
     url = "../api/courses/"+course;
@@ -22,14 +23,14 @@ $(document).ready(function(){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
       //TODO: Check for error
-      document.getElementById("course_name").value  = dataParsed.parameters['course_name'];
-      document.getElementById("depart_pref").value  = dataParsed.parameters['depart_pref'];
-      document.getElementById("course_num").value   = dataParsed.parameters['course_num'];
-      document.getElementById("description").value  = dataParsed.parameters['description'];
-      document.getElementById("ldap_group").value   = dataParsed.parameters['ldap_group'];
-      document.getElementById("professor").value    = dataParsed.parameters['professor'];
-      document.getElementById("acc_code").value     = dataParsed.parameters['acc_code'];
+      var attributes = ["course_name", "depart_pref", "course_num", "description", "ldap_group", "professor", "acc_code"];
+      attributes.forEach(function(attribute){
+        if(attribute in dataParsed.parameters){
+          document.getElementById(attribute).value  = dataParsed.parameters[attribute]
+        }
+      });
     });
+    document.getElementById("create_class_button").innerText= "Edit Course";
     $("#create_class").submit( create_class );
   }
 });
@@ -47,24 +48,15 @@ fail = function(data){
 
 create_class = function( event ) {
   event.preventDefault();
-  
   var $form = $(this);
-  var course_name = $form.find( "input[id='course_name']" ).val();
-  var depart_pref = $form.find( "input[id='depart_pref']" ).val();
-  var course_num  = $form.find( "input[id='course_num']" ).val();
-  var description = $('#description').val();
-  var ldap_group  = $form.find( "input[id='ldap_group']" ).val();
-  var professor   = $form.find( "input[id='professor']" ).val();
-  var acc_code    = $form.find( "input[id='acc_code']" ).val();
-
   url = "../api/courses";
-  var posting = $.post( url, { course_name: course_name, 
-                               depart_pref: depart_pref,
-                               course_num:  course_num,
-                               description: description,
-                               ldap_group:  ldap_group,
-                               professor:   professor,
-                               acc_code:    acc_code,
+  var posting = $.post( url, { course_name: $form.find( "input[id='course_name']" ).val(), 
+                               depart_pref: $form.find( "input[id='depart_pref']" ).val(),
+                               course_num:  $form.find( "input[id='course_num']" ).val(),
+                               description: $('#description').val(),
+                               ldap_group:  $form.find( "input[id='ldap_group']" ).val(),
+                               professor:   $form.find( "input[id='professor']" ).val(),
+                               acc_code:    $form.find( "input[id='acc_code']" ).val(),
                              } );
 
   posting.done(done);

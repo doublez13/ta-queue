@@ -62,10 +62,10 @@
                                 </div>
                                 <div class="col-sm-12 padding-left-0 padding-right-0">
                                     <label>Description</label>
-                                    <textarea id="description" placeholder="(optional)" style="height:100px" ></textarea>
+                                    <textarea id="description" placeholder="Course description" style="height:100px" required></textarea>
                                 </div>
                                 <div class="padding-bottom-10">
-                                  <button class="btn btn-success" type="submit">Create Course</button>
+                                  <button id="create_class_button" class="btn btn-success" type="submit"></button>
                                   <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
                                   <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
                                 </div>
