@@ -20,8 +20,9 @@ login = function( event ) {
       localStorage.setItem("username",   dataParsed.username);
       localStorage.setItem("first_name", dataParsed.first_name);
       localStorage.setItem("last_name",  dataParsed.last_name);
+      localStorage.setItem("is_admin",   dataParsed.is_admin);
 
-      //let router.php figure out where to route
+      //let the router figure out where to send us
       location.reload();
     }
     else{

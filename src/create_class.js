@@ -13,11 +13,13 @@ $(document).ready(function(){
     document.getElementById("page_title").innerHTML = "New Course";
     document.getElementById("panel_title").innerHTML = "New Course";
     document.getElementById("create_class_button").innerText= "Create Course";
+    document.getElementById("delete_class_button").style.display = "none";
     $("#create_class").submit( create_class );
   }
   else{                              //Edit exsisting course
-    document.getElementById("page_title").innerHTML = "Edit Course";
+    document.getElementById("page_title").innerHTML  = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
+    document.getElementById("course_name").disabled  =true;
     url = "../api/courses/"+course;
     var get = $.get( url, function(data) {
       var dataString = JSON.stringify(data);
@@ -32,6 +34,7 @@ $(document).ready(function(){
     });
     document.getElementById("create_class_button").innerText= "Edit Course";
     $("#create_class").submit( create_class );
+    $("#delete_class_button").click( delete_class );
   }
 });
 
@@ -60,5 +63,15 @@ create_class = function( event ) {
                              } );
 
   posting.done(done);
-  posting.fail(fail);
+  posting.fail(fail); 
+}
+
+delete_class = function( event ){
+  event.preventDefault();
+  var del = $.ajax({
+              method: "DELETE",
+              url: "../api/courses/"+course,
+            });
+  del.done(done);
+  del.fail(fail);
 }

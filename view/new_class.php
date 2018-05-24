@@ -66,7 +66,8 @@
                                 </div>
                                 <div class="padding-bottom-10">
                                   <button id="create_class_button" class="btn btn-success" type="submit"></button>
-                                  <a class="padding-left-30" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
+                                  <button id="delete_class_button" class="btn btn-warning" type="submit">Delete Course</button>
+                                  <a class="padding-left-10" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
                                   <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
                                 </div>
                             </form>

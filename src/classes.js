@@ -1,7 +1,7 @@
 username = localStorage.username;
+is_admin = localStorage.is_admin;
 get_all_classes();
 get_my_classes();
-
 
 function get_my_classes(){
   var $url = "../api/user/"+username+"/courses";
@@ -72,16 +72,16 @@ function renderAllCourseTable(allCourses, dataParsed) {
     var tableRow = $('<tr>');
 
     tableRow.append($('<td>').text( course_name ));
-    if( $.inArray(course_name, ta_courses) >= 0 ){
+    if( $.inArray(course_name, ta_courses) >= 0 ){ //They're a TA for the course
       tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button></td>');
     }
-    else if( $.inArray(course_name, myCourses) >= 0 ){
+    else if( $.inArray(course_name, myCourses) >= 0 ){ //They're enrolled in the course
       var text = "Leave";
       var action = "dropCourse('"+course_name+"')";
       tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
     }
-    else{
-      var text = " Enroll"; // extra space on left creates a little separation between icon and text
+    else{ // Able to enroll as student
+      var text = " Enroll";
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
         tableRow.append('<td> <button class="btn btn-warning" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button></td>');
@@ -90,13 +90,18 @@ function renderAllCourseTable(allCourses, dataParsed) {
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
       }
     }
+    if(is_admin){
+      var url = "./edit_class?course="+course_name;
+      var onclick = "window.location='"+url+"'";
+      tableRow.append('<td> <button class="btn btn-primary" onclick="'+onclick+'" style="width: 100%;" > <i class="fa fa-cog"></i>  </button></td>');
+    }
 
     $('#all_classes_body').append(tableRow);
   }
 }
 
-done = function(data){
-  get_all_classes(); //reloads the content on the page
+done = function(data){ //reloads the content on the page
+  get_all_classes();
   get_my_classes();  
 }
 

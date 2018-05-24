@@ -65,7 +65,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text  = "Course created/updated"; 
     break;
   case "DELETE": //Delete a course
-    if ($is_admin){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( not_authorized() );
       die();
