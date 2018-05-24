@@ -1,5 +1,5 @@
 username = localStorage.username;
-is_admin = localStorage.is_admin;
+is_admin = localStorage.is_admin == 'true';
 get_all_classes();
 get_my_classes();
 

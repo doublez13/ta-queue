@@ -68,10 +68,12 @@ create_class = function( event ) {
 
 delete_class = function( event ){
   event.preventDefault();
-  var del = $.ajax({
-              method: "DELETE",
-              url: "../api/courses/"+course,
-            });
-  del.done(done);
-  del.fail(fail);
+  if(confirm("Are you sure you want to delete the course? All data and logs will be wiped.")){
+    var del = $.ajax({
+                method: "DELETE",
+                url: "../api/courses/"+course,
+              });
+    del.done(done);
+    del.fail(fail);
+  }
 }

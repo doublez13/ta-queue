@@ -35,7 +35,7 @@ if( substr($path, 0, 5) === "/api/" ){
   }
 
   $username   = $_SESSION['username'];
-  $ta_courses = $_SESSION["ta_courses"];
+  $ta_courses = $_SESSION["ta_courses"]; //TODO: Keeping this as a session variable means it doesn't change during their session.
   $is_admin   = $_SESSION["is_admin"];
 
   $controller = explode("/", $path)[2];

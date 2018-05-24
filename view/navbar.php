@@ -31,7 +31,7 @@
         <?php if( isset($_SESSION["username"]) ){ 
           if( isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] ){ ?>
             <li class="nav-item dropdown" id="admin_menu">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Admin
               </a>
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
