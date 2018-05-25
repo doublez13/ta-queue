@@ -19,19 +19,20 @@ $(document).ready(function(){
   else{                              //Edit exsisting course
     document.getElementById("page_title").innerHTML  = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
-    document.getElementById("course_name").disabled  =true;
+    document.getElementById("course_name").disabled  = true;
+
     url = "../api/courses/"+course;
     var get = $.get( url, function(data) {
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      //TODO: Check for error
       var attributes = ["course_name", "depart_pref", "course_num", "description", "ldap_group", "professor", "acc_code"];
       attributes.forEach(function(attribute){
         if(attribute in dataParsed.parameters){
           document.getElementById(attribute).value  = dataParsed.parameters[attribute]
         }
       });
-    });
+    }).fail(function(data){window.location = "./classes"}); //Silent redirect to course page on error
+
     document.getElementById("create_class_button").innerText= "Edit Course";
     $("#create_class").submit( create_class );
     $("#delete_class_button").click( delete_class );

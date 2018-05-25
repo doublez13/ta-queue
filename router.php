@@ -20,8 +20,8 @@ if( substr($path, 0, 5) === "/api/" ){
     die();
   }
 
-  if ( !is_authenticated() ){    //Trying to access protected endpoint
-    if( basic_auth_provided() ){ //They provided Basic authentication
+  if ( !is_authenticated() ){    //Trying to access protected endpoint, not authenticated.
+    if( basic_auth_provided() ){ //They provided Basic authentication.
       $username = $_SERVER['PHP_AUTH_USER'];
       $password = $_SERVER['PHP_AUTH_PW'];
       if(!authenticate($username, $password)){
@@ -36,7 +36,7 @@ if( substr($path, 0, 5) === "/api/" ){
 
   $username   = $_SESSION['username'];
   $ta_courses = $_SESSION["ta_courses"]; //TODO: Keeping this as a session variable means it doesn't change during their session.
-  $is_admin   = $_SESSION["is_admin"];
+  $is_admin   = is_administrator($username);
 
   $controller = explode("/", $path)[2];
   switch($controller){
@@ -81,7 +81,7 @@ else{
   }
   //Admin access needed
   elseif(is_admin_page($path)){
-    if(is_administrator()){
+    if(is_administrator($username)){
       require_once $source;
     }else{
       header("Location: classes");
@@ -103,7 +103,7 @@ function is_authenticated(){
 function is_redirect(){
   return isset($_SESSION["redirect_url"]);
 }
-function is_administrator(){
+function is_administrator($username){ //TODO: Temporary function to abstract the implementation
   return isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
 }
 function credentials_provided(){

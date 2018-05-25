@@ -7,7 +7,7 @@ $path_split = explode("/", $path);
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
     if ( isset($path_split[3])  ){  //Admin endpoint: Get all settings for specific course
-      if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
+      if (!$is_admin){
         http_response_code(403);
         echo json_encode( not_authorized() );
         die();
@@ -24,7 +24,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     break;
   case "PUT":  //Edit a course
-    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( not_authorized() );
       die();
@@ -36,7 +36,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     $_POST['course_name'] = $path_split[3]; //Fall through
   case "POST": //Create a course
-    if (!isset($_SESSION['is_admin']) || !$_SESSION['is_admin']){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( not_authorized() );
       die();

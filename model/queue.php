@@ -200,7 +200,9 @@ function enq_stu($username, $course_name, $question, $location){
     mysqli_close($sql_conn);
     return -1;
   }
- 
+
+  //TODO: If UPDATE, return here so it won't add another log entry.
+
   #Log the student in the student_log table
   #If MySQL worked properly, we'd be able to completely implement all logging
   #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
