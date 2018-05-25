@@ -86,7 +86,7 @@ switch( $endpoint ){
       case "POST": 
         if (!isset($_POST['operation'])){
           http_response_code(422);
-          echo json_encode( missing_course() );
+          echo json_encode( missing_info() );
           die();
         }
         $operation = $_POST['operation']; 
@@ -121,7 +121,7 @@ switch( $endpoint ){
             break;
           default:
             http_response_code(422);
-            echo json_encode( missing_course() );
+            echo json_encode( missing_info() );
             die();
         }
         $text = "Student position switched";
@@ -168,7 +168,7 @@ switch( $endpoint ){
       case "POST":
         if (!isset($_POST['setting'])){
           http_response_code(422);
-          echo json_encode( missing_course() );
+          echo json_encode( missing_info() );
           die();
         }
         $setting = $_POST['setting'];
@@ -211,7 +211,7 @@ switch( $endpoint ){
       case "POST":
         if (!isset($_POST['state'])){
           http_response_code(422);
-          echo json_encode( missing_course() );
+          echo json_encode( missing_info() );
           die();
         }
         $state = $_POST['state'];
@@ -233,7 +233,7 @@ switch( $endpoint ){
             break;
           default:
             http_response_code(422);
-            echo json_encode( missing_course() );
+            echo json_encode( missing_info() );
             die();
         }
         $text = "Queue state changed";
