@@ -77,10 +77,13 @@ paths:
               authenticated:
                 type: "boolean"
                 # example: true
+              is_admin:
+                type: "boolean"
+                # example: true
         401:
-          description: "Invalid username and/or password"
+          description: "Username and/or password is incorrect"
           schema:
-            $ref: '#/definitions/error'
+            $ref: '#/definitions/not_authenticated'
         405:
           description: "Invalid HTTP request method"
           schema:
@@ -88,7 +91,7 @@ paths:
         422:
           description: "Missing username and/or password"
           schema:
-            $ref: '#/definitions/error'
+            $ref: '#/definitions/not_authenticated'
         500:
           description: "Server-side error"
           schema:
@@ -142,9 +145,13 @@ paths:
                   last_name:
                     type: "string"
         401:
-          description: "Not authenticated"
+          description: "Unauthorized"
           schema:
             $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
         405:
           description: "Invalid HTTP request method"
           schema:

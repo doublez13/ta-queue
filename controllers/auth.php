@@ -46,7 +46,7 @@ switch( $endpoint ){
 
     if (is_null($return) || is_null($is_admin) || is_null($ta_courses)){
       http_response_code(500);
-      echo json_encode( ldap_issue() );
+      echo json_encode( json_err("Unable to retrieve info from LDAP") );
       die();
     }
 

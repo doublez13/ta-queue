@@ -27,7 +27,7 @@ if(isset($_POST['end_date'])){
 if ((isset($end_date) && !isset($start_date)) || $format_err)
 {
   http_response_code(422); // 400 FOR BAD DATE?
-  echo json_encode( missing_date() );
+  echo json_encode( json_err("Missing or bad date (required: yyyy-mm-dd)") );
   die();
 }
 
@@ -46,7 +46,7 @@ if (isset($_POST['course']))
     if (!isset($_POST['student']))
     {
       http_response_code(422); // 400 FOR BAD DATE?
-      echo json_encode( missing_student() );
+      echo json_encode( json_err("No student specified") );
       die();
     }
     $username = $_POST['student']; // Set to grab the stats for student

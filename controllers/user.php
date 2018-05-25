@@ -5,13 +5,13 @@
 $path_split = explode("/", $path);
 if(empty($path_split[3])){
   http_response_code(422);
-  echo json_encode( missing_course() );
+  echo json_encode( json_err("Missing username") );
   die();
 }
 $req_username = $path_split[3];
 if($req_username != $username && !$is_admin){
   http_response_code(403);
-  echo json_encode( not_authorized() );
+  echo json_encode( forbidden() );
   die();
 }
 $endpoint     = "info";
@@ -26,7 +26,7 @@ switch($endpoint){
       case "GET":
         $stud_courses = get_stud_courses($req_username);
         if (is_null($stud_courses)){
-          $return = my_course_list_error();
+          $return = json_err("Unable to fetch courses");
           http_response_code(500);
         }else{
           $return = array(
@@ -41,7 +41,7 @@ switch($endpoint){
       case "POST":
         if ( !isset($path_split[5]) ){
           http_response_code(422);
-          echo json_encode( missing_course() );
+          echo json_encode( json_err("No course specified") );
           die();
         }
         $course   = $path_split[5];
@@ -65,7 +65,7 @@ switch($endpoint){
       case "DELETE":
         if ( !isset($path_split[5]) ){
           http_response_code(422);
-          echo json_encode( missing_course() );
+          echo json_encode( json_err("No course specified") );
           die();
         }
         $course = $path_split[5];
@@ -94,7 +94,7 @@ switch($endpoint){
       case "GET":
         $stud_info = get_info($req_username);
         if (is_null($stud_info)){
-          $return = ldap_issue();
+          $return = json_err("Unable to retrieve info from LDAP");
           http_response_code(500);
         }else{
           $return = array(
@@ -107,7 +107,7 @@ switch($endpoint){
       case "DELETE":
         if (!$is_admin){
           http_response_code(403);
-          echo json_encode( not_authorized() );
+          echo json_encode( forbidden() );
           die();
         }
         $res = del_user($req_username);

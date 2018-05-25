@@ -9,7 +9,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     if ( isset($path_split[3])  ){  //Admin endpoint: Get all settings for specific course
       if (!$is_admin){
         http_response_code(403);
-        echo json_encode( not_authorized() );
+        echo json_encode( forbidden() );
         die();
       }
       $course = $path_split[3];
@@ -26,26 +26,26 @@ switch( $_SERVER['REQUEST_METHOD'] ){
   case "PUT":  //Edit a course
     if (!$is_admin){
       http_response_code(403);
-      echo json_encode( not_authorized() );
+      echo json_encode( forbidden() );
       die();
     }
     if ( !isset($path_split[3]) ){
       http_response_code(422);
-      echo json_encode( missing_info() );
+      echo json_encode( json_err("Missing course") );
       die();
     }
     $_POST['course_name'] = $path_split[3]; //Fall through
   case "POST": //Create a course
     if (!$is_admin){
       http_response_code(403);
-      echo json_encode( not_authorized() );
+      echo json_encode( forbidden() );
       die();
     }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || !isset($_POST['course_num']) || 
         !isset($_POST['description']) || !isset($_POST['ldap_group'])    || !isset($_POST['professor']))
     {
       http_response_code(422);
-      echo json_encode( missing_info() );
+      echo json_encode( json_err("Missing required parameters") );
       die();
     }
 
@@ -67,12 +67,12 @@ switch( $_SERVER['REQUEST_METHOD'] ){
   case "DELETE": //Delete a course
     if (!$is_admin){
       http_response_code(403);
-      echo json_encode( not_authorized() );
+      echo json_encode( forbidden() );
       die();
     }
     if ( !isset($path_split[3]) ){
       http_response_code(422);
-      echo json_encode( missing_info() );
+      echo json_encode( json_err("Missing course") );
       die();
     }
     $course_name = $path_split[3];

@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] !== "POST")
 if (!isset($_POST['course']))
 {
   http_response_code(422);
-  echo json_encode( missing_course() );
+  echo json_encode( json_err("No course specified") );
   die();
 }
 
@@ -34,7 +34,7 @@ if(isset($_POST['end_date'])){
 if ((isset($end_date) && !isset($start_date)) || $format_err)
 {
   http_response_code(422); // 400 FOR BAD DATE?
-  echo json_encode( missing_date() );
+  echo json_encode( json_err("Missing or bad date (required: yyyy-mm-dd)") );
   die();
 }
 

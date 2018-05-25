@@ -32,78 +32,22 @@ function missing_auth(){
   );
 }
 
-function not_authenticated(){
+function unauthorized(){ //401
   return array("authenticated" => False);
 }
 
-function not_authorized(){
+function forbidden(){ //403
   return array(
     "authenticated" => True,
     "error" => "Not authorized"
   );
 }
 
-function missing_info(){
+//Generic error
+function json_err($err){
   return array(
     "authenticated" => True,
-    "error" => "Missing required info"
+    "error" => $err
   );
 }
-
-function missing_course(){
-  return array(
-    "authenticated" => True,
-    "error" => "No course specified"
-  );
-}
-
-function missing_student(){
-  return array(
-    "authenticated" => True,
-    "error" => "No student specified"
-  );
-}
-
-function missing_time($param_name){
-  return array(
-    "authenticated" => True,
-    "error" => "Missing/bad $param_name (required: integer > 0)"
-  );
-}
-
-function missing_date(){
-  return array(
-    "authenticated" => True,
-    "error" => "Missing or bad date (required: yyyy-mm-dd)"
-  );
-}
-
-function missing_announcement(){
-  return array(
-    "authenticated" => True,
-    "error" => "No announcement specified"
-  );
-}
-
-function ldap_issue(){
-  return array(
-    "authenticated" => True,
-    "error" => "Unable to Retrieve Info from LDAP"
-  );
-}
-
-function course_list_error(){
-  return array(
-    "authenticated" => True,
-    "error" => "Unable to Fetch All Courses"
-  );
-}
-
-function my_course_list_error(){
-  return array(
-    "authenticated" => True,
-    "error" => "Unable to Fetch Your Courses"
-  );
-}
-
 ?>

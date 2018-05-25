@@ -5,7 +5,7 @@
 $path_split = explode("/", $path);
 if(empty($path_split[3])){
   http_response_code(422);
-  echo json_encode( missing_course() );
+  echo json_encode( json_err("No course specified") );
   die();
 }
 $course   = $path_split[3];
@@ -18,14 +18,14 @@ switch( $endpoint ){
   case "announcements":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
-        if (!isset($_POST['announcement'])){
-          http_response_code(422);
-          echo json_encode( missing_announcement() );
-          die();
-        }
         if (!in_array($course, $ta_courses)){
           http_response_code(403);
-          echo json_encode( not_authorized() );
+          echo json_encode( forbidden() );
+          die();
+        }
+        if (!isset($_POST['announcement'])){
+          http_response_code(422);
+          echo json_encode( json_err("No announcement specified") );
           die();
         }
         $announcement = filter_var($_POST['announcement'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
@@ -33,14 +33,14 @@ switch( $endpoint ){
         $text = "Announcement set";
         break;
       case "DELETE":
-        if( !isset($path_split[5]) ){ //announcement_id in url
-          http_response_code(422);
-          echo json_encode( missing_announcement() );
-          die();
-        }
         if (!in_array($course, $ta_courses)){
           http_response_code(403);
-          echo json_encode( not_authorized() );
+          echo json_encode( forbidden() );
+          die();
+        }
+        if( !isset($path_split[5]) ){ //announcement_id in url
+          http_response_code(422);
+          echo json_encode( json_err("No announcement specified") );
           die();
         }
         $announcement_id = $path_split[5];
@@ -58,20 +58,19 @@ switch( $endpoint ){
   case "help_student":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
+        if (!in_array($course, $ta_courses)){
+          http_response_code(403);
+          echo json_encode( forbidden() );
+          die();
+        }
         if (!isset($_POST['student'])){
           http_response_code(422);
-          echo json_encode( missing_student() );
+          echo json_encode( json_err("No student specified") );
           die();
         }
         $student = $_POST['student'];
-
-        if (!in_array($course, $ta_courses)){
-          http_response_code(403);
-          echo json_encode( not_authorized() );
-          die();
-        }
-        $res  = help_student($username, $student, $course);
-        $text = "TA status changed";
+        $res     = help_student($username, $student, $course);
+        $text    = "TA status changed";
         break;
       default:
         http_response_code(405);
@@ -83,28 +82,27 @@ switch( $endpoint ){
 
   case "position":
     switch( $_SERVER['REQUEST_METHOD'] ){
-      case "POST": 
+      case "POST":
         if (!isset($_POST['operation'])){
           http_response_code(422);
-          echo json_encode( missing_info() );
+          echo json_encode( json_err("Missing operation") );
           die();
         }
         $operation = $_POST['operation']; 
-
         switch( $operation ){
           case "up":
+            if (!in_array($course, $ta_courses)){//Only need to be a TA to move up, not down
+              http_response_code(403);
+              echo json_encode( forbidden() );
+              die();
+            }
             if (!isset($_POST['student'])){
               http_response_code(422);
-              echo json_encode( missing_student() );
+              echo json_encode( json_err("No student specified") );
               die();
             }
             $student = $_POST['student'];
 
-            if (!in_array($course, $ta_courses)){
-              http_response_code(403);
-              echo json_encode( not_authorized() );
-              die();
-            }
             $res = increase_stud_priority($student, $course);
             break;
           case "down":
@@ -112,7 +110,7 @@ switch( $endpoint ){
             if (in_array($course, $ta_courses)){
               if (!isset($_POST['student'])){
                 http_response_code(422);
-                echo json_encode( missing_student() );
+                echo json_encode( json_err("No student specified") );
                 die();
               }
               $username = $_POST['student'];
@@ -121,7 +119,7 @@ switch( $endpoint ){
             break;
           default:
             http_response_code(422);
-            echo json_encode( missing_info() );
+            echo json_encode( json_err("Missing operation") );
             die();
         }
         $text = "Student position switched";
@@ -146,7 +144,7 @@ switch( $endpoint ){
           $ret = get_queue($course);
         }else{ //Not in course
           http_response_code(403);
-          echo json_encode( not_authorized() );
+          echo json_encode( forbidden() );
           die();
         }
         break;
@@ -166,23 +164,22 @@ switch( $endpoint ){
   case "settings":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
+        if (!in_array($course, $ta_courses)){
+          http_response_code(403);
+          echo json_encode( forbidden() );
+          die();
+        }
         if (!isset($_POST['setting'])){
           http_response_code(422);
-          echo json_encode( missing_info() );
+          echo json_encode( json_err("Missing setting") );
           die();
         }
         $setting = $_POST['setting'];
-    
-        if (!in_array($course, $ta_courses)){
-          http_response_code(403);
-          echo json_encode( not_authorized() );
-          die();
-        }
         switch( $setting ){
           case "time_lim":
             if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 ){
               http_response_code(422);
-              echo json_encode( missing_time('time_lim') );
+              echo json_encode( json_err("Missing or bad time limit") );
               die();
             }
             $res = set_time_lim( $_POST['time_lim'], $course);
@@ -190,7 +187,7 @@ switch( $endpoint ){
           case "cooldown":
             if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 ){
               http_response_code(422);
-              echo json_encode( missing_time('time_lim') );
+              echo json_encode( json_err("Missing or bad time limit") );
               die();
             }
             $res = set_cooldown( $_POST['time_lim'], $course);     
@@ -209,18 +206,17 @@ switch( $endpoint ){
   case "state":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
+        if (!in_array($course, $ta_courses)){
+          http_response_code(403);
+          echo json_encode( forbidden() );
+          die();
+        }
         if (!isset($_POST['state'])){
           http_response_code(422);
-          echo json_encode( missing_info() );
+          echo json_encode( json_err("Mising state") );
           die();
         }
         $state = $_POST['state'];
-
-        if (!in_array($course, $ta_courses)){
-          http_response_code(403);
-          echo json_encode( not_authorized() );
-          die();
-        }    
         switch($state){
           case "closed":
             $res = close_queue($course);
@@ -233,7 +229,7 @@ switch( $endpoint ){
             break;
           default:
             http_response_code(422);
-            echo json_encode( missing_info() );
+            echo json_encode( json_err("Invalid state") );
             die();
         }
         $text = "Queue state changed";
@@ -266,13 +262,13 @@ switch( $endpoint ){
       case "DELETE":
         if (!isset($path_split[5])){
           http_response_code(422);
-          echo json_encode( missing_student() );
+          echo json_encode( json_err("No student specified") );
           die();
         }
         $student = $path_split[5];
         if (!in_array($course, $ta_courses) && $student != $username){ //Not a TA
-          http_response_code(422);
-          echo json_encode( not_authorized() );
+          http_response_code(403);
+          echo json_encode( forbidden() );
           die();
         }
         $res  = deq_stu($student, $course);
@@ -280,7 +276,7 @@ switch( $endpoint ){
         break;
       default:
         http_response_code(405);
-        echo json_encode( invalid_method("POST") );
+        echo json_encode( invalid_method("POST or DELETE") );
         die();
     }
     break;
@@ -291,7 +287,7 @@ switch( $endpoint ){
       case "POST":
         if (!in_array($course, $ta_courses)){
           http_response_code(403);
-          echo json_encode( not_authorized() );
+          echo json_encode( forbidden() );
           die();
         }
         $res  = enq_ta($username, $course);
