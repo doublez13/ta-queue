@@ -124,6 +124,9 @@ function del_user($username){
  *         null on error
  */
 function _ldap_connect($username, $password){
+  if(empty($username) || empty($password)){
+    return null;
+  }
   $ldap_conn = ldap_connect(LDAP_SERVER);
   ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
   ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
