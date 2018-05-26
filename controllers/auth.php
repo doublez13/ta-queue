@@ -1,6 +1,12 @@
 <?php
-// File: auth.php
-// SPDX-License-Identifier: GPL-3.0-or-later
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
+ *               2018 Blake Burton
+ *
+ * Controller for authentication endpoints
+ * 
+ */
 
 $path_split = explode("/", $path);
 $endpoint = $path_split[2];

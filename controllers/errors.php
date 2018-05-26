@@ -1,6 +1,11 @@
 <?php
-// File: errors.php
-// SPDX-License-Identifier: GPL-3.0-or-later
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
+ *
+ * Error codes
+ * 
+ */
 
 //Error codes returned by the model
 function return_JSON_error($err_code){

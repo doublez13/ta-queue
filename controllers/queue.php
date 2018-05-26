@@ -1,6 +1,12 @@
 <?php
-// File: queue.php
-// SPDX-License-Identifier: GPL-3.0-or-later
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
+ *               2018 Blake Burton
+ *
+ * Controller for queue endpoints
+ * 
+ */
 
 $path_split = explode("/", $path);
 if(empty($path_split[3])){

@@ -1,6 +1,12 @@
 <?php
-// File: courses.php
-// SPDX-License-Identifier: GPL-3.0-or-later
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
+ *               2018 Blake Burton
+ *
+ * Controller for course endpoints
+ * 
+ */
 
 $path_split = explode("/", $path);
 
@@ -49,12 +55,12 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
 
-    $course_name = $_POST['course_name'];
-    $depart_pref = $_POST['depart_pref'];
-    $course_num  = $_POST['course_num'];
-    $description = $_POST['description'];
-    $ldap_group  = $_POST['ldap_group'];
-    $professor   = $_POST['professor'];
+    $course_name = filter_var($_POST['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $depart_pref = filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $ldap_group  = filter_var($_POST['ldap_group'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $professor   = filter_var($_POST['professor'],   FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     if ($_POST['acc_code']){
       $acc_code    = $_POST['acc_code'];
     }else{
