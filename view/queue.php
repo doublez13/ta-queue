@@ -11,12 +11,12 @@
   <?php include('./view/navbar.php'); ?>
 
     <div class="jumbotron jumbotron-billboard padding-left-20 padding-right-20 flex flex-column flex-alignItems-center flex-noShrink" style="margin-top: -15px; opacity: 0.75; padding:0px;">
-            <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; word-wrap: break-word; text-align: center">Queue</h1>
+      <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; word-wrap: break-word; text-align: center">Queue</h1>
       <div class="flex flex-justifyContent-center flex-alignItems-center">
-                <h4 class="margin-left-10 margin-right-10" id="queue_state" style="color: #404040;"></h4>|
-                <h4 class="margin-left-10 margin-right-10" id="in_queue"    style="color: #404040;"></h4>|
-                <h4 class="margin-left-10 margin-right-10" id="time_limit"  style="color: #404040;"></h4>|
-                <h4 class="margin-left-10 margin-right-10" id="cooldown"    style="color: #404040;"></h4>
+        <h4 class="margin-left-10 margin-right-10" id="queue_state" style="color: #404040;"></h4>|
+        <h4 class="margin-left-10 margin-right-10" id="in_queue"    style="color: #404040;"></h4>|
+        <h4 class="margin-left-10 margin-right-10" id="time_limit"  style="color: #404040;"></h4>|
+        <h4 class="margin-left-10 margin-right-10" id="cooldown"    style="color: #404040;"></h4>
       </div>
     </div>
 
@@ -110,43 +110,6 @@
                     </div>
                 </div>
 
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~ DO NOT DELETE/EDIT CODE BELOW!: WORKING BACK UP CODE ACROSS ALL BROWSERS  ~~~~~~~~~~~~~~~~~~~~~~~~~-->
-
-                <!--NO SCROLL BAR: GROWING/SHRINKING ANNOUNCEMENTS-->
-<!--                <div class="panel panel-primary">-->
-<!--                    <div class="panel-heading">-->
-<!--                        <h3 class="panel-title"  style="font-size:20px;" align="center">Announcements</h3>-->
-<!--                    </div>-->
-<!--                    <table class="table table-hover" id="anns" align="center" style="margin-left:auto; margin-right:auto;">-->
-<!--                        <tbody id="anns_body"></tbody>-->
-<!--                    </table>-->
-
-                    <!--POST ANNOUNCEMENT BOX (ONLY SHOWN FOR TAS)-->
-<!--                    <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form" style="display: none">-->
-<!--                        <div class="input-group">-->
-<!--                            <input type="text" id="new_ann" class="flex-fillSpace form-control">-->
-<!--                            <span class="input-group-btn">-->
-<!--                                <input class="btn btn-success flex-noShrink" id="ann_button" type="submit" value="Post">-->
-<!--                            </span>-->
-<!--                        </div>-->
-<!--                    </form>-->
-<!--                </div>-->
-
-                <!--NO SCROLL BAR: GROWING/SHRINKING QUEUE-->
-<!--                <div id ="queue_table">-->
-<!--                    <div class="panel panel-primary">-->
-<!--                        <div class="panel-heading">-->
-<!--                            <h3 class="panel-title" style="font-size: 20px;" align="center">Queue</h3>-->
-<!--                        </div>-->
-<!--                        <table class="table table-hover" id="queue" align="center" style="margin-left:auto; margin-right:auto; table-layout: fixed;">-->
-<!--                            <thead id="queue_head"></thead>-->
-<!--                            <tbody id="queue_body"></tbody>-->
-<!--                        </table>-->
-<!--                    </div>-->
-<!--                </div>-->
-
-<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
             </div>
     </div><!--container-->
