@@ -10,17 +10,17 @@
 <body>
   <?php include('./view/navbar.php'); ?>
 
-		<div class="jumbotron jumbotron-billboard padding-left-20 padding-right-20 flex flex-column flex-alignItems-center flex-noShrink" style="margin-top: -15px; opacity: 0.75; padding:0px;">
+    <div class="jumbotron jumbotron-billboard padding-left-20 padding-right-20 flex flex-column flex-alignItems-center flex-noShrink" style="margin-top: -15px; opacity: 0.75; padding:0px;">
             <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; word-wrap: break-word; text-align: center">Queue</h1>
-			<div class="flex flex-justifyContent-center flex-alignItems-center">
+      <div class="flex flex-justifyContent-center flex-alignItems-center">
                 <h4 class="margin-left-10 margin-right-10" id="queue_state" style="color: #404040;"></h4>|
                 <h4 class="margin-left-10 margin-right-10" id="in_queue"    style="color: #404040;"></h4>|
                 <h4 class="margin-left-10 margin-right-10" id="time_limit"  style="color: #404040;"></h4>|
                 <h4 class="margin-left-10 margin-right-10" id="cooldown"    style="color: #404040;"></h4>
-			</div>
-		</div>
+      </div>
+    </div>
 
-		<div class="container flex-fillSpace flex-md" style="width: 100%; max-width:1500px;">
+    <div class="container flex-fillSpace flex-md" style="width: 100%; max-width:1500px;">
 
             <!--TAS ON DUTY AND QUEUE BUTTONS COLUMN-->
             <div class="col-xs-12 col-sm-3 col-md-2  padding-bottom-15 flex flex-column flex-alignItems-stretch">
@@ -149,7 +149,7 @@
 <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~-->
 
             </div>
-		</div><!--container-->
+    </div><!--container-->
 
         <!--ENTER QUEUE MODAL-->
         <div id="dialog-form" title="Location and Question">
@@ -172,7 +172,7 @@
             </form>
         </div>
 
-	</body>
+  </body>
 </html>
 
 

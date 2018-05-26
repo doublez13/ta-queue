@@ -11,7 +11,7 @@
   <?php include('./view/navbar.php'); ?>
 
   <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
-    <div style="margin-top:  -40px; margin-bottom: -20px; text-align:center;">	
+    <div style="margin-top:  -40px; margin-bottom: -20px; text-align:center;">  
       <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Welcome to the TA Help Queue</h1>
     </div>
   </div>
@@ -19,7 +19,7 @@
   <div class="container">
     <div class="row">
       <div class="col-sm-12">
-			  <h2 style="padding-bottom: 25px; text-align:center;"><span style="color: #e8002b;">University of Utah</span> College of Engineering</h2>
+        <h2 style="padding-bottom: 25px; text-align:center;"><span style="color: #e8002b;">University of Utah</span> College of Engineering</h2>
       </div><!--col-sm-12-->
     </div><!--row-->
 

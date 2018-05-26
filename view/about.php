@@ -12,7 +12,7 @@
   <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
     <div style="margin-top:  -40px; margin-bottom: -20px; text-align: center;">
       <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Team Suzie Queue</h1>
-	    <img src="./resources/img/Untitled-1.png" alt="Suzie Queue Logo" style="height:70px;">
+      <img src="./resources/img/Untitled-1.png" alt="Suzie Queue Logo" style="height:70px;">
     </div>
   </div>
 
@@ -30,7 +30,7 @@
         </p>
             
       <h3 style="text-decoration: underline;">Ryan Welling</h3> <br>
-		    <p style="font-size: 17px">
+        <p style="font-size: 17px">
           -Front-end Design and Implementation<br>
           -UI / UX Polishing <br>
           -Reports<br>
@@ -53,12 +53,12 @@
     </div><!--col-sm-6-->
     
     <div class="col-sm-6">
-	    <img src="./resources/img/SuzieQueueTeamPhoto.jpg" alt="Team Photo" style="width:600px; height:400px; margin-top:50px;">
-	    <p>
+      <img src="./resources/img/SuzieQueueTeamPhoto.jpg" alt="Team Photo" style="width:600px; height:400px; margin-top:50px;">
+      <p>
       <br>
-		  Team Members L-R: Blake Burton, Ryan Welling, Matt Damon, Zane Zakraisek
+      Team Members L-R: Blake Burton, Ryan Welling, Matt Damon, Zane Zakraisek
       </p>
-	  </div>
+    </div>
   </div><!--container-->
 </body>
 </html>
