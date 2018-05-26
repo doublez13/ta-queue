@@ -50,8 +50,8 @@ function get_queue($course_name){
   }else{
     $entry = mysqli_fetch_assoc($result);
     $return["state"]    = $entry["state"];
-    $return["time_lim"] = $entry["time_lim"];
-    $return["cooldown"] = $entry["cooldown"];
+    $return["time_lim"] = intval($entry["time_lim"]);
+    $return["cooldown"] = intval($entry["cooldown"]);
   }
   $return["announcements"] = [];
   $return["TAs"]      = [];
