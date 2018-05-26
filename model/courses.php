@@ -214,7 +214,7 @@ function get_ta_courses($username){
     $query  = "SELECT course_name FROM courses WHERE ldap_group ='".$group_sam."'";
     $result = mysqli_query($sql_conn, $query);
     if(!mysqli_num_rows($result)){
-      continue; //No class in the database with this ldap group
+      continue; //No course in the database with this ldap group
     }
     
     //possible multiple courses use the same ldap_group
@@ -288,7 +288,7 @@ function add_stud_course($username, $course_name, $acc_code){
   }
 
   $real_acc_code = get_course_acc_code($course_name); 
-  if($real_acc_code == -1 ){
+  if($real_acc_code == -1 ){//TODO: Nothing stopping -1 from being an access code
     mysqli_close($sql_conn);
     return -1;//error
   } elseif(!is_null($real_acc_code) &&  $acc_code != $real_acc_code){
@@ -387,7 +387,7 @@ function get_course_group($course_name){
  *
  * @param string $course_name
  * @return int access_code
- *         null on error
+ *             -1 on error
  */
 function get_course_acc_code($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);

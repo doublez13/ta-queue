@@ -14,7 +14,7 @@ require_once 'config.php';
  * @param string $course
  * @return array of queue data on success
  *         int -1 on error
- *         int -2 on nonexistent class
+ *         int -2 on nonexistent course
  */
 function get_queue($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
