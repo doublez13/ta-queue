@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Course Admin</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/create_class.js"></script>
+  <script src="./src/create_course.js"></script>
 </head>
 <body>
   <?php include('./view/navbar.php'); ?>
@@ -18,7 +18,7 @@
 		<div class="container">
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
-					<div id ="class_table">
+					<div id ="course_table">
 						<div class="panel panel-primary">
 						<!-- Default panel contents -->
 							<div class="panel-heading">
@@ -38,7 +38,7 @@
                             }
                             </style>
 
-                            <form id="create_class" class="padding-left-15 padding-right-15">
+                            <form id="create_course" class="padding-left-15 padding-right-15">
                                 
                                 <div class="col-sm-6 padding-top-15 padding-left-0">
                                     <label>Course Name</label>
@@ -65,8 +65,8 @@
                                     <textarea id="description" placeholder="Course description" style="height:100px" required></textarea>
                                 </div>
                                 <div class="padding-bottom-10">
-                                  <button id="create_class_button" class="btn btn-success" type="submit"></button>
-                                  <button id="delete_class_button" class="btn btn-warning" type="submit">Delete Course</button>
+                                  <button id="create_course_button" class="btn btn-success" type="submit"></button>
+                                  <button id="delete_course_button" class="btn btn-warning" type="submit">Delete Course</button>
                                   <a class="padding-left-10" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
                                   <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
                                 </div>

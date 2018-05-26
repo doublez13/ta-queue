@@ -20,8 +20,7 @@
 		<div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
 			<div align="center" style="margin-top:  -60px; margin-bottom: -50px">
                 <!--RYAN'S STYLE-->
-<!--			<h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; font-family: garamond;"></h1>-->
-                <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;">Class Statistics</h1>
+                <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000;">Course Statistics</h1>
                 <h4 id="queue_state" style="color: #404040;"></h4>
                 <h4 id="time_limit"  style="color: #404040;"></h4>
                 <h4 id="in_queue"    style="color: #404040;"></h4>

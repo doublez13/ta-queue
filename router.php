@@ -71,7 +71,7 @@ else{
       unset($_SESSION["redirect_url"]);
       header("Location: $url");
     }else{
-      header("Location: classes");
+      header("Location: courses");
     }
   }
   //Not authenticated
@@ -84,7 +84,7 @@ else{
     if(is_administrator($username)){
       require_once $source;
     }else{
-      header("Location: classes");
+      header("Location: courses");
     }
   }
   //Regular pages
@@ -93,7 +93,7 @@ else{
   }
   //Nonexistant page
   else{
-    header("Location: classes");
+    header("Location: courses");
   }
 }
 

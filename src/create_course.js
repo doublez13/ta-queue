@@ -12,9 +12,9 @@ $(document).ready(function(){
   if(typeof course === 'undefined'){ //Create new course
     document.getElementById("page_title").innerHTML = "New Course";
     document.getElementById("panel_title").innerHTML = "New Course";
-    document.getElementById("create_class_button").innerText= "Create Course";
-    document.getElementById("delete_class_button").style.display = "none";
-    $("#create_class").submit( create_class );
+    document.getElementById("create_course_button").innerText= "Create Course";
+    document.getElementById("delete_course_button").style.display = "none";
+    $("#create_course").submit( create_course );
   }
   else{                              //Edit exsisting course
     document.getElementById("page_title").innerHTML  = "Edit Course";
@@ -31,16 +31,16 @@ $(document).ready(function(){
           document.getElementById(attribute).value  = dataParsed.parameters[attribute]
         }
       });
-    }).fail(function(data){window.location = "./classes"}); //Silent redirect to course page on error
+    }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error
 
-    document.getElementById("create_class_button").innerText= "Edit Course";
-    $("#create_class").submit( create_class );
-    $("#delete_class_button").click( delete_class );
+    document.getElementById("create_course_button").innerText= "Edit Course";
+    $("#create_course").submit( create_course );
+    $("#delete_course_button").click( delete_course );
   }
 });
 
 done = function(data){
-  window.location = "./classes";
+  window.location = "./courses";
 }
 
 fail = function(data){
@@ -50,7 +50,7 @@ fail = function(data){
   alert(dataParsed["error"]);
 }
 
-create_class = function( event ) {
+create_course = function( event ) {
   event.preventDefault();
   var $form = $(this);
   url = "../api/courses";
@@ -67,7 +67,7 @@ create_class = function( event ) {
   posting.fail(fail); 
 }
 
-delete_class = function( event ){
+delete_course = function( event ){
   event.preventDefault();
   if(confirm("Are you sure you want to delete the course? All data and logs will be wiped.")){
     var del = $.ajax({

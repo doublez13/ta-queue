@@ -37,14 +37,14 @@
               <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <ul>
                   <li>
-                    <a class="dropdown-item" href="new_class">Create Course</a>
+                    <a class="dropdown-item" href="new_course">Create Course</a>
                   </li>
                 </ul>
               </div>
             </li>
           <?php } ?>
           <li>
-            <a href="classes">Courses</a>
+            <a href="courses">Courses</a>
           </li>
           <li>
             <a href="#" onclick="logout();">Logout <?php echo $_SESSION["username"] ?></a>

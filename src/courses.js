@@ -1,9 +1,9 @@
 username = localStorage.username;
 is_admin = localStorage.is_admin == 'true';
-get_all_classes();
-get_my_classes();
+get_all_courses();
+get_my_courses();
 
-function get_my_classes(){
+function get_my_courses(){
   var $url = "../api/user/"+username+"/courses";
   var $get = $.get( $url );
   $get.done(function(data){
@@ -24,14 +24,14 @@ function get_my_classes(){
       location.reload;
     }
 
-    $('#my_classes_body tr').remove();
+    $('#my_courses_body tr').remove();
     renderMyCourseTable(ta_courses, "TA");
     renderMyCourseTable(stud_courses, "Student");
   });
 }
 
 function renderMyCourseTable(courses, role) {
-  var table = $('#my_classes_body'); 
+  var table = $('#my_courses_body'); 
 
   courses.forEach(function (course) {
     var tableRow = $('<tr>');
@@ -43,7 +43,7 @@ function renderMyCourseTable(courses, role) {
   });
 }
 
-function get_all_classes(){
+function get_all_courses(){
   var $url = "../api/courses";
   var $get = $.get( $url );
   $get.done(function(data){
@@ -62,7 +62,7 @@ function get_all_classes(){
 }
 
 function renderAllCourseTable(allCourses, dataParsed) {
-  $('#all_classes_body').empty();
+  $('#all_courses_body').empty();
   
   var myCourses = dataParsed.student_courses;
   var ta_courses= dataParsed.ta_courses;
@@ -91,18 +91,18 @@ function renderAllCourseTable(allCourses, dataParsed) {
       }
     }
     if(is_admin){
-      var url = "./edit_class?course="+course_name;
+      var url = "./edit_course?course="+course_name;
       var onclick = "window.location='"+url+"'";
       tableRow.append('<td> <button class="btn btn-primary" onclick="'+onclick+'" style="width: 100%;" > <i class="fa fa-cog"></i>  </button></td>');
     }
 
-    $('#all_classes_body').append(tableRow);
+    $('#all_courses_body').append(tableRow);
   }
 }
 
 done = function(data){ //reloads the content on the page
-  get_all_classes();
-  get_my_classes();  
+  get_all_courses();
+  get_my_courses();  
 }
 
 fail = function(data){

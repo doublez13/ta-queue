@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Courses</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/classes.js"></script>
+  <script src="./src/courses.js"></script>
 </head>
 
 <body>
@@ -20,20 +20,20 @@
 
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
-          <div id ="my_class_table">
+          <div id ="my_course_table">
             <div class="panel panel-primary">
               <!-- Default panel contents -->
               <div class="panel-heading">
                 <h3 class="panel-title" style="font-size:20px; text-align: center;">My Courses</h3>
               </div>
-              <table class="table table-hover" id="my_classes" style="margin-left:auto; margin-right:auto;">
+              <table class="table table-hover" id="my_courses" style="margin-left:auto; margin-right:auto;">
                 <tr style="background: none;">
                   <th>Course</th>
                   <th>Role</th>
                   <th>Queue</th>
                 </tr>
-                <tbody id="my_classes_body"></tbody>
-                <!--classes.js should write here-->
+                <tbody id="my_courses_body"></tbody>
+                <!--courses.js should write here-->
               </table>
             </div><!--panel-->
           </div><!--id-->
@@ -42,7 +42,7 @@
 
 			<div class="row">
 				<div class="col-sm-8 col-sm-offset-2">
-					<div id ="class_table">
+					<div id ="course_table">
 						<div class="panel panel-primary">
 						  <!-- Default panel contents -->
 							<div class="panel-heading">
@@ -51,9 +51,9 @@
 							<div class="panel-body">
                 <p style="text-align: center;"><b>Enroll/Leave your courses here.</b></p>
 							</div>
-              <table class="table table-hover " id="all_classes" style="margin-left:auto; margin-right:auto;">
-                <tbody id="all_classes_body"></tbody>
-								<!--classes.js should write here-->
+              <table class="table table-hover " id="all_courses" style="margin-left:auto; margin-right:auto;">
+                <tbody id="all_courses_body"></tbody>
+								<!--courses.js should write here-->
 							</table>
 						</div><!--panel-->
 					</div><!--id-->
