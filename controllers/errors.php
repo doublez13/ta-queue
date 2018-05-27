@@ -37,10 +37,6 @@ function missing_auth(){
   );
 }
 
-function unauthorized(){ //401
-  return array("authenticated" => False);
-}
-
 function forbidden(){ //403
   return array(
     "authenticated" => True,

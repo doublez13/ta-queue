@@ -10,6 +10,7 @@ require_once 'config.php';
 
 /**
  * Returns the state of a queue
+ * TODO: Consider breaking this into four smaller functions
  *
  * @param string $course
  * @return array of queue data on success
@@ -22,9 +23,8 @@ function get_queue($course_name){
     return -1; //SQL error
   }
 
-  #Note that we don't have to use SQL Parameters in the 
-  #following functions since the block of code below
-  #sanitizes the input
+  #Note that we don't have to use SQL Parameters in ths 
+  #function since the block of code below sanitizes the input
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id == -1){
     mysqli_close($sql_conn);
@@ -99,46 +99,6 @@ function get_queue($course_name){
 
   mysqli_close($sql_conn);
   return $return;
-}
-
-/**
- * Returns the length of the queue
- *
- * @param string $course_name
- * @return int length of queue
- *         int -1 on error
- *         int -2 on nonexistent course
- *         int -3 on closed queue
- */
-function get_queue_length($course_name){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return -1;
-  }
-
-  $queue_state = get_queue_state($course_name);
-  if($queue_state < 0){
-    mysqli_close($sql_conn);
-    return $queue_state;
-  }elseif(get_queue_state($course_name) == "closed"){
-    mysqli_close($sql_conn);
-    return -3;
-  }
-
-  $query = "SELECT * FROM queue NATURAL JOIN courses WHERE course_name=?";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  mysqli_stmt_bind_param($stmt, "s", $course_name);
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  mysqli_stmt_store_result($stmt);
-  return mysqli_stmt_num_rows($stmt);
 }
 
 /**
@@ -301,7 +261,9 @@ function deq_stu($username, $course_name){
 }
 
 /**
- * Add TA to queue
+ * Put TA on duty.
+ * If TA is already on duty, this frees them if they
+ * were helping a student, but does NOT dequeue the student.
  *
  * @param string $username
  * @param string $course_name
@@ -451,71 +413,6 @@ function get_ta_status($username, $course_name){
 }
 
 /**
- * Sets the TA status to helping the next person in the queue.
- * Call deq_stu() before calling this again
- *
- * @param string $username
- * @param string $course_name
- * @return int 0  on success
- *         int -1 on fail
- *         int -2 on nonexistent course
- *         int -3 on closed course
- *         int -4 on TA not on duty
- */
-function help_next_student($username, $course_name){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return -1;
-  }
-
-  $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == -1){
-    mysqli_close($sql_conn);
-    return -1; //SQL error
-  }elseif($course_id == -2){
-    mysqli_close($sql_conn);
-    return -2; //Nonexistent course
-  }
-
-  $ta_status = get_ta_status($username, $course_name);
-  if($ta_status == -3){//Closed course
-    mysqli_close($sql_conn);
-    return -3;
-  }elseif($ta_status == 1){
-    mysqli_close($sql_conn);
-    return -4;
-  }
-
-  $query = "SELECT position FROM queue
-            WHERE course_id ='".$course_id."'
-            AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
-            ORDER BY position LIMIT 1";
-  $result = mysqli_query($sql_conn, $query);
-  if(!$result){
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  $position = mysqli_fetch_assoc($result)['position'];
-
-  $query = "REPLACE INTO ta_status (username, course_id, helping) VALUES (?,?,?)"; 
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  mysqli_stmt_bind_param($stmt, "sis", $username, $course_id, $position);
-  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
-  }
-
-  mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
-  return 0;
-}
-
-/**
  * Help particular student in queue
  *
  * @param string $TA_username
@@ -560,55 +457,6 @@ function help_student($TA_username, $stud_username, $course_name){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_id, $stud_username, $course_id);
-  if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
-  }
-
-  mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
-  return 0;
-}
-
-/**
- * Sets the TA free from helping anyone,
- * but does NOT dequeue a student they could be helping
- *
- * Note that dequeuing the student the TA is helping frees the TA automatically.
- * 
- * @param string $username
- * @param string $course_name
- * @return int 0  on success
- *         int -1 on error
- *         int -2 on nonexistent course
- *         int -3 on closed course
- *         int -4 on TA not on duty
- */
-function free_ta($username, $course_name){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return -1;
-  }
-
-  $ta_status = get_ta_status($username, $course_name);
-  if($ta_status < 0){
-    mysqli_close($sql_conn);
-    return $ta_status;
-  }elseif($ta_status == 1){
-    mysqli_close($sql_conn);
-    return -4;
-  }
-
-  $query = "UPDATE ta_status SET helping = NULL 
-            WHERE username = ? 
-            AND course_id=(SELECT course_id FROM courses WHERE course_name = ?)";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
   if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -1179,20 +1027,4 @@ function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_
     return 0;
   }
 }
-
-//TODO: Implement these where write locks are desirable
-function write_lock_table($table_name, $sql_conn){
-  if(!$sql_conn){
-    return -1;
-  }
-  return mysqli_query($sql_conn, "LOCK TABLES ".$table_name." WRITE");   
-}
-
-function write_unlock_table($sql_conn){
-  if(!$sql_conn){
-    return -1;
-  }
-  return mysqli_query($sql_conn, "UNLOCK TABLES");
-}
-
 ?>

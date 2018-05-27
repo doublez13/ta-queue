@@ -106,9 +106,6 @@ function is_redirect(){
 function is_administrator($username){ //TODO: Temporary function to abstract the implementation
   return isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
 }
-function credentials_provided(){
-  return isset($_POST['username']) && isset($_POST['password']);
-}
 function is_open_page($path){
   return $path == "/about"       ||
          $path == "/tutorial";
