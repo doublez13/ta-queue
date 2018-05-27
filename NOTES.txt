@@ -13,9 +13,7 @@
 -TA log to track how long on duty?
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Make questions optionally visible to rest of class?
--Make 'description' optional for courses? What did we want to use this for?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
--Some numerical values are returned as strings (e.g. 'time_lim' and 'id' in get_queue.php). Would it make more sense to make these integers?
 -help_student.php (not the UI) allows two TAs to help the same student. How would we show this using colors.
 -Have different background colors for TAs?
 -Have CIS handle authentication?

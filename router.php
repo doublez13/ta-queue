@@ -1,4 +1,13 @@
 <?php
+/**
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ * Copyright (c) 2018 Zane Zakraisek
+ *
+ * Routes all API requests to the appropriate controller.
+ * Returns the requested page from the view directory.
+ *
+ */
+
 session_start();
 
 $REQUEST_URI = $_SERVER["REQUEST_URI"];
@@ -162,5 +171,4 @@ function authenticate($username, $password){
   }
   return false;
 }
-
 ?>
