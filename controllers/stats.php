@@ -114,12 +114,12 @@ function check_date(){
   $format_err  = false;
   $start_date  = null;
   $end_date    = null;
-  if(isset($_POST['start_date'])){
-    $start_date = $_POST['start_date'];
+  if(isset($_GET['start_date'])){
+    $start_date = $_GET['start_date'];
     $format_err = !((bool)preg_match($date_format, $start_date));
   }
-  if(isset($_POST['end_date'])){
-    $end_date   = $_POST['end_date'];
+  if(isset($_GET['end_date'])){
+    $end_date   = $_GET['end_date'];
     $format_err = !((bool)preg_match($date_format, $end_date)) || $format_err;
   }
   // Make sure start_date was sent if end_date was sent and ensure correct formats
