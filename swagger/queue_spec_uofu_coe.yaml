@@ -888,8 +888,9 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /stats/course_stats:
-    post:
+
+  /stats/course/{course}:
+    get:
       summary: "Get statistics for a course"
       description: "Get statistics for the specified course including average wait/help times (seconds) and a total students helped daily log.<br><br>If no dates are specified, the returned info accounts for the entire history of the course. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
       tags:
@@ -900,16 +901,16 @@ paths:
         - "application/json"
       parameters:
       - name: "course"
-        in: "formData"
+        in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
         required: true
       - name: "start_date"
-        in: "formData"
+        in: "query"
         description: "queue entry date (yyyy-mm-dd) (inclusive)"
         type: "string"
       - name: "end_date"
-        in: "formData"
+        in: "query"
         description: "queue entry date (yyyy-mm-dd) (exclusive)"
         type: "string"
       responses:
@@ -951,10 +952,10 @@ paths:
           description: "Not authenticated"
           schema:
             $ref: '#/definitions/not_authenticated'
-        # 403:
-        #   description: "Not TA for course"
-        #   schema:
-        #     $ref: '#/definitions/error'
+        403:
+           description: "Not TA for course"
+           schema:
+             $ref: '#/definitions/error'
         405:
           description: "Invalid HTTP request method"
           schema:
