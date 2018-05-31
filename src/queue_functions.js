@@ -654,22 +654,22 @@ function dequeue_ta(course){
 }
 
 function inc_priority(course, student){
-  var url = "../api/queue/"+course+"/position";
-  var posting = $.post( url, { student: student, operation: "up" } );
+  var url = "../api/queue/"+course+"/student/"+student+"/position";
+  var posting = $.post( url, { direction: "up" } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function dec_priority(course, student){
-  var url = "../api/queue/"+course+"/position";
-  var posting = $.post( url, { student: student, operation: "down" } );
+  var url = "../api/queue/"+course+"/student/"+student+"/position";
+  var posting = $.post( url, { direction: "down" } );
   posting.done(done);
   posting.fail(fail);
 }
 
 function help_student(course, username){
-  var url = "../api/queue/"+course+"/help_student";
-  var posting = $.post( url, { student: username } );
+  var url = "../api/queue/"+course+"/student/"+username+"/help";
+  var posting = $.post( url );
   posting.done(done);
   posting.fail(fail);
 }
