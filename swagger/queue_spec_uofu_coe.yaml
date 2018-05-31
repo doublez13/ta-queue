@@ -40,7 +40,7 @@ paths:
   /login:
     post:
       summary: "Login a user"
-      description: "Login a user with the specified CADE username and password and get their info."
+      description: "Login a user with the specified username and password and get their info."
       tags:
         - "Authentication"
       consumes:
@@ -50,12 +50,12 @@ paths:
       parameters:
       - name: "username"
         in: "formData"
-        description: "CADE username"
+        description: "username"
         type: "string"
         required: true
       - name: "password"
         in: "formData"
-        description: "CADE password"
+        description: "password"
         type: "string"
         format: "password"
         required: true
@@ -99,7 +99,7 @@ paths:
   /logout:
     get:
       summary: "Logout a user"
-      description: "Logout the user who sent the request. Naturally, the value of `authenticated` will always be false."
+      description: "Logout the user who sent the request."
       tags:
         - "Authentication"
       responses:
@@ -118,7 +118,7 @@ paths:
   /user/{username}:
     get:
       summary: "Get user info"
-      description: "Get the user's info."
+      description: "Get the specified user's info. Admins can get anyone's info. Other users are restricted to themselves"
       tags:
       - "User"
       parameters:
@@ -162,13 +162,13 @@ paths:
             $ref: '#/definitions/error'
     delete:
       summary: "Delete a user"
-      description: "Get the user's info."
+      description: "Delete a user and all their data. Must be an admin."
       tags:
       - "User"
       parameters:
       - name: "username"
         in: "path"
-        description: "username of student"
+        description: "username of user to delete"
         type: "string"
         required: true
       responses:
@@ -192,6 +192,10 @@ paths:
           description: "Not authenticated"
           schema:
             $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
         405:
           description: "Invalid HTTP request method"
           schema:
@@ -203,14 +207,14 @@ paths:
   
   /user/{username}/courses:
     get:
-      summary: "Get user enrolled courses"
-      description: "Get all the courses the user has enrolled in or TAs."
+      summary: "Get courses a user is enrolled in."
+      description: "Get all the courses the user has enrolled in, or is a TA for."
       tags:
         - "User"
       parameters:
       - name: "username"
         in: "path"
-        description: "username of student"
+        description: "username"
         type: "string"
         required: true
       responses:
@@ -427,7 +431,7 @@ paths:
   /queue/{course}/student:
     post:
       summary: "Enqueue user"
-      description: "Enqueue the user for the specified course with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course\n- course queue must be open\n- TAs cannot enter their own queues"
+      description: "Enqueue the user with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course as a student\n- course queue must be open"
       tags:
         - "Queue"
       consumes:
@@ -474,7 +478,7 @@ paths:
   /queue/{course}/student/{username}:
     delete:
       summary: "Dequeue a student"
-      description: "Dequeue the student from the specified queue. If the user is a TA for the course, dequeue the specified student from the specified course. **TAs can only dequeue their own students.**"
+      description: "Dequeue the specified student from the specified course queue. If the user is a TA for the course, dequeue the student from the course."
       tags:
         - "Queue"
       consumes:
@@ -516,7 +520,7 @@ paths:
   /queue/{course}/position:
     post:
       summary: "Changes a user's position in the queue"
-      description: "Move the specified user one spot up or down in the specified course. **TAs can only move their own students, and students can only move themselves**"
+      description: "Move the specified student one spot up or down in the specified course. **TAs can only move their own students, and students can only move themselves down**"
       tags:
         - "Queue"
       consumes:
@@ -536,7 +540,7 @@ paths:
         required: true
       - name: "operation"
         in: "formData"
-        description: "up or down"
+        description: "Move spcified student up or down"
         type: "string"
         required: true
         enum:
@@ -968,247 +972,6 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /stats/student_log:
-    post:
-      summary: "Get user queue log"
-      description: "Get info regarding every instance the user was helped in any queue, or if `course` is specifed, only that particular queue. If a course is specified for which the user is a TA, get info regarding each instance the specifed student was helped in that queue. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the student. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
-      tags:
-        - "Stats"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems) (if desired)"
-        type: "string"
-      - name: "student"
-        in: "formData"
-        description: "username of student TA is getting info for"
-        type: "string"
-      - name: "start_date"
-        in: "formData"
-        description: "queue entry date (yyyy-mm-dd) (inclusive)"
-        type: "string"
-      - name: "end_date"
-        in: "formData"
-        description: "queue entry date (yyyy-mm-dd) (exclusive)"
-        type: "string"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-                description: "true if logged in"
-                type: "boolean"
-              student_log:
-                description: "student entry instances"
-                type: "array"
-                items:
-                  type: "object"
-                  properties:
-                    course_name:
-                      description: "ONLY PRESENT WHEN NO COURSE IS SPECIFIED"
-                      type: "string"
-                      example: "ONLY PRESENT WHEN NO COURSE IS SPECIFIED"
-                    question:
-                      description: "question asked by student"
-                      type: "string"
-                    location:
-                      description: "location of student"
-                      type: "string"
-                    enter_tmstmp:
-                      description: "time of queue entry"
-                      type: "string"
-                    help_tmstmp:
-                      description: "time when helped"
-                      type: "string"
-                    exit_tmstmp:
-                      description: "time of queue exit"
-                      type: "string"
-                    helped_by:
-                      description: "TA who helped student"
-                      type: "string"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing student (if user is TA and course is specified) or missing/bad date"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-  /stats/ta_log:
-    post:
-      summary: "Get TA's helped students log (TA)"
-      description: "Get info regarding each instance a student was helped by the TA in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the TA. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
-      tags:
-        - "Stats"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      - name: "start_date"
-        in: "formData"
-        description: "student helped date (yyyy-mm-dd) (inclusive)"
-        type: "string"
-      - name: "end_date"
-        in: "formData"
-        description: "student helped date (yyyy-mm-dd) (exclusive)"
-        type: "string"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-                description: "true if logged in"
-                type: "boolean"
-              ta_log:
-                description: "student helped instances"
-                type: "array"
-                items:
-                  type: "object"
-                  properties:
-                    student:
-                      description: "username of student that was helped"
-                      type: "string"
-                    question:
-                      description: "question asked by student"
-                      type: "string"
-                    location:
-                      description: "location of student"
-                      type: "string"
-                    enter_tmstmp:
-                      description: "time of queue entry"
-                      type: "string"
-                    help_tmstmp:
-                      description: "time when helped"
-                      type: "string"
-                    exit_tmstmp:
-                      description: "time of queue exit"
-                      type: "string"
-                    helped_by:
-                      description: "TA who helped student"
-                      type: "string"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course or missing/bad date"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-  /stats/course_log:
-    post:
-      summary: "Get a course queue log (TA)"
-      description: "Get info regarding each instance a student was helped in the specified course. Each instance includes info such as the question that was asked, when the student entered the queue, and when the student was helped.<br><br>If no dates are specified, the returned info accounts for the entire history of the course. If `start_date` is specified, the returned info accounts from `start_date` (inclusive) to the present. If `start_date` and `end_date` are specified, the returned info accounts from `start_date` (inclusive) `to end_date` (exclusive)."
-      tags:
-        - "Stats"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "formData"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      - name: "start_date"
-        in: "formData"
-        description: "queue entry date (yyyy-mm-dd) (inclusive)"
-        type: "string"
-      - name: "end_date"
-        in: "formData"
-        description: "queue entry date (yyyy-mm-dd) (exclusive)"
-        type: "string"
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-                description: "true if logged in"
-                type: "boolean"
-              course_log:
-                description: "student entry instances"
-                type: "array"
-                items:
-                  type: "object"
-                  properties:
-                    student:
-                      description: "username of student"
-                      type: "string"
-                    question:
-                      description: "question asked by student"
-                      type: "string"
-                    location:
-                      description: "location of student"
-                      type: "string"
-                    enter_tmstmp:
-                      description: "time of queue entry"
-                      type: "string"
-                    help_tmstmp:
-                      description: "time when helped"
-                      type: "string"
-                    exit_tmstmp:
-                      description: "time of queue exit"
-                      type: "string"
-                    helped_by:
-                      description: "TA who helped student"
-                      type: "string"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course or missing/bad date"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-
   /courses:
     get:
       summary: "Get all courses"

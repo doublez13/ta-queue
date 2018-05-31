@@ -36,7 +36,7 @@ switch( $endpoint ){
         }
         $announcement = filter_var($_POST['announcement'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
         $res  = add_announcement($course, $announcement, $username);
-        $text = "Announcement set";
+        $text = "Announcement posted";
         break;
       case "DELETE":
         if (!in_array($course, $ta_courses)){
@@ -108,24 +108,25 @@ switch( $endpoint ){
               die();
             }
             $student = $_POST['student'];
-
             $res = increase_stud_priority($student, $course);
             break;
           case "down":
-            //If TA, set username to the posted student
-            if (in_array($course, $ta_courses)){
-              if (!isset($_POST['student'])){
-                http_response_code(422);
-                echo json_encode( json_err("No student specified") );
-                die();
-              }
-              $username = $_POST['student'];
+            if (!isset($_POST['student'])){
+              http_response_code(422);
+              echo json_encode( json_err("No student specified") );
+              die();
             }
-            $res = decrease_stud_priority($username, $course);
+            $student = $_POST['student'];
+            if(!in_array($course, $ta_courses) && $student != $username ){
+              http_response_code(403);
+              echo json_encode( forbidden() );
+              die();
+            }
+            $res = decrease_stud_priority($student, $course);
             break;
           default:
             http_response_code(422);
-            echo json_encode( json_err("Missing operation") );
+            echo json_encode( json_err("Invalid Operation (up or down)") );
             die();
         }
         $text = "Student position switched";
@@ -198,6 +199,10 @@ switch( $endpoint ){
             }
             $res = set_cooldown( $_POST['time_lim'], $course);     
             break;
+          default:
+            http_response_code(422);
+            echo json_encode( json_err("Invalid setting (time_lim or cooldown)") );
+            die();
         }
         $text = "Setting changed";
         break;
