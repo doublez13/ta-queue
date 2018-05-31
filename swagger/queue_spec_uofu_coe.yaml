@@ -517,7 +517,56 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/{course}/position:
+
+  /queue/{course}/student/{username}/help:
+    post:
+      summary: "Help a user (TA)"
+      description: "Set the TA's status to helping the specified user in the specified course. A TA can only help one user at a time; a new user will override the current one. **The TA must be on duty in the specified course.**"
+      tags:
+        - "Queue"
+      consumes:
+        - "application/x-www-form-urlencoded"
+      produces:
+        - "application/json"
+      parameters:
+      - name: "course"
+        in: "path"
+        description: "full course name (e.g. CS 4400: Computer Systems)"
+        type: "string"
+        required: true
+      - name: "username"
+        in: "path"
+        description: "username to help"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            $ref: '#/definitions/success'
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not TA for course"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        422:
+          description: "Missing course and/or student"
+          schema:
+            $ref: '#/definitions/error'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+
+
+  /queue/{course}/student/{username}/position:
     post:
       summary: "Changes a user's position in the queue"
       description: "Move the specified student one spot up or down in the specified course. **TAs can only move their own students, and students can only move themselves down**"
@@ -534,11 +583,11 @@ paths:
         type: "string"
         required: true
       - name: "student"
-        in: "formData"
+        in: "path"
         description: "username to move"
         type: "string"
         required: true
-      - name: "operation"
+      - name: "direction"
         in: "formData"
         description: "Move spcified student up or down"
         type: "string"
@@ -567,6 +616,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+
   /queue/{course}/state:
     post:
       summary: "Change the state of a queue (TA)"
@@ -754,52 +804,6 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /queue/{course}/help_student:
-    post:
-      summary: "Help a user (TA)"
-      description: "Set the TA's status to helping the specified user in the specified course. A TA can only help one user at a time; a new user will override the current one. **The TA must be on duty in the specified course.**"
-      tags:
-        - "Queue"
-      consumes:
-        - "application/x-www-form-urlencoded"
-      produces:
-        - "application/json"
-      parameters:
-      - name: "course"
-        in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
-        required: true
-      - name: "student"
-        in: "formData"
-        description: "username to help"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            $ref: '#/definitions/success'
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Not TA for course"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        422:
-          description: "Missing course and/or student"
-          schema:
-            $ref: '#/definitions/error'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
   /queue/{course}/announcements:
     post:
       summary: "Post an announcement (TA)"
