@@ -167,7 +167,7 @@ function authenticate($username, $password){
     $_SESSION["ta_courses"]   = $ta_courses;
     $_SESSION["username"]     = $username;
     $_SESSION["is_admin"]     = $is_admin;
-      return true;
+    return true;
   }
   return false;
 }

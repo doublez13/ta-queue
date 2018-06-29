@@ -8,6 +8,10 @@ body
   background-repeat: no-repeat;
   background-size:100% 1920px;
 
+  //background-image: url("https://pbs.twimg.com/media/DHShiXcV0AEMT1_.jpg");
+  //background-repeat: no-repeat, repeat;
+  //background-size: cover;
+
   /* Additions made by Taylor Davenport  */
   flex-direction: column !important; -webkit-flex-flow: column !important;
   display: -webkit-box; display: -ms-flexbox; display: flex;
