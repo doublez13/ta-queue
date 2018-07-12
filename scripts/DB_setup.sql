@@ -9,6 +9,7 @@ create table users(
   first_name  VARCHAR(32) NOT NULL,
   last_name   VARCHAR(32) NOT NULL,
   full_name   VARCHAR(64) NOT NULL,
+  admin       BOOLEAN DEFAULT false NOT NULL,
   first_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   last_login  TIMESTAMP,
   primary key (username)
@@ -22,16 +23,16 @@ create table courses(
   course_name VARCHAR(128) UNIQUE,
   professor   VARCHAR(128), 
   description TEXT,
-  ldap_group  VARCHAR(256),
   access_code VARCHAR(16),
   primary key (course_id),
   foreign key (professor) references users(username) ON DELETE SET NULL
 );
 
---Students enrolled in course;
+--Students enrolled in course as student or TA;
 create table enrolled(
   username    VARCHAR(256),
   course_id   int NOT NULL,
+  role        ENUM('student','ta') NOT NULL,
   primary key (username, course_id),
   foreign key (username) references users(username) ON DELETE CASCADE,
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE

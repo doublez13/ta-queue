@@ -25,7 +25,7 @@ $(document).ready(function(){
     var get = $.get( url, function(data) {
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      var attributes = ["course_name", "depart_pref", "course_num", "description", "ldap_group", "professor", "access_code"];
+      var attributes = ["course_name", "depart_pref", "course_num", "description", "professor", "access_code"];
       attributes.forEach(function(attribute){
         if(attribute in dataParsed.parameters){
           document.getElementById(attribute).value  = dataParsed.parameters[attribute]
@@ -58,7 +58,6 @@ create_course = function( event ) {
                                depart_pref: $form.find( "input[id='depart_pref']" ).val(),
                                course_num:  $form.find( "input[id='course_num']" ).val(),
                                description: $('#description').val(),
-                               ldap_group:  $form.find( "input[id='ldap_group']" ).val(),
                                professor:   $form.find( "input[id='professor']" ).val(),
                                access_code: $form.find( "input[id='access_code']" ).val(),
                              } );

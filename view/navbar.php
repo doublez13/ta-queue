@@ -28,8 +28,9 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-        <?php if( isset($_SESSION["username"]) ){ 
-          if( isset($_SESSION["is_admin"]) && $_SESSION["is_admin"] ){ ?>
+       <?php require_once('./model/auth.php'); 
+       if( isset($_SESSION["username"]) ){ 
+          if( is_admin($_SESSION["username"]) ){ ?>
             <li class="nav-item dropdown" id="admin_menu">
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Admin

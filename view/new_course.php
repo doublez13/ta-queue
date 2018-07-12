@@ -46,29 +46,24 @@
 
                                     <label>Department</label>
                                     <input type="text" id="depart_pref" placeholder="e.g. &quot;CS&quot;" maxlength="16" required>
-
-                                    <label>Course Number</label>
-                                    <input type="text" id="course_num" placeholder="e.g. &quot;4400&quot;" maxlength="16" required>
                                 </div>
                                 <div class="col-sm-6 padding-top-15 padding-left-0 padding-right-0">
                                     <label>Instructor Username</label>
                                     <input type="text" id="professor" placeholder="username of instructor" maxlength="128" required>
 
-                                    <label>LDAP Group</label>
-                                    <input type="text" id="ldap_group" placeholder="TA membership group" maxlength="256" required>
-
-                                    <label>Access Code</label>
-                                    <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
+                                    <label>Course Number</label>
+                                    <input type="text" id="course_num" placeholder="e.g. &quot;4400&quot;" maxlength="16" required>
                                 </div>
                                 <div class="col-sm-12 padding-left-0 padding-right-0">
+                                    <label>Access Code</label>
+                                    <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
+
                                     <label>Description</label>
                                     <textarea id="description" placeholder="Course description" style="height:100px" required></textarea>
                                 </div>
                                 <div class="padding-bottom-10">
                                   <button id="create_course_button" class="btn btn-success" type="submit"></button>
                                   <button id="delete_course_button" class="btn btn-warning" type="submit">Delete Course</button>
-                                  <a class="padding-left-10" style="color: #e8002b; text-align: right" href="https://webhandin.eng.utah.edu/groupmodify" target="_blank">Update LDAP groups here</a>
-                                  <span>or send an email to </span><span style="font-style: italic">opers@eng.utah.edu</span>
                                 </div>
                             </form>
             </div><!--panel-->

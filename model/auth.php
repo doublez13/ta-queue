@@ -6,8 +6,8 @@ require_once 'config.php';
  *
  * Functions for Authentication and Authorization.
  *
- * NOTE: All user and group 'names' are references to 
- *       sAMAccountName, not cn or displayName.
+ * NOTE: All usernames are references to 
+ *       sAMAccountName.
  */
 
 /**
@@ -33,6 +33,8 @@ function auth($username, $password){
  *         null on error
  */
 function get_info($username){
+  //TODO: Do a SQL check first and fall back to LDAP if not in SQL
+
   $result = srch_by_sam($username); 
   if(is_null($result)){
     return NULL;
@@ -67,19 +69,37 @@ function get_info($username){
  *         false if not queue admin
  */
 function is_admin($username){
-  $result = srch_by_sam(ADMIN_GROUP);
-  if(is_null($result)){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
     return NULL;
   }
 
-  $members = $result['member'];
-  foreach($members as &$member) {
-    $member = dn_to_sam($member);
-    if($member == $username){
-      return true;
-    }
+  $query = "SELECT admin FROM users WHERE username=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
   }
-  return false;
+  mysqli_stmt_bind_param($stmt, "s", $username);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $admin);
+  mysqli_stmt_fetch($stmt);
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $admin;
+}
+
+function grant_admin($username){
+  return admin_access($username, 'true');
+}
+
+function revoke_admin($username){
+    return admin_access($username, 'false');
 }
 
 /**
@@ -148,32 +168,6 @@ function _ldap_connect($username, $password){
 }
 
 /**
- * Converts a distinguishedName to a samaccountname
- *
- * @param string $dn
- * @return string samaccountname
- *         null on error
- */
-function dn_to_sam($dn){
-  $filter = "(distinguishedName=$dn)";
-
-  $ldap_conn = _ldap_connect(BIND_USER, BIND_PASSWD);
-  if(is_null($ldap_conn)){
-    return NULL;
-  }
-
-  $results = ldap_search($ldap_conn, BASE_OU, $filter);
-  $entries = ldap_get_entries($ldap_conn, $results);
-
-  if(!$entries['count']){
-    return NULL;
-  }
-
-  ldap_unbind($ldap_conn);
-  return $entries[0]['samaccountname'][0];
-}
-
-/**
  * Returns all LDAP attributes for samaccountname
  *
  * @param string $sam
@@ -238,4 +232,40 @@ function touch_user($username, $first, $last, $full){
   mysqli_close($sql_conn);
   return 0;
 }
+
+/**
+ * Touches the SQL entry for $username.
+ * Updates the login timestamp
+ *
+ * @param string $username
+ * @param bool $admin
+ * @return int 0 on success
+ *         int 1 on fail
+ */
+function admin_access($username, $admin){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return 1;
+  }
+
+  get_info($username);
+
+  $query = "UPDATE users SET admin=? WHERE username=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return 1;
+  }
+  mysqli_stmt_bind_param($stmt, 'ss', $admin, $username);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return 1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
+}
+
 ?>

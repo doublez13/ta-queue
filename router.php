@@ -44,8 +44,8 @@ if( substr($path, 0, 5) === "/api/" ){
   }
 
   $username   = $_SESSION['username'];
-  $ta_courses = $_SESSION["ta_courses"]; //TODO: Keeping this as a session variable means it doesn't change during their session.
-  $is_admin   = is_administrator($username);
+  $ta_courses = get_ta_courses($username); 
+  $is_admin   = is_admin($username);
 
   $controller = explode("/", $path)[2];
   switch($controller){
@@ -90,7 +90,7 @@ else{
   }
   //Admin access needed
   elseif(is_admin_page($path)){
-    if(is_administrator($username)){
+    if(is_admin($username)){
       require_once $source;
     }else{
       header("Location: courses");
@@ -111,9 +111,6 @@ function is_authenticated(){
 }
 function is_redirect(){
   return isset($_SESSION["redirect_url"]);
-}
-function is_administrator($username){ //TODO: Temporary function to abstract the implementation
-  return isset($_SESSION["is_admin"]) && $_SESSION["is_admin"];
 }
 function is_open_page($path){
   return $path == "/about"       ||
@@ -164,9 +161,7 @@ function authenticate($username, $password){
       return false;
     }
 
-    $_SESSION["ta_courses"]   = $ta_courses;
     $_SESSION["username"]     = $username;
-    $_SESSION["is_admin"]     = $is_admin;
     return true;
   }
   return false;

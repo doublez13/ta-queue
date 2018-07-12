@@ -56,9 +56,7 @@ switch( $endpoint ){
       die();
     }
 
-    $_SESSION["ta_courses"]   = $ta_courses;
     $_SESSION["username"]     = $username;
-    $_SESSION["is_admin"]     = $is_admin;
     $return["authenticated"]  = True;
     $return["is_admin"]       = $is_admin;
 

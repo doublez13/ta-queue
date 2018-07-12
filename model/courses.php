@@ -48,13 +48,12 @@ function get_avail_courses(){
   * @param string $depart_pref
   * @param string $course_num
   * @param string $description
-  * @param string $ldap_group
   * @param string $professor
   * @param string $acc_code, null if none
   * @return int 0 on success
   *             1 on fail
   */
-function new_course($course_name, $depart_pref, $course_num, $description, $ldap_group, $professor, $acc_code){
+function new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
@@ -65,15 +64,15 @@ function new_course($course_name, $depart_pref, $course_num, $description, $ldap
   //Calling get_info(user) automatically adds a valid user to the users table.
   get_info($professor);
  
-  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, ldap_group, professor, access_code)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE description=?, ldap_group=?, professor=?, access_code=?";
+  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, professor, access_code)
+            VALUES (?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE description=?, professor=?, access_code=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, "sssssssssss", $depart_pref, $course_num, $course_name, $description, $ldap_group, $professor, $acc_code, $description, $ldap_group, $professor, $acc_code);
+  mysqli_stmt_bind_param($stmt, "sssssssss", $depart_pref, $course_num, $course_name, $description, $professor, $acc_code, $description, $professor, $acc_code);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -128,7 +127,7 @@ function get_course($course_name){
   if(!$sql_conn){
     return null;
   }
-  $query = "SELECT depart_pref, course_num, course_name, professor, description, ldap_group, access_code FROM courses WHERE course_name=?";
+  $query = "SELECT depart_pref, course_num, course_name, professor, description, access_code FROM courses WHERE course_name=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -140,7 +139,7 @@ function get_course($course_name){
     mysqli_close($sql_conn);
     return null;
   }
-  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $professor, $description, $ldap_group, $access_code);
+  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $professor, $description, $access_code);
   if(mysqli_stmt_fetch($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -149,37 +148,40 @@ function get_course($course_name){
                  "course_name" => $course_name, 
                  "professor"   => $professor, 
                  "description" => $description, 
-                 "ldap_group"  => $ldap_group, 
                  "access_code" => $access_code
            );
   }
   return null;
 }
 
- /**
-  * Returns a list of TAs for the course.
-  *
-  * @param string $course_name
-  * @return array of TA usernames
-  *         null on fail
-  */
 function get_tas($course_name){
-  $course_group = get_course_group($course_name);
-  if(is_null($course_group)){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
     return NULL;
   }
 
-  $result = srch_by_sam($course_group);
-  if(is_null($result)){
+  $query = "SELECT username FROM courses NATURAL JOIN enrolled WHERE course_name=? AND role='ta'";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
     return NULL;
   }
+  mysqli_stmt_bind_param($stmt, "s", $course_name);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $username);
 
-  $members = $result["member"];
-  foreach($members as &$member) {
-    $member = dn_to_sam($member);
+  $tas = array();
+  while(mysqli_stmt_fetch($stmt)){
+    $tas[] = $username;
   }
 
-  return $members;
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $tas;
 }
 
  /**
@@ -190,41 +192,7 @@ function get_tas($course_name){
   *         null on error
   */
 function get_ta_courses($username){
-  $result = srch_by_sam($username);
-  if(is_null($result)){
-    return NULL;
-  } 
-
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return NULL;
-  }
- 
-  $groups = $result["memberof"];
-  unset($groups["count"]);
-
-  $courses = array();
-  foreach($groups as $group) { //Iterate groups the user is a member of
-    $group_sam = dn_to_sam($group);
-    if(is_null($group_sam)){
-      continue; //In theory, this is not possible, but we'll check
-    }
-
-    #group_sam is returned from LDAP, so we won't worry about SQL injection here
-    $query  = "SELECT course_name FROM courses WHERE ldap_group ='".$group_sam."'";
-    $result = mysqli_query($sql_conn, $query);
-    if(!mysqli_num_rows($result)){
-      continue; //No course in the database with this ldap group
-    }
-    
-    //possible multiple courses use the same ldap_group
-    while($entry = mysqli_fetch_assoc($result)){
-      $courses[] = $entry["course_name"]; 
-    }
-  }
-  
-  mysqli_close($sql_conn);
-  return $courses;
+   return get_user_courses($username, "ta");
 }
 
  /**
@@ -235,34 +203,39 @@ function get_ta_courses($username){
   * @return null on error
   */
 function get_stud_courses($username){
+  return get_user_courses($username, "student");
+}
+
+function add_ta_course($username, $course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return NULL;
+    return -1;
   }
 
-  $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username=?";
+  get_info($username);
+
+  //If they are already enrolled as a student, this automatically unenrolls them, and enrolls them as a TA
+  $query = "REPLACE enrolled (username, course_id, role) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?), 'ta')";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return NULL;
+    return -1;
   }
-  mysqli_stmt_bind_param($stmt, "s", $username);
+  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);   
-    return NULL;
-  } 
-  mysqli_stmt_bind_result($stmt, $course_name);
-  
-  $courses = array();
-  while(mysqli_stmt_fetch($stmt)){
-    $courses[] = $course_name;
+    mysqli_close($sql_conn);
+    return -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return $courses;
+  return 0;
 }
+
+function rem_ta_course($username, $course_name){
+  return rem_user_course($username, $course_name, "ta");
+} 
 
  /**
   * Add user to course as a student
@@ -280,12 +253,9 @@ function add_stud_course($username, $course_name, $acc_code){
     return -1;
   }
 
-  //Don't allow user to enroll in course if they're a TA
-  $TAs = get_tas($course_name);
-  if (!is_null($TAs) && in_array($username, $TAs)){
-    mysqli_close($sql_conn);
-    return -5;
-  }
+  get_info($username);
+
+  //TODO: Should we error if they're a TA? Currently we just switch their role.
 
   $real_acc_code = get_course_acc_code($course_name); 
   if($real_acc_code == -1 ){//TODO: Nothing stopping -1 from being an access code
@@ -297,7 +267,7 @@ function add_stud_course($username, $course_name, $acc_code){
   }
   //Proper access code provided, or one isn't required
 
-  $query = "REPLACE enrolled (username, course_id) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?) )";
+  $query = "REPLACE enrolled (username, course_id, role) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?), 'student')";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -324,66 +294,13 @@ function add_stud_course($username, $course_name, $acc_code){
   *             -1 on fail
   */
 function rem_stud_course($username, $course_name){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return -1;
-  }
-
-  $query = "DELETE enrolled FROM enrolled NATURAL JOIN courses WHERE username=? AND course_name=?";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
-  }
-
-  mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
-  return 0;
+  return rem_user_course($username, $course_name, "student");
 }
 
 
 ######### HELPER METHODS #########
 /**
- * Returns the LDAP group for the course
- *
- * @param string $course_name
- * @return string ldap_group
- * @return null on error
- */
-function get_course_group($course_name){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return NULL;
-  }
-
-  $query = "SELECT ldap_group FROM courses WHERE course_name=?";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return NULL;
-  }
-  mysqli_stmt_bind_param($stmt, "s", $course_name);
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return NULL;
-  }
-  mysqli_stmt_bind_result($stmt, $ldap_group);
-  mysqli_stmt_fetch($stmt);
-
-  mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
-  return $ldap_group;
-}
-
-/**
- * Returns the LDAP group for the course
+ * Returns the access code for the course
  *
  * @param string $course_name
  * @return int access_code
@@ -413,5 +330,66 @@ function get_course_acc_code($course_name){
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return $access_code;
+}
+
+ /**
+  * Get courses where the user has role
+  *
+  * @param string $username
+  * @return array of courses the user is a member of with that role
+  *         null on error
+  */
+function get_user_courses($username, $role){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
+
+  $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username=? AND role=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, "ss", $username, $role);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $course_name);
+
+  $courses = array();
+  while(mysqli_stmt_fetch($stmt)){
+    $courses[] = $course_name;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $courses;
+}
+
+function rem_user_course($username, $course_name, $role){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  $query = "DELETE enrolled FROM enrolled NATURAL JOIN courses WHERE username=? AND course_name=? AND role=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_param($stmt, "sss", $username, $course_name, $role);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
 }
 ?>

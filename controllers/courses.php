@@ -12,18 +12,28 @@ $path_split = explode("/", $path);
 
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
-    if ( isset($path_split[3])  ){  //Admin endpoint: Get all settings for specific course
+    if ( isset($path_split[3])  ){  //Admin endpoint: Get information on specific course
       if (!$is_admin){
         http_response_code(403);
         echo json_encode( forbidden() );
         die();
       }
       $course = $path_split[3];
-      $res    = get_course($course);
-      $field  = "parameters";
-      $text   = $res; 
-    }
-    else{                          //Get all availible courses
+
+      if ( isset($path_split[4]) ){//Get list of TAs
+        if($path_split[4] != "ta"){
+          //ERROR && DIE
+        }
+        $res    = get_tas($course);  
+        $field  = "TAs";
+        $text   = $res;
+
+      }else{ //Get course settings
+        $res    = get_course($course);
+        $field  = "parameters";
+        $text   = $res; 
+      }
+    }else{                          //Get all availible courses
       $res   = get_avail_courses();
       $field = "all_courses";
       $text  = $res;
@@ -48,7 +58,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || !isset($_POST['course_num']) || 
-        !isset($_POST['description']) || !isset($_POST['ldap_group'])    || !isset($_POST['professor']))
+        !isset($_POST['description']) || !isset($_POST['professor']))
     {
       http_response_code(422);
       echo json_encode( json_err("Missing required parameters") );
@@ -59,14 +69,13 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $depart_pref = filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    $ldap_group  = filter_var($_POST['ldap_group'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $professor   = filter_var($_POST['professor'],   FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    if ($_POST['acc_code']){
-      $acc_code    = $_POST['acc_code'];
+    if ($_POST['access_code']){
+      $acc_code    = $_POST['access_code'];
     }else{
       $acc_code    = null;
     }
-    $res   = new_course($course_name, $depart_pref, $course_num, $description, $ldap_group, $professor, $acc_code);
+    $res   = new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code);
     $field = "success";
     $text  = "Course created/updated"; 
     break;

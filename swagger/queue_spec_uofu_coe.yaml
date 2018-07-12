@@ -204,7 +204,97 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  
+
+  /user/{username}/admin:
+    post:
+      summary: "Add a user to the admin group"
+      description: "Add a user to the admin group"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of user to delete"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+               	type: "boolean"
+              student_info:
+               	type: "object"
+                properties:
+                  username:
+                    type: "string"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+    delete:
+      summary: "Delete a user from the admin group"
+      description: "Remove a user from the admin group"
+      tags:
+      - "User"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of user to delete"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+               	type: "boolean"
+              student_info:
+               	type: "object"
+                properties:
+                  username:
+                    type: "string"
+                  first_name:
+                    type: "string"
+                  last_name:
+                    type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+ 
   /user/{username}/courses:
     get:
       summary: "Get courses a user is enrolled in."
@@ -245,9 +335,9 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/{username}/courses/{course}:
+  /user/{username}/courses/{course}/{role}:
     post:
-      summary: "Enroll user in a course"
+      summary: "Enroll user in a course as student or TA"
       description: "Enroll the user in the specified course with the specified access code (if required)."
       tags:
         - "User"
@@ -265,6 +355,13 @@ paths:
         in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
+        required: true
+      - name: "role"
+        in: "path"
+        description: "role: student or ta"
+        enum:
+        - "student"
+        - "ta"
         required: true
       - name: "acc_code"
         in: "formData"
@@ -310,6 +407,13 @@ paths:
         in: "path"
         description: "full course name (e.g. CS 4400: Computer Systems)"
         type: "string"
+        required: true
+      - name: "role"
+        in: "path"
+        description: "role: student or ta"
+        enum:
+        - "student"
+        - "ta"
         required: true
       responses:
         200:
@@ -1233,6 +1337,47 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+
+  /courses/{course}/ta:
+    get:
+      summary: "Get all TAs for a course"
+      description: "Get all the TAs for a course (e.g. \"CS 4150: Algorithms"
+      tags:
+        - "Courses"
+      parameters:
+      - name: "course"
+        in: "path"
+        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              TAs:
+                type: "object"
+                description: "array: tas"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Not admin"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+
 
 definitions:
   success:

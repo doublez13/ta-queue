@@ -12,18 +12,6 @@ function get_my_courses(){
     var stud_courses = dataParsed.student_courses;
     var ta_courses   = dataParsed.ta_courses;
 
-    //Edge case where a user may somehow be registered as a student AND a TA 
-    var intersection = stud_courses.filter(function(n) {
-      return ta_courses.indexOf(n) !== -1;
-    });
-    if(intersection.length){ 
-      alert("You're registered on the queue as both a student and TA for one or more courses. Unregistering as student...");
-      for(course in intersection){
-        dropCourse(course);
-      }
-      location.reload;
-    }
-
     $('#my_courses_body tr').remove();
     renderMyCourseTable(ta_courses, "TA");
     renderMyCourseTable(stud_courses, "Student");
