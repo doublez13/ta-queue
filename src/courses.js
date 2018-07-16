@@ -108,7 +108,7 @@ function prompt_acc_code(course_name){
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/"+username+"/courses/"+course;
+  var url = "../api/user/"+username+"/courses/"+course+"/student";
   if(code == null){
     var posting = $.post( url );
   }else{
@@ -121,7 +121,7 @@ function enrollCourse(course, code) {
 function dropCourse(course) {
   var del = $.ajax({
                   method: "DELETE",
-                  url: "../api/user/"+username+"/courses/"+course
+                  url: "../api/user/"+username+"/courses/"+course+"/student"
                   });
   del.done(done);
   del.fail(fail);
