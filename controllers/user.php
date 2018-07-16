@@ -108,11 +108,6 @@ switch($endpoint){
         if($role == "student"){
           $res = rem_stud_course($req_username, $course);
         }elseif($role == "ta"){
-          if (!$is_admin){ //Must be an admin to remove user as TA
-            http_response_code(403);
-            echo json_encode( forbidden() );
-            die();
-          }
           $res = rem_ta_course($req_username, $course);
         }else{
           http_response_code(422);
