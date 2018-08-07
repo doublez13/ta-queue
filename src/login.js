@@ -26,7 +26,10 @@ login = function( event ) {
       location.reload();
     }
     else{
-      alert("Invalid username or password");
+      document.getElementById("Login").style.borderWidth = "medium";
+      document.getElementById("Login").style.borderColor = "red";
+      document.getElementById("password").style.borderWidth = "medium";
+      document.getElementById("password").style.borderColor = "red";
     }
   });
 }
