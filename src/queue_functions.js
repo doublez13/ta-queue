@@ -64,7 +64,7 @@ function start(){
   last_name   = localStorage.last_name;
 
   var url = "../api/user/"+my_username+"/courses";
-  var get_req = $.get( url);
+  var get_req = $.get(url);
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -82,7 +82,7 @@ function start(){
 //and is what updates the dataParsed  
 function get_queue(course) {
   var url = "../api/queue/"+course+"";
-  var posting = $.get( url );
+  var posting = $.get(url);
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -166,7 +166,6 @@ function render_stats(dataParsed){
 }
 
 function render_ann_box(anns){
-
   $("#anns_body").empty();
   $('#anns_body').append('<tr class="flex" style="background: none;"> ' +
                            '<th class="flex-noShrink" style="width:110px;">Date</th>' +
@@ -220,68 +219,6 @@ function render_ann_box(anns){
       }
     });
   }
-
-  // ~~~~~~~~~~~~~~ DO NOT DELETE/EDIT: WORKING BACK UP CODE ACROSS ALL BROWSERS  ~~~~~~~~~~~~~~~~~~~~~~~~
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~ NO FLEX OR SCROLL BAR OPTION ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  // $("#anns_body").empty();
-  // $('#anns_body').append("<tr style='background: none;'> " +
-  //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Date</th>" +
-  //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Time</th>" +
-  //                          "<th class='col-sm-2' align='left' style='word-wrap:break-word'>Poster</th>" +
-  //                          "<th class='col-sm-5' align='left' style='word-wrap:break-word'>Announcement</th>" +
-  //                          "<th class='col-sm-1'></th></tr>");
-  //
-  // for(ann in anns){
-  //     var date       = anns[ann]["tmstmp"].split(" ")[0];
-  //     var time       = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
-  //
-  //     // Calculate how hold the announcement is -> ann_age_sec (doesn't work in IE)
-  //     var current_timestamp = new Date(new Date().toISOString().slice(0, 19).replace('T', ' '));
-  //     current_timestamp.setHours(current_timestamp.getHours() - 6); // new Date() is 6 hours ahead
-  //     var announcement_timestamp = new Date(anns[ann]["tmstmp"]);
-  //     var ann_age_sec = (current_timestamp - announcement_timestamp) / 1000; // ms -> s
-  //     var poster          = anns[ann]["poster"];
-  //     var announcement    = anns[ann]["announcement"];
-  //     let announcement_id = anns[ann]["id"]
-  //     var new_row =  $("<tr>" +
-  //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+date+"</td>" +
-  //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+time+"</td>" +
-  //                        "<td class='col-sm-2' align='left' style='word-wrap:break-word'>"+poster+"</td>" +
-  //                        "<td class='col-sm-5'>"+announcement+"</td> </tr>");
-  //
-  //     var td = $('<td class='col-sm-1'></td>');
-  //     if(is_TA){
-  //
-  //       // blue X icon below:
-  //       var del_ann_button = $('<div align="right"><button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button></div>');
-  //       // red circle X icon below:
-  //       //var del_ann_button = $('<td><button class="btn btn-danger"><i class="glyphicon glyphicon-remove-sign" title="Delete"></i></button><td>');
-  //       del_ann_button.click(function(event){
-  //           del_announcement(course, announcement_id)
-  //       });
-  //       td.append(del_ann_button);
-  //     }
-  //     new_row.append(td);
-  //
-  //     // Change color of announcement if it's less than X seconds old
-  //     if (ann_age_sec < 900) {
-  //       new_row.css("background-color", "#b3ffb3");//        00ff00 ccff33
-  //     }
-  //
-  //     $('#anns_body').append(new_row);
-  // }
-  // if(is_TA){
-  //     $("#ann_button").unbind("click");
-  //     $("#new_ann_form").show();
-  //     $("#ann_button").click(function( event ) {
-  //         event.preventDefault();
-  //         var announcement = document.getElementById("new_ann").value;
-  //         document.getElementById("new_ann").value = "";
-  //         add_announcement(course, announcement)
-  //     });
-  // }
-
-  // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ END WORKING BACK UP CODE ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 }
 
 //Shows the TAs that are on duty
@@ -332,7 +269,6 @@ function render_ta_view(dataParsed){
     });
    
     if(queue_state == "open"){ 
-      //$("body").css("background-image", "-webkit-linear-gradient(top, #808080 0%, #FFFFFF 50%");
       document.getElementById("freeze_button").className="btn btn-primary";
       document.getElementById("freeze_button").title="Prevent new entries";
       $("#freeze_button").text("Freeze Queue");
@@ -341,7 +277,6 @@ function render_ta_view(dataParsed){
         freeze_queue(course);
       });
     }else{ //frozen
-      //$("body").css("background-image", "-webkit-linear-gradient(top, #075685 0%, #FFF 50%");
       document.getElementById("freeze_button").className="btn btn-warning";
       document.getElementById("freeze_button").title="Allow new entries";
       $("#freeze_button").text("Resume Queue");
@@ -489,7 +424,6 @@ function render_queue_table(dataParsed){
 
         if(time_rem <= 0){
           new_row.css("background-color", "#fe2b40"); //User is over time limit
-	      //$("body").css("background-image", "-webkit-linear-gradient(top, #ff9C00 0%, #fFFFBB 50%");
         }
       }
     }
