@@ -28,13 +28,8 @@ function get_avail_courses(){
 
   $courses = array();
   while($entry = mysqli_fetch_assoc($result)){
-
-    $acc_req = false;
-    if(!is_null($entry["access_code"])){
-      $acc_req = true;
-    }
-
-    $courses += [ $entry["course_name"] => array("acc_req" => $acc_req)  ];
+    $acc_req = (is_null($entry["access_code"]) ? 0 : 1);
+    $courses += [ $entry["course_name"] => array("acc_req" => $acc_req) ];
   }
 
   mysqli_close($sql_conn);
