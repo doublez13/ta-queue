@@ -38,9 +38,9 @@ create_course = function( event ) {
   var posting = $.post( url, { course_name: $form.find( "input[id='course_name']" ).val(), 
                                depart_pref: $form.find( "input[id='depart_pref']" ).val(),
                                course_num:  $form.find( "input[id='course_num']" ).val(),
-                               description: $('#description').val(),
                                professor:   $form.find( "input[id='professor']" ).val(),
                                access_code: $form.find( "input[id='access_code']" ).val(),
+                               description: $('#description').val(),
                              } );
 
   posting.done(function(data){
