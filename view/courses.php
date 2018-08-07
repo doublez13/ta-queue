@@ -20,7 +20,7 @@
 
       <div class="row">
         <div class="col-sm-8 col-sm-offset-2">
-          <div id ="my_course_table">
+          <div id ="my_course_table" style="display: none">
             <div class="panel panel-primary">
               <!-- Default panel contents -->
               <div class="panel-heading">

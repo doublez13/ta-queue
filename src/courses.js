@@ -1,7 +1,10 @@
 username = localStorage.username;
-is_admin = localStorage.is_admin == 'true';
+is_admin = localStorage.is_admin == true;
+
+if(!is_admin){
+  get_my_courses();
+}
 get_all_courses();
-get_my_courses();
 
 function get_my_courses(){
   var $url = "../api/user/"+username+"/courses";
@@ -19,6 +22,7 @@ function get_my_courses(){
 }
 
 function renderMyCourseTable(courses, role) {
+  $("#my_course_table").show();
   var table = $('#my_courses_body'); 
 
   courses.forEach(function (course) {
@@ -26,14 +30,14 @@ function renderMyCourseTable(courses, role) {
     tableRow.append($('<td>').text(course));
     tableRow.append($('<td>').text(role));
     var URI = encodeURI("queue?course="+course);
-    tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>GoTo</span> </button></a> </td> '  );
+    tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
     table.append(tableRow);
   });
 }
 
 function get_all_courses(){
   var $url = "../api/courses";
-  var $get = $.get( $url );
+  var $get = $.get($url);
   $get.done(function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -60,15 +64,24 @@ function renderAllCourseTable(allCourses, dataParsed) {
     var tableRow = $('<tr>');
 
     tableRow.append($('<td>').text( course_name ));
-    if( $.inArray(course_name, ta_courses) >= 0 ){ //They're a TA for the course
+
+    if(is_admin){                                       //They're an admin
+      var URI = encodeURI("queue?course="+course);
+      tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
+      
+      var url = "./edit_course?course="+course_name;
+      var onclick = "window.location='"+url+"'";
+      tableRow.append('<td> <button class="btn btn-primary" onclick="'+onclick+'" style="width: 100%;" > <i class="fa fa-cog"></i>  </button></td>');
+    }
+    else if( $.inArray(course_name, ta_courses) >= 0 ){ //They're a TA for the course
       tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button></td>');
     }
-    else if( $.inArray(course_name, myCourses) >= 0 ){ //They're enrolled in the course
+    else if( $.inArray(course_name, myCourses) >= 0 ){  //They're a student in the course
       var text = "Leave";
       var action = "dropCourse('"+course_name+"')";
       tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
     }
-    else{ // Able to enroll as student
+    else{                                               // They're able to enroll as student
       var text = " Enroll";
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
@@ -78,17 +91,12 @@ function renderAllCourseTable(allCourses, dataParsed) {
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
       }
     }
-    if(is_admin){
-      var url = "./edit_course?course="+course_name;
-      var onclick = "window.location='"+url+"'";
-      tableRow.append('<td> <button class="btn btn-primary" onclick="'+onclick+'" style="width: 100%;" > <i class="fa fa-cog"></i>  </button></td>');
-    }
 
     $('#all_courses_body').append(tableRow);
   }
 }
 
-done = function(data){ //reloads the content on the page
+done = function(data){ //reloads the content on the page after they add/rem a course
   get_all_courses();
   get_my_courses();  
 }

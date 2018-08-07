@@ -67,7 +67,10 @@ switch( $endpoint ){
         //For now, these return the same information.
         //Later, we may want the TAs to see more,
         //or the students to see less.
-        if (in_array($course, $ta_courses)){ //TA
+        if($is_admin){                                            //Admin
+          $ret = get_queue($course);
+        }
+        elseif (in_array($course, $ta_courses)){                  //TA
           $ret = get_queue($course);
         }elseif (in_array($course, get_stud_courses($username))){ //Student
           $ret = get_queue($course);

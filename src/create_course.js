@@ -15,6 +15,7 @@ $(document).ready(function(){
     document.getElementById("create_course_button").innerText= "Create Course";
     document.getElementById("delete_course_button").style.display = "none";
     $("#create_course").submit( create_course );
+    doneMsg = "Course successfully created";
   }
   else{                              //Edit exsisting course
     document.getElementById("page_title").innerHTML  = "Edit Course";
@@ -27,6 +28,7 @@ $(document).ready(function(){
 
     $("#create_course").submit( create_course );
     $("#delete_course_button").click( delete_course );
+    doneMsg = "Course successfully modified";
   }
 });
 
@@ -67,7 +69,7 @@ delete_course = function( event ){
                 url: "../api/courses/"+course,
               });
     del.done(function(data){
-      alert("Course deleted successfully!");
+      alert("Course successfully deleted");
       window.location = "./courses";
     });
     del.fail(function(data){
@@ -158,7 +160,7 @@ function edit_TAs(){
       });
     });
     if(!error){
-      alert("Course Created Successfully!");
+      alert(doneMsg);
       window.location = "./courses";
     }
 
