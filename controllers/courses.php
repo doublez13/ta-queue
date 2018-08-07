@@ -75,6 +75,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }else{
       $acc_code    = null;
     }
+    //new_course is used both for creating and modifying courses
     $res   = new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code);
     $field = "success";
     $text  = "Course created/updated"; 
@@ -103,10 +104,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 
 //TODO: convert get_avail_courses() to error codes, and not null on error
 if ( (is_int($res) && $res) || is_null($res) ){
-  $return = array(
-    "authenticated" => True,
-    "error" => "Unable to process course request"
-  );
+  $return = return_JSON_error($res);
   http_response_code(500);
 }else{
   $return = array(

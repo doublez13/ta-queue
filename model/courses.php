@@ -50,33 +50,36 @@ function get_avail_courses(){
   * @param string $description
   * @param string $professor
   * @param string $acc_code, null if none
-  * @return int 0 on success
-  *             1 on fail
+  * @return int 0  on success
+  *             -1 generic error
+  *             -8 user does not exist
   */
 function new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return 1;
-  }
-
   //If the prof has never logged in, they're not in the users table
   //and therefore fail the Foreign Key Constraint.
   //Calling get_info(user) automatically adds a valid user to the users table.
-  get_info($professor);
- 
+  if(is_null(get_info($professor))){
+    return -8;
+  }
+  
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
   $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, professor, access_code)
             VALUES (?, ?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE description=?, professor=?, access_code=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
   mysqli_stmt_bind_param($stmt, "sssssssss", $depart_pref, $course_num, $course_name, $description, $professor, $acc_code, $description, $professor, $acc_code);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   } 
 
   mysqli_stmt_close($stmt);
@@ -206,13 +209,28 @@ function get_stud_courses($username){
   return get_user_courses($username, "student");
 }
 
+
+ /**
+  * Get courses that the user has joined as a student
+  * TODO: ADD CHECK FOR COURSE
+  * @param string $username
+  * @return int 0 on success
+  *             -1 on fail
+  *             -2 on nonexistant course
+  *             -8 on nonexistant user
+  */
 function add_ta_course($username, $course_name){
+  //If the prof has never logged in, they're not in the users table
+  //and therefore fail the Foreign Key Constraint.
+  //Calling get_info(user) automatically adds a valid user to the users table.
+  if(is_null(get_info($username))){
+    return -8;
+  }
+
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
   }
-
-  get_info($username);
 
   //If they are already enrolled as a student, this automatically unenrolls them, and enrolls them as a TA
   $query = "REPLACE enrolled (username, course_id, role) VALUES ( ?, (SELECT course_id FROM courses WHERE course_name=?), 'ta')";
@@ -239,21 +257,28 @@ function rem_ta_course($username, $course_name){
 
  /**
   * Add user to course as a student
-  *
+  * TODO: ADD CHECKS FOR COURSE AND USER
   * @param string $username
   * @param string $course_name
   * @return int 0 on success, 
   *             -1 on fail, 
+  *             -2 on nonexistant course
   *             -5 if user already has TA role, 
   *             -6 on invalid access code
+  *             -8 on nonexistant user
   */
-function add_stud_course($username, $course_name, $acc_code){ 
+function add_stud_course($username, $course_name, $acc_code){
+  //If the prof has never logged in, they're not in the users table
+  //and therefore fail the Foreign Key Constraint.
+  //Calling get_info(user) automatically adds a valid user to the users table.
+  if(is_null(get_info($username))){
+    return -8;
+  }
+
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
   }
-
-  get_info($username);
 
   //TODO: Should we error if they're a TA? Currently we just switch their role.
 

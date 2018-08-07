@@ -16,7 +16,8 @@ function return_JSON_error($err_code){
     -4 => "TA not on duty",
     -5 => "User already registered as TA for course",
     -6 => "Invalid access code provided",
-    -7 => "User in cool-down period"
+    -7 => "User in cool-down period",
+    -8 => "User does not exist"
   );
   return array(
     "authenticated" => True,
