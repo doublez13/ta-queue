@@ -2,7 +2,7 @@ swagger: "2.0"
 info:
   title: "Queue API for University of Utah College of Engineering"
   version: "1.0.0"
-  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login` (if you have not already done so on the website). Please remember to logout with `logout` when finished. **Logging out does not remove you from queues or take TAs off duty.**\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n-- access control (via TA/admin group membership); **admins must be members of \"queue-admin-GROUP\"**\n*If any of these do not work as expected, contact a CADE Lab administrator.*"
+  description: "**The following endpoints/functionalities can be used in designing a TA queue for the UofU CoE.**\n\n NOTES:\n- To test endpoints using *Try it out*, you must first login using `login` (if you have not already done so on the website). Please remember to logout with `logout` when finished. **Logging out does not remove you from queues or take TAs off duty.**\n- You must be logged in as a TA to successfully use endpoints marked with *(TA)* or as an admin to use endpoints under *Admin*; otherwise endpoints are open to all users. Naturally, TAs and students can only operate on courses they are assigned to or enrolled in, respectively.\n- This system relies on CADE Active Directory LDAP for:\n-- user authentication\n-- user info (e.g. first/last name)\n"
   # termsOfService: "http://swagger.io/terms/"
   contact:
     email: "zz@eng.utah.edu"
@@ -1116,7 +1116,7 @@ paths:
             $ref: '#/definitions/error'
     post:
       summary: "Create a new course"
-      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
+      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n"
       tags:
         - "Courses"
       consumes:
@@ -1147,11 +1147,6 @@ paths:
       - name: "description"
         in: "formData"
         description: "description of the course"
-        type: "string"
-        required: true
-      - name: "ldap_group"
-        in: "formData"
-        description: "LDAP group name for course TAs"
         type: "string"
         required: true
       - name: "acc_code"
@@ -1230,7 +1225,7 @@ paths:
 
     put:
       summary: "Edit an existing course"
-      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n- *ldap_group* must correspond to the real LDAP group name for the course TAs or else they won't have TA privileges"
+      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n"
       tags:
         - "Courses"
       consumes:
@@ -1261,11 +1256,6 @@ paths:
       - name: "description"
         in: "formData"
         description: "description of the course"
-        type: "string"
-        required: true
-      - name: "ldap_group"
-        in: "formData"
-        description: "LDAP group name for course TAs"
         type: "string"
         required: true
       - name: "acc_code"
