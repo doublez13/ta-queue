@@ -92,25 +92,25 @@ function new_course($course_name, $depart_pref, $course_num, $description, $prof
  *
  * @param string $course_name
  * @return int 0 on success
- *             1 on fail
+ *             -1 on fail
  */
 function del_course($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
-    return 1;
+    return -1;
   }
 
   $query = "DELETE FROM courses WHERE course_name=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
   mysqli_stmt_bind_param($stmt, "s",$course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return 1;
+    return -1;
   }
 
   mysqli_stmt_close($stmt);
