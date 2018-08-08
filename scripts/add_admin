@@ -1,0 +1,23 @@
+#!/usr/bin/php
+<?php
+require_once '../model/auth.php';
+
+if(count(($argv)) == 1){
+  echo "\nPlease provide a username to add to the admin group.\n\n";
+  die();
+}
+
+$username = $argv[1];
+if(is_null(get_info($username))){
+  echo "\nUsername does not exist in LDAP.\n\n";
+  die();
+}
+
+if(grant_admin($username)){
+  echo "\nFailed to grant admin access for ".$username.".\n\n";
+  die();
+}
+
+echo "\n".$username." successfully added to the admin group.\n\n"
+
+?>
