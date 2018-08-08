@@ -152,6 +152,13 @@ function get_course($course_name){
   return null;
 }
 
+/**
+ * Returns an array of TAs for course_name
+ *
+ * @param string $course_name
+ * @return array of TAs for course_name
+ *         null on error
+ */
 function get_tas($course_name){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -215,7 +222,7 @@ function get_stud_courses($username){
   *             -8 on nonexistant user
   */
 function add_ta_course($username, $course_name){
-  //If the prof has never logged in, they're not in the users table
+  //If the user has never logged in, they're not in the users table
   //and therefore fail the Foreign Key Constraint.
   //Calling get_info(user) automatically adds a valid user to the users table.
   if(is_null(get_info($username))){
@@ -246,6 +253,14 @@ function add_ta_course($username, $course_name){
   return 0;
 }
 
+/**
+ * Unenrolls a user from the course as a TA
+ *
+ * @param string $course_name
+ * @param string $username
+ * @return int 0 on success
+ *             -1 on fail
+ */
 function rem_ta_course($username, $course_name){
   return rem_user_course($username, $course_name, "ta");
 } 
@@ -277,7 +292,7 @@ function add_stud_course($username, $course_name, $acc_code){
 
   //TODO: Should we error if they're a TA? Currently we just switch their role.
 
-  $real_acc_code = get_course_acc_code($course_name); 
+  $real_acc_code = get_course_acc_code($course_name, $sql_conn); 
   if($real_acc_code == -1 ){//TODO: Nothing stopping -1 from being an access code
     mysqli_close($sql_conn);
     return -1;//error
@@ -319,19 +334,14 @@ function rem_stud_course($username, $course_name){
 
 
 ######### HELPER METHODS #########
-/**
- * Returns the access code for the course
- *
- * @param string $course_name
- * @return int access_code
- *             -1 on error
- */
-function get_course_acc_code($course_name){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return -1;
-  }
-
+ /**
+  * Returns the access code for the course
+  *
+  * @param string $course_name
+  * @return string access_code
+  *         int   -1 on error
+  */
+function get_course_acc_code($course_name, $sql_conn){
   $query = "SELECT access_code FROM courses WHERE course_name=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -348,7 +358,6 @@ function get_course_acc_code($course_name){
   mysqli_stmt_fetch($stmt);
 
   mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
   return $access_code;
 }
 
@@ -389,6 +398,15 @@ function get_user_courses($username, $role){
   return $courses;
 }
 
+ /**
+  * Remove user from course as $role
+  *
+  * @param string $username
+  * @param string $course_name
+  * @param string $role [ta, student]
+  * @return int  0 on success, 
+  *             -1 on fail
+  */
 function rem_user_course($username, $course_name, $role){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
