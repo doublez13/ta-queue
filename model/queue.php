@@ -24,14 +24,11 @@ function get_queue($course_name){
   }
 
   #Note that we don't have to use SQL Parameters in ths 
-  #function since the block of code below sanitizes the input
+  #function since the block of code below sanitizes the $course_name input
   $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == -1){
+  if($course_id < 0){
     mysqli_close($sql_conn);
-    return -1; //SQL error
-  }elseif($course_id == -2){
-    mysqli_close($sql_conn);
-    return -2; //Nonexistent course
+    return $course_id; //SQL error
   }
 
   #Build return array
@@ -430,16 +427,11 @@ function help_student($TA_username, $stud_username, $course_name){
     return -1;
   }
 
-  $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == -1){
+  $queue_state = get_queue_state($course_name);
+  if($queue_state < 0){
     mysqli_close($sql_conn);
-    return -1;
-  }elseif($course_id == -2){
-    mysqli_close($sql_conn);
-    return -2;
-  }
-
-  if(get_queue_state($course_name) == "closed"){
+    return $queue_state;
+  }elseif($queue_state == "closed"){
     mysqli_close($sql_conn);
     return -3;
   }
@@ -449,14 +441,15 @@ function help_student($TA_username, $stud_username, $course_name){
     return -4;
   }
 
+  //TODO: Do you even SQL brah?
   $query = "REPLACE INTO ta_status (username, course_id, helping)
-            VALUES (?,?, (SELECT position FROM queue WHERE username=? AND course_id=?))";
+            VALUES (?,(SELECT course_id FROM courses WHERE course_name=?), (SELECT position FROM queue WHERE username=? AND course_id=(SELECT course_id FROM courses WHERE course_name=?)))";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_id, $stud_username, $course_id);
+  mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_name, $stud_username, $course_name);
   if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -484,16 +477,11 @@ function set_time_lim($time_lim, $course_name){
     return -1;
   }
 
-  $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == -1){
+  $queue_state = get_queue_state($course_name);
+  if($queue_state < 0){
     mysqli_close($sql_conn);
-    return -1; //SQL error
-  }elseif($course_id == -2){
-    mysqli_close($sql_conn);
-    return -2; //Nonexistent course
-  }
-
-  if(get_queue_state($course_name) == "closed"){
+    return $queue_state;
+  }elseif($queue_state == "closed"){
     mysqli_close($sql_conn);
     return -3;
   }
@@ -535,16 +523,11 @@ function set_cooldown($time_lim, $course_name){
     return -1;
   }
 
-  $course_id = course_name_to_id($course_name, $sql_conn);
-  if($course_id == -1){
+  $queue_state = get_queue_state($course_name);
+  if($queue_state < 0){
     mysqli_close($sql_conn);
-    return -1; //SQL error
-  }elseif($course_id == -2){
-    mysqli_close($sql_conn);
-    return -2; //Nonexistent course
-  }
-
-  if(get_queue_state($course_name) == "closed"){
+    return $queue_state;
+  }elseif($queue_state == "closed"){
     mysqli_close($sql_conn);
     return -3;
   }
