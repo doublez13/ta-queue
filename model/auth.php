@@ -93,11 +93,11 @@ function is_admin($username){
 }
 
 function grant_admin($username){
-  return admin_access($username, 'true');
+  return admin_access($username, 1);
 }
 
 function revoke_admin($username){
-    return admin_access($username, 'false');
+    return admin_access($username, 0);
 }
 
 /**
@@ -235,7 +235,7 @@ function touch_user($username, $first, $last, $full){
  * Adds or removes a user from the admin group.
  *
  * @param string $username
- * @param bool $admin
+ * @param int $admin
  * @return int 0 on success
  *         int 1 on fail
  */
@@ -255,7 +255,7 @@ function admin_access($username, $admin){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, 'ss', $admin, $username);
+  mysqli_stmt_bind_param($stmt, 'is', $admin, $username);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
