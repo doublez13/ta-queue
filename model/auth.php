@@ -33,8 +33,6 @@ function auth($username, $password){
  *         null on error
  */
 function get_info($username){
-  //TODO: Do a SQL check first and fall back to LDAP if not in SQL
-
   $result = srch_by_sam($username); 
   if(is_null($result)){
     return NULL;
@@ -234,8 +232,7 @@ function touch_user($username, $first, $last, $full){
 }
 
 /**
- * Touches the SQL entry for $username.
- * Updates the login timestamp
+ * Adds or removes a user from the admin group.
  *
  * @param string $username
  * @param bool $admin
@@ -248,7 +245,9 @@ function admin_access($username, $admin){
     return 1;
   }
 
-  get_info($username);
+  if(is_null(get_info($username))){
+    return 1;
+  }
 
   $query = "UPDATE users SET admin=? WHERE username=?";
   $stmt  = mysqli_prepare($sql_conn, $query);

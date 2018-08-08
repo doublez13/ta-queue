@@ -44,7 +44,7 @@ DATABASE:    Database for the queue.
 In the resources directory at the root of the project is the DB_setup.sql file that initializes the queue database. Simply set the database name at the top of the file to match what's set in the config.php file. In a mysql shell, the script can be ran using 'mysql> source path/to/DB_setup.sql'.
 
 ### Swagger API Documentation
-The public API is documented according to the Swagger 2.0 specification. The documentation file is found at "/swagger/queue_spec_uofu_coe.yaml". CHANGES TO THE API SHOULD BE UPDATED ACCORDINGLY IN THIS FILE. The Swagger webpage is viewed by browsing to "/swagger/index.html" (the Swagger UI version is 3.10.0). The webpage has a "Try it out" feature which allows users to actually use each endpoint. For this to work correctly, the "host" and "basePath" values at the top of the documentation file should point to the desired API (perhaps the real one).
+The public API is documented according to the Swagger 2.0 specification. The documentation file is found at "/swagger/ta_queue.yaml". CHANGES TO THE API SHOULD BE UPDATED ACCORDINGLY IN THIS FILE. The Swagger webpage is viewed by browsing to "/swagger/index.html" (the Swagger UI version is 3.10.0). The webpage has a "Try it out" feature which allows users to actually use each endpoint. For this to work correctly, the "host" and "basePath" values at the top of the documentation file should point to the desired API (perhaps the real one).
 
 #
 ## User Documentation
