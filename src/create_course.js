@@ -103,7 +103,7 @@ function get_TAs(){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     dataParsed.TAs.forEach(function(TA){
-      TAs.value += ' ' + TA;
+      TAs.value += TA + ' ';
     });
   }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied
 }
@@ -112,7 +112,7 @@ function get_TAs(){
 function edit_TAs(){
   var TAString = document.getElementById("TAs").value.trim();
   var course   = document.getElementById("course_name").value.trim();
-  var newTAs   = TAString.split(" ");
+  var newTAs   = TAString.split(" ").filter(v=>v!='');
 
   //Get all current TAs
   var $url = "../api/courses/"+course+"/ta";
@@ -144,7 +144,7 @@ function edit_TAs(){
         url: "../api/user/"+item+"/courses/"+course+"/ta"
       });
     });
-
+    
     //Do any adding if necessary
     var error = 0;
     add.forEach( function(item, index) {

@@ -58,7 +58,7 @@
                   <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
                   
                   <label>TAs</label>
-                  <input type="text" id="TAs" placeholder="space separated list of usernames" required>
+                  <input type="text" id="TAs" placeholder="space separated list of usernames">
 
                   <label>Description</label>
                   <textarea id="description" placeholder="Course description" style="height:100px" required></textarea>
