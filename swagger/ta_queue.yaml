@@ -97,7 +97,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
   /logout:
-    get:
+    post:
       summary: "Logout a user"
       description: "Logout the user who sent the request."
       tags:

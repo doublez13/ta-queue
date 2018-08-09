@@ -63,6 +63,12 @@ switch( $endpoint ){
     http_response_code(200);
     break;
   case "logout":
+    if ($_SERVER['REQUEST_METHOD'] !== "POST"){
+      http_response_code(405);
+      echo json_encode( invalid_method("POST") );
+      die();
+    }
+
     //Clear session variables
     $_SESSION = array();
     
