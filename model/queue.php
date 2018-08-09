@@ -449,7 +449,7 @@ function help_student($TA_username, $stud_username, $course_name){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_name, $stud_username, $course_name);
+  mysqli_stmt_bind_param($stmt, "ssss", $TA_username, $course_name, $stud_username, $course_name);
   if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);

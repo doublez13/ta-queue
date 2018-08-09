@@ -127,7 +127,7 @@ function invalid_auth_reply(){
   http_response_code(401);
   $return = array(
     "authenticated" => False,
-    "error" => "Invalid username or password"
+    "error" => "Not Authenticated"
   );
   echo json_encode($return);
 }

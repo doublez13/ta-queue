@@ -444,7 +444,7 @@ function render_queue_table(dataParsed){
       }else{ //Student is not being helped
         var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
-          enqueue_ta(course); //Maybe make this cleaner. 
+          enqueue_ta(course); //TODO:Make this cleaner. 
           help_student(course, username);
         });
       }
