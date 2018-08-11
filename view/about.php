@@ -17,7 +17,7 @@
   </div>
 
   <div class="container">
-    <div class="col-sm-6">
+    <div class="col-sm-5">
       <h1 style="color: #cc0000">Team Members</h1>
       <h3 style="text-decoration: underline;">Blake Burton</h3> <br>
         <p style="font-size: 17px">
@@ -52,7 +52,7 @@
         </p>
     </div><!--col-sm-6-->
     
-    <div class="col-sm-6">
+    <div class="col-sm-7">
       <img src="./resources/img/SuzieQueueTeamPhoto.jpg" alt="Team Photo" style="width:600px; height:400px; margin-top:50px;">
       <p>
       <br>

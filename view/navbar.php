@@ -20,7 +20,7 @@
             <a href="./about">About</a>
           </li>
           <li>
-            <a href="./tutorial" target="_blank">Tutorial</a>
+            <a href="./help" target="_blank">Help</a>
           </li>
           <li>
             <a href="../swagger/index.html" target="_blank">Public API</a>
