@@ -105,7 +105,7 @@ function is_redirect(){
 }
 function is_open_page($path){
   return $path == "/about"       ||
-         $path == "/tutorial";
+         $path == "/help";
 }
 function is_login_endpoint($path){
   return $path == '/api/login'   || 
