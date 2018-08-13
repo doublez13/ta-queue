@@ -41,7 +41,7 @@ function missing_auth(){
 function forbidden(){ //403
   return array(
     "authenticated" => True,
-    "error" => "Not authorized"
+    "error" => "Forbidden"
   );
 }
 
