@@ -9,7 +9,7 @@
 <body>
   <?php include('./view/navbar.php'); ?>
  
-  <div class="jumbotron jumbotron-billboard" style="margin-top: -15px; opacity: 0.75;">
+  <div class="jumbotron jumbotron-billboard" style="margin-top: -20px; opacity: 0.75;">
     <div style="margin-top:  -40px; margin-bottom: -20px; text-align: center;">
       <h1 style="color: #404040; text-shadow: 2px 2px #000000;">TA Help Queue Tutorial</h1>
     </div>
