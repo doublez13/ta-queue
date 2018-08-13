@@ -45,7 +45,8 @@ create_course = function( event ) {
                                description: $('#description').val(),
                              } );
 
-  posting.done(function(data){
+  professor = $form.find( "input[id='professor']" ).val();
+  posting.done(function(data){//Modify the course, then modify the TAs
     edit_TAs()
   });
   posting.fail(function(data){
@@ -136,10 +137,19 @@ function edit_TAs(){
         add.push(item);
       } 
     });
+    //TODO: This is such a hack
+    //Instead of plumbing a professor role into the model and controller,
+    //we simply add the professor to the TA list so they'll automatically
+    //inherit TA permissions.
+    //Currently the professor attribute isn't used in the backend, but I'd 
+    //like to eventually allow professors to edit their own course, and 
+    //have access to a wider range of stats
+    add.push(professor);
 
     //Do any removal if necessary
     del.forEach( function(item, index) {
       $.ajax({
+        async: false,
         method: "DELETE",
         url: "../api/user/"+item+"/courses/"+course+"/ta"
       });

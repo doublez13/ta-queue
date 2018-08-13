@@ -81,25 +81,30 @@ function start(){
 //This function is called every X seconds,
 //and is what updates the dataParsed  
 function get_queue(course) {
-  var url = "../api/queue/"+course+"";
+  var url = "../api/queue/"+course;
   var posting = $.get(url);
   var done = function(data){
     var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    renderView(dataParsed);
+  }
+  var fail = function(data){
+    var dataString = JSON.stringify(data.responseJSON);
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.error){
       var error = dataParsed.error;
       //If they're not enrolled in the course, attempt to
       //enroll them with no access code
-      if(error == "Not enrolled in course"){
+      if(error == "Forbidden"){
         enrollCourse(course, null);
       }else{
         alert(dataParsed.error);
-        return;
+        window.location = '/';
       }
     }
-    renderView(dataParsed);
   }
   posting.done(done);
+  posting.fail(fail);
 }
 
 //This function renders the view from the data
@@ -121,9 +126,9 @@ function renderView(dataParsed) {
 
   //Render buttons, and so on
   if(is_TA){
-    render_ta_view(dataParsed)
+    render_ta_view(dataParsed);
   }else{
-    render_student_view(dataParsed)
+    render_student_view(dataParsed);
   }
 }
 
@@ -652,7 +657,7 @@ function tConvert (time) {
 }
 
 function enrollCourse(course, code) {
-  var url = "../api/user/"+my_username+"/courses/"+course;
+  var url = "../api/user/"+my_username+"/courses/"+course+"/student";
   if(code == null){
     var posting = $.post( url );
   }else{
@@ -661,4 +666,3 @@ function enrollCourse(course, code) {
   posting.done(done);
   posting.fail( function(data){ window.location = '/'; });
 }
-

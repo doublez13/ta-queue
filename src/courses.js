@@ -67,11 +67,17 @@ function renderAllCourseTable(allCourses, dataParsed) {
 
     if(is_admin){                                       //They're an admin
       var URI = encodeURI("queue?course="+course);
-      tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
-      
       var url = "./edit_course?course="+course_name;
       var onclick = "window.location='"+url+"'";
-      tableRow.append('<td> <button class="btn btn-primary" onclick="'+onclick+'" style="width: 100%;" > <i class="fa fa-cog"></i>  </button></td>');
+
+      var td = $("<td class='col-sm-2'></td>");
+      var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
+      var go_button = $('<div class="btn-group" role="group"> <a href="'+URI+'"> <button class="btn btn-primary" title="Go to Course">Go</button></div>');
+      var edit_button1 = $('<div class="btn-group" role="group"><button class="btn btn-primary" onclick="'+onclick+'"  title="Edit Course"><i class="fa fa-cog"></i></button></div>');
+      button_group.append(go_button);
+      button_group.append(edit_button1);
+      td.append(button_group);
+      tableRow.append(td);
     }
     else if( $.inArray(course_name, ta_courses) >= 0 ){ //They're a TA for the course
       tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button></td>');
@@ -81,7 +87,7 @@ function renderAllCourseTable(allCourses, dataParsed) {
       var action = "dropCourse('"+course_name+"')";
       tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
     }
-    else{                                               // They're able to enroll as student
+    else{                                               //They're able to enroll as student
       var text = " Enroll";
       if(allCourses[course_name]["acc_req"]){
         var action = "prompt_acc_code('"+course_name+"')";
@@ -96,7 +102,7 @@ function renderAllCourseTable(allCourses, dataParsed) {
   }
 }
 
-done = function(data){ //reloads the content on the page after they add/rem a course
+done = function(data){ //Repopulates the content on the page after they add/rem a course
   get_all_courses();
   get_my_courses();  
 }
