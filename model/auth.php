@@ -33,30 +33,21 @@ function auth($username, $password){
  *         null on error
  */
 function get_info($username){
-  $result = srch_by_sam($username); 
-  if(is_null($result)){
-    return NULL;
+  $info = get_info_sql($username);
+  if(is_null($info)){
+    error_log("Oracle database not available!", 0);
+    $info = get_info_ldap($username);
+    if(is_null($info)){
+      return NULL;
+    }
+    $info['is_admin'] = False;
   }
 
-  if(!(array_key_exists('givenname', $result) && array_key_exists('sn', $result))){ 
-    return NULL;
-  }
-  $first_name = $result['givenname'][0];
-  $last_name  = $result['sn'][0];
-  
-  $first_name = ucwords(strtolower($first_name));
-  $last_name  = ucwords(strtolower($last_name));
-  
   #Touches the user entry in the sql table
-  if(touch_user($username, $first_name, $last_name, $first_name.' '.$last_name)){
+  if(touch_user($info['username'], $info['first_name'], $info['last_name'], $info['full_name'])){
     return NULL;
   }
- 
-  return array(
-    'username'   => $username,
-    'first_name' => $first_name,
-    'last_name'  => $last_name,
-  );
+  return $info;
 }
 
 /**
@@ -266,5 +257,82 @@ function admin_access($username, $admin){
   mysqli_close($sql_conn);
   return 0;
 }
+
+/**
+ * Returns an array of information on the user from SQL
+ *
+ * @param string $username samaccountname
+ * @return array consisting of first name, last name, and username
+ *         null on error
+ */
+function get_info_sql($username){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
+
+  $query = "SELECT username, first_name, last_name, full_name, admin FROM users WHERE username=?"; 
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, 's', $username);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+
+  mysqli_stmt_bind_result($stmt, $username, $first_name, $last_name, $full_name, $admin);
+  mysqli_stmt_fetch($stmt);
+
+  //TODO: Poor way of testing
+  if(is_null($first_name)){
+    return NULL;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+
+  return array(
+    'username'   => $username,
+    'first_name' => $first_name,
+    'last_name'  => $last_name,
+    'full_name'  => $full_name,
+    'is_admin'   => $admin
+  );
+}
+
+/**
+ * Returns an array of information on the user from LDAP
+ *
+ * @param string $username samaccountname
+ * @return array consisting of first name, last name, and username
+ *         null on error
+ */
+function get_info_ldap($username){
+  $result = srch_by_sam($username);
+  if(is_null($result)){
+    return NULL;
+  }
+
+  if(!(array_key_exists('givenname', $result) && array_key_exists('sn', $result))){
+    return NULL;
+  }
+  $first_name = $result['givenname'][0];
+  $last_name  = $result['sn'][0];
+
+  $first_name = ucwords(strtolower($first_name));
+  $last_name  = ucwords(strtolower($last_name));
+
+  return array(
+    'username'   => $username,
+    'first_name' => $first_name,
+    'last_name'  => $last_name,
+    'full_name'  => $first_name.' '.$last_name
+  );
+}
+
 
 ?>
