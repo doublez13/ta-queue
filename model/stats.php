@@ -19,6 +19,7 @@ require_once 'queue.php';
  * @param string $end_date enter queue timestamp (exclusive)
  * @return array of student log entries
  *         int -1 on error
+ *         int -2 on nonexistent course
  */
 function get_stud_log($stud_username, $start_date, $end_date){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
