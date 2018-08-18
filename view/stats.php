@@ -8,7 +8,7 @@
   <!-- Highcharts CDN -->
   <script src="https://code.highcharts.com/highcharts.src.js" ></script>
   <script src="https://code.highcharts.com/modules/exporting.src.js"></script>
-  <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-yYHfGKTlXFMrQe8uQPl37NB5145K3wGM4E0NueblXUuuBbVBPtsn36f4D4Ph5WzT" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-YSePHngPg90XHqvLix/s6s5rQACuRdMewL1EXZNpH+kN6WTFkE8vbZ786PXc2OGY" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js" integrity="sha384-jTMy6EIZUv6UQkT/OrJic59RKQRr8cYNcNBBsHUAlAdKt3sSMfCaf5V2YE97wLkB" crossorigin="anonymous"></script>
         
   <script src="./src/stats_graph.js"></script>
