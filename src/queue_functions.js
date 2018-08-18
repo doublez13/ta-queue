@@ -160,7 +160,7 @@ function render_stats(dataParsed){
   // SET COOL DOWN
   $("#cooldown").empty();
   $("#cooldown").append("<span id='cd_time'>Cool-Down: </span>")
-  if(dataParsed.cooldown >0){
+  if(dataParsed.cooldown > 0){
     $("#cd_time").append("<b>"+dataParsed.cooldown+" Minutes</b>");
   }
   else
