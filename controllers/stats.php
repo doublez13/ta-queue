@@ -4,7 +4,7 @@
  * Copyright (c) 2018 Zane Zakraisek
  *               2018 Blake Burton
  *
- * Controller for user endpoints
+ * Controller for stats endpoints
  * 
  */
 
