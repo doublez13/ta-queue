@@ -35,7 +35,6 @@ function auth($username, $password){
 function get_info($username){
   $info = get_info_sql($username);
   if(is_null($info)){
-    error_log("Oracle database not available!", 0);
     $info = get_info_ldap($username);
     if(is_null($info)){
       return NULL;
