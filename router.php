@@ -81,6 +81,8 @@ else{
   }
   //Admin access needed
   elseif(is_admin_page($path)){
+    require_once "model/auth.php";
+    $username  = $_SESSION['username'];
     if(is_admin($username)){
       require_once $source;
     }else{
@@ -115,8 +117,8 @@ function is_root_dir($path){
   return $path == '/';
 }
 function is_admin_page($path){
-  return $path == "/new_class"   || 
-         $path == "/edit_class";
+  return $path == "/new_course"   || 
+         $path == "/edit_course";
 }
 function basic_auth_provided(){
   return isset($_SERVER['PHP_AUTH_USER']) && 
