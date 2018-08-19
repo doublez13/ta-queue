@@ -43,6 +43,7 @@ function get_info($username){
   }
 
   #Touches the user entry in the sql table
+  #TODO: Consider moving this under info['is_admin']
   if(touch_user($info['username'], $info['first_name'], $info['last_name'], $info['full_name'])){
     return NULL;
   }
