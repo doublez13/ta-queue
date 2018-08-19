@@ -22,7 +22,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 
       if ( isset($path_split[4]) ){//Get list of TAs
         if($path_split[4] != "ta"){
-          //ERROR && DIE
+          //TODO: ERROR && DIE
         }
         $res    = get_tas($course);  
         $field  = "TAs";
@@ -102,9 +102,15 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     die();
 }
 
-//TODO: convert get_avail_courses() to error codes, and not null on error
-if ( (is_int($res) && $res) || is_null($res) ){
+//TODO: convert methods to error codes, and not null on error
+if ( is_int($res) && $res ){
   $return = return_JSON_error($res);
+  http_response_code(500);
+}elseif(is_null($res)){
+  $return = array(
+    "authenticated" => True,
+    "error" => "Generic SQL error"
+  );
   http_response_code(500);
 }else{
   $return = array(
