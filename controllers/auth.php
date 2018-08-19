@@ -13,6 +13,8 @@ $endpoint = $path_split[2];
 
 switch( $endpoint ){
   case "login":
+    //Wipe any existing session, but back up and restore
+    //redirect_url if it exists
     if(isset($_SESSION["redirect_url"])){
       $redirect_url = $_SESSION["redirect_url"];
     }
@@ -46,11 +48,10 @@ switch( $endpoint ){
       die();
     }
 
-    $return     = get_info($username);
-    $is_admin   = is_admin($username);
-    $ta_courses = get_ta_courses($username);
+    $return   = get_info($username);
+    $is_admin = is_admin($username);
 
-    if (is_null($return) || is_null($is_admin) || is_null($ta_courses)){
+    if (is_null($return) || is_null($is_admin)){
       http_response_code(500);
       echo json_encode( json_err("Unable to retrieve info from LDAP") );
       die();
