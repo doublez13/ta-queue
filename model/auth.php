@@ -148,7 +148,7 @@ function _ldap_connect($username, $password){
   }
 
   if($ldap_conn){
-    if(ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
+    if(@ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
       return $ldap_conn;
     } 
   }
