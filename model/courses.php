@@ -197,7 +197,7 @@ function get_tas($course_name){
   *         null on error
   */
 function get_ta_courses($username){
-   return get_user_courses($username, "ta");
+   return get_user_courses($username)['ta'];
 }
 
  /**
@@ -208,7 +208,7 @@ function get_ta_courses($username){
   * @return null on error
   */
 function get_stud_courses($username){
-  return get_user_courses($username, "student");
+  return get_user_courses($username)['student'];
 }
 
 
@@ -368,37 +368,39 @@ function get_course_acc_code($course_name, $sql_conn){
   * @return array of courses the user is a member of with that role
   *         null on error
   */
-function get_user_courses($username, $role){
+function get_user_courses($username){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return NULL;
   }
 
   #TODO: Consider switching this to a subquery instead of a join
-  #SELECT course_name FROM courses WHERE course_id IN (SELECT course_id FROM enrolled WHERE username=? AND role=?)
-  $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username=? AND role=?";
+  $query = "SELECT course_name, role FROM courses NATURAL JOIN enrolled WHERE username=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return NULL;
   }
-  mysqli_stmt_bind_param($stmt, "ss", $username, $role);
+  mysqli_stmt_bind_param($stmt, "s", $username);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return NULL;
   }
-  mysqli_stmt_bind_result($stmt, $course_name);
+  mysqli_stmt_bind_result($stmt, $course_name, $role);
 
-  $courses = array();
+  $courses            = array();
+  $courses['student'] = array();
+  $courses['ta']      = array();
   while(mysqli_stmt_fetch($stmt)){
-    $courses[] = $course_name;
+    $courses[$role][] = $course_name;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return $courses;
-}
+} 
+
 
  /**
   * Remove user from course as $role

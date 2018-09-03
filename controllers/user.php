@@ -30,7 +30,6 @@ switch($endpoint){
   case "courses":
     switch($_SERVER['REQUEST_METHOD']){
       case "GET":
-        $stud_courses = get_stud_courses($req_username);
         if (is_null($stud_courses)){
           $return = json_err("Unable to fetch courses");
           http_response_code(500);
