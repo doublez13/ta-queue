@@ -27,6 +27,8 @@ function auth($username, $password){
 
 /**
  * Returns an array of information on the user
+ * Check the database first, if a user is not there,
+ * then try LDAP and create a database entry if successful
  *
  * @param string $username samaccountname
  * @return array consisting of first name, last name, and username
@@ -43,7 +45,6 @@ function get_info($username){
   }
 
   #Touches the user entry in the sql table
-  #TODO: Consider moving this under info['is_admin']
   if(touch_user($info['username'], $info['first_name'], $info['last_name'], $info['full_name'])){
     return NULL;
   }
