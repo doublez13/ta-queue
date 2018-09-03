@@ -35,8 +35,8 @@ if( substr($path, 0, 5) === "/api/" ){
   }
 
   $username   = $_SESSION['username'];
-  $ta_courses = get_ta_courses($username); 
-  $is_admin   = is_admin($username);
+  $ta_courses = get_ta_courses($username); //TODO: Adds overhead to every request 
+  $is_admin   = is_admin($username);       //TODO: Adds overhead to every request
 
   $controller = explode("/", $path)[2];
   switch($controller){

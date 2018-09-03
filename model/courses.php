@@ -374,6 +374,8 @@ function get_user_courses($username, $role){
     return NULL;
   }
 
+  #TODO: Consider switching this to a subquery instead of a join
+  #SELECT course_name FROM courses WHERE course_id IN (SELECT course_id FROM enrolled WHERE username=? AND role=?)
   $query = "SELECT course_name FROM courses NATURAL JOIN enrolled WHERE username=? AND role=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){

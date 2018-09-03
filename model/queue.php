@@ -23,7 +23,7 @@ function get_queue($course_name){
     return -1; //SQL error
   }
 
-  #Note that we don't have to use SQL Parameters in ths 
+  #NOTE: we don't have to use SQL Parameters in ths 
   #function since the block of code below sanitizes the $course_name input
   $course_id = course_name_to_id($course_name, $sql_conn);
   if($course_id < 0){
