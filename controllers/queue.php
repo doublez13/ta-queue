@@ -69,12 +69,11 @@ switch( $endpoint ){
         //or the students to see less.
         if($is_admin){                                            //Admin
           $ret = get_queue($course);
-        }
-        elseif (in_array($course, $ta_courses)){                  //TA
+        }elseif (in_array($course, $ta_courses)){                 //TA
           $ret = get_queue($course);
         }elseif (in_array($course, get_stud_courses($username))){ //Student
           $ret = get_queue($course);
-        }else{ //Not in course
+        }else{                                                    //Not in course
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -84,7 +83,7 @@ switch( $endpoint ){
         http_response_code(405);
         echo json_encode( invalid_method("GET") );
         die();
-    }//TODO: Not the cleanest way to do it, but it works
+    }//TODO: Not the cleanest way to do it, but it works for now
     $text = "Queue fetched";
     $res = $ret;
     if(!is_int($ret)){
@@ -107,7 +106,7 @@ switch( $endpoint ){
           die();
         }
         $setting = $_POST['setting'];
-        switch( $setting ){
+        switch( $setting ){ //Right now we just support time_lim and cooldown
           case "time_lim":
             if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 ){
               http_response_code(422);
