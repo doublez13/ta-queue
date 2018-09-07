@@ -201,7 +201,7 @@ switch( $endpoint ){
           die();
       }
     }else{ //  /api/queue/course/student/username
-      $student = $path_split[5]; //username of student
+      $student = strtolower($path_split[5]); //username of student converted to lower case
       if (!isset($path_split[6])){
         switch($_SERVER['REQUEST_METHOD']){
           case "DELETE":

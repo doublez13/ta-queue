@@ -14,7 +14,7 @@ if(empty($path_split[3])){
   echo json_encode( json_err("Missing username") );
   die();
 }
-$req_username = $path_split[3];
+$req_username = strtolower($path_split[3]); //requested username converted to lower case
 if($req_username != $username && !$is_admin){
   http_response_code(403);
   echo json_encode( forbidden() );

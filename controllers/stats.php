@@ -27,7 +27,7 @@ switch($endpoint){
   case "student":
     switch($_SERVER['REQUEST_METHOD']){
       case "GET":
-        $student = $path_split[4];
+        $student = strtolower($path_split[4]); //username of student converted to lower case
         if(!in_array($course, $ta_courses) && $student != $username){ //Not a TA
           http_response_code(403);
           echo json_encode( forbidden() );

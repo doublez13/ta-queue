@@ -35,7 +35,9 @@ switch( $endpoint ){
       die();
     }
 
-    $username = $_POST['username'];
+    //Usernames are case insensitive, but we represent them as
+    //all lowercase in the database
+    $username = strtolower($_POST['username']);
     $password = $_POST['password'];
 
     if (!auth($username, $password)){
