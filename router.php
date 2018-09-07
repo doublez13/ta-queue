@@ -34,7 +34,7 @@ if( substr($path, 0, 5) === "/api/" ){
     die();
   }
 
-  $username     = $_SESSION['username'];
+  $username     = $_SESSION['username'];       //NOTE: This is always lowercase
   $is_admin     = is_admin($username);         //TODO: Adds overhead to every request
   $user_courses = get_user_courses($username); //TODO: Adds overhead to every request
   $ta_courses   = $user_courses["ta"];
