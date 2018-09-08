@@ -84,7 +84,7 @@ function average_plot(course_data) {
         },
         tooltip: {
           headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.x} date, {point.y} number'
+          pointFormat: '{point.y} students helped'
         }
       }
     },
