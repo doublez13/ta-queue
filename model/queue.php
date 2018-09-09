@@ -34,6 +34,7 @@ function get_queue($course_name){
   #Build return array
   $return = array();
 
+
   #Get the state of the queue, if its not here, it must be closed
   $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
@@ -42,19 +43,17 @@ function get_queue($course_name){
     return -1;
   }
   if(!mysqli_num_rows($result)){
-    $return["state"]        = "closed";
-    $return["queue_length"] = 0;
+    $return["state"] = "closed";
   }else{
     $entry = mysqli_fetch_assoc($result);
     $return["state"]    = $entry["state"];
     $return["time_lim"] = intval($entry["time_lim"]);
     $return["cooldown"] = intval($entry["cooldown"]);
   }
-  $return["announcements"] = [];
-  $return["TAs"]      = [];
-  $return["queue"]    = [];
+
 
   #Get the announcements
+  $return["announcements"] = [];
   $query  = "SELECT id, announcement, (SELECT full_name FROM users WHERE username = announcements.poster) AS poster, tmstmp 
              FROM announcements WHERE course_id ='".$course_id."' 
              ORDER BY id DESC";
@@ -67,7 +66,9 @@ function get_queue($course_name){
     $return["announcements"][] = $entry;
   }
 
+
   #Get the state of the TAs
+  $return["TAs"]      = [];
   $query  = "SELECT ta_status.username, (SELECT TIMEDIFF(NOW(), ta_status.state_tmstmp)) as duration, users.full_name, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping 
              FROM ta_status INNER JOIN users on ta_status.username = users.username 
              WHERE course_id='".$course_id."'";
@@ -80,7 +81,9 @@ function get_queue($course_name){
     $return["TAs"][] = $entry;
   }
 
+
   #Get the actual queue
+  $return["queue"]    = [];
   $query  = "SELECT queue.username, users.full_name, queue.question, queue.location 
              FROM queue INNER JOIN users on queue.username = users.username
              WHERE course_id ='".$course_id."' ORDER BY position";
@@ -93,6 +96,7 @@ function get_queue($course_name){
     $return["queue"][] = $entry;
   }
   $return["queue_length"] = count($return["queue"]);
+
 
   mysqli_close($sql_conn);
   return $return;
