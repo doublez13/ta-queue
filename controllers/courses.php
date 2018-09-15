@@ -22,7 +22,9 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 
       if ( isset($path_split[4]) ){//Get list of TAs
         if($path_split[4] != "ta"){
-          //TODO: ERROR && DIE
+          http_response_code(422);
+          echo json_encode( json_err("Invalid Endpoint") );
+          die();
         }
         $res    = get_tas($course);  
         $field  = "TAs";
