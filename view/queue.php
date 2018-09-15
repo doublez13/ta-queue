@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-  <title>TA Help Queue - Main</title>
+  <title>TA Help Queue</title>
   <?php include('./view/head.html'); ?>
   <script src="./src/queue_functions.js"></script>
 </head>

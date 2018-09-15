@@ -168,6 +168,7 @@ function render_stats(dataParsed){
 
   // SET QUEUE LENGTH
   $("#in_queue").text("Length: " + dataParsed.queue_length);
+  document.title = "("+dataParsed.queue_length+") TA Help Queue"
 }
 
 function render_ann_box(anns){
