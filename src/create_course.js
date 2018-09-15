@@ -110,6 +110,7 @@ function get_TAs(){
 }
 
 //Update the TA List
+//TODO: Courses can't have forward slashes in names
 function edit_TAs(){
   var TAString = document.getElementById("TAs").value.trim();
   var course   = document.getElementById("course_name").value.trim();
