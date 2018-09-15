@@ -82,7 +82,7 @@
 
         <!--POST ANNOUNCEMENT BOX (ONLY SHOWN FOR TAS)-->
         <form class="bgColor-grey-1 padding-10 margin-0 flex flex-noShrink" id="new_ann_form" style="display: none">
-          <div class="input-group">
+          <div class="input-group flex-fillSpace">
             <input type="text" id="new_ann" class="flex-fillSpace form-control" aria-label='...'>
             <span class="input-group-btn">
               <input class="btn btn-success flex-noShrink" id="ann_button" type="submit" value="Post">
