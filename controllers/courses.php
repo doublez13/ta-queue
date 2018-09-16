@@ -13,7 +13,7 @@ $path_split = explode("/", $path);
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
     if ( isset($path_split[3])  ){  //Admin endpoint: Get information on specific course
-      if (!$is_admin){
+      if (!is_admin($username)){
         http_response_code(403);
         echo json_encode( forbidden() );
         die();
@@ -42,7 +42,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     break;
   case "PUT":  //Edit a course
-    if (!$is_admin){
+    if (!is_admin($username)){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -54,7 +54,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     $_POST['course_name'] = $path_split[3]; //Fall through
   case "POST": //Create a course
-    if (!$is_admin){
+    if (!is_admin($username)){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -83,7 +83,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text  = "Course created/updated"; 
     break;
   case "DELETE": //Delete a course
-    if (!$is_admin){
+    if (!is_admin($username)){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();

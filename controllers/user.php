@@ -15,7 +15,7 @@ if(empty($path_split[3])){
   die();
 }
 $req_username = strtolower($path_split[3]); //requested username converted to lower case
-if($req_username != $username && !$is_admin){
+if($req_username != $username && !is_admin($username)){
   http_response_code(403);
   echo json_encode( forbidden() );
   die();
@@ -65,7 +65,7 @@ switch($endpoint){
         if($role == "student"){
           $res = add_stud_course($req_username, $course, $acc_code);
         }elseif($role == "ta"){
-          if (!$is_admin){ //Must be an admin to add user as TA
+          if (!is_admin($username)){ //Must be an admin to add user as TA
             http_response_code(403);
             echo json_encode( forbidden() );
             die();
@@ -136,7 +136,7 @@ switch($endpoint){
   case "admin":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
-        if (!$is_admin){
+        if (!is_admin($username)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -144,7 +144,7 @@ switch($endpoint){
         $res = grant_admin($req_username);
         break;
       case "DELETE":
-        if (!$is_admin){
+        if (!is_admin($username)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -184,7 +184,7 @@ switch($endpoint){
         }
         break;
       case "DELETE":
-        if (!$is_admin){
+        if (!is_admin($username)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();

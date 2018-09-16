@@ -57,7 +57,7 @@ switch($endpoint){
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "GET":
         $ta = $path_split[4];
-        if(!$is_admin && $ta != $username){ //Not an admin
+        if(!is_admin($username) && $ta != $username){ //Not an admin
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
