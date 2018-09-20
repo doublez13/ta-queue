@@ -398,16 +398,19 @@ function render_queue_table(dataParsed){
                             "<th class='col-sm-1' align='left'>Pos.</th>"+
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Student</th>" +
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Location</th>" +
-                            "<th class='col-sm-4' align='left' style='word-wrap: break-word'>Question</th>" +
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Question</th>" +
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>TA</th>" +
                             "<th class='col-sm-3'></th> </tr>");
   var helping = {};
   for(TA in TAs ){
     if(TAs[TA].helping != null){
       helping[TAs[TA].helping] = {}; //Maps student being helped to info about their session in the queue
       helping[TAs[TA].helping]["duration"] = TAs[TA].duration;  //Time student has been helped
-      helping[TAs[TA].helping]["TA"] = TAs[TA].username;        //TA helping the student
+      helping[TAs[TA].helping]["TA"] = TAs[TA].username;        //Username of TA helping student
+      helping[TAs[TA].helping]["TA_full"] = TAs[TA].full_name;  //Full name of TA helping student
     }
   }
+  
   
   var time_lim = dataParsed.time_lim;
 
@@ -421,14 +424,16 @@ function render_queue_table(dataParsed){
                       "<td class='col-sm-1' align='left'>" + i + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + full_name + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + Location + "</td>" +
-                      "<td class='col-sm-4' align='left' style='word-wrap:break-word'>" + question + "</td></tr>");
+                      "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + question + "</td>" +
+                      "</tr>");
     i++;
- 
+
+    var TA_full = ""; 
     if( username in helping ){
       new_row.css("background-color", "#99ccff");//  b3ffb3
+      TA_full = helping[username]["TA_full"];
       if(time_lim > 0){
         var duration = helping[username]["duration"];
-        var TA       = helping[username]["TA"]; //Currently not using this field. Maybe we can display it in the queue table?
         var fields = duration.split(':');
         duration = parseInt(fields[0])*3600 + parseInt(fields[1])*60 + parseInt(fields[2]);
         var time_rem = time_lim*60-duration;
@@ -438,6 +443,8 @@ function render_queue_table(dataParsed){
         }
       }
     }
+    var TA_td = "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + TA_full + "</td>";
+    new_row.append(TA_td);
 
     if(is_TA) {
       // HELP BUTTON
