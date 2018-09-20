@@ -428,6 +428,7 @@ function render_queue_table(dataParsed){
       new_row.css("background-color", "#99ccff");//  b3ffb3
       if(time_lim > 0){
         var duration = helping[username]["duration"];
+        var TA       = helping[username]["TA"]; //Currently not using this field. Maybe we can display it in the queue table?
         var fields = duration.split(':');
         duration = parseInt(fields[0])*3600 + parseInt(fields[1])*60 + parseInt(fields[2]);
         var time_rem = time_lim*60-duration;
