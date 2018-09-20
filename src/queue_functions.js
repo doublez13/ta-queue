@@ -133,7 +133,8 @@ function renderView(dataParsed) {
 }
 
 function render_stats(dataParsed){
-  var state = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
+  var state  = dataParsed.state.charAt(0).toUpperCase() + dataParsed.state.slice(1);
+  var length = dataParsed.queue_length; 
 
   // SET AND COLOR QUEUE STATE
   $("#queue_state").empty();
@@ -141,12 +142,16 @@ function render_stats(dataParsed){
   $("#queue_state").append("<span id='state'><b>"+state+"</b></span>")
   if(state == "Open"){
     $("#state").css('color', 'green');
+    document.title = "("+length+") TA Help Queue"
   }
   else if(state == "Closed"){
     $("#state").css('color', 'red');
+    document.title = "TA Help Queue"
   }
-  else
+  else if(state == "Frozen"){
     $("#state").css('color', 'blue');
+    document.title = "("+length+") TA Help Queue"
+  }
 
   // SET TIME LIMIT
   $("#time_limit").empty();
@@ -167,8 +172,7 @@ function render_stats(dataParsed){
     $("#cd_time").append("None");
 
   // SET QUEUE LENGTH
-  $("#in_queue").text("Length: " + dataParsed.queue_length);
-  document.title = "("+dataParsed.queue_length+") TA Help Queue"
+  $("#in_queue").text("Length: " + length);
 }
 
 function render_ann_box(anns){
