@@ -15,6 +15,7 @@ $(document).ready(function(){
   if(typeof course === 'undefined'){
     window.location ='./my_courses';
   }
+  get_course_stats(course);
 });
 
 $(document).on("change", "#chart", function(e){
@@ -33,13 +34,13 @@ function parse_it(data) {
   var new_arr = dataParsed.map((element, index) => {
   	return [Date.parse(element.date), element.students_helped]
   });
-  average_plot(new_arr);
+  stud_helped_per_day_column_chart(new_arr);
 };
 
-function average_plot(course_data) {
+function stud_helped_per_day_column_chart(course_data) {
   $('#container').highcharts({
     chart: {
-      type: 'scatter',
+      type: 'column',
       zoomType: 'xy'
 	  },
 	  title: {

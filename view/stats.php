@@ -40,8 +40,7 @@
                     <label class="col-md-8 control-label" for="chart">Choose Form</label>
                     <div class="col-md-8 col-md-offset-2">
                       <select id="chart" name="chart" class="form-control">
-                        <option value="blank"></option>
-                        <option value="num_student">Number of Students Helped Per Day</option>
+                        <option selected="selected" value="num_student">Number of Students Helped Per Day</option>
                       </select>
                     </div>
                   </div><!--form-group-->
