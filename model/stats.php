@@ -409,4 +409,71 @@ function get_course_usage_by_day($course_name, $start_date, $end_date){
   mysqli_close($sql_conn);
   return $result;
 }
+
+
+
+/**
+ * Returns a log of the number of users helped per day in the queue. If no dates are
+ * specified, a log for the entire history of the queue is returned. If start_date is
+ * specified, a log from start_date (inclusive) to the present is returned. If start_date and
+ * end_date are specified, a log from start_date (inclusive) to end_date (exclusive) is returned.
+ *
+ * @param string $course_name
+ * @param string $start_date enter queue timestamp (inclusive)
+ * @param string $end_date enter queue timestamp (exclusive)
+ * @return array of course usage stats by day
+ *         int -1 on error
+ */
+function get_course_avg_help_time($course_name, $start_date, $end_date){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  // Append date ranges if necessary
+  $range_condition = "";
+  if(!is_null($start_date))
+    if (!is_null($end_date))
+      $range_condition = " AND enter_tmstmp >=? AND enter_tmstmp <? ";
+    else
+      $range_condition = " AND enter_tmstmp >=? ";
+ 
+  $query = "SELECT DATE(enter_tmstmp) as date, SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp,enter_tmstmp)))) as avg_help_time 
+            FROM student_log 
+            WHERE course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition . 
+            "GROUP BY DATE(enter_tmstmp)"; 
+
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  // BETTER WAY TO DO THIS IN A SINGLE FUNCTION CALL?
+  if(!is_null($start_date))
+    if (!is_null($end_date))
+      mysqli_stmt_bind_param($stmt, 'sss', $course_name, $start_date, $end_date);
+    else
+      mysqli_stmt_bind_param($stmt, 'ss', $course_name, $start_date);
+  else
+    mysqli_stmt_bind_param($stmt, 's', $course_name);
+
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  mysqli_stmt_bind_result($stmt, $date, $count);
+  $result = [];
+  while (mysqli_stmt_fetch($stmt)){
+    $result[] = array('date'            => $date,
+                      'avg_help_time'   => $count
+                     );
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $result;
+}
 ?>
