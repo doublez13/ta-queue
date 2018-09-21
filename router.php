@@ -10,19 +10,18 @@
 
 session_start();
 
-$REQUEST_URI = $_SERVER["REQUEST_URI"];
+$REQUEST_URI = $_SERVER['REQUEST_URI'];
 $path        = urldecode(parse_url($REQUEST_URI, PHP_URL_PATH));
 
 //////// REQUESTS FOR API ////////
-if( substr($path, 0, 5) === "/api/" ){
+if( substr($path, 0, 5) === '/api/' ){
   header('Content-Type: application/json');
 
-  require_once "model/config.php";
-  require_once "model/auth.php";
-  require_once "model/courses.php";
-  require_once "model/queue.php";
-  require_once "model/stats.php";
-  require_once "controllers/errors.php";
+  require_once './model/config.php';
+  require_once './model/auth.php';
+  require_once './model/courses.php';
+  require_once './model/queue.php';
+  require_once './controllers/errors.php';
 
   if( is_login_endpoint($path) ){
     require_once './controllers/auth.php';
@@ -36,8 +35,8 @@ if( substr($path, 0, 5) === "/api/" ){
 
   $username     = $_SESSION['username'];       //NOTE: This is always lowercase
   $user_courses = get_user_courses($username); //TODO: Adds overhead to every request
-  $ta_courses   = $user_courses["ta"];
-  $stud_courses = $user_courses["student"];
+  $ta_courses   = $user_courses['ta'];
+  $stud_courses = $user_courses['student'];
 
   $controller = explode("/", $path)[2];
   switch($controller){
@@ -51,6 +50,7 @@ if( substr($path, 0, 5) === "/api/" ){
       require_once './controllers/courses.php';
       break;
     case "stats":
+      require_once './model/stats.php';
       require_once './controllers/stats.php';
       break;
     default:
@@ -68,26 +68,26 @@ else{
     if(!is_authenticated()){
       require_once './view/index.php';
     }elseif(is_redirect()){
-      $url = $_SESSION["redirect_url"];
-      unset($_SESSION["redirect_url"]);
+      $url = $_SESSION['redirect_url'];
+      unset($_SESSION['redirect_url']);
       header("Location: $url");
     }else{
-      header("Location: courses");
+      header('Location: courses');
     }
   }
   //Not authenticated
   elseif(!is_authenticated()){
-    $_SESSION["redirect_url"] = $REQUEST_URI;
-    header("Location: /");
+    $_SESSION['redirect_url'] = $REQUEST_URI;
+    header('Location: /');
   }
   //Admin access needed
   elseif(is_admin_page($path)){
-    require_once "model/auth.php";
+    require_once './model/auth.php';
     $username  = $_SESSION['username'];
     if(is_admin($username)){
       require_once $source;
     }else{
-      header("Location: courses");
+      header('Location: courses');
     }
   }
   //Regular pages
@@ -96,19 +96,19 @@ else{
   }
   //Nonexistant page
   else{
-    header("Location: courses");
+    header('Location: courses');
   }
 }
 
 function is_authenticated(){
-  return isset($_SESSION["username"]);
+  return isset($_SESSION['username']);
 }
 function is_redirect(){
-  return isset($_SESSION["redirect_url"]);
+  return isset($_SESSION['redirect_url']);
 }
 function is_open_page($path){
-  return $path == "/about"       ||
-         $path == "/help";
+  return $path == '/about'       ||
+         $path == '/help';
 }
 function is_login_endpoint($path){
   return $path == '/api/login'   || 
@@ -118,8 +118,8 @@ function is_root_dir($path){
   return $path == '/';
 }
 function is_admin_page($path){
-  return $path == "/new_course"   || 
-         $path == "/edit_course";
+  return $path == '/new_course'   || 
+         $path == '/edit_course';
 }
 function basic_auth_provided(){
   return isset($_SERVER['PHP_AUTH_USER']) && 
