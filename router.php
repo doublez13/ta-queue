@@ -40,11 +40,11 @@ if( substr($path, 0, 5) === '/api/' ){
 
   $controller = explode("/", $path)[2];
   switch($controller){
-    case "user": 
-      require_once './controllers/user.php';
-      break;
     case "queue":
       require_once './controllers/queue.php';
+      break;
+    case "user": 
+      require_once './controllers/user.php';
       break;
     case "courses":
       require_once './controllers/courses.php';
