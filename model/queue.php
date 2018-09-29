@@ -890,12 +890,9 @@ function change_stud_priority($stud_username, $course_name, $operation){
               WHERE position>'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
               ORDER BY position ASC LIMIT 1";
   }else{
-    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
     return -1;
   }
-
-  #####SQL TRANSACTION#####
-  mysqli_autocommit($sql_conn, false); 
 
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
@@ -903,7 +900,7 @@ function change_stud_priority($stud_username, $course_name, $operation){
     return -1;
   }
 
-  $entry  = mysqli_fetch_assoc($result);
+  $entry = mysqli_fetch_assoc($result);
   if(!$entry){
     mysqli_close($sql_conn);
     return 0;//Nobody to switch with
@@ -913,6 +910,9 @@ function change_stud_priority($stud_username, $course_name, $operation){
   $username2 = $entry['username'];
   $question2 = $entry['question'];
   $location2 = $entry['location'];
+
+  #####SQL TRANSACTION#####
+  mysqli_autocommit($sql_conn, false);
 
   $query = "DELETE FROM queue WHERE position = '".$position1."'";
   $res = mysqli_query($sql_conn, $query);
