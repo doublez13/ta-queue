@@ -139,15 +139,13 @@ function _ldap_connect($username, $password){
   }
   $ldap_conn = ldap_connect(LDAP_SERVER);
   ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-  ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
-  
-  //TLS cert disabling code requires php 7.0.5+
+  ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);  
+  //TLS cert disabling code requires php >= 7.0.5
+  //If running php < 7.0.5, disable requiring the cert at the OS level if needed
   if(version_compare(phpversion(), '7.0.5') > 0){
     ldap_set_option($ldap_conn, LDAP_OPT_X_TLS_REQUIRE_CERT, 0);
-    ldap_start_tls($ldap_conn);
-  }elseif(TLS_REQCERT_DISABLED){
-    ldap_start_tls($ldap_conn);
   }
+  ldap_start_tls($ldap_conn);
 
   if($ldap_conn){
     if(@ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
