@@ -175,16 +175,15 @@ function enq_stu($username, $course_name, $question, $location){
     mysqli_close($sql_conn);
     return -1;
   }
+  $ret = 0;
   mysqli_stmt_bind_param($stmt, "ssss", $username, $course_name, $question, $location);
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   } 
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -249,16 +248,15 @@ function deq_stu($username, $course_name){
     mysqli_close($sql_conn);
     return -1;
   }
+  $ret = 0;
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
