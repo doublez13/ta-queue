@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (c) 2018 Zane Zakraisek
  *
- * Routes all API requests to the appropriate controller.
+ * Routes all requests to the appropriate controller or view.
  * Returns the requested page from the view directory.
  *
  */
@@ -23,7 +23,7 @@ if( substr($path, 0, 5) === '/api/' ){
   require_once './model/queue.php';
   require_once './controllers/errors.php';
 
-  if( is_login_endpoint($path) ){
+  if(is_login_endpoint($path)){
     require_once './controllers/auth.php';
     die();
   }
