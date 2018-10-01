@@ -284,10 +284,9 @@ function get_info_sql($username){
   }
 
   mysqli_stmt_bind_result($stmt, $username, $first_name, $last_name, $full_name, $admin);
-  mysqli_stmt_fetch($stmt);
-
-  //TODO: Poor way of testing
-  if(is_null($first_name)){
+  if(!mysqli_stmt_fetch($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
     return NULL;
   }
 
