@@ -331,6 +331,4 @@ function get_info_ldap($username){
     'full_name'  => $first_name.' '.$last_name
   );
 }
-
-
 ?>

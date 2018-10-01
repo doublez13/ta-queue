@@ -223,8 +223,7 @@ function deq_stu($username, $course_name){
   }
   mysqli_stmt_bind_param($stmt, "ss", $username, $course_name);
  
-  $res = mysqli_stmt_execute($stmt);
-  if(!$res){
+  if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -762,25 +761,7 @@ function change_queue_state($course_name, $state){
     return -2; //Nonexistent course
   }
 
-  if($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
-    $query = "DELETE FROM queue_state WHERE course_id = '".$course_id."'";
-    if(!mysqli_query($sql_conn, $query)){
-      mysqli_close($sql_conn);
-      return -1;
-    }
-  }elseif($state == "frozen"){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
-    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','frozen') ON DUPLICATE KEY UPDATE state='frozen'";
-    if(!mysqli_query($sql_conn, $query)){
-      mysqli_close($sql_conn);
-      return -1;
-    }
-  }elseif($state == "open"){
-    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','open') ON DUPLICATE KEY UPDATE state='open'";
-    if(!mysqli_query($sql_conn, $query)){
-      mysqli_close($sql_conn);
-      return -1;
-    }
-  }else{//Just querying the state of the queue if $state==NULL
+  if(is_null($state)){ //Just querying the state of the queue if $state==NULL
     $query  = "SELECT state FROM queue_state WHERE course_id ='".$course_id."'";
     $result = mysqli_query($sql_conn, $query);
     if(!$result){
@@ -792,7 +773,20 @@ function change_queue_state($course_name, $state){
       return "closed";
     }
     $entry = mysqli_fetch_assoc($result);
-    $state = $entry["state"];
+    mysqli_close($sql_conn);
+    return $entry["state"];
+  }elseif($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
+    $query = "DELETE FROM queue_state WHERE course_id = '".$course_id."'";
+  }elseif($state == 'frozen' || $state == 'open'){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
+    $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','".$state."') ON DUPLICATE KEY UPDATE state='".$state."'";
+  }else{
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  if(!mysqli_query($sql_conn, $query)){
+    mysqli_close($sql_conn);
+    return -1;
   }
 
   mysqli_close($sql_conn);
