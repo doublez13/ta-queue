@@ -859,20 +859,26 @@ function change_stud_priority($stud_username, $course_name, $operation){
     return -3;
   }
 
-  $query = "SELECT position, username, course_id, question, location FROM queue WHERE username=? AND course_id=(SELECT course_id from courses where course_name=?)";
+  #TODO: Clean this SQL up!
+  $query = "SELECT position, username, course_id, question, location FROM queue 
+            WHERE username=? 
+            AND course_id=(SELECT course_id from courses where course_name=?)
+            AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id=(SELECT course_id from courses where course_name=?))";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "ss", $stud_username, $course_name);
+  mysqli_stmt_bind_param($stmt, "sss", $stud_username, $course_name, $course_name);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
   }
   mysqli_stmt_bind_result($stmt, $position1, $username1, $course_id, $question1, $location1);
-  mysqli_stmt_fetch($stmt);
+  if(is_null(mysqli_stmt_fetch($stmt))){
+    return 0; //User not in queue, or is currently being helped, so don't move anyone
+  }
   mysqli_stmt_close($stmt);
 
   if($operation == "increase"){
