@@ -30,14 +30,15 @@ switch($endpoint){
   case "courses":
     switch($_SERVER['REQUEST_METHOD']){
       case "GET":
-        if (is_null($stud_courses)){
+        $user_courses = get_user_courses($username);
+        if (is_null($user_courses)){
           $return = json_err("Unable to fetch courses");
           http_response_code(500);
         }else{
           $return = array(
             "authenticated" => True,
-            "student_courses" => $stud_courses,
-            "ta_courses"      => $ta_courses
+            "student_courses" => $user_courses['student'],
+            "ta_courses"      => $user_courses['ta']
           );
           http_response_code(200);
         }
@@ -46,7 +47,7 @@ switch($endpoint){
       case "POST":
         if ( !isset($path_split[5]) ){
           http_response_code(422);
-          echo json_encode( json_err("No course specified") );
+          echo json_encode( json_err("No course_id specified") );
           die();
         }
         if ( !isset($path_split[6]) ){
@@ -55,22 +56,22 @@ switch($endpoint){
           die();
         }
 
-        $course   = $path_split[5];
-        $role     = $path_split[6];
-        $acc_code = NULL;
+        $course_id = $path_split[5];
+        $role      = $path_split[6];
+        $acc_code  = NULL;
         if (isset($_POST['acc_code'])){
           $acc_code = $_POST['acc_code'];
         }
 
         if($role == "student"){
-          $res = add_stud_course($req_username, $course, $acc_code);
+          $res = add_stud_course($req_username, $course_id, $acc_code);
         }elseif($role == "ta"){
           if (!is_admin($username)){ //Must be an admin to add user as TA
             http_response_code(403);
             echo json_encode( forbidden() );
             die();
           }
-          $res = add_ta_course($req_username, $course);
+          $res = add_ta_course($req_username, $course_id);
         }else{
           http_response_code(422);
           echo json_encode( json_err("Invalid Role: student or ta only") );
@@ -92,7 +93,7 @@ switch($endpoint){
       case "DELETE":
         if ( !isset($path_split[5]) ){
           http_response_code(422);
-          echo json_encode( json_err("No course specified") );
+          echo json_encode( json_err("No course_id specified") );
           die();
         }
         if ( !isset($path_split[6]) ){
@@ -101,13 +102,13 @@ switch($endpoint){
           die();
         }
 
-        $course = $path_split[5];
-        $role   = $path_split[6];
+        $course_id = $path_split[5];
+        $role      = $path_split[6];
 
         if($role == "student"){
-          $res = rem_stud_course($req_username, $course);
+          $res = rem_stud_course($req_username, $course_id);
         }elseif($role == "ta"){
-          $res = rem_ta_course($req_username, $course);
+          $res = rem_ta_course($req_username, $course_id);
         }else{
           http_response_code(422);
           echo json_encode( json_err("Invalid Role: student or ta only") );
@@ -196,7 +197,7 @@ switch($endpoint){
         }else{
           $return = array(
             "authenticated" => True,
-            "success" => "Student Course Removed Successfully"
+            "success" => "User deleted"
           );
           http_response_code(200);
         }

@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Course Admin</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/create_course.js"></script>
+  <script src="./src/create_course.js?ver=2.0"></script>
 </head>
 <body>
   <?php include('./view/navbar.php'); ?>

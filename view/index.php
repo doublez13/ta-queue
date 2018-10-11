@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Index</title>
   <?php include('./view/head.html'); ?> 
-  <script src="./src/login.js"></script>
+  <script src="./src/login.js?ver=2.0"></script>
 </head>
 
 <body>
@@ -12,7 +12,7 @@
 
   <div class="jumbotron jumbotron-billboard" style="margin-top: -20px; opacity: 0.75;">
     <div style="margin-top:  -40px; margin-bottom: -20px; text-align:center;">  
-      <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Welcome to the TA Help Queue</h1>
+      <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Welcome to the TA Help Queue: DEVEL</h1>
     </div>
   </div>
 

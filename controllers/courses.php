@@ -18,7 +18,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
         echo json_encode( forbidden() );
         die();
       }
-      $course = $path_split[3];
+      $course_id = $path_split[3];
 
       if ( isset($path_split[4]) ){//Get list of TAs
         if($path_split[4] != "ta"){
@@ -26,12 +26,12 @@ switch( $_SERVER['REQUEST_METHOD'] ){
           echo json_encode( json_err("Invalid Endpoint") );
           die();
         }
-        $res    = get_tas($course);  
+        $res    = get_tas($course_id);  
         $field  = "TAs";
         $text   = $res;
 
       }else{ //Get course settings
-        $res    = get_course($course);
+        $res    = get_course($course_id);
         $field  = "parameters";
         $text   = $res; 
       }
@@ -49,7 +49,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     if ( !isset($path_split[3]) ){
       http_response_code(422);
-      echo json_encode( json_err("Missing course") );
+      echo json_encode( json_err("Missing course_name") );
       die();
     }
     $_POST['course_name'] = $path_split[3]; //Fall through
@@ -90,11 +90,11 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     if ( !isset($path_split[3]) ){
       http_response_code(422);
-      echo json_encode( json_err("Missing course") );
+      echo json_encode( json_err("Missing course_id") );
       die();
     }
-    $course_name = $path_split[3];
-    $res   = del_course($course_name);
+    $course_id = $path_split[3];
+    $res   = del_course($course_id);
     $field = "success"; 
     $text  = "Course deleted";
     break;

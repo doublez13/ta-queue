@@ -34,9 +34,6 @@ if( substr($path, 0, 5) === '/api/' ){
   }
 
   $username     = $_SESSION['username'];       //NOTE: This is always lowercase
-  $user_courses = get_user_courses($username); //TODO: Adds overhead to every request
-  $ta_courses   = $user_courses['ta'];
-  $stud_courses = $user_courses['student'];
 
   $controller = explode("/", $path)[2];
   switch($controller){

@@ -16,13 +16,13 @@ $(document).ready(function(){
     document.getElementById("delete_course_button").style.display = "none";
     $("#create_course").submit( create_course );
     doneMsg = "Course successfully created";
-  }
-  else{                              //Edit exsisting course
+  }else{                             //Edit exsisting course
     document.getElementById("page_title").innerHTML  = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
     document.getElementById("course_name").disabled  = true;
     document.getElementById("create_course_button").innerText= "Edit Course";
-    
+   
+    course_id = course_name_to_id(course);
     get_course();
     get_TAs(); 
 
@@ -46,13 +46,14 @@ create_course = function( event ) {
                              } );
 
   professor = $form.find( "input[id='professor']" ).val();
-  posting.done(function(data){//Modify the course, then modify the TAs
+  posting.done(function(data){ //Modify the course, then modify the TAs
+    course_id = course_name_to_id(course);
     edit_TAs()
   });
   posting.fail(function(data){
     var dataString = JSON.stringify(data.responseJSON);
     var dataParsed = JSON.parse(dataString);
-    var error_msg = dataParsed["error"];
+    var error_msg  = dataParsed["error"];
     if(error_msg == "User does not exist"){
       alert("Instructor does not exist"); //Little bit more specific
     }
@@ -67,7 +68,7 @@ delete_course = function( event ){
   if(confirm("Are you sure you want to delete the course? All data and logs will be wiped.")){
     var del = $.ajax({
                 method: "DELETE",
-                url: "../api/courses/"+course,
+                url: "../api/courses/"+course_id,
               });
     del.done(function(data){
       alert("Course successfully deleted");
@@ -82,7 +83,7 @@ delete_course = function( event ){
 }
 
 function get_course(){
-  url = "../api/courses/"+course;
+  url = "../api/courses/"+course_id;
   var get = $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -95,11 +96,24 @@ function get_course(){
   }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied
 }
 
+function course_name_to_id(name){
+  $.ajax({
+    async: false,
+    method: "GET",
+    url: "../api/courses"
+  }).done(function(data){
+    var dataString = JSON.stringify(data);
+    var dataParsed = JSON.parse(dataString);
+    allCourses = dataParsed.all_courses
+    course_id = allCourses[name]['course_id'];
+  });
+  return course_id;
+}
 
 //TODO: Fix the ugliness in these two functions!!
 //Get the TA List
 function get_TAs(){
-  url = "../api/courses/"+course+'/ta';
+  url = "../api/courses/"+course_id+'/ta';
   var get = $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -117,7 +131,7 @@ function edit_TAs(){
   var newTAs   = TAString.split(" ").filter(v=>v!='');
 
   //Get all current TAs
-  var $url = "../api/courses/"+course+"/ta";
+  var $url = "../api/courses/"+course_id+"/ta";
   var $get = $.get( $url );
   $get.done(function(data){
     var dataString = JSON.stringify(data);
@@ -152,7 +166,7 @@ function edit_TAs(){
       $.ajax({
         async: false,
         method: "DELETE",
-        url: "../api/user/"+item+"/courses/"+course+"/ta"
+        url: "../api/user/"+item+"/courses/"+course_id+"/ta"
       });
     });
     
@@ -162,7 +176,7 @@ function edit_TAs(){
       $.ajax({
         async: false,
         method: "POST",
-        url: "../api/user/"+item+"/courses/"+course+"/ta"
+        url: "../api/user/"+item+"/courses/"+course_id+"/ta"
       }).fail(function(data){
          var dataString = JSON.stringify(data.responseJSON);
          var dataParsed = JSON.parse(dataString);

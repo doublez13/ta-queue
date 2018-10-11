@@ -37,7 +37,7 @@ $(document).ready(function(){
           cont = false;
         }
         if(cont){
-	        enqueue_student(course, question, lab_location);
+	        enqueue_student(course_id, question, lab_location);
 	        dialog.dialog( "close" );
         }
       },
@@ -69,19 +69,28 @@ function start(){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     is_TA = false;
-    if($.inArray(course, dataParsed["ta_courses"]) != -1){
+    if($.inArray(course, Object.keys(dataParsed['ta_courses'])) != -1){
       is_TA = true;
     }
-    get_queue(course);
-    setInterval(get_queue, 5000, course);
+
+    var url = "../api/courses";
+    var get_req = $.get(url);
+    var done = function(data){
+      var dataString = JSON.stringify(data);
+      var dataParsed = JSON.parse(dataString);
+      course_id = dataParsed['all_courses'][course]['course_id'];
+      get_queue(course_id);
+      setInterval(get_queue, 5000, course_id);
+    }
+    get_req.done(done);
   }
   get_req.done(done);
 }
 
 //This function is called every X seconds,
 //and is what updates the dataParsed  
-function get_queue(course) {
-  var url = "../api/queue/"+course;
+function get_queue(course_id) {
+  var url = "../api/queue/"+course_id;
   var posting = $.get(url);
   var done = function(data){
     var dataString = JSON.stringify(data);
@@ -96,7 +105,7 @@ function get_queue(course) {
       //If they're not enrolled in the course, attempt to
       //enroll them with no access code
       if(error == "Forbidden"){
-        enrollCourse(course, null);
+        enrollCourse(course_id, null);
       }else{
         alert(dataParsed.error);
         window.location = '/';
@@ -203,7 +212,7 @@ function render_ann_box(anns){
     if(is_TA){
       var del_ann_button = $('<td><div align="right"><button class="btn btn-primary"><i class="fa fa-close" title="Delete"></i></button></div></td>');
       del_ann_button.click(function(event){
-        del_announcement(course, announcement_id)
+        del_announcement(course_id, announcement_id)
       });
       new_row.append(del_ann_button);
     }
@@ -225,7 +234,7 @@ function render_ann_box(anns){
       var announcement = document.getElementById("new_ann").value;
       if (announcement !== "") {
         document.getElementById("new_ann").value = "";
-        add_announcement(course, announcement)
+        add_announcement(course_id, announcement)
       }
     });
   }
@@ -257,7 +266,7 @@ function render_ta_view(dataParsed){
     $("#state_button").text("Open Queue");
     $("#state_button").click(function( event ) {
       event.preventDefault();
-      open_queue(course);
+      open_queue(course_id);
     });
     $("#duty_button").hide();
     $("#freeze_button").hide();
@@ -271,11 +280,11 @@ function render_ta_view(dataParsed){
       if (dataParsed.queue_length > 0) {
         var res = confirm("Are you sure you want to close the queue? All students will be removed.")
         if (res) {
-          close_queue(course);
+          close_queue(course_id);
         }
       }
       else
-        close_queue(course);
+        close_queue(course_id);
     });
    
     if(queue_state == "open"){ 
@@ -284,7 +293,7 @@ function render_ta_view(dataParsed){
       $("#freeze_button").text("Freeze Queue");
       $("#freeze_button").click(function( event ) {
         event.preventDefault();
-        freeze_queue(course);
+        freeze_queue(course_id);
       });
     }else{ //frozen
       document.getElementById("freeze_button").className="btn btn-warning";
@@ -292,7 +301,7 @@ function render_ta_view(dataParsed){
       $("#freeze_button").text("Resume Queue");
       $("#freeze_button").click(function( event ) {
         event.preventDefault();
-        open_queue(course);
+        open_queue(course_id);
       });
     }
 
@@ -310,7 +319,7 @@ function render_ta_view(dataParsed){
       $("#duty_button").text("Go On Duty");
       $("#duty_button").click(function(event){
         event.preventDefault();
-        enqueue_ta(course);
+        enqueue_ta(course_id);
       });
     }
     else{
@@ -318,7 +327,7 @@ function render_ta_view(dataParsed){
       $("#duty_button").text("Go Off Duty");
       $("#duty_button").click(function(event){
 	    event.preventDefault();
-	    dequeue_ta(course);
+	    dequeue_ta(course_id);
       });
     }
     $("#duty_button").show();
@@ -332,7 +341,7 @@ function render_ta_view(dataParsed){
     $("#time_form").submit(function(event){
       event.preventDefault();
       var limit = $(this).find( "input[id='time_limit_input']" ).val();
-      set_limit(course, limit);
+      set_limit(course_id, limit);
     });
 
     // Don't refresh while editing
@@ -343,7 +352,7 @@ function render_ta_view(dataParsed){
     $("#cooldown_form").submit(function(event){
       event.preventDefault();
       var limit = $(this).find( "input[id='cooldown_input']" ).val();
-      set_cooldown(course, limit);
+      set_cooldown(course_id, limit);
     });
   }
   $("#state_button").show();
@@ -381,7 +390,7 @@ function render_student_view(dataParsed){
     $("#join_button").click(function( event ) {
       event.preventDefault();
       if (confirm("Are you sure you want to exit the queue?")) {
-        dequeue_student(course, my_username);
+        dequeue_student(course_id, my_username);
       }
     });
   }
@@ -453,7 +462,7 @@ function render_queue_table(dataParsed){
         if(my_username === TA_helping_them){ //The TA is currently helping student
           var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
           help_button.click(function(event){
-            release_ta(course);
+            release_ta(course_id);
           });
         }
         else{ //The student is currently being helped, but not by this TA, so don't let them end the other TA's help session
@@ -462,8 +471,8 @@ function render_queue_table(dataParsed){
       }else{ //Student is not being helped
         var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
-          enqueue_ta(course); //TODO:Make this cleaner. 
-          help_student(course, username);
+          enqueue_ta(course_id); //TODO:Make this cleaner. 
+          help_student(course_id, username);
         });
       }
 
@@ -473,7 +482,7 @@ function render_queue_table(dataParsed){
         increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up" disabled=true> <i class="fa fa-arrow-up"></i>  </button></div>');
       }
       increase_button.click(function(event){
-        inc_priority(course, username); 
+        inc_priority(course_id, username); 
       });
 
       // MOVE DOWN BUTTON
@@ -482,13 +491,13 @@ function render_queue_table(dataParsed){
         decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
       }
       decrease_button.click(function(event){
-        dec_priority(course, username);
+        dec_priority(course_id, username);
       });
 
       // REMOVE BUTTON
       var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
       dequeue_button.click(function(event) {
-          dequeue_student(course, username);
+          dequeue_student(course_id, username);
       });
 
       // Create TA button group that spans entire td width and append it to the new row
@@ -512,7 +521,7 @@ function render_queue_table(dataParsed){
         }
         decrease_button.click(function(event){
           if (confirm("Are you sure you want to move one spot down?")) {
-            dec_priority(course, my_username);
+            dec_priority(course_id, my_username);
           }
         });
         td.append(decrease_button);
@@ -528,7 +537,7 @@ function render_queue_table(dataParsed){
 
 //API Endpoint calls
 done = function(data){
-  get_queue(course); //reloads the content on the page
+  get_queue(course_id); //reloads the content on the page
 }
 
 fail = function(data){
@@ -538,41 +547,41 @@ fail = function(data){
   alert(dataParsed["error"]);
 }
 
-function open_queue(course){
-  var url = "../api/queue/"+course+"/state";
+function open_queue(course_id){
+  var url = "../api/queue/"+course_id+"/state";
   var posting = $.post( url, { state: "open" } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function close_queue(course){
-  var url = "../api/queue/"+course+"/state";
+function close_queue(course_id){
+  var url = "../api/queue/"+course_id+"/state";
   var posting = $.post( url, { state: "closed" } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function freeze_queue(course){
-  var url = "../api/queue/"+course+"/state";
+function freeze_queue(course_id){
+  var url = "../api/queue/"+course_id+"/state";
   var posting = $.post( url, { state: "frozen" } );
   posting.done(done);
   posting.fail(fail);
 }
 
 
-function enqueue_student(course, question, Location){
-  var url = "../api/queue/"+course+"/student";
+function enqueue_student(course_id, question, Location){
+  var url = "../api/queue/"+course_id+"/student";
   var posting = $.post( url, { question: question, location: Location } );
   posting.done(done);
   posting.fail(fail);
 }
 
 /*
- *Students call dequeue_student(course, null) to dequeue themselves
- *TAs call dequeue_student(course, username) to dequeue student
+ *Students call dequeue_student(course_id, null) to dequeue themselves
+ *TAs call dequeue_student(course_id, username) to dequeue student
  */
-function dequeue_student(course, student){
-  var url = "../api/queue/"+course+"/student/"+student;
+function dequeue_student(course_id, student){
+  var url = "../api/queue/"+course_id+"/student/"+student;
   var del = $.ajax({
               method: "DELETE",
               url: url,
@@ -581,22 +590,22 @@ function dequeue_student(course, student){
   del.fail(fail);
 }
 
-function release_ta(course){
-  var url = "../api/queue/"+course+"/ta";
+function release_ta(course_id){
+  var url = "../api/queue/"+course_id+"/ta";
   var posting = $.post( url );
   posting.done(done);
   posting.fail(fail);
 }
 
-function enqueue_ta(course){
-  var url = "../api/queue/"+course+"/ta";
+function enqueue_ta(course_id){
+  var url = "../api/queue/"+course_id+"/ta";
   var posting = $.post( url );
   posting.done(done);
   posting.fail(fail);
 }
 
-function dequeue_ta(course){
-  var url = "../api/queue/"+course+"/ta";
+function dequeue_ta(course_id){
+  var url = "../api/queue/"+course_id+"/ta";
   var del = $.ajax({
               method: "DELETE",
               url: url,
@@ -605,52 +614,52 @@ function dequeue_ta(course){
   del.fail(fail);
 }
 
-function inc_priority(course, student){
-  var url = "../api/queue/"+course+"/student/"+student+"/position";
+function inc_priority(course_id, student){
+  var url = "../api/queue/"+course_id+"/student/"+student+"/position";
   var posting = $.post( url, { direction: "up" } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function dec_priority(course, student){
-  var url = "../api/queue/"+course+"/student/"+student+"/position";
+function dec_priority(course_id, student){
+  var url = "../api/queue/"+course_id+"/student/"+student+"/position";
   var posting = $.post( url, { direction: "down" } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function help_student(course, username){
-  var url = "../api/queue/"+course+"/student/"+username+"/help";
+function help_student(course_id, username){
+  var url = "../api/queue/"+course_id+"/student/"+username+"/help";
   var posting = $.post( url );
   posting.done(done);
   posting.fail(fail);
 }
 
-function set_limit(course, limit){
-  var url = "../api/queue/"+course+"/settings";
+function set_limit(course_id, limit){
+  var url = "../api/queue/"+course_id+"/settings";
   var posting = $.post( url, { setting: "time_lim", time_lim: limit.toString() } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function set_cooldown(course, limit){
-  var url = "../api/queue/"+course+"/settings";
+function set_cooldown(course_id, limit){
+  var url = "../api/queue/"+course_id+"/settings";
   var posting = $.post( url, { setting: "cooldown", time_lim: limit.toString() } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function add_announcement(course, announcement){
-  var url = "../api/queue/"+course+"/announcements";
+function add_announcement(course_id, announcement){
+  var url = "../api/queue/"+course_id+"/announcements";
   var posting = $.post( url, { announcement: announcement } );
   posting.done(done);
   posting.fail(fail);
 }
 
-function del_announcement(course, announcement_id){
+function del_announcement(course_id, announcement_id){
   var del = $.ajax({
               method: "DELETE",
-              url: "../api/queue/"+course+"/announcements/"+announcement_id,
+              url: "../api/queue/"+course_id+"/announcements/"+announcement_id,
             });
   del.done(done);
   del.fail(fail);
@@ -669,8 +678,8 @@ function tConvert (time) {
     return time.join (''); // return adjusted time or original string
 }
 
-function enrollCourse(course, code) {
-  var url = "../api/user/"+my_username+"/courses/"+course+"/student";
+function enrollCourse(course_id, code) {
+  var url = "../api/user/"+my_username+"/courses/"+course_id+"/student";
   if(code == null){
     var posting = $.post( url );
   }else{

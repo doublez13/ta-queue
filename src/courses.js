@@ -1,39 +1,7 @@
 username = localStorage.username;
 is_admin = localStorage.is_admin == true;
 
-if(!is_admin){
-  get_my_courses();
-}
 get_all_courses();
-
-function get_my_courses(){
-  var $url = "../api/user/"+username+"/courses";
-  var $get = $.get( $url );
-  $get.done(function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    var stud_courses = dataParsed.student_courses;
-    var ta_courses   = dataParsed.ta_courses;
-
-    $('#my_courses_body tr').remove();
-    renderMyCourseTable(ta_courses, "TA");
-    renderMyCourseTable(stud_courses, "Student");
-  });
-}
-
-function renderMyCourseTable(courses, role) {
-  $("#my_course_table").show();
-  var table = $('#my_courses_body'); 
-
-  courses.forEach(function (course) {
-    var tableRow = $('<tr>');
-    tableRow.append($('<td>').text(course));
-    tableRow.append($('<td>').text(role));
-    var URI = encodeURI("queue?course="+course);
-    tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
-    table.append(tableRow);
-  });
-}
 
 function get_all_courses(){
   var $url = "../api/courses";
@@ -48,19 +16,25 @@ function get_all_courses(){
     $get.done( function(data) {
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      renderAllCourseTable(allCourses, dataParsed);
+      renderCourseTables(allCourses, dataParsed);
     });
   });
 }
 
-function renderAllCourseTable(allCourses, dataParsed) {
+function renderCourseTables(allCourses, myCourses) {
   $('#all_courses_body').empty();
-  
-  var myCourses = dataParsed.student_courses;
-  var ta_courses= dataParsed.ta_courses;
+  $('#my_courses_body tr').remove();
 
-  for(course in allCourses) {
-    var course_name = course;
+  if(!is_admin){
+    var stud_courses = myCourses.student_courses
+    var ta_courses   = myCourses.ta_courses;
+    renderMyCourseTable(ta_courses, "TA");
+    renderMyCourseTable(stud_courses, "Student");
+  }
+
+  for(course_name in allCourses) {
+    var course_id   = allCourses[course_name]['course_id'];
+    var acc_req     = allCourses[course_name]["acc_req"]
     var tableRow = $('<tr>');
 
     tableRow.append($('<td>').text( course_name ));
@@ -79,21 +53,21 @@ function renderAllCourseTable(allCourses, dataParsed) {
       td.append(button_group);
       tableRow.append(td);
     }
-    else if( $.inArray(course_name, ta_courses) >= 0 ){ //They're a TA for the course
+    else if( $.inArray(course_name, Object.keys(ta_courses) ) >= 0 ){ //They're a TA for the course
       tableRow.append('<td> <button class="btn btn-primary" disabled style="width: 100%;" > TA </button></td>');
     }
-    else if( $.inArray(course_name, myCourses) >= 0 ){  //They're a student in the course
+    else if( $.inArray(course_name, Object.keys(stud_courses) ) >= 0 ){  //They're a student in the course
       var text = "Leave";
-      var action = "dropCourse('"+course_name+"')";
+      var action = "dropCourse('"+course_id+"')";
       tableRow.append('<td> <button class="btn btn-danger" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
     }
     else{                                               //They're able to enroll as student
       var text = " Enroll";
-      if(allCourses[course_name]["acc_req"]){
-        var action = "prompt_acc_code('"+course_name+"')";
+      if(acc_req){
+        var action = "prompt_acc_code('"+course_id+"')";
         tableRow.append('<td> <button class="btn btn-warning" onclick="'+action+'" style="width: 100%;"><i class="glyphicon glyphicon-lock"></i>'+text+'</button></td>');
       }else{
-        var action = "enrollCourse('"+course_name+"', null)";
+        var action = "enrollCourse('"+course_id+"', null)";
         tableRow.append('<td> <button class="btn btn-primary" onclick="'+action+'" style="width: 100%;" >'+text+'</button></td>');
       }
     }
@@ -102,9 +76,22 @@ function renderAllCourseTable(allCourses, dataParsed) {
   }
 }
 
+function renderMyCourseTable(courses, role) {
+  $("#my_course_table").show();
+  var table = $('#my_courses_body');
+
+  for(course in courses) {
+    var tableRow = $('<tr>');
+    tableRow.append($('<td>').text(course));
+    tableRow.append($('<td>').text(role));
+    var URI = encodeURI("queue?course="+course);
+    tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
+    table.append(tableRow);
+  }
+}
+
 done = function(data){ //Repopulates the content on the page after they add/rem a course
   get_all_courses();
-  get_my_courses();  
 }
 
 fail = function(data){
@@ -114,15 +101,15 @@ fail = function(data){
   alert(dataParsed["error"]);
 }
 
-function prompt_acc_code(course_name){
+function prompt_acc_code(course_id){
   var code = prompt("Please enter the course access code:");
   if(code != null){
-    enrollCourse(course_name, code);
+    enrollCourse(course_id, code);
   }
 }
 
-function enrollCourse(course, code) {
-  var url = "../api/user/"+username+"/courses/"+course+"/student";
+function enrollCourse(course_id, code) {
+  var url = "../api/user/"+username+"/courses/"+course_id+"/student";
   if(code == null){
     var posting = $.post( url );
   }else{
@@ -132,10 +119,10 @@ function enrollCourse(course, code) {
   posting.fail(fail);
 }
 
-function dropCourse(course) {
+function dropCourse(course_id) {
   var del = $.ajax({
                   method: "DELETE",
-                  url: "../api/user/"+username+"/courses/"+course+"/student"
+                  url: "../api/user/"+username+"/courses/"+course_id+"/student"
                   });
   del.done(done);
   del.fail(fail);

@@ -28,7 +28,7 @@ switch($endpoint){
     switch($_SERVER['REQUEST_METHOD']){
       case "GET":
         $student = strtolower($path_split[4]); //username of student converted to lower case
-        if(!in_array($course, $ta_courses) && $student != $username){ //Not a TA
+        if(!in_array($course_id, get_user_courses2($username)['ta']) && $student != $username){ //Not a TA
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -44,8 +44,8 @@ switch($endpoint){
   case "course":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "GET":
-        $course = $path_split[4];
-        $return = course_stats($course); //Course stats are public
+        $course_id = $path_split[4];
+        $return    = course_stats($course_id); //Course stats are public
         break;
       default:
         http_response_code(405);
@@ -77,11 +77,11 @@ switch($endpoint){
 }
 echo json_encode($return);
 
-function course_stats($course){
+function course_stats($course_id){
   $dates = check_date();
 
-  $stats = get_course_stats($course, $dates[0], $dates[1]);
-  $usage = get_course_usage_by_day($course, $dates[0], $dates[1]);
+  $stats = get_course_stats($course_id, $dates[0], $dates[1]);
+  $usage = get_course_usage_by_day($course_id, $dates[0], $dates[1]);
 
   if($stats < 0 || $usage < 0){
     $return = return_JSON_error($stats < 0 ? $stats : $usage);

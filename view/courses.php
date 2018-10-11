@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Courses</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/courses.js"></script>
+  <script src="./src/courses.js?ver=2.0"></script>
 </head>
 
 <body>
