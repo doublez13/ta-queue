@@ -155,8 +155,7 @@ function enq_stu($username, $course_id, $question, $location){
   }
   mysqli_stmt_bind_param($stmt, "sisss", $username, $course_id, $question, $location, $question);
  
-  $res = mysqli_stmt_execute($stmt);
-  if(!$res){
+  if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
@@ -295,15 +294,14 @@ function enq_ta($username, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "si", $username, $course_id);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -340,15 +338,14 @@ function deq_ta($username, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "si", $username, $course_id);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -448,15 +445,14 @@ function help_student($TA_username, $stud_username, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_id, $stud_username, $course_id);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -492,15 +488,14 @@ function set_time_lim($time_lim, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ii", $time_lim, $course_id);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -538,15 +533,14 @@ function set_cooldown($time_lim, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ii", $time_lim, $course_id);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -671,15 +665,14 @@ function add_announcement($course_id, $announcement, $poster){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "iss", $course_id, $announcement, $poster);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 /**
@@ -714,15 +707,14 @@ function del_announcement($course_id, $announcement_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ii", $announcement_id, $course_id);
+  $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return 0;
+  return $ret;
 }
 
 //HELPER FUNCTIONS
