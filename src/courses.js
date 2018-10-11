@@ -40,7 +40,7 @@ function renderCourseTables(allCourses, myCourses) {
     tableRow.append($('<td>').text( course_name ));
 
     if(is_admin){                                       //They're an admin
-      var URI = encodeURI("queue?course="+course);
+      var URI = encodeURI("queue?course="+course_name);
       var url = "./edit_course?course="+course_name;
       var onclick = "window.location='"+url+"'";
 
