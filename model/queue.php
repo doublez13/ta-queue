@@ -822,7 +822,6 @@ function change_stud_priority($stud_username, $course_id, $operation){
     return -1;
   }
   mysqli_stmt_bind_result($stmt, $position1, $username1, $course_id, $question1, $location1);
-  mysqli_stmt_fetch($stmt);
   if(is_null(mysqli_stmt_fetch($stmt))){
     return 0; //User not in queue, or is currently being helped, so don't move anyone
   }
