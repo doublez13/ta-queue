@@ -177,7 +177,7 @@ function srch_by_sam($sam){
   $entries = ldap_get_entries($ldap_conn, $results);
 
   ldap_unbind($ldap_conn);
-  if(!$entries['count']){//No results found for that group
+  if(!$entries['count']){//No results found for that user
     return NULL;
   }
   

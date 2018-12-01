@@ -25,7 +25,10 @@ function renderCourseTables(allCourses, myCourses) {
   $('#all_courses_body').empty();
   $('#my_courses_body tr').remove();
 
-  if(!is_admin){
+  if(is_admin){
+    document.getElementById('all_courses_paragraph').innerHTML = "<b>Admin Interface: View/Edit Courses</b>";
+  }else{
+    document.getElementById('all_courses_paragraph').innerHTML = "<b>Enroll/Leave your courses here.</b>";
     var stud_courses = myCourses.student_courses
     var ta_courses   = myCourses.ta_courses;
     renderMyCourseTable(ta_courses, "TA");

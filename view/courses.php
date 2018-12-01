@@ -49,7 +49,7 @@
                 <h3 class="panel-title" style="font-size:20px; text-align: center;">All Available Courses</h3>
               </div>
               <div class="panel-body">
-                <p style="text-align: center;"><b>Enroll/Leave your courses here.</b></p>
+                <p id="all_courses_paragraph" style="text-align: center;"></p>
               </div>
               <table class="table table-hover " id="all_courses" style="margin-left:auto; margin-right:auto;">
                 <tbody id="all_courses_body"></tbody>
