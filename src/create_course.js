@@ -36,7 +36,7 @@ create_course = function( event ) {
   event.preventDefault();
 
   var $form = $(this);
-  url = "../api/courses";
+  var url = "../api/courses";
   var posting = $.post( url, { course_name: $form.find( "input[id='course_name']" ).val(), 
                                depart_pref: $form.find( "input[id='depart_pref']" ).val(),
                                course_num:  $form.find( "input[id='course_num']" ).val(),
@@ -83,7 +83,7 @@ delete_course = function( event ){
 }
 
 function get_course(){
-  url = "../api/courses/"+course_id;
+  var url = "../api/courses/"+course_id;
   var get = $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
@@ -104,7 +104,7 @@ function course_name_to_id(name){
   }).done(function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    allCourses = dataParsed.all_courses
+    var allCourses = dataParsed.all_courses
     course_id = allCourses[name]['course_id'];
   });
   return course_id;
@@ -113,7 +113,7 @@ function course_name_to_id(name){
 //TODO: Fix the ugliness in these two functions!!
 //Get the TA List
 function get_TAs(){
-  url = "../api/courses/"+course_id+'/ta';
+  var url = "../api/courses/"+course_id+'/ta';
   var get = $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);

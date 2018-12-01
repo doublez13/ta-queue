@@ -35,6 +35,7 @@ function renderCourseTables(allCourses, myCourses) {
     renderMyCourseTable(stud_courses, "Student");
   }
 
+  var course_name;
   for(course_name in allCourses) {
     var course_id   = allCourses[course_name]['course_id'];
     var acc_req     = allCourses[course_name]["acc_req"]
@@ -83,6 +84,7 @@ function renderMyCourseTable(courses, role) {
   $("#my_course_table").show();
   var table = $('#my_courses_body');
 
+  var course;
   for(course in courses) {
     var tableRow = $('<tr>');
     tableRow.append($('<td>').text(course));

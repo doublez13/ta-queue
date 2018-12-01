@@ -1,5 +1,9 @@
 var dialog;
 var form;
+var my_username;
+var first_name;
+var last_name;
+var course_id;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -23,8 +27,8 @@ $(document).ready(function(){
     modal: true,
     buttons: {
       "Enter Queue": function() {
-	      lab_location = document.getElementById("location").value;
-	      question = document.getElementById("question").value;
+	      var lab_location = document.getElementById("location").value;
+	      var question = document.getElementById("question").value;
         var cont = true;
         document.getElementById('location').style.borderColor = "black";
         document.getElementById('question').style.borderColor = "black";
@@ -191,6 +195,7 @@ function render_ann_box(anns){
                            '<th class="flex-noShrink" style="width:100px;">Time</th>' +
                            '<th class="flex-noShrink" style="width:180px;">Poster</th>' +
                            '<th>Announcement</th> </tr>');
+  var ann;
   for(ann in anns){
     var date = anns[ann]["tmstmp"].split(" ")[0];
     var time = tConvert(anns[ann]["tmstmp"].split(" ")[1].substr(0, 5));
@@ -247,6 +252,7 @@ function render_ta_table(TAs){
     $("#tas_header").text("TA on Duty");
   else
     $("#tas_header").text("TAs on Duty");
+  var TA;
   for(TA in TAs){
     var full_name = TAs[TA]["full_name"];
     $('#ta_on_duty').append("<h4>"+full_name+"</h4>");
@@ -362,6 +368,7 @@ function render_student_view(dataParsed){
   var queue = dataParsed.queue;
   
   var in_queue = false;
+  var session;
   for(session in queue){
     if(my_username == queue[session]["username"]){
       in_queue = true;
@@ -424,6 +431,7 @@ function render_queue_table(dataParsed){
   var time_lim = dataParsed.time_lim;
 
   var i = 1;
+  var row;
   for(row in queue){
     let username  = queue[row].username;
     let full_name = queue[row].full_name;
