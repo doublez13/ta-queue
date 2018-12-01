@@ -549,7 +549,6 @@ done = function(data){
 }
 
 fail = function(data){
-  var httpStatus = data.status;
   var dataString = JSON.stringify(data.responseJSON);
   var dataParsed = JSON.parse(dataString);
   alert(dataParsed["error"]);

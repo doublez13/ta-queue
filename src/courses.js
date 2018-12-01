@@ -29,7 +29,7 @@ function renderCourseTables(allCourses, myCourses) {
     document.getElementById('all_courses_paragraph').innerHTML = "<b>Admin Interface: View/Edit Courses</b>";
   }else{
     document.getElementById('all_courses_paragraph').innerHTML = "<b>Enroll/Leave your courses here.</b>";
-    var stud_courses = myCourses.student_courses
+    var stud_courses = myCourses.student_courses;
     var ta_courses   = myCourses.ta_courses;
     renderMyCourseTable(ta_courses, "TA");
     renderMyCourseTable(stud_courses, "Student");
@@ -38,7 +38,7 @@ function renderCourseTables(allCourses, myCourses) {
   var course_name;
   for(course_name in allCourses) {
     var course_id   = allCourses[course_name]['course_id'];
-    var acc_req     = allCourses[course_name]["acc_req"]
+    var acc_req     = allCourses[course_name]["acc_req"];
     var tableRow = $('<tr>');
 
     tableRow.append($('<td>').text( course_name ));
@@ -100,7 +100,6 @@ done = function(data){ //Repopulates the content on the page after they add/rem 
 }
 
 fail = function(data){
-  var httpStatus = data.status;
   var dataString = JSON.stringify(data.responseJSON);
   var dataParsed = JSON.parse(dataString);
   alert(dataParsed["error"]);

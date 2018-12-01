@@ -84,7 +84,7 @@ delete_course = function( event ){
 
 function get_course(){
   var url = "../api/courses/"+course_id;
-  var get = $.get( url, function(data) {
+  $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     var attributes = ["course_name", "depart_pref", "course_num", "description", "professor", "access_code"];
@@ -114,7 +114,7 @@ function course_name_to_id(name){
 //Get the TA List
 function get_TAs(){
   var url = "../api/courses/"+course_id+'/ta';
-  var get = $.get( url, function(data) {
+  $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     dataParsed.TAs.forEach(function(TA){
@@ -127,7 +127,6 @@ function get_TAs(){
 //TODO: Courses can't have forward slashes in names
 function edit_TAs(){
   var TAString = document.getElementById("TAs").value.trim();
-  var course   = document.getElementById("course_name").value.trim();
   var newTAs   = TAString.split(" ").filter(v=>v!='');
 
   //Get all current TAs
