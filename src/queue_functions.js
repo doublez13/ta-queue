@@ -418,6 +418,7 @@ function render_queue_table(dataParsed){
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>TA</th>" +
                             "<th class='col-sm-3'></th> </tr>");
   var helping = {};
+  var TA;
   for(TA in TAs ){
     if(TAs[TA].helping != null){
       helping[TAs[TA].helping] = {}; //Maps student being helped to info about their session in the queue
