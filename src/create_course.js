@@ -2,14 +2,15 @@ $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
   var query = window.location.search.substring(1);
   var vars = query.split("&");
+  var url_course_name;
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
     if(pair[0] == "course"){
-      course = decodeURIComponent(pair[1]);
+      url_course_name = decodeURIComponent(pair[1]);
       break;
     }
   }
-  if(typeof course === 'undefined'){ //Create new course
+  if(typeof url_course_name === 'undefined'){ //Create new course
     document.getElementById("page_title").innerHTML = "New Course";
     document.getElementById("panel_title").innerHTML = "New Course";
     document.getElementById("create_course_button").innerText= "Create Course";
@@ -22,9 +23,9 @@ $(document).ready(function(){
     document.getElementById("course_name").disabled  = true;
     document.getElementById("create_course_button").innerText= "Edit Course";
    
-    course_id = course_name_to_id(course);
-    get_course();
-    get_TAs(); 
+    var url_course_id = course_name_to_id(url_course_name);
+    get_course(url_course_id);
+    get_TAs(url_course_id); 
 
     $("#create_course").submit( create_course );
     $("#delete_course_button").click( delete_course );
@@ -45,10 +46,10 @@ create_course = function( event ) {
                                description: $('#description').val(),
                              } );
 
-  professor = $form.find( "input[id='professor']" ).val();
+  var new_course_name = $form.find( "input[id='course_name']" ).val();
   posting.done(function(data){ //Modify the course, then modify the TAs
-    course_id = course_name_to_id(course);
-    edit_TAs()
+    var new_course_id = course_name_to_id(new_course_name);
+    edit_TAs(new_course_id)
   });
   posting.fail(function(data){
     var dataString = JSON.stringify(data.responseJSON);
@@ -65,10 +66,13 @@ create_course = function( event ) {
 
 delete_course = function( event ){
   event.preventDefault();
+
   if(confirm("Are you sure you want to delete the course? All data and logs will be wiped.")){
+    var del_course_name = document.getElementById("course_name").value
+    var del_course_id   = course_name_to_id(del_course_name);
     var del = $.ajax({
                 method: "DELETE",
-                url: "../api/courses/"+course_id,
+                url: "../api/courses/"+del_course_id,
               });
     del.done(function(data){
       alert("Course successfully deleted");
@@ -82,7 +86,7 @@ delete_course = function( event ){
   }
 }
 
-function get_course(){
+function get_course(course_id){
   var url = "../api/courses/"+course_id;
   $.get( url, function(data) {
     var dataString = JSON.stringify(data);
@@ -96,7 +100,7 @@ function get_course(){
   }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied
 }
 
-function course_name_to_id(name){
+function course_name_to_id(course_name){
   $.ajax({
     async: false,
     method: "GET",
@@ -105,14 +109,14 @@ function course_name_to_id(name){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     var allCourses = dataParsed.all_courses
-    course_id = allCourses[name]['course_id'];
+    course_id = allCourses[course_name]['course_id'];
   });
   return course_id;
 }
 
 //TODO: Fix the ugliness in these two functions!!
 //Get the TA List
-function get_TAs(){
+function get_TAs(course_id){
   var url = "../api/courses/"+course_id+'/ta';
   $.get( url, function(data) {
     var dataString = JSON.stringify(data);
@@ -125,7 +129,7 @@ function get_TAs(){
 
 //Update the TA List
 //TODO: Courses can't have forward slashes in names
-function edit_TAs(){
+function edit_TAs(course_id){
   var TAString = document.getElementById("TAs").value.trim();
   var newTAs   = TAString.split(" ").filter(v=>v!='');
 
@@ -158,6 +162,7 @@ function edit_TAs(){
     //Currently the professor attribute isn't used in the backend, but I'd 
     //like to eventually allow professors to edit their own course, and 
     //have access to a wider range of stats
+    var professor = document.getElementById("professor").value
     add.push(professor);
 
     //Do any removal if necessary
