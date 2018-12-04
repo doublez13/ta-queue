@@ -162,7 +162,7 @@ function edit_TAs(course_id){
     //Currently the professor attribute isn't used in the backend, but I'd 
     //like to eventually allow professors to edit their own course, and 
     //have access to a wider range of stats
-    var professor = document.getElementById("professor").value
+    var professor = document.getElementById("professor").value;
     add.push(professor);
 
     //Do any removal if necessary
