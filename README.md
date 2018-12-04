@@ -1,6 +1,8 @@
 # Teaching Queue
 
-[![Language Grade:](https://img.shields.io/lgtm/grade/javascript/g/doublez13/suzie-queue.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/doublez13/suzie-queue/context:javascript)
+[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/doublez13/suzie-queue.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/doublez13/suzie-queue/context:javascript)
+
+[![Total alerts](https://img.shields.io/lgtm/alerts/g/doublez13/suzie-queue.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/doublez13/suzie-queue/alerts/)
 
 
 ## Technical Documentation and Setup
