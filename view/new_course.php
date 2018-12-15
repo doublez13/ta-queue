@@ -57,7 +57,7 @@
                   <label>Access Code</label>
                   <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
                   
-                  <label>TAs (space delimited)</label>
+                  <label>TA usernames (space delimited)</label>
                   <input type="text" id="TAs" placeholder="space separated list of usernames">
 
                   <label>Description</label>
