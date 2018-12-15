@@ -4,6 +4,7 @@ var my_username;
 var first_name;
 var last_name;
 var course_id;
+var is_admin = localStorage.is_admin == true;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -364,6 +365,9 @@ function render_ta_view(dataParsed){
   $("#state_button").show();
 }
 
+//View for students
+//Note admin users that are NOT registered as a
+//TA for the course get this view.
 function render_student_view(dataParsed){
   var queue = dataParsed.queue;
   
@@ -378,6 +382,17 @@ function render_student_view(dataParsed){
  
   var state = dataParsed.state; 
   if(state == "closed" || (state == "frozen" && !in_queue )){
+    $("#join_button").hide();
+    return;
+  }
+
+  //Admin users are able to view any queue.
+  //If they're not registered as a TA, they'll
+  //be presented with the student view, but since
+  //they're not enrolled as a student, the backend
+  //won't allow them to enter the queue, so let's
+  //just disable the button.
+  if(is_admin){
     $("#join_button").hide();
     return;
   }
