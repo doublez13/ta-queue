@@ -59,8 +59,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       echo json_encode( forbidden() );
       die();
     }
-    if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || !isset($_POST['course_num']) || 
-        !isset($_POST['description']) || !isset($_POST['professor']))
+    if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || 
+        !isset($_POST['course_num'])  || !isset($_POST['professor']))
     {
       http_response_code(422);
       echo json_encode( json_err("Missing required parameters") );
@@ -70,13 +70,20 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $course_name = filter_var($_POST['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $depart_pref = filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $professor   = filter_var($_POST['professor'],   FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    if ($_POST['access_code']){
-      $acc_code    = $_POST['access_code'];
+     
+    if ($_POST['description']){
+      $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     }else{
-      $acc_code    = null;
+      $description = null;
     }
+    
+    if ($_POST['access_code']){
+      $acc_code = $_POST['access_code'];
+    }else{
+      $acc_code = null;
+    }
+
     //new_course is used both for creating and modifying courses
     $res   = new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code);
     $field = "success";

@@ -61,7 +61,7 @@
                   <input type="text" id="TAs" placeholder="space separated list of usernames">
 
                   <label>Description</label>
-                  <textarea id="description" placeholder="Course description" style="height:100px" required></textarea>
+                  <textarea id="description" placeholder="Course description" style="height:100px"></textarea>
                 </div>
                 <div class="padding-bottom-10">
                   <button id="create_course_button" class="btn btn-success" type="submit"></button>
