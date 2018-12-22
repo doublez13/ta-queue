@@ -43,6 +43,7 @@ create_course = function( event ) {
                                course_num:  $form.find( "input[id='course_num']" ).val(),
                                professor:   $form.find( "input[id='professor']" ).val(),
                                access_code: $form.find( "input[id='access_code']" ).val(),
+                               enabled:     document.getElementById('enabled').checked,
                                description: $('#description').val(),
                              } );
 
@@ -91,10 +92,14 @@ function get_course(course_id){
   $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    var attributes = ["course_name", "depart_pref", "course_num", "description", "professor", "access_code"];
+    var attributes = ["course_name", "depart_pref", "course_num", "description", "professor", "access_code", "enabled"];
     attributes.forEach(function(attribute){
       if(attribute in dataParsed.parameters){
-        document.getElementById(attribute).value  = dataParsed.parameters[attribute]
+        if(attribute == "enabled"){
+          document.getElementById('enabled').checked = dataParsed.parameters[attribute];
+        }else{
+          document.getElementById(attribute).value = dataParsed.parameters[attribute];
+        }
       }
     });
   }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied

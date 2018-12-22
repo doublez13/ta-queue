@@ -9,33 +9,23 @@ require_once 'auth.php';
  */
 
 /**
+ * Returns array of all registered courses that are enabled
+ *
+ * @return array of course names
+ *         null on fail
+ */
+function get_enabled_courses(){
+  return get_courses(true);
+}
+
+/**
  * Returns array of all registered courses
  *
  * @return array of course names
  *         null on fail
  */
-function get_avail_courses(){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return NULL;
-  }
-
-  $query  = "SELECT course_id, course_name, access_code FROM courses";
-  $result = mysqli_query($sql_conn, $query);
-  if(!$result){
-    return NULL;
-  }
-
-  $courses = array();
-  while($entry = mysqli_fetch_assoc($result)){
-    $acc_req = (is_null($entry["access_code"]) ? 0 : 1);
-    $courses += [ $entry["course_name"] => array("acc_req"   => $acc_req, 
-                                                 "course_id" => $entry["course_id"]
-                                                ) ];
-  }
-
-  mysqli_close($sql_conn);
-  return $courses;
+function get_all_courses(){
+  return get_courses(false);
 }
 
  /**
@@ -51,28 +41,28 @@ function get_avail_courses(){
   *             -1 generic error
   *             -8 user does not exist
   */
-function new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code){
+function new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code, $enabled){
   //If the prof has never logged in, they're not in the users table
   //and therefore fail the Foreign Key Constraint.
   //Calling get_info(user) automatically adds a valid user to the users table.
   if(is_null(get_info($professor))){
     return -8;
   }
-  
+
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
   }
 
-  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, professor, access_code)
-            VALUES (?, ?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE description=?, professor=?, access_code=?";
+  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, professor, access_code, enabled)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
+            ON DUPLICATE KEY UPDATE description=?, professor=?, access_code=?, enabled=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "sssssssss", $depart_pref, $course_num, $course_name, $description, $professor, $acc_code, $description, $professor, $acc_code);
+  mysqli_stmt_bind_param($stmt, "ssssssisssi", $depart_pref, $course_num, $course_name, $description, $professor, $acc_code, $enabled, $description, $professor, $acc_code, $enabled);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -127,7 +117,7 @@ function get_course($course_id){
   if(!$sql_conn){
     return null;
   }
-  $query = "SELECT depart_pref, course_num, course_name, professor, description, access_code FROM courses WHERE course_id=?";
+  $query = "SELECT depart_pref, course_num, course_name, professor, description, access_code, enabled FROM courses WHERE course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -139,7 +129,7 @@ function get_course($course_id){
     mysqli_close($sql_conn);
     return null;
   }
-  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $professor, $description, $access_code);
+  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $professor, $description, $access_code, $enabled);
   if(mysqli_stmt_fetch($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -149,7 +139,8 @@ function get_course($course_id){
                  "course_id"   => $course_id,
                  "professor"   => $professor, 
                  "description" => $description, 
-                 "access_code" => $access_code
+                 "access_code" => $access_code,
+                 "enabled"     => $enabled
            );
   }
   return null;
@@ -378,7 +369,7 @@ function get_user_courses($username){
   }
 
   #TODO: Consider switching this to a subquery instead of a join
-  $query = "SELECT course_name, course_id, role FROM courses NATURAL JOIN enrolled WHERE username=?";
+  $query = "SELECT course_name, course_id, role FROM courses NATURAL JOIN enrolled WHERE username=? AND enabled=true";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -419,7 +410,7 @@ function get_user_courses2($username){
   }
 
   #TODO: Consider switching this to a subquery instead of a join
-  $query = "SELECT course_id, role FROM courses NATURAL JOIN enrolled WHERE username=?";
+  $query = "SELECT course_id, role FROM courses NATURAL JOIN enrolled WHERE username=? AND enabled=true";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -477,5 +468,75 @@ function rem_user_course($username, $course_id, $role){
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
+}
+
+ /**
+  * Returns true if the course is open, false if closed
+  * NULL on error
+  *
+  * @param int    $course_id
+  * @return bool 
+  */
+function get_course_state($course_id){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
+  
+  $query = "SELECT enabled from courses where course_id=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, "i", $course_id);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $enabled);
+  $enabled = -1;
+  mysqli_stmt_fetch($stmt);
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+
+  return $enabled;
+}
+
+/**
+ * Returns array of all registered courses
+ *
+ * @param boolean $enabled_only
+ * @return array of course names
+ *         null on fail
+ */
+function get_courses($enabled_only){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
+
+  $query = "SELECT course_id, course_name, access_code, enabled FROM courses";
+  if($enabled_only){
+    $query = "SELECT course_id, course_name, access_code, enabled FROM courses where enabled=true";
+  }
+  $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    return NULL;
+  }
+
+  $courses = array();
+  while($entry = mysqli_fetch_assoc($result)){
+    $acc_req = (is_null($entry["access_code"]) ? 0 : 1);
+    $courses += [ $entry["course_name"] => array("acc_req"   => $acc_req,
+                                                 "course_id" => $entry["course_id"],
+                                                 "enabled"   => $entry["enabled"]
+                                                ) ];
+  }
+
+  mysqli_close($sql_conn);
+  return $courses;
 }
 ?>

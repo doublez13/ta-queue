@@ -83,7 +83,12 @@ function start(){
     var done = function(data){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      course_id = dataParsed['all_courses'][course]['course_id'];
+      //Check if the course they're requesting exists
+      if(course in dataParsed['all_courses']){
+        course_id = dataParsed['all_courses'][course]['course_id'];
+      }else{
+        window.location = '/';
+      }
       get_queue(course_id);
       setInterval(get_queue, 5000, course_id);
     }

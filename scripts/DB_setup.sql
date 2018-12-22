@@ -24,6 +24,7 @@ create table courses(
   professor   VARCHAR(128), 
   description TEXT,
   access_code VARCHAR(16),
+  enabled     BOOLEAN DEFAULT true NOT NULL,
   primary key (course_id),
   foreign key (professor) references users(username) ON DELETE SET NULL
 );

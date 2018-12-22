@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Course Admin</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/create_course.js?ver=2.0"></script>
+  <script src="./src/create_course.js?ver=3.0"></script>
 </head>
 <body>
   <?php include('./view/navbar.php'); ?>
@@ -62,6 +62,9 @@
 
                   <label>Description</label>
                   <textarea id="description" placeholder="Course description" style="height:100px"></textarea>
+
+                  <label>Enabled</label>
+                  <input type="checkbox" id="enabled" checked>
                 </div>
                 <div class="padding-bottom-10">
                   <button id="create_course_button" class="btn btn-success" type="submit"></button>

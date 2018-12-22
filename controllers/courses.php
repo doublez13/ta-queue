@@ -36,7 +36,11 @@ switch( $_SERVER['REQUEST_METHOD'] ){
         $text   = $res; 
       }
     }else{                          //Get all availible courses
-      $res   = get_avail_courses();
+      if (is_admin($username)){
+        $res = get_all_courses();
+      }else{
+        $res = get_enabled_courses();
+      }
       $field = "all_courses";
       $text  = $res;
     }
@@ -60,7 +64,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || 
-        !isset($_POST['course_num'])  || !isset($_POST['professor']))
+        !isset($_POST['course_num'])  || !isset($_POST['professor'])   ||
+        !isset($_POST['enabled']))
     {
       http_response_code(422);
       echo json_encode( json_err("Missing required parameters") );
@@ -71,7 +76,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $depart_pref = filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $professor   = filter_var($_POST['professor'],   FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-     
+    $enabled     = filter_var($_POST['enabled'],     FILTER_VALIDATE_BOOLEAN);
+
     if ($_POST['description']){
       $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     }else{
@@ -85,7 +91,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
 
     //new_course is used both for creating and modifying courses
-    $res   = new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code);
+    $res   = new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code, $enabled);
     $field = "success";
     $text  = "Course created/updated"; 
     break;

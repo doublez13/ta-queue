@@ -731,6 +731,7 @@ function del_announcement($course_id, $announcement_id){
  * @return string $state of queue
  *         int -1 on general error
  *         int -2 on nonexistent course
+ *         int -9 on disabled course
  */
 function change_queue_state($course_id, $state){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
@@ -764,6 +765,15 @@ function change_queue_state($course_id, $state){
   }elseif($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
     $query = "DELETE FROM queue_state WHERE course_id = '".$course_id."'";
   }elseif($state == 'frozen' || $state == 'open'){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
+    //Check if the course is disabled
+    $course_state = get_course_state($course_id);
+    if(is_null($course_state)){
+      mysqli_close($sql_conn);
+      return -1;
+    }elseif(!$course_state){
+      mysqli_close($sql_conn);
+      return -9;
+    }
     $query = "INSERT INTO queue_state (course_id, state) VALUES ('".$course_id."','".$state."') ON DUPLICATE KEY UPDATE state='".$state."'";
   }else{
     mysqli_close($sql_conn);

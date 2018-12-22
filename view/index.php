@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Index</title>
   <?php include('./view/head.html'); ?> 
-  <script src="./src/login.js?ver=2.0"></script>
+  <script src="./src/login.js?ver=3.0"></script>
 </head>
 
 <body>

@@ -17,7 +17,8 @@ function return_JSON_error($err_code){
     -5 => "User already registered as TA for course",
     -6 => "Invalid access code provided",
     -7 => "User in cool-down period",
-    -8 => "User does not exist"
+    -8 => "User does not exist",
+    -9 => "Course is disabled"
   );
   return array(
     "authenticated" => True,

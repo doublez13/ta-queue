@@ -37,11 +37,14 @@ function renderCourseTables(allCourses, myCourses) {
 
   var course_name;
   for(course_name in allCourses) {
-    var course_id   = allCourses[course_name]['course_id'];
-    var acc_req     = allCourses[course_name]["acc_req"];
+    var course_id = allCourses[course_name]['course_id'];
+    var acc_req   = allCourses[course_name]['acc_req'];
+    var enabled   = allCourses[course_name]['enabled']
     var tableRow = $('<tr>');
 
-    tableRow.append($('<td>').text( course_name ));
+    var rowCell = $('<td>');
+    rowCell.text(course_name);
+    tableRow.append(rowCell);
 
     if(is_admin){                                       //They're an admin
       var URI = encodeURI("queue?course="+course_name);
@@ -50,7 +53,12 @@ function renderCourseTables(allCourses, myCourses) {
 
       var td = $("<td class='col-sm-2'></td>");
       var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
-      var go_button = $('<div class="btn-group" role="group"> <a href="'+URI+'"> <button class="btn btn-primary" title="Go to Course">Go</button></div>');
+      var go_button;
+      if(enabled == 1){
+        go_button = $('<div class="btn-group" role="group"> <a href="'+URI+'"> <button class="btn btn-primary" title="Go to Course">Go</button></div>');
+      }else{
+        go_button = $('<div class="btn-group" role="group"> <a href="'+URI+'"> <button class="btn btn-primary" title="Go to Course" disabled=true>Go</button></div>');
+      }
       var edit_button1 = $('<div class="btn-group" role="group"><button class="btn btn-primary" onclick="'+onclick+'"  title="Edit Course"><i class="fa fa-cog"></i></button></div>');
       button_group.append(go_button);
       button_group.append(edit_button1);
