@@ -39,7 +39,7 @@ function renderCourseTables(allCourses, myCourses) {
   for(course_name in allCourses) {
     var course_id = allCourses[course_name]['course_id'];
     var acc_req   = allCourses[course_name]['acc_req'];
-    var enabled   = allCourses[course_name]['enabled']
+    var enabled   = allCourses[course_name]['enabled'];
     var tableRow = $('<tr>');
 
     var rowCell = $('<td>');

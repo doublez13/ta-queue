@@ -28,19 +28,19 @@ function get_all_courses(){
   return get_courses(false);
 }
 
- /**
-  * Adds a new course to the database
-  *
-  * @param string $course_name
-  * @param string $depart_pref
-  * @param string $course_num
-  * @param string $description
-  * @param string $professor
-  * @param string $acc_code, null if none
-  * @return int 0  on success
-  *             -1 generic error
-  *             -8 user does not exist
-  */
+/**
+ * Adds a new course to the database
+ *
+ * @param string $course_name
+ * @param string $depart_pref
+ * @param string $course_num
+ * @param string $description
+ * @param string $professor
+ * @param string $acc_code, null if none
+ * @return int 0  on success
+ *             -1 generic error
+ *             -8 user does not exist
+ */
 function new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code, $enabled){
   //If the prof has never logged in, they're not in the users table
   //and therefore fail the Foreign Key Constraint.
@@ -183,38 +183,38 @@ function get_tas($course_id){
   return $tas;
 }
 
- /**
-  * Get courses that the user is a TA for
-  *
-  * @param string $username
-  * @return array of courses the user is a TA for 
-  *         null on error
-  */
+/**
+ * Get courses that the user is a TA for
+ *
+ * @param string $username
+ * @return array of courses the user is a TA for 
+ *         null on error
+ */
 function get_ta_courses($username){
    return get_user_courses($username)['ta'];
 }
 
- /**
-  * Get courses that the user has joined as a student
-  *
-  * @param string $username
-  * @return array of courses the user is a student in
-  * @return null on error
-  */
+/**
+ * Get courses that the user has joined as a student
+ *
+ * @param string $username
+ * @return array of courses the user is a student in
+ * @return null on error
+ */
 function get_stud_courses($username){
   return get_user_courses($username)['student'];
 }
 
 
- /**
-  * Get courses that the user has joined as a student
-  * TODO: ADD CHECK FOR COURSE
-  * @param string $username
-  * @return int 0 on success
-  *             -1 on fail
-  *             -2 on nonexistant course
-  *             -8 on nonexistant user
-  */
+/**
+ * Get courses that the user has joined as a student
+ * TODO: ADD CHECK FOR COURSE
+ * @param string $username
+ * @return int 0 on success
+ *             -1 on fail
+ *             -2 on nonexistant course
+ *             -8 on nonexistant user
+ */
 function add_ta_course($username, $course_id){
   //If the user has never logged in, they're not in the users table
   //and therefore fail the Foreign Key Constraint.
@@ -259,18 +259,18 @@ function rem_ta_course($username, $course_id){
   return rem_user_course($username, $course_id, "ta");
 } 
 
- /**
-  * Add user to course as a student
-  * TODO: ADD CHECKS FOR COURSE AND USER
-  * @param string $username
-  * @param string $course_id
-  * @return int 0 on success, 
-  *             -1 on fail, 
-  *             -2 on nonexistant course
-  *             -5 if user already has TA role, 
-  *             -6 on invalid access code
-  *             -8 on nonexistant user
-  */
+/**
+ * Add user to course as a student
+ * TODO: ADD CHECKS FOR COURSE AND USER
+ * @param string $username
+ * @param string $course_id
+ * @return int 0 on success, 
+ *             -1 on fail, 
+ *             -2 on nonexistant course
+ *             -5 if user already has TA role, 
+ *             -6 on invalid access code
+ *             -8 on nonexistant user
+ */
 function add_stud_course($username, $course_id, $acc_code){
   //If the prof has never logged in, they're not in the users table
   //and therefore fail the Foreign Key Constraint.
@@ -314,27 +314,27 @@ function add_stud_course($username, $course_id, $acc_code){
   return 0;
 }
 
- /**
-  * Remove student from course 
-  *
-  * @param string $username
-  * @param string $course_id
-  * @return int  0 on success, 
-  *             -1 on fail
-  */
+/**
+ * Remove student from course 
+ *
+ * @param string $username
+ * @param string $course_id
+ * @return int  0 on success, 
+ *             -1 on fail
+ */
 function rem_stud_course($username, $course_id){
   return rem_user_course($username, $course_id, "student");
 }
 
 
 ######### HELPER METHODS #########
- /**
-  * Returns the access code for the course
-  *
-  * @param  int    $course_id
-  * @return string access_code
-  *         int   -1 on error
-  */
+/**
+ * Returns the access code for the course
+ *
+ * @param  int    $course_id
+ * @return string access_code
+ *         int   -1 on error
+ */
 function get_course_acc_code($course_id, $sql_conn){
   $query = "SELECT access_code FROM courses WHERE course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -355,13 +355,13 @@ function get_course_acc_code($course_id, $sql_conn){
   return $access_code;
 }
 
- /**
-  * Get courses where the user has role
-  *
-  * @param string $username
-  * @return array of courses the user is a member of with that role
-  *         null on error
-  */
+/**
+ * Get courses where the user has role
+ *
+ * @param string $username
+ * @return array of courses the user is a member of with that role
+ *         null on error
+ */
 function get_user_courses($username){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -396,13 +396,13 @@ function get_user_courses($username){
   return $courses;
 } 
 
- /**
-   * Get courses where the user has role
-   *
-   * @param string $username
-   * @return array of courses the user is a member of with that role
-   *         null on error
-   */
+/**
+ * Get courses where the user has role
+ *
+ * @param string $username
+ * @return array of courses the user is a member of with that role
+ *         null on error
+ */
 function get_user_courses2($username){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -437,15 +437,15 @@ function get_user_courses2($username){
   return $courses;
 }
 
- /**
-  * Remove user from course as $role
-  *
-  * @param string $username
-  * @param int    $course_id
-  * @param string $role [ta, student]
-  * @return int  0 on success, 
-  *             -1 on fail
-  */
+/**
+ * Remove user from course as $role
+ *
+ * @param string $username
+ * @param int    $course_id
+ * @param string $role [ta, student]
+ * @return int  0 on success, 
+ *             -1 on fail
+ */
 function rem_user_course($username, $course_id, $role){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
@@ -470,13 +470,13 @@ function rem_user_course($username, $course_id, $role){
   return 0;
 }
 
- /**
-  * Returns true if the course is open, false if closed
-  * NULL on error
-  *
-  * @param int    $course_id
-  * @return bool 
-  */
+/**
+ * Returns true if the course is open, false if closed
+ * NULL on error
+ *
+ * @param int    $course_id
+ * @return bool 
+ */
 function get_course_state($course_id){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){

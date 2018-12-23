@@ -84,10 +84,22 @@ function is_admin($username){
   return $admin;
 }
 
+/**
+ * Adds $username to the admin group
+ *
+ * @param string $username
+ * @return bool
+ */
 function grant_admin($username){
   return admin_access($username, 1);
 }
 
+/**
+ * Removes $username from the admin group
+ *
+ * @param string $username
+ * @return bool
+ */
 function revoke_admin($username){
     return admin_access($username, 0);
 }

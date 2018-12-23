@@ -548,7 +548,6 @@ function set_cooldown($time_lim, $course_id){
  *
  * @param  string $stud_username
  * @param  int    $course_id
- * @param  string $operation {increase, decrease}
  * @return int 0  on success
  *         int -1 on general error
  *         int -2 on nonexistent course
@@ -563,7 +562,6 @@ function increase_stud_priority($stud_username, $course_id){
  *
  * @param  string $stud_username
  * @param  int    $course_id
- * @param  string $operation {increase, decrease}
  * @return int 0  on success
  *         int -1 on general 
  *         int -2 on nonexistent course
@@ -970,7 +968,7 @@ function check_user_cooldown($stud_username, $course_cooldown, $course_id, $sql_
 }
 
 /**
- *Checks if the provided course_id is valid
+ * Checks if the provided course_id is valid
  *
  * @param string $course_id
  * @param string $sql_conn

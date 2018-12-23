@@ -118,11 +118,6 @@ function is_admin_page($path){
   return $path == '/new_course'   || 
          $path == '/edit_course';
 }
-function basic_auth_provided(){
-  return isset($_SERVER['PHP_AUTH_USER']) && 
-         isset($_SERVER['PHP_AUTH_PW']);
-}
-
 function invalid_auth_reply(){
   http_response_code(401);
   $return = array(
