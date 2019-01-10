@@ -65,30 +65,6 @@ function stud_helped_per_day_column_chart(course_data) {
         text: 'Number of Students Helped'
       }
     },
-    plotOptions: {
-      scatter: {
-        marker: {
-          radius: 5,
-          states: {
-            hover: {
-              enabled: true,
-              lineColor: 'rgb(100,100,100)'
-            }
-          }
-        },
-        states: {
-          hover: {
-            marker: {
-              enabled: false
-            }
-          }
-        },
-        tooltip: {
-          headerFormat: '<b>{series.name}</b><br>',
-          pointFormat: '{point.y} students helped'
-        }
-      }
-    },
     series: [{
       "name": 'Students Helped',
       "color": 'rgba(223, 83, 83, .5)',
