@@ -106,6 +106,8 @@ function get_course(course_id){
 }
 
 function course_name_to_id(course_name){
+  //Trim any whitespace off the ends here since the backend will when it creates it.
+  course_name = course_name.trim();
   $.ajax({
     async: false,
     method: "GET",

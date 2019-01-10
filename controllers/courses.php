@@ -72,8 +72,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
 
-    $course_name = filter_var($_POST['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    $depart_pref = filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    $course_name = trim(filter_var($_POST['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
+    $depart_pref = trim(filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
     $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $professor   = filter_var($_POST['professor'],   FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $enabled     = filter_var($_POST['enabled'],     FILTER_VALIDATE_BOOLEAN);
