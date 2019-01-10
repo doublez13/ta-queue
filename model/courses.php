@@ -518,9 +518,9 @@ function get_courses($enabled_only){
     return NULL;
   }
 
-  $query = "SELECT course_id, course_name, access_code, enabled FROM courses";
+  $query = "SELECT course_id, course_name, access_code, enabled FROM courses ORDER BY depart_pref, course_name";
   if($enabled_only){
-    $query = "SELECT course_id, course_name, access_code, enabled FROM courses where enabled=true";
+    $query = "SELECT course_id, course_name, access_code, enabled FROM courses WHERE enabled=true ORDER BY depart_pref, course_name";
   }
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
