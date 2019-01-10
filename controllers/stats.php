@@ -116,6 +116,7 @@ function check_date(){
   //Jan 1st     - May 9th
   //May 10th    - August 19th
   //August 20st - December 31st
+  date_default_timezone_set('America/Denver');
   $curr_year  = date('Y');
   $curr_month = date('m');
   $curr_day   = date('d'); 
