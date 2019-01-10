@@ -24,8 +24,8 @@ $(document).on("change", "#chart", function(e){
 
 function get_course_stats(course) {
   var url = "../api/stats/course/"+course;
-  var posting = $.get( url, { course: course } );
-  posting.done(parse_it);
+  var get = $.get(url);
+  get.done(parse_it);
 };
 
 function parse_it(data) {

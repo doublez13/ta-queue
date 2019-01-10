@@ -112,21 +112,33 @@ function ta_stats(){
 function check_date(){
   $date_format = "/^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])$/"; // yyyy-mm-dd
   $format_err  = false;
-  $start_date  = null;
-  $end_date    = null;
-  if(isset($_GET['start_date'])){
+  //If no start date was set, set it to the beginning of the semester
+  //Jan 1st     - May 9th
+  //May 10th    - August 19th
+  //August 20st - December 31st
+  $curr_year  = date('Y');
+  $curr_month = date('m');
+  $curr_day   = date('d'); 
+  if($curr_month < 5 || ($curr_month == 5 && $curr_day <= 9)){
+    $start_date  = $curr_year.'-01-01';
+    $end_date    = $curr_year.'-05-09';
+  }elseif($curr_month < 8 || ($curr_month == 8 && $curr_day <= 19)){
+    $start_date  = $curr_year.'-05-10';
+    $end_date    = $curr_year.'-08-19';
+  }else{
+    $start_date  = $curr_year.'-08-20';
+    $end_date    = $curr_year.'-12-31';
+  }
+  if(isset($_GET['start_date']) && isset($_GET['end_date'])){
     $start_date = $_GET['start_date'];
+    $end_date = $_GET['end_date'];
     $format_err = !((bool)preg_match($date_format, $start_date));
-  }
-  if(isset($_GET['end_date'])){
-    $end_date   = $_GET['end_date'];
     $format_err = !((bool)preg_match($date_format, $end_date)) || $format_err;
-  }
-  // Make sure start_date was sent if end_date was sent and ensure correct formats
-  if ((isset($end_date) && !isset($start_date)) || $format_err){
-    http_response_code(422); // 400 FOR BAD DATE?
-    echo json_encode( json_err("Missing or bad date (required: yyyy-mm-dd)") );
-    die();
+    if ($format_err){
+      http_response_code(422); // 400 FOR BAD DATE?
+      echo json_encode( json_err("bad date (required: yyyy-mm-dd)") );
+      die();
+    }
   }
   return [$start_date, $end_date];
 }
