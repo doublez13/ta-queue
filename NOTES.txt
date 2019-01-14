@@ -5,7 +5,6 @@
 -The photo on the about page doesn't work well with mobile screens or screen resizing
 -In Edge on the queue page I noticed this error every ~20 seconds, but no visible issue: "SCRIPT12030: SCRIPT12030: WebSocket Error: Network Error 12030, The connection with the server was terminated abnormally"
 -The alert() in the fail function in queue_functions.js prints 'undefined' instead of the error.
--Should we have the UI show specifically which TA is helping whom? Maybe each TA can have its own color in the TAs on Duty box.
 -Small UI issue in Chrome and Firefox: the rows don't render across the entire queue table in the student view.
 -Small UI issue in Edge: when announcements word wrap and the last line has only a small amount of text, only the announcement column is fully highlighted.
 -Small UI issue in mobile Safari: in the TA view the Course Stats button is not same width as the button group above.
