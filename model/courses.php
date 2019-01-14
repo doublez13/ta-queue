@@ -67,7 +67,7 @@ function new_course($course_name, $depart_pref, $course_num, $description, $prof
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return -1;
-  } 
+  }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
@@ -133,12 +133,12 @@ function get_course($course_id){
   if(mysqli_stmt_fetch($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
-    return array("depart_pref" => $depart_pref, 
-                 "course_num"  => $course_num, 
-                 "course_name" => $course_name, 
+    return array("depart_pref" => $depart_pref,
+                 "course_num"  => $course_num,
+                 "course_name" => $course_name,
                  "course_id"   => $course_id,
-                 "professor"   => $professor, 
-                 "description" => $description, 
+                 "professor"   => $professor,
+                 "description" => $description,
                  "access_code" => $access_code,
                  "enabled"     => $enabled
            );
@@ -187,7 +187,7 @@ function get_tas($course_id){
  * Get courses that the user is a TA for
  *
  * @param string $username
- * @return array of courses the user is a TA for 
+ * @return array of courses the user is a TA for
  *         null on error
  */
 function get_ta_courses($username){
@@ -257,17 +257,17 @@ function add_ta_course($username, $course_id){
  */
 function rem_ta_course($username, $course_id){
   return rem_user_course($username, $course_id, "ta");
-} 
+}
 
 /**
  * Add user to course as a student
  * TODO: ADD CHECKS FOR COURSE AND USER
  * @param string $username
  * @param string $course_id
- * @return int 0 on success, 
- *             -1 on fail, 
+ * @return int 0 on success,
+ *             -1 on fail,
  *             -2 on nonexistant course
- *             -5 if user already has TA role, 
+ *             -5 if user already has TA role,
  *             -6 on invalid access code
  *             -8 on nonexistant user
  */
@@ -286,7 +286,7 @@ function add_stud_course($username, $course_id, $acc_code){
 
   //TODO: Should we error if they're a TA? Currently we just switch their role.
 
-  $real_acc_code = get_course_acc_code($course_id, $sql_conn); 
+  $real_acc_code = get_course_acc_code($course_id, $sql_conn);
   if($real_acc_code == -1 ){//TODO: Nothing stopping -1 from being an access code
     mysqli_close($sql_conn);
     return -1;//error
@@ -315,11 +315,11 @@ function add_stud_course($username, $course_id, $acc_code){
 }
 
 /**
- * Remove student from course 
+ * Remove student from course
  *
  * @param string $username
  * @param string $course_id
- * @return int  0 on success, 
+ * @return int  0 on success,
  *             -1 on fail
  */
 function rem_stud_course($username, $course_id){
@@ -394,7 +394,7 @@ function get_user_courses($username){
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return $courses;
-} 
+}
 
 /**
  * Get courses where the user has role
@@ -443,7 +443,7 @@ function get_user_courses2($username){
  * @param string $username
  * @param int    $course_id
  * @param string $role [ta, student]
- * @return int  0 on success, 
+ * @return int  0 on success,
  *             -1 on fail
  */
 function rem_user_course($username, $course_id, $role){
@@ -475,14 +475,14 @@ function rem_user_course($username, $course_id, $role){
  * NULL on error
  *
  * @param int    $course_id
- * @return bool 
+ * @return bool
  */
 function get_course_state($course_id){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return NULL;
   }
-  
+
   $query = "SELECT enabled from courses where course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){

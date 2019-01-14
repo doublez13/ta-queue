@@ -6,7 +6,7 @@ require_once 'config.php';
  *
  * Functions for Authentication and Authorization.
  *
- * NOTE: All usernames are references to 
+ * NOTE: All usernames are references to
  *       sAMAccountName.
  */
 
@@ -22,7 +22,7 @@ function auth($username, $password){
   if(!is_null(_ldap_connect($username, $password))){
     $auth = 1;
   }
-  return $auth; 
+  return $auth;
 }
 
 /**
@@ -151,7 +151,7 @@ function _ldap_connect($username, $password){
   }
   $ldap_conn = ldap_connect(LDAP_SERVER);
   ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-  ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);  
+  ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
   //TLS cert disabling code requires php >= 7.0.5
   //If running php < 7.0.5, disable requiring the cert at the OS level if needed
   if(version_compare(phpversion(), '7.0.5') > 0){
@@ -162,7 +162,7 @@ function _ldap_connect($username, $password){
   if($ldap_conn){
     if(@ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
       return $ldap_conn;
-    } 
+    }
   }
   return NULL;
 }
@@ -192,7 +192,7 @@ function srch_by_sam($sam){
   if(!$entries['count']){//No results found for that user
     return NULL;
   }
-  
+
   return $entries[0];
 }
 
@@ -213,7 +213,7 @@ function touch_user($username, $first, $last, $full){
     return 1;
   }
 
-  $query = "INSERT INTO users (username, first_name, last_name, full_name, last_login) 
+  $query = "INSERT INTO users (username, first_name, last_name, full_name, last_login)
             VALUES (?, ?, ?, ?, NOW())
             ON DUPLICATE KEY UPDATE last_login=NOW()";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -282,7 +282,7 @@ function get_info_sql($username){
     return NULL;
   }
 
-  $query = "SELECT username, first_name, last_name, full_name, admin FROM users WHERE username=?"; 
+  $query = "SELECT username, first_name, last_name, full_name, admin FROM users WHERE username=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);

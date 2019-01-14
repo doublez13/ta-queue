@@ -5,7 +5,7 @@ require_once 'config.php';
  * Copyright (c) 2018 Zane Zakraisek
  *
  * Functions for manipulating the queues
- * 
+ *
  */
 
 /**
@@ -55,8 +55,8 @@ function get_queue($course_id){
 
   #Get the announcements
   $return["announcements"] = [];
-  $query  = "SELECT id, announcement, (SELECT full_name FROM users WHERE username = announcements.poster) AS poster, tmstmp 
-             FROM announcements WHERE course_id ='".$course_id."' 
+  $query  = "SELECT id, announcement, (SELECT full_name FROM users WHERE username = announcements.poster) AS poster, tmstmp
+             FROM announcements WHERE course_id ='".$course_id."'
              ORDER BY id DESC";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
@@ -70,8 +70,8 @@ function get_queue($course_id){
 
   #Get the state of the TAs
   $return["TAs"]      = [];
-  $query  = "SELECT ta_status.username, (SELECT TIMEDIFF(NOW(), ta_status.state_tmstmp)) as duration, users.full_name, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping 
-             FROM ta_status INNER JOIN users on ta_status.username = users.username 
+  $query  = "SELECT ta_status.username, (SELECT TIMEDIFF(NOW(), ta_status.state_tmstmp)) as duration, users.full_name, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping
+             FROM ta_status INNER JOIN users on ta_status.username = users.username
              WHERE course_id='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
@@ -85,7 +85,7 @@ function get_queue($course_id){
 
   #Get the actual queue
   $return["queue"]    = [];
-  $query  = "SELECT queue.username, users.full_name, queue.question, queue.location 
+  $query  = "SELECT queue.username, users.full_name, queue.question, queue.location
              FROM queue INNER JOIN users on queue.username = users.username
              WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
@@ -145,8 +145,8 @@ function enq_stu($username, $course_id, $question, $location){
     }
   }
 
-  $query = "INSERT INTO queue (username, course_id, question, location) 
-            VALUES (?, ?, ?, ?) 
+  $query = "INSERT INTO queue (username, course_id, question, location)
+            VALUES (?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE question=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -154,7 +154,7 @@ function enq_stu($username, $course_id, $question, $location){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "sisss", $username, $course_id, $question, $location, $question);
- 
+
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -167,8 +167,8 @@ function enq_stu($username, $course_id, $question, $location){
   #If MySQL worked properly, we'd be able to completely implement all logging
   #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
   #with uniqueness constraints in MySQL force me to take this route instead.
-  $query = "INSERT INTO student_log (username, course_id, question, location) 
-            VALUES (?, ?, ?, ?)"; 
+  $query = "INSERT INTO student_log (username, course_id, question, location)
+            VALUES (?, ?, ?, ?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -178,7 +178,7 @@ function enq_stu($username, $course_id, $question, $location){
   mysqli_stmt_bind_param($stmt, "siss", $username, $course_id, $question, $location);
   if(!mysqli_stmt_execute($stmt)){
     $ret = -1;
-  } 
+  }
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
@@ -189,7 +189,7 @@ function enq_stu($username, $course_id, $question, $location){
  * Remove student from queue
  *
  * If a TA is helping this student, SQL will free the TA.
- * 
+ *
  * @param  string $username
  * @param  int    $course_id
  * @return int 0  on success
@@ -211,9 +211,9 @@ function deq_stu($username, $course_id){
   elseif($queue_state == "closed"){
     mysqli_close($sql_conn);
     return -3;
-  }  
+  }
 
-  $query = "DELETE queue from queue NATURAL JOIN courses 
+  $query = "DELETE queue from queue NATURAL JOIN courses
             WHERE username=? AND course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -221,7 +221,7 @@ function deq_stu($username, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "si", $username, $course_id);
- 
+
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -239,7 +239,7 @@ function deq_stu($username, $course_id){
   #If MySQL worked properly, we'd be able to completely implement all logging
   #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
   #with uniqueness constraints in MySQL force me to take this route instead.
-  $query = "UPDATE student_log SET exit_tmstmp = NOW() 
+  $query = "UPDATE student_log SET exit_tmstmp = NOW()
             WHERE username=? AND course_id=? ORDER BY id DESC limit 1;";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -285,7 +285,7 @@ function enq_ta($username, $course_id){
     return -3;
   }
 
-  $query = "INSERT INTO ta_status (username, course_id) 
+  $query = "INSERT INTO ta_status (username, course_id)
             VALUES (?, ?)
             ON DUPLICATE KEY UPDATE helping=NULL";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -330,8 +330,8 @@ function deq_ta($username, $course_id){
     return -3;
   }
 
-  $query = "DELETE FROM ta_status 
-            WHERE username=? AND course_id=?"; 
+  $query = "DELETE FROM ta_status
+            WHERE username=? AND course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -376,8 +376,8 @@ function get_ta_status($username, $course_id){
     return -3;
   }
 
-  $query  = "SELECT helping FROM ta_status 
-             WHERE username=? AND course_id=?"; 
+  $query  = "SELECT helping FROM ta_status
+             WHERE username=? AND course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -480,7 +480,7 @@ function set_time_lim($time_lim, $course_id){
     return -3;
   }
 
-  $query = "UPDATE queue_state SET time_lim = ? 
+  $query = "UPDATE queue_state SET time_lim = ?
             WHERE course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -525,7 +525,7 @@ function set_cooldown($time_lim, $course_id){
     return -3;
   }
 
-  $query = "UPDATE queue_state SET cooldown = ? 
+  $query = "UPDATE queue_state SET cooldown = ?
             WHERE course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -563,7 +563,7 @@ function increase_stud_priority($stud_username, $course_id){
  * @param  string $stud_username
  * @param  int    $course_id
  * @return int 0  on success
- *         int -1 on general 
+ *         int -1 on general
  *         int -2 on nonexistent course
  *         int -3 on closed course
  */
@@ -697,7 +697,7 @@ function del_announcement($course_id, $announcement_id){
     return -2; //Nonexistant course
   }
 
-  $query = "DELETE FROM announcements 
+  $query = "DELETE FROM announcements
             WHERE id = ? AND course_id = ?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -718,7 +718,7 @@ function del_announcement($course_id, $announcement_id){
 //HELPER FUNCTIONS
 /**
  * Changes the state of the course queue
- * 
+ *
  * I'd like to move the input and output states
  * from strings to ints
  *
@@ -813,9 +813,9 @@ function change_stud_priority($stud_username, $course_id, $operation){
     return -3;
   }
 
-  $query = "SELECT position, username, course_id, question, location 
-            FROM queue 
-            WHERE username=? 
+  $query = "SELECT position, username, course_id, question, location
+            FROM queue
+            WHERE username=?
             AND course_id=?
             AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id=?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -836,12 +836,12 @@ function change_stud_priority($stud_username, $course_id, $operation){
   mysqli_stmt_close($stmt);
 
   if($operation == "increase"){
-    $query = "SELECT position, username, course_id, question, location FROM queue 
-              WHERE position<'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
+    $query = "SELECT position, username, course_id, question, location FROM queue
+              WHERE position<'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
               ORDER BY position DESC LIMIT 1";
   }elseif($operation == "decrease"){
-    $query = "SELECT position, username, course_id, question, location FROM queue 
-              WHERE position>'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."') 
+    $query = "SELECT position, username, course_id, question, location FROM queue
+              WHERE position>'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
               ORDER BY position ASC LIMIT 1";
   }else{
     mysqli_close($sql_conn);
@@ -873,13 +873,13 @@ function change_stud_priority($stud_username, $course_id, $operation){
   $query = "DELETE FROM queue WHERE position = '".$position2."'";
   $res = mysqli_query($sql_conn, $query) && $res;
 
-  $query = "INSERT INTO queue (position, username, course_id, question, location) 
+  $query = "INSERT INTO queue (position, username, course_id, question, location)
             VALUES ('".$position2."', '".$username1."', '".$course_id."', '".$question1."', '".$location1."')";
   $res = mysqli_query($sql_conn, $query) && $res;
-  $query = "INSERT INTO queue (position, username, course_id, question, location) 
+  $query = "INSERT INTO queue (position, username, course_id, question, location)
             VALUES ('".$position1."', '".$username2."', '".$course_id."', '".$question2."', '".$location2."');";
   $res = mysqli_query($sql_conn, $query) && $res;
-  
+
   $ret = 0;
   if($res){
     mysqli_commit($sql_conn);
@@ -895,7 +895,7 @@ function change_stud_priority($stud_username, $course_id, $operation){
 
 /**
  * Retrieves the cooldown setting for a course
- * 
+ *
  * @param string $course_id
  * @param string $sql_conn
  * @return int  0 if no cooldown set

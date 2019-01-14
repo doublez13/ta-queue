@@ -40,7 +40,7 @@ if( substr($path, 0, 5) === '/api/' ){
     case "queue":
       require_once './controllers/queue.php';
       break;
-    case "user": 
+    case "user":
       require_once './controllers/user.php';
       break;
     case "courses":
@@ -108,14 +108,14 @@ function is_open_page($path){
          $path == '/help';
 }
 function is_login_endpoint($path){
-  return $path == '/api/login'   || 
+  return $path == '/api/login'   ||
          $path == '/api/logout';
 }
 function is_root_dir($path){
   return $path == '/';
 }
 function is_admin_page($path){
-  return $path == '/new_course'   || 
+  return $path == '/new_course'   ||
          $path == '/edit_course';
 }
 function invalid_auth_reply(){

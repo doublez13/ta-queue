@@ -28,7 +28,7 @@ function get_stud_log($stud_username, $start_date, $end_date){
   }
 
   $query = "SELECT (SELECT course_name FROM courses WHERE course_id=student_log.course_id) AS course_name, question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
-            FROM student_log 
+            FROM student_log
             WHERE username = ? AND exit_tmstmp != '0' AND help_tmstmp != '0'";
 
   // Append date ranges if necessary
@@ -59,19 +59,19 @@ function get_stud_log($stud_username, $start_date, $end_date){
     return -1;
   }
 
-  mysqli_stmt_bind_result($stmt, $course_name, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by); 
+  mysqli_stmt_bind_result($stmt, $course_name, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
-    $result[] = array('course_name'  => $course_name, 
-                      'question'     => $question, 
-                      'location'     => $location, 
-                      'enter_tmstmp' => $enter_tmstmp, 
-                      'help_tmstmp'  => $help_tmstmp, 
-                      'exit_tmstmp'  => $exit_tmstmp, 
+    $result[] = array('course_name'  => $course_name,
+                      'question'     => $question,
+                      'location'     => $location,
+                      'enter_tmstmp' => $enter_tmstmp,
+                      'help_tmstmp'  => $help_tmstmp,
+                      'exit_tmstmp'  => $exit_tmstmp,
                       'helped_by'    => $helped_by,
-                     ); 
+                     );
   }
-  
+
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return $result;
@@ -96,7 +96,7 @@ function get_course_log($course_name, $start_date, $end_date){
   }
 
   $query = "SELECT username, question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
-            FROM student_log 
+            FROM student_log
             WHERE course_id=(SELECT course_id from courses where course_name=?) AND exit_tmstmp !='0' AND help_tmstmp !='0'";
 
   // Append date ranges if necessary
@@ -150,7 +150,7 @@ function get_course_log($course_name, $start_date, $end_date){
  * specified, a log for the entire history of the student in course_name is returned. If start_date is
  * specified, a log from start_date (inclusive) to the present is returned. If start_date and
  * end_date are specified, a log from start_date (inclusive) to end_date (exclusive) is returned.
- * 
+ *
  * @param string $stud_username
  * @param string $course_name
  * @param string $start_date enter queue timestamp (inclusive)
@@ -165,7 +165,7 @@ function get_stud_log_for_course($stud_username, $course_name, $start_date, $end
   }
 
   $query = "SELECT question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
-            FROM student_log 
+            FROM student_log
             WHERE username=? AND course_id=(SELECT course_id from courses where course_name=?) AND exit_tmstmp !='0' AND help_tmstmp !='0'";
 
   // Append date ranges if necessary
@@ -195,7 +195,7 @@ function get_stud_log_for_course($stud_username, $course_name, $start_date, $end
     mysqli_close($sql_conn);
     return -1;
   }
-  
+
   mysqli_stmt_bind_result($stmt, $question, $location, $enter_tmstmp, $help_tmstmp, $exit_tmstmp, $helped_by);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
@@ -233,7 +233,7 @@ function get_ta_log_for_course($ta_username, $course_name, $start_date, $end_dat
   }
 
   $query = "SELECT username, question, location, enter_tmstmp, help_tmstmp, exit_tmstmp, helped_by
-            FROM student_log 
+            FROM student_log
             WHERE helped_by=? AND course_id=(SELECT course_id from courses where course_name=?) AND exit_tmstmp !='0' AND help_tmstmp !='0'";
 
   // Append date ranges if necessary
@@ -303,9 +303,9 @@ function get_course_stats($course_name, $start_date, $end_date){
   $query = "SELECT
               ROUND(AVG(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp)))   , 0)  AS avg_wait_time,
               ROUND(STDDEV(TIME_TO_SEC(TIMEDIFF(help_tmstmp, enter_tmstmp))), 0)  AS stddev_wait_time,
-              ROUND(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))    , 0)  AS avg_help_time, 
+              ROUND(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))    , 0)  AS avg_help_time,
               ROUND(STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp))) , 0)  AS stddev_help_time
-              FROM student_log  
+              FROM student_log
               WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)";
 
   // Append date ranges if necessary
@@ -373,7 +373,7 @@ function get_course_usage_by_day($course_name, $start_date, $end_date){
 
   $query = "SELECT
             DATE(enter_tmstmp), COUNT(*)
-            FROM student_log 
+            FROM student_log
             WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
            "GROUP BY DATE(enter_tmstmp)";
   $stmt  = mysqli_prepare($sql_conn, $query);
@@ -437,11 +437,11 @@ function get_course_avg_help_time($course_name, $start_date, $end_date){
       $range_condition = " AND enter_tmstmp >=? AND enter_tmstmp <? ";
     else
       $range_condition = " AND enter_tmstmp >=? ";
- 
-  $query = "SELECT DATE(enter_tmstmp) as date, SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp,enter_tmstmp)))) as avg_help_time 
-            FROM student_log 
-            WHERE course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition . 
-            "GROUP BY DATE(enter_tmstmp)"; 
+
+  $query = "SELECT DATE(enter_tmstmp) as date, SEC_TO_TIME(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp,enter_tmstmp)))) as avg_help_time
+            FROM student_log
+            WHERE course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
+            "GROUP BY DATE(enter_tmstmp)";
 
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
