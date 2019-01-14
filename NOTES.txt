@@ -12,7 +12,6 @@
 -Should we add "authenticated => ... " to invalid_method() in errors.php? This would require a dynamic check.
 -Make questions optionally visible to rest of class?
 -Can a course be taught by two different professors during the same semester? DB won't allow that.
--help_student.php (not the UI) allows two TAs to help the same student. How would we show this using colors.
 -Have different background colors for TAs?
 -Have CIS handle authentication?
 -Should logging out remove you from all queues?
