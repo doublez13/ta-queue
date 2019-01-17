@@ -6,9 +6,9 @@
   <?php include('./view/head.html'); ?>
   
   <!-- Highcharts CDN -->
-  <script src="https://code.highcharts.com/highcharts.src.js" ></script>
-  <script src="https://code.highcharts.com/modules/exporting.src.js"></script>
-  <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-YSePHngPg90XHqvLix/s6s5rQACuRdMewL1EXZNpH+kN6WTFkE8vbZ786PXc2OGY" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts.src.js" integrity="sha384-FYisK27wreiNhnjrtRFQC6eGL2LN/gV+SNGBQZhK3Cnxgln2gGVutPzePwE9RIxx" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/modules/exporting.src.js" integrity="sha384-t3InkGFPpG7qAfxhe5V7mfudiR6stKo1O2tRAudyVjxbNcESro4lkRN3Rv8lrUks" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-tQAmxFwtvZsQAvixjcGgTE/1m5dLy/jhorj9D8UXJWSZ43QQgR8fkxBw1dDv1Cpk" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js" integrity="sha384-jTMy6EIZUv6UQkT/OrJic59RKQRr8cYNcNBBsHUAlAdKt3sSMfCaf5V2YE97wLkB" crossorigin="anonymous"></script>
         
   <script src="./src/stats_graph.js?ver=4.0"></script>
