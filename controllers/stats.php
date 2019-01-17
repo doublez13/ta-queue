@@ -121,18 +121,18 @@ function check_date(){
   $curr_month = date('m');
   $curr_day   = date('d'); 
   if($curr_month < 5 || ($curr_month == 5 && $curr_day <= 9)){
-    $start_date  = $curr_year.'-01-01';
-    $end_date    = $curr_year.'-05-09';
+    $start_date = $curr_year.'-01-01';
+    $end_date   = $curr_year.'-05-09';
   }elseif($curr_month < 8 || ($curr_month == 8 && $curr_day <= 19)){
-    $start_date  = $curr_year.'-05-10';
-    $end_date    = $curr_year.'-08-19';
+    $start_date = $curr_year.'-05-10';
+    $end_date   = $curr_year.'-08-19';
   }else{
-    $start_date  = $curr_year.'-08-20';
-    $end_date    = $curr_year.'-12-31';
+    $start_date = $curr_year.'-08-20';
+    $end_date   = $curr_year.'-12-31';
   }
   if(isset($_GET['start_date']) && isset($_GET['end_date'])){
     $start_date = $_GET['start_date'];
-    $end_date = $_GET['end_date'];
+    $end_date   = $_GET['end_date'];
     $format_err = !((bool)preg_match($date_format, $start_date));
     $format_err = !((bool)preg_match($date_format, $end_date)) || $format_err;
     if ($format_err){

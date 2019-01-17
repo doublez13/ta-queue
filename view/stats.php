@@ -11,7 +11,7 @@
   <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-YSePHngPg90XHqvLix/s6s5rQACuRdMewL1EXZNpH+kN6WTFkE8vbZ786PXc2OGY" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js" integrity="sha384-jTMy6EIZUv6UQkT/OrJic59RKQRr8cYNcNBBsHUAlAdKt3sSMfCaf5V2YE97wLkB" crossorigin="anonymous"></script>
         
-  <script src="./src/stats_graph.js?ver=3.0"></script>
+  <script src="./src/stats_graph.js?ver=4.0"></script>
 </head>
 
 <body>
@@ -31,19 +31,35 @@
         <div class="container-fluid" style="padding-right: 10px;">
         <div class="row">
           <div class="col-sm-12">      
-            <form class="form-horizontal">
+            <form class="form-inline">
               <fieldset>
                 <!-- Form Name -->
                 <legend>Available Charts</legend>
                 <!-- Select Basic -->
+
                   <div class="form-group">
-                    <label class="col-md-8 control-label" for="chart">Choose Form</label>
-                    <div class="col-md-8 col-md-offset-2">
-                      <select id="chart" name="chart" class="form-control">
-                        <option selected="selected" value="num_student">Number of Students Helped Per Day</option>
+                    <label class="col-md-8 control-label" for="chart">Choose Stats</label>
+                    <div class="col-md-8">
+                      <select id="stats_selector" class="form-control">
+                        <option selected="selected" value="num_student">Students Helped Per Day</option>
                       </select>
                     </div>
                   </div><!--form-group-->
+
+                  <div class="form-group">
+                    <label class="col-md-8 control-label" for="chart">Start Date</label>
+                    <div class="col-md-8">
+                      <input id="start_date" type="date">
+                    </div>
+                  </div><!--form-group-->
+
+                  <div class="form-group">
+                    <label class="col-md-8 control-label" for="chart">End Date</label>
+                    <div class="col-md-8">
+                      <input id="end_date" type="date">
+                    </div>
+                  </div><!--form-group-->
+
                 </fieldset>
               </form>
             </div><!--col-sm-8-->
