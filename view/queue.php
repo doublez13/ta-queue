@@ -20,7 +20,7 @@
     </div>
   </div>
 
-  <div class="container flex-fillSpace flex-md" style="width: 100%; max-width:1500px;">
+  <div class="container flex-fillSpace flex-md" style="width: 100%; max-width:95%;">
 
     <!--TAS ON DUTY AND QUEUE BUTTONS COLUMN-->
     <div class="col-xs-12 col-sm-3 col-md-2  padding-bottom-15 flex flex-column flex-alignItems-stretch">
