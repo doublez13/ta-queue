@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue</title>
   <?php include('./view/head.html'); ?>
-  <script src="./src/queue_functions.js?ver=3.0"></script>
+  <script src="./src/queue_functions.js?ver=4.0"></script>
 </head>
 
 <body>

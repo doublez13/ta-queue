@@ -4,7 +4,7 @@ var my_username;
 var first_name;
 var last_name;
 var course_id;
-var is_admin = localStorage.is_admin == true;
+var is_admin = localStorage.is_admin == "true";
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER

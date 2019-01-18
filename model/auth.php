@@ -52,6 +52,33 @@ function get_info($username){
 }
 
 /**
+ * Returns an array of all admin users
+ *
+ * @return array of all admin users
+ *         null on error
+ *
+ */
+function get_admins(){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
+
+  $query = "SELECT username FROM users WHERE admin=1";
+  $result = mysqli_query($sql_conn, $query);
+  if(!$result){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+
+  $admins = [];
+  while($admin = mysqli_fetch_assoc($result)){
+    $admins[] = $admin["username"];
+  }
+  return $admins;
+}
+
+/**
  * Returns whether or not $username is a queue admin
  *
  * @param string $username samaccountname
@@ -59,29 +86,12 @@ function get_info($username){
  *         false if not queue admin
  */
 function is_admin($username){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return NULL;
-  }
+  $admins = get_admins();
 
-  $query = "SELECT admin FROM users WHERE username=?";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
+  if(is_null($admins)){
     return NULL;
   }
-  mysqli_stmt_bind_param($stmt, "s", $username);
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return NULL;
-  }
-  mysqli_stmt_bind_result($stmt, $admin);
-  mysqli_stmt_fetch($stmt);
-
-  mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
-  return $admin;
+  return in_array($username, $admins);
 }
 
 /**
