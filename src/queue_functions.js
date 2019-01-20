@@ -59,11 +59,7 @@ $(document).ready(function(){
     window.location = "stats?course="+course;
   });
 
-  start();
-});
-
-function start(){
-  $("#title").text(course+' Queue');
+  $("#title").text(course);
   my_username = localStorage.username;
   first_name  = localStorage.first_name;
   last_name   = localStorage.last_name;
@@ -94,8 +90,8 @@ function start(){
     }
     get_req.done(done);
   }
-  get_req.done(done);
-}
+  get_req.done(done); 
+});
 
 //This function is called every X seconds,
 //and is what updates the dataParsed  
