@@ -50,6 +50,9 @@ if( substr($path, 0, 5) === '/api/' ){
       require_once './model/stats.php';
       require_once './controllers/stats.php';
       break;
+    case "admins":
+      require_once './controllers/admins.php';
+      break;
     default:
       header('Location: /swagger');
   }
