@@ -134,41 +134,6 @@ switch($endpoint){
         die();
     }
     break;
-  case "admin":
-    switch( $_SERVER['REQUEST_METHOD'] ){
-      case "POST":
-        if (!is_admin($username)){
-          http_response_code(403);
-          echo json_encode( forbidden() );
-          die();
-        }
-        $res = grant_admin($req_username);
-        break;
-      case "DELETE":
-        if (!is_admin($username)){
-          http_response_code(403);
-          echo json_encode( forbidden() );
-          die();
-        }
-        $res = revoke_admin($req_username);
-        break;
-      default:
-        http_response_code(405);
-        echo json_encode( invalid_method("POST, DELETE") );
-        die();
-    }
-    if ($res){
-      $return = json_err("Unable to change admin status");
-      http_response_code(500);
-    }
-    else{
-      $return = array(
-        "authenticated" => True,
-        "success" => "Admin status changed successfully"
-      );
-      http_response_code(200);
-    }
-    break;
   case "info":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "GET":

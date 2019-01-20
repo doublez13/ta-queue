@@ -26,6 +26,8 @@ schemes:
 tags:
   - name: "Authentication"
     description: "Endpoint authentication"
+  - name: "Admins"
+    description: "Modifying the admins group"
   - name: "Courses"
     description: "Course functionalities"
   - name: "User"
@@ -114,6 +116,123 @@ paths:
               success:
                 type: "string"
                 example: "User logged out"
+
+  /admins:
+    get:
+      summary: "Get the usernames of all users in the admins group"
+      description: "Get the usernames of all users in the admins group"
+      tags:
+      - "Admins"
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              admins:
+                type: "object"
+                properties:
+                  username:
+                    type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+
+  /admins/{username}:
+    post:
+      summary: "Add a user to the admin group"
+      description: "Add a user to the admin group"
+      tags:
+      - "Admins"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of user to delete"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              student_info:
+                type: "object"
+                properties:
+                  username:
+                    type: "string"
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+    delete:
+      summary: "Remove a user from the admin group"
+      description: "Remove a user from the admin group"
+      tags:
+      - "Admins"
+      parameters:
+      - name: "username"
+        in: "path"
+        description: "username of user to delete"
+        type: "string"
+        required: true
+      responses:
+        200:
+          description: "Success"
+          schema:
+            type: "object"
+            properties:
+              authenticated:
+                type: "boolean"
+              student_info:
+                type: "object"
+                properties:
+        401:
+          description: "Not authenticated"
+          schema:
+            $ref: '#/definitions/not_authenticated'
+        403:
+          description: "Forbidden"
+          schema:
+            $ref: '#/definitions/error'
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
+        500:
+          description: "Server-side error"
+          schema:
+            $ref: '#/definitions/error'
+
 
   /user/{username}:
     get:
@@ -205,96 +324,6 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /user/{username}/admin:
-    post:
-      summary: "Add a user to the admin group"
-      description: "Add a user to the admin group"
-      tags:
-      - "User"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "username of user to delete"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-               	type: "boolean"
-              student_info:
-               	type: "object"
-                properties:
-                  username:
-                    type: "string"
-                  first_name:
-                    type: "string"
-                  last_name:
-                    type: "string"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Forbidden"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
-    delete:
-      summary: "Delete a user from the admin group"
-      description: "Remove a user from the admin group"
-      tags:
-      - "User"
-      parameters:
-      - name: "username"
-        in: "path"
-        description: "username of user to delete"
-        type: "string"
-        required: true
-      responses:
-        200:
-          description: "Success"
-          schema:
-            type: "object"
-            properties:
-              authenticated:
-               	type: "boolean"
-              student_info:
-               	type: "object"
-                properties:
-                  username:
-                    type: "string"
-                  first_name:
-                    type: "string"
-                  last_name:
-                    type: "string"
-        401:
-          description: "Not authenticated"
-          schema:
-            $ref: '#/definitions/not_authenticated'
-        403:
-          description: "Forbidden"
-          schema:
-            $ref: '#/definitions/error'
-        405:
-          description: "Invalid HTTP request method"
-          schema:
-            $ref: '#/definitions/bad_method'
-        500:
-          description: "Server-side error"
-          schema:
-            $ref: '#/definitions/error'
- 
   /user/{username}/courses:
     get:
       summary: "Get courses a user is enrolled in."
