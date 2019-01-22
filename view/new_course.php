@@ -6,7 +6,7 @@
   <?php
    include('./view/head.html');
 
-   $includes = ["./src/create_course.js"];
+   $includes = ["./src/create_course.js", "./src/logout.js"];
    foreach($includes as $include){
      $filemtime = filemtime($include);
      $source    = $include.'?ver='.$filemtime;

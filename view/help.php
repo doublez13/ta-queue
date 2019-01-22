@@ -3,7 +3,16 @@
 
 <head>
   <title>TA Help Queue - Tutorial</title>
-  <?php include('./view/head.html'); ?>
+  <?php
+   include('./view/head.html');
+
+   $includes = ["./src/logout.js"];
+   foreach($includes as $include){
+     $filemtime = filemtime($include);
+     $source    = $include.'?ver='.$filemtime;
+     echo "<script src='".$source."'></script>\n";
+   }
+   ?>
 </head>
 
 <body>
