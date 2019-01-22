@@ -3,8 +3,16 @@
 
 <head>
   <title>TA Help Queue</title>
-  <?php include('./view/head.html'); ?>
-  <script src="./src/queue_functions.js?ver=4.0"></script>
+  <?php
+   include('./view/head.html');
+
+   $includes = ["./src/queue_functions.js"];
+   foreach($includes as $include){
+     $filemtime = filemtime($include);
+     $source    = $include.'?ver='.$filemtime;
+     echo "<script src='".$source."'></script>\n";
+   }
+   ?>
 </head>
 
 <body>

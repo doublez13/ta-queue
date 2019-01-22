@@ -3,8 +3,16 @@
 
 <head>
   <title>TA Help Queue - Courses</title>
-  <?php include('./view/head.html'); ?>
-  <script src="./src/courses.js?ver=4.0"></script>
+  <?php
+   include('./view/head.html');
+
+   $includes = ["./src/courses.js"];
+   foreach($includes as $include){
+     $filemtime = filemtime($include);
+     $source    = $include.'?ver='.$filemtime;
+     echo "<script src='".$source."'></script>\n";
+   }
+   ?>
 </head>
 
 <body>

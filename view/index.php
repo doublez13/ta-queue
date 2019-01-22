@@ -3,8 +3,16 @@
 
 <head>
   <title>TA Help Queue - Index</title>
-  <?php include('./view/head.html'); ?> 
-  <script src="./src/login.js?ver=3.0"></script>
+  <?php
+   include('./view/head.html');
+
+   $includes = ["./src/login.js"];
+   foreach($includes as $include){
+     $filemtime = filemtime($include);
+     $source    = $include.'?ver='.$filemtime;
+     echo "<script src='".$source."'></script>\n";
+   }
+   ?>
 </head>
 
 <body>

@@ -3,9 +3,18 @@
 
 <head>
   <title>TA Help Queue - Course Admin</title>
-  <?php include('./view/head.html'); ?>
-  <script src="./src/create_course.js?ver=3.0"></script>
+  <?php
+   include('./view/head.html');
+
+   $includes = ["./src/create_course.js"];
+   foreach($includes as $include){
+     $filemtime = filemtime($include);
+     $source    = $include.'?ver='.$filemtime;
+     echo "<script src='".$source."'></script>\n";
+   }
+   ?>
 </head>
+
 <body>
   <?php include('./view/navbar.php'); ?>
 
