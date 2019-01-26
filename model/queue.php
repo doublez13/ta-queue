@@ -204,7 +204,7 @@ function deq_stu($username, $course_id){
 
   $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
-    $ret = 1;
+    $ret = -1;
   }
 
   mysqli_stmt_close($stmt);
