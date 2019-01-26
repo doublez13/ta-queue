@@ -155,27 +155,7 @@ function enq_stu($username, $course_id, $question, $location){
   }
   mysqli_stmt_bind_param($stmt, "sisss", $username, $course_id, $question, $location, $question);
 
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
-  }
-
-  //TODO: If UPDATE, return here so it won't add another log entry.
-
-  #Log the student in the student_log table
-  #If MySQL worked properly, we'd be able to completely implement all logging
-  #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
-  #with uniqueness constraints in MySQL force me to take this route instead.
-  $query = "INSERT INTO student_log (username, course_id, question, location)
-            VALUES (?, ?, ?, ?)";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return -1;
-  }
   $ret = 0;
-  mysqli_stmt_bind_param($stmt, "siss", $username, $course_id, $question, $location);
   if(!mysqli_stmt_execute($stmt)){
     $ret = -1;
   }
@@ -222,34 +202,9 @@ function deq_stu($username, $course_id){
   }
   mysqli_stmt_bind_param($stmt, "si", $username, $course_id);
 
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return -1;
-  }
-  //If nobody was effected, return gracefully
-  //instead of trying to log the deletion.
-  if(!mysqli_stmt_affected_rows($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return 0;
-  }
-
-  #Log the student in the student_log table
-  #If MySQL worked properly, we'd be able to completely implement all logging
-  #stricly in the DB with triggers. Bug #11472, and the fact that you cannot swap rows
-  #with uniqueness constraints in MySQL force me to take this route instead.
-  $query = "UPDATE student_log SET exit_tmstmp = NOW()
-            WHERE username=? AND course_id=? ORDER BY id DESC limit 1;";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return -1;
-  }
   $ret = 0;
-  mysqli_stmt_bind_param($stmt, "si", $username, $course_id);
   if(!mysqli_stmt_execute($stmt)){
-    $ret = -1;
+    $ret = 1;
   }
 
   mysqli_stmt_close($stmt);
