@@ -813,8 +813,7 @@ function change_stud_priority($stud_username, $course_id, $operation){
     return -3;
   }
 
-  $query = "SELECT position, username, course_id, question, location
-            FROM queue
+  $query = "SELECT position FROM queue
             WHERE username=?
             AND course_id=?
             AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id=?)";
@@ -829,18 +828,18 @@ function change_stud_priority($stud_username, $course_id, $operation){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_result($stmt, $position1, $username1, $course_id, $question1, $location1);
+  mysqli_stmt_bind_result($stmt, $position1);
   if(is_null(mysqli_stmt_fetch($stmt))){
     return 0; //User not in queue, or is currently being helped, so don't move anyone
   }
   mysqli_stmt_close($stmt);
 
   if($operation == "increase"){
-    $query = "SELECT position, username, course_id, question, location FROM queue
+    $query = "SELECT position FROM queue
               WHERE position<'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
               ORDER BY position DESC LIMIT 1";
   }elseif($operation == "decrease"){
-    $query = "SELECT position, username, course_id, question, location FROM queue
+    $query = "SELECT position FROM queue
               WHERE position>'".$position1."' AND course_id='".$course_id."' AND position NOT IN (SELECT helping FROM ta_status WHERE helping IS NOT NULL AND course_id='".$course_id."')
               ORDER BY position ASC LIMIT 1";
   }else{
@@ -861,9 +860,6 @@ function change_stud_priority($stud_username, $course_id, $operation){
   }
 
   $position2 = $entry['position'];
-  $username2 = $entry['username'];
-  $question2 = $entry['question'];
-  $location2 = $entry['location'];
 
   #####SQL TRANSACTION#####
   mysqli_autocommit($sql_conn, false);
