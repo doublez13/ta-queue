@@ -868,16 +868,11 @@ function change_stud_priority($stud_username, $course_id, $operation){
   #####SQL TRANSACTION#####
   mysqli_autocommit($sql_conn, false);
 
-  $query = "DELETE FROM queue WHERE position = '".$position1."'";
+  $query = "UPDATE queue set position='-1' WHERE position='".$position1."'";
   $res = mysqli_query($sql_conn, $query);
-  $query = "DELETE FROM queue WHERE position = '".$position2."'";
+  $query = "UPDATE queue set position='".$position1."' WHERE position='".$position2."'";
   $res = mysqli_query($sql_conn, $query) && $res;
-
-  $query = "INSERT INTO queue (position, username, course_id, question, location)
-            VALUES ('".$position2."', '".$username1."', '".$course_id."', '".$question1."', '".$location1."')";
-  $res = mysqli_query($sql_conn, $query) && $res;
-  $query = "INSERT INTO queue (position, username, course_id, question, location)
-            VALUES ('".$position1."', '".$username2."', '".$course_id."', '".$question2."', '".$location2."');";
+  $query = "UPDATE queue set position='".$position2."' WHERE position='-1'";
   $res = mysqli_query($sql_conn, $query) && $res;
 
   $ret = 0;
