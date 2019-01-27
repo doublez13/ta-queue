@@ -89,7 +89,7 @@ create table announcements(
   foreign key    (poster) references users(username) ON DELETE SET NULL
 );
 
---LOGS--
+--Logs--
 create table student_log(
   id             BIGINT AUTO_INCREMENT,
   username       VARCHAR(256) NOT NULL,
@@ -106,14 +106,17 @@ create table student_log(
   foreign key    (course_id) references courses(course_id) ON DELETE SET NULL  
 );
 
+--Trigger for entry into queue--
 CREATE TRIGGER log_student_entry AFTER INSERT ON queue FOR EACH ROW 
 INSERT INTO student_log (username, course_id, question, location) 
 VALUES (NEW.username, NEW.course_id, NEW.question, NEW.location);
 
+--Trigger for exit from queue--
 CREATE TRIGGER log_student_exit AFTER DELETE ON queue FOR EACH ROW
 UPDATE student_log SET exit_tmstmp = CURRENT_TIMESTAMP 
 WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
 
+--Trigger for helped in queue--
 CREATE TRIGGER log_student_help AFTER INSERT ON ta_status FOR EACH ROW
 UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP, helped_by = NEW.username
 WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id ORDER BY id DESC LIMIT 1;
