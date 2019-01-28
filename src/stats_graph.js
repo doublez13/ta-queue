@@ -19,14 +19,25 @@ $(document).ready(function(){
 });
 
 $(document).on("change", "#stats_selector", function(e){
-    get_course_stats(course);
+  var stat = document.getElementById("stats_selector").value;
+  choose_stats(stat);
 });
 $(document).on("change", "#start_date", function(e){
-  get_course_stats(course);
+  var stat = document.getElementById("stats_selector").value;
+  choose_stats(stat);
 });
 $(document).on("change", "#end_date", function(e){
-    get_course_stats(course);
+  var stat = document.getElementById("stats_selector").value;
+  choose_stats(stat);
 });
+
+function choose_stats(stat){
+  if(stat == "num_student"){
+    get_course_stats(course);
+  }else if(stat == "ta_proportions"){
+    get_ta_stats(course);
+  }
+}
 
 
 function get_course_stats(course) {
@@ -62,6 +73,42 @@ function get_course_stats(course) {
       return [Date.parse(element.date), element.students_helped, element.helped_by]
     });
     stud_helped_per_day_column_chart(new_arr);
+  });
+};
+
+function get_ta_stats(course) {
+  var url = "../api/stats/ta/"+course;
+
+  var start_date = document.getElementById("start_date").value;
+  var end_date   = document.getElementById("end_date").value;
+
+  if(!start_date || !end_date){
+    var d = new Date();
+    var curr_year  = d.getFullYear();
+    var curr_month = d.getMonth();
+    var curr_day   = d.getDate();
+    if(curr_month < 5 || (curr_month == 5 && curr_day <= 9)){
+      start_date = curr_year+'-01-01';
+      end_date   = curr_year+'-05-09';
+    }else if(curr_month < 8 || (curr_month == 8 && curr_day <= 19)){
+      start_date = curr_year+'-05-10';
+      end_date   = curr_year+'-08-19';
+    }else{
+      start_date = curr_year+'-08-20';
+      end_date   = curr_year+'-12-31';
+    }
+    document.getElementById("start_date").value = start_date;
+    document.getElementById("end_date").value   = end_date;
+  }
+
+  var get = $.get(url, {start_date: start_date, end_date: end_date});
+  get.done(function(data){
+    var dataString = JSON.stringify(data.ta_proportions);
+    var dataParsed = JSON.parse(dataString);
+    var new_arr = dataParsed.map((element) => {
+      return [element.students_helped, element.helped_by]
+    });
+    ta_proportions_pie_chart(new_arr);
   });
 };
 
@@ -119,3 +166,29 @@ function stud_helped_per_day_column_chart(course_data) {
     series: series_data, 
   });
 };
+
+
+function ta_proportions_pie_chart(course_data) {
+  var series_data = [];
+  for(var TA in course_data){
+    series_data.push({ "name": course_data[TA][1],
+                       "y": course_data[TA][0]});
+  }
+
+  $('#container').highcharts({
+    chart: {
+      type: 'pie'
+    },
+    plotOptions: {
+      pie: {
+        allowPointSelect: true,
+        cursor: 'pointer',
+      }
+    },
+    title: {
+      text: 'Students Helped Per Day'
+    },
+    series: [{data: series_data}],
+  });
+};
+

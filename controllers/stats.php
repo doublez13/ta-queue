@@ -56,19 +56,15 @@ switch($endpoint){
   case "ta":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "GET":
-        $ta = $path_split[4];
-        if(!is_admin($username) && $ta != $username){ //Not an admin
-          http_response_code(403);
-          echo json_encode( forbidden() );
-          die();
-        }
-
+        $course_id = $path_split[4];
+        $return = ta_stats($course_id);
         break;
       default:
       http_response_code(405);
         echo json_encode( invalid_method("GET") );
         die();
-      }    
+    }
+    break;    
   default:
     http_response_code(422);
     echo json_encode( json_err("Invalid endpoint (course, student, ta)") );
@@ -103,10 +99,22 @@ function user_stats(){
   die();
 }
 
-function ta_stats(){
-  http_response_code(422);
-  echo json_encode( json_err("Not implemented yet") );
-  die();
+function ta_stats($course_id){
+  $dates = check_date();
+
+  $usage = get_ta_proportions($course_id, $dates[0], $dates[1]);
+
+  if($usage < 0){
+    $return = return_JSON_error($usage);
+    http_response_code(500);
+  }else{
+    $return = array(
+      "authenticated" => True,
+      "ta_proportions" => $usage
+    );
+    http_response_code(200);
+  }
+  return $return;
 }
 
 function check_date(){
