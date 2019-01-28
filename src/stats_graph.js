@@ -58,14 +58,29 @@ function get_course_stats(course) {
   get.done(function(data){
     var dataString = JSON.stringify(data.usage);
     var dataParsed = JSON.parse(dataString);
-    var new_arr = dataParsed.map((element, index) => {
-      return [Date.parse(element.date), element.students_helped]
+    var new_arr = dataParsed.map((element) => {
+      return [Date.parse(element.date), element.students_helped, element.helped_by]
     });
     stud_helped_per_day_column_chart(new_arr);
   });
 };
 
 function stud_helped_per_day_column_chart(course_data) {
+  var tmp_data = {};
+  for(var i = 0; i < course_data.length; i++){
+    let TA = course_data[i][2];
+    if(!(TA in tmp_data)){
+      tmp_data[TA] = [];
+    }
+    tmp_data[TA].push(course_data[i]);
+  }
+  
+  var series_data = []
+  for(var TA in tmp_data){
+    series_data.push({ "name": TA,
+                       "data": tmp_data[TA]});
+  }
+
   $('#container').highcharts({
     chart: {
       type: 'column',
@@ -91,12 +106,16 @@ function stud_helped_per_day_column_chart(course_data) {
     yAxis: {
       title: {
         text: 'Number of Students Helped'
+      },
+      stackLabels: {
+        enabled: true
       }
     },
-    series: [{
-      "name": 'Students Helped',
-      "color": 'rgba(223, 83, 83, .5)',
-      "data": course_data
-    }], 
+    plotOptions: {
+      column: {
+        stacking: 'normal',
+      }
+    },
+    series: series_data, 
   });
 };

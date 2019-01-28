@@ -372,10 +372,10 @@ function get_course_usage_by_day($course_name, $start_date, $end_date){
       $range_condition = " AND enter_tmstmp >=? ";
 
   $query = "SELECT
-            DATE(enter_tmstmp), COUNT(*)
+            (SELECT full_name FROM users WHERE username = helped_by) AS helped_by, DATE(enter_tmstmp), COUNT(*)
             FROM student_log
             WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
-           "GROUP BY DATE(enter_tmstmp)";
+           "GROUP BY DATE(enter_tmstmp), helped_by";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -397,10 +397,11 @@ function get_course_usage_by_day($course_name, $start_date, $end_date){
     return -1;
   }
 
-  mysqli_stmt_bind_result($stmt, $date, $count);
+  mysqli_stmt_bind_result($stmt, $helped_by, $date, $count);
   $result = [];
   while (mysqli_stmt_fetch($stmt)){
     $result[] = array('date'            => $date,
+                      'helped_by'       => $helped_by,
                       'students_helped' => $count
                      );
   }
