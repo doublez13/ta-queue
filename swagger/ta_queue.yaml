@@ -561,7 +561,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/{course}/student:
+  /queue/{course_id}/student:
     post:
       summary: "Enqueue user"
       description: "Enqueue the user with the specified question and location.\n**Requirements:**\n- user must be enrolled in the course as a student\n- course queue must be open"
@@ -572,9 +572,9 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
+        description: "Course ID number"
         type: "string"
         required: true
       - name: "question"
@@ -608,7 +608,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/{course}/student/{username}:
+  /queue/{course_id}/student/{username}:
     delete:
       summary: "Dequeue a student"
       description: "Dequeue the specified student from the specified course queue. If the user is a TA for the course, dequeue the student from the course."
@@ -619,9 +619,9 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
+        description: "Course ID number"
         type: "string"
         required: true
       - name: "username"
