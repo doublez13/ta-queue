@@ -49,7 +49,7 @@
                     <div class="col-md-8">
                       <select id="stats_selector" class="form-control">
                         <option selected="selected" value="num_student">Students Helped Per Day</option>
-                        <option value="ta_proportions">TA Pie Chart</option>
+                        <option value="ta_proportions">Portion of Students Helped by TA</option>
                       </select>
                     </div>
                   </div><!--form-group-->

@@ -186,9 +186,12 @@ function ta_proportions_pie_chart(course_data) {
       }
     },
     title: {
-      text: 'Students Helped Per Day'
+      text: 'Portion of Students Helped by TA'
     },
-    series: [{data: series_data}],
+    series: [{
+      name: 'Students Helped',
+      data: series_data
+    }],
   });
 };
 
