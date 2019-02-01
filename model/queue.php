@@ -387,19 +387,22 @@ function help_student($TA_username, $stud_username, $course_id){
     return -3;
   }
 
+  #TA has to be on duty to help student
+  #NOTE: This ensures that the TA has a row in the ta_status table 
   if(get_ta_status($TA_username, $course_id) < 2){
     mysqli_close($sql_conn);
     return -4;
   }
 
-  $query = "REPLACE INTO ta_status (username, course_id, helping)
-            VALUES (?, ?, (SELECT position FROM queue WHERE username=? AND course_id=?))";
+  $query = "UPDATE ta_status
+            SET helping = (SELECT position FROM queue WHERE username=? AND course_id=?)
+            WHERE username=? AND course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "sisi", $TA_username, $course_id, $stud_username, $course_id);
+  mysqli_stmt_bind_param($stmt, "sisi", $stud_username, $course_id, $TA_username, $course_id);
   $ret = 0;
   if(!mysqli_stmt_execute($stmt) || !mysqli_stmt_affected_rows($stmt)){
     $ret = -1;

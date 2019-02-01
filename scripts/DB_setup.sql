@@ -117,6 +117,6 @@ UPDATE student_log SET exit_tmstmp = CURRENT_TIMESTAMP
 WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
 
 --Trigger for helped in queue--
-CREATE TRIGGER log_student_help AFTER INSERT ON ta_status FOR EACH ROW
+CREATE TRIGGER log_student_help AFTER UPDATE ON ta_status FOR EACH ROW
 UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP, helped_by = NEW.username
 WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id ORDER BY id DESC LIMIT 1;
