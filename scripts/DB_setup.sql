@@ -143,9 +143,6 @@ CREATE TRIGGER log_ta_exit AFTER DELETE ON ta_status FOR EACH ROW
 UPDATE ta_log SET exit_tmstmp = CURRENT_TIMESTAMP
 WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
 
-
-
-
 --Queue State Logs--
 create table queue_state_log(
   id             BIGINT AUTO_INCREMENT,
@@ -153,7 +150,7 @@ create table queue_state_log(
   state          ENUM('open','frozen','closed') NOT NULL,
   tmstmp         TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   primary key    (id),
-  foreign key    (course_id) references courses(course_id) ON DELETE SET NULL
+  foreign key    (course_id) references courses(course_id) ON DELETE CASCADE
 );
 
 --Triggers for Queue Open/Freeze--
