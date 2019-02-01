@@ -89,7 +89,7 @@ create table announcements(
   foreign key    (poster) references users(username) ON DELETE SET NULL
 );
 
---Logs--
+--Student Logs--
 create table student_log(
   id             BIGINT AUTO_INCREMENT,
   username       VARCHAR(256) NOT NULL,
@@ -120,3 +120,25 @@ WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1
 CREATE TRIGGER log_student_help AFTER UPDATE ON ta_status FOR EACH ROW
 UPDATE student_log SET help_tmstmp = CURRENT_TIMESTAMP, helped_by = NEW.username
 WHERE username=(SELECT username FROM queue where position=NEW.helping) AND course_id=NEW.course_id ORDER BY id DESC LIMIT 1;
+
+--TA Logs--
+create table ta_log(
+  id             BIGINT AUTO_INCREMENT,
+  username       VARCHAR(256) NOT NULL,
+  course_id      int,
+  enter_tmstmp   TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  exit_tmstmp    TIMESTAMP,
+  primary key    (id),
+  foreign key    (username)  references users(username)    ON DELETE CASCADE,
+  foreign key    (course_id) references courses(course_id) ON DELETE SET NULL
+);
+
+--Trigger for TA on duty--
+CREATE TRIGGER log_ta_entry AFTER INSERT ON ta_status FOR EACH ROW
+INSERT INTO ta_log (username, course_id)
+VALUES (NEW.username, NEW.course_id);
+
+--Trigger for TA off duty--
+CREATE TRIGGER log_ta_exit AFTER DELETE ON ta_status FOR EACH ROW
+UPDATE ta_log SET exit_tmstmp = CURRENT_TIMESTAMP
+WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
