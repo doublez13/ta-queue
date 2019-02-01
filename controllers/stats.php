@@ -102,15 +102,17 @@ function user_stats(){
 function ta_stats($course_id){
   $dates = check_date();
 
-  $usage = get_ta_proportions($course_id, $dates[0], $dates[1]);
+  $usage             = get_ta_proportions($course_id, $dates[0], $dates[1]);
+  $ta_avg_help_time  = get_ta_avg_help_time($course_id, $dates[0], $dates[1]);
 
-  if($usage < 0){
+  if($usage < 0 || $ta_avg_help_time < 0){
     $return = return_JSON_error($usage);
     http_response_code(500);
   }else{
     $return = array(
-      "authenticated" => True,
-      "ta_proportions" => $usage
+      "authenticated"    => True,
+      "ta_proportions"   => $usage,
+      "avg_ta_help_time" => $ta_avg_help_time
     );
     http_response_code(200);
   }
