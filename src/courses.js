@@ -15,8 +15,8 @@ function get_all_courses(){
     var $get = $.get( $url );
     $get.done( function(data) {
       var dataString = JSON.stringify(data);
-      var dataParsed = JSON.parse(dataString);
-      renderCourseTables(allCourses, dataParsed);
+      var myCourses  = JSON.parse(dataString);
+      renderCourseTables(allCourses, myCourses);
     });
   });
 }
@@ -40,10 +40,12 @@ function renderCourseTables(allCourses, myCourses) {
     var course_id = allCourses[course_name]['course_id'];
     var acc_req   = allCourses[course_name]['acc_req'];
     var enabled   = allCourses[course_name]['enabled'];
+    var desc      = allCourses[course_name]['description'];
     var tableRow = $('<tr>');
 
     var rowCell = $('<td>');
     rowCell.text(course_name);
+    rowCell.attr("title", desc);
     tableRow.append(rowCell);
 
     if(is_admin){                                       //They're an admin
@@ -94,8 +96,12 @@ function renderMyCourseTable(courses, role) {
 
   var course;
   for(course in courses) {
+    var desc     = courses[course]['description'];
     var tableRow = $('<tr>');
-    tableRow.append($('<td>').text(course));
+    var rowCell  = $('<td>');
+    rowCell.attr("title", desc);
+    rowCell.text(course);
+    tableRow.append(rowCell);
     tableRow.append($('<td>').text(role));
     var URI = encodeURI("queue?course="+course);
     tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
