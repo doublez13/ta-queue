@@ -36,6 +36,8 @@ function choose_stats(stat){
     get_course_stats(course);
   }else if(stat == "ta_proportions"){
     get_ta_stats(course);
+  }else if(stat == "ta_avg_help_time"){
+    get_ta_avg_help_time(course);
   }
 }
 
@@ -112,6 +114,42 @@ function get_ta_stats(course) {
   });
 };
 
+function get_ta_avg_help_time(course){
+  var url = "../api/stats/ta/"+course;
+
+  var start_date = document.getElementById("start_date").value;
+  var end_date   = document.getElementById("end_date").value;
+
+  if(!start_date || !end_date){
+    var d = new Date();
+    var curr_year  = d.getFullYear();
+    var curr_month = d.getMonth();
+    var curr_day   = d.getDate();
+    if(curr_month < 5 || (curr_month == 5 && curr_day <= 9)){
+      start_date = curr_year+'-01-01';
+      end_date   = curr_year+'-05-09';
+    }else if(curr_month < 8 || (curr_month == 8 && curr_day <= 19)){
+      start_date = curr_year+'-05-10';
+      end_date   = curr_year+'-08-19';
+    }else{
+      start_date = curr_year+'-08-20';
+      end_date   = curr_year+'-12-31';
+    }
+    document.getElementById("start_date").value = start_date;
+    document.getElementById("end_date").value   = end_date;
+                                        }
+
+  var get = $.get(url, {start_date: start_date, end_date: end_date});
+  get.done(function(data){
+    var dataString = JSON.stringify(data.avg_ta_help_time);
+    var dataParsed = JSON.parse(dataString);
+    var new_arr = dataParsed.map((element) => {
+      return [element.TA, element.avg_help_time]
+    });
+    ta_avg_help_time_column_chart(new_arr);
+  });
+}
+
 function stud_helped_per_day_column_chart(course_data) {
   var tmp_data = {};
   for(var i = 0; i < course_data.length; i++){
@@ -167,7 +205,6 @@ function stud_helped_per_day_column_chart(course_data) {
   });
 };
 
-
 function ta_proportions_pie_chart(course_data) {
   var series_data = [];
   for(var TA in course_data){
@@ -195,3 +232,39 @@ function ta_proportions_pie_chart(course_data) {
   });
 };
 
+function ta_avg_help_time_column_chart(course_data) {
+  var series_data = []
+  for(var entry in course_data){
+    var minutes = Math.round((course_data[entry][1]/60)*10)/10
+    series_data.push({ "name": course_data[entry][0],
+                       "y":    minutes});
+  }
+
+  $('#container').highcharts({
+    chart: {
+      type: 'column',
+    },
+    title: {
+      text: 'Average TA Help Time'
+    },
+    xAxis: {
+      type: 'category'
+    },
+    yAxis: {
+      title: {
+        text: 'Minutes'
+      },
+      units: 'minutes'
+    },
+    legend: {
+      enabled: false
+    },
+    tooltip: {
+      pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y:.2f}</b> minutes<br/>'
+    },
+    series:[{
+      name: "TAs",
+      data: series_data,
+      colorByPoint: true}]
+  });
+};

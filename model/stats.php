@@ -543,4 +543,58 @@ function get_ta_proportions($course_name, $start_date, $end_date){
   mysqli_close($sql_conn);
   return $result;
 }
+
+function get_ta_avg_help_time($course_name, $start_date, $end_date){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  // Append date ranges if necessary
+  $range_condition = "";
+  if(!is_null($start_date))
+    if (!is_null($end_date))
+      $range_condition = " AND enter_tmstmp >=? AND enter_tmstmp <? ";
+    else
+      $range_condition = " AND enter_tmstmp >=? ";
+
+  $query = "SELECT
+            (SELECT full_name FROM users WHERE username = helped_by) AS TA,
+            AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp))) AS avg_help_time FROM student_log
+            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
+           "GROUP BY TA";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  // BETTER WAY TO DO THIS IN A SINGLE FUNCTION CALL?
+  if(!is_null($start_date)){
+    if (!is_null($end_date))
+      mysqli_stmt_bind_param($stmt, 'sss', $course_name, $start_date, $end_date);
+    else
+      mysqli_stmt_bind_param($stmt, 'ss', $course_name, $start_date);
+  }else
+    mysqli_stmt_bind_param($stmt, 's', $course_name);
+
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return -1;
+  }
+
+  mysqli_stmt_bind_result($stmt, $TA, $avg_help_time);
+  $result = [];
+  while (mysqli_stmt_fetch($stmt)){
+    $result[] = array('TA'            => $TA,
+                      'avg_help_time' => intval($avg_help_time)
+                     );
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $result;
+}
+
 ?>

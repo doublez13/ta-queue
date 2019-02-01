@@ -50,6 +50,7 @@
                       <select id="stats_selector" class="form-control">
                         <option selected="selected" value="num_student">Students Helped Per Day</option>
                         <option value="ta_proportions">Portion of Students Helped by TA</option>
+                        <option value="ta_avg_help_time">Average TA Help Time</option>
                       </select>
                     </div>
                   </div><!--form-group-->
