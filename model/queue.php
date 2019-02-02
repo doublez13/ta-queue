@@ -720,12 +720,11 @@ function change_queue_state($course_id, $state){
     return $entry["state"];
   }elseif($state == "closed"){ //By deleting the entry in queue_state, we cascade the other entries
     //The above comment is correct, but cascading the other entries DOES NOT execute the triggers
-    //We need to manually delete the TAs still on duty so that the delete trigger will fire.
+    //We need to manually delete the TAs/students in the queue to fire the delete triggers.
     $query = "DELETE FROM ta_status WHERE course_id = '".$course_id."'";
-    if(!mysqli_query($sql_conn, $query)){
-      mysqli_close($sql_conn);
-      return -1;
-    }
+    mysqli_query($sql_conn, $query);
+    $query = "DELETE FROM queue WHERE course_id = '".$course_id."'";
+    mysqli_query($sql_conn, $query);
     $query = "DELETE FROM queue_state WHERE course_id = '".$course_id."'";
   }elseif($state == 'frozen' || $state == 'open'){ //Since REPLACE calls DELETE then INSERT, calling REPLACE would CASCADE all other tables, we use ON DUPLICATE KEY UPDATE instead
     //Check if the course is disabled
