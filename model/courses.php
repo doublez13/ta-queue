@@ -336,16 +336,18 @@ function rem_stud_course($username, $course_id){
  *         int   -1 on error
  */
 function get_course_acc_code($course_id, $sql_conn){
+  if(!$sql_conn){
+    return -1;
+  }
+
   $query = "SELECT access_code FROM courses WHERE course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
-    mysqli_close($sql_conn);
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "i", $course_id);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
     return -1;
   }
   mysqli_stmt_bind_result($stmt, $access_code);
@@ -525,6 +527,7 @@ function get_courses($enabled_only){
   }
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
+    mysqli_close($sql_conn);
     return NULL;
   }
 

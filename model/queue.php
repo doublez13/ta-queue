@@ -134,10 +134,12 @@ function enq_stu($username, $course_id, $question, $location){
   //Check cooldown settings for queue
   $cooldown = get_course_cooldown($course_id, $sql_conn);
   if($cooldown < 0){ //error
+    mysqli_close($sql_conn);
     return $cooldown;
   }elseif($cooldown){//cooldown period enabled
     $result = check_user_cooldown($username, $cooldown, $course_id, $sql_conn);
     if($result < 0){
+      mysqli_close($sql_conn);
       return $result; //error
     }elseif($result){ //user still has time left on cooldown
       mysqli_close($sql_conn);
@@ -794,6 +796,8 @@ function change_stud_priority($stud_username, $course_id, $operation){
   }
   mysqli_stmt_bind_result($stmt, $position1);
   if(is_null(mysqli_stmt_fetch($stmt))){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
     return 0; //User not in queue, or is currently being helped, so don't move anyone
   }
   mysqli_stmt_close($stmt);

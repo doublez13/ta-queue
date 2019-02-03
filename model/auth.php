@@ -75,6 +75,8 @@ function get_admins(){
   while($admin = mysqli_fetch_assoc($result)){
     $admins[] = $admin["username"];
   }
+
+  mysqli_close($sql_conn);
   return $admins;
 }
 
