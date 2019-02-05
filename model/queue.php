@@ -18,34 +18,30 @@ require_once 'config.php';
  *         int -2 on nonexistent course
  */
 function get_queue($course_id){
+  if(!is_numeric($course_id)){
+    return -1; //Eliminates the risk of SQL injection without the overhead of prepared queries
+  }
+
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1; //SQL error
   }
 
-  $res = check_course_id($course_id, $sql_conn);
-  if($res == -1){
-    mysqli_close($sql_conn);
-    return -1; //SQL error
-  }elseif($res == 0){
-    mysqli_close($sql_conn);
-    return -2; //Nonexistant course
-  }
-
   #Build return array
   $return = array();
 
-  #TODO
-  #SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown FROM queue_state RIGHT JOIN courses ON queue_state.course_id = courses.course_id;
   #Get the state of the queue, if its not here, it must be closed
-  $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
+  $query  = "SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown
+             FROM queue_state RIGHT JOIN courses ON queue_state.course_id = courses.course_id
+             WHERE courses.course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
     mysqli_close($sql_conn);
-    return -1;
+    return -1; //SQL Error
   }
   if(!mysqli_num_rows($result)){
-    $return["state"] = "closed";
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant Course
   }else{
     $entry = mysqli_fetch_assoc($result);
     $return["state"]    = $entry["state"];
