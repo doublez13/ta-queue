@@ -35,7 +35,8 @@ function get_queue($course_id){
   #Build return array
   $return = array();
 
-
+  #TODO
+  #SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown FROM queue_state RIGHT JOIN courses ON queue_state.course_id = courses.course_id;
   #Get the state of the queue, if its not here, it must be closed
   $query  = "SELECT * FROM queue_state WHERE course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
