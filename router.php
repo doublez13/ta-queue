@@ -96,7 +96,7 @@ else{
   }
   //Nonexistant page
   else{
-    header('Location: courses');
+    header('Location: /courses');
   }
 }
 
