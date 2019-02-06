@@ -159,22 +159,36 @@ function del_user($username){
  */
 function _ldap_connect($username, $password){
   if(empty($username) || empty($password)){
-    return null;
-  }
-  $ldap_conn = ldap_connect(LDAP_SERVER);
-  ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
-  ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
-  //TLS cert disabling code requires php >= 7.0.5
-  //If running php < 7.0.5, disable requiring the cert at the OS level if needed
-  if(version_compare(phpversion(), '7.0.5') > 0){
-    ldap_set_option($ldap_conn, LDAP_OPT_X_TLS_REQUIRE_CERT, 0);
+    return NULL;
   }
 
-  if($ldap_conn && ldap_start_tls($ldap_conn)){
-    if(@ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
-      return $ldap_conn;
+  global $ldap_servers;
+  foreach($ldap_servers as $ldap_server){
+    $fp = fsockopen($ldap_server, 389, $errno, $errstr, 5); //Check if the LDAP server is up
+    if (!$fp){
+      continue;
+    }
+    else {
+      fclose($fp);
+
+      $ldap_conn = ldap_connect($ldap_server);
+      ldap_set_option($ldap_conn, LDAP_OPT_PROTOCOL_VERSION, 3);
+      ldap_set_option($ldap_conn, LDAP_OPT_REFERRALS, 0);
+      //TLS cert disabling code requires php >= 7.0.5
+      //If running php < 7.0.5, disable requiring the cert at the OS level if needed
+      if(version_compare(phpversion(), '7.0.5') > 0){
+        ldap_set_option($ldap_conn, LDAP_OPT_X_TLS_REQUIRE_CERT, 0);
+      }
+
+      if($ldap_conn && ldap_start_tls($ldap_conn)){
+        if(@ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
+          return $ldap_conn;
+        }
+      }
+      return NULL;
     }
   }
+
   return NULL;
 }
 
