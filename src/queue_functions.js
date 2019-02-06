@@ -87,9 +87,9 @@ $(document).ready(function(){
       }
       get_queue(course_id);
       setInterval(get_queue, 5000, course_id);
-    }
+    };
     get_req.done(done);
-  }
+  };
   get_req.done(done); 
 });
 
@@ -102,7 +102,7 @@ function get_queue(course_id) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     renderView(dataParsed);
-  }
+  };
   var fail = function(data){
     var dataString = JSON.stringify(data.responseJSON);
     var dataParsed = JSON.parse(dataString);
@@ -117,7 +117,7 @@ function get_queue(course_id) {
         window.location = '/';
       }
     }
-  }
+  };
   posting.done(done);
   posting.fail(fail);
 }
@@ -563,13 +563,13 @@ function render_queue_table(dataParsed){
 //API Endpoint calls
 done = function(data){
   get_queue(course_id); //reloads the content on the page
-}
+};
 
 fail = function(data){
   var dataString = JSON.stringify(data.responseJSON);
   var dataParsed = JSON.parse(dataString);
   alert(dataParsed["error"]);
-}
+};
 
 function open_queue(course_id){
   var url = "../api/queue/"+course_id+"/state";
