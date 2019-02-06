@@ -1,5 +1,5 @@
 <?php
-define("LDAP_SERVER", "");
+$ldap_servers = array();
 define("LDAP_DOMAIN", "");
 define("BIND_USER",   "");
 define("BIND_PASSWD", "");
