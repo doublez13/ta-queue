@@ -28,12 +28,12 @@ if( substr($path, 0, 5) === '/api/' ){
     die();
   }
 
-  if (!is_authenticated()){    //Trying to access protected endpoint, not authenticated.
+  if(!is_authenticated()){ //Trying to access protected endpoint, not authenticated.
     invalid_auth_reply();
     die();
   }
 
-  $username     = $_SESSION['username'];       //NOTE: This is always lowercase
+  $username = $_SESSION['username']; //NOTE: This is always lowercase
 
   $controller = explode("/", $path)[2];
   switch($controller){
@@ -72,7 +72,7 @@ else{
       unset($_SESSION['redirect_url']);
       header("Location: $url");
     }else{
-      header('Location: courses');
+      header('Location: /courses');
     }
   }
   //Not authenticated
@@ -87,7 +87,7 @@ else{
     if(is_admin($username)){
       require_once $source;
     }else{
-      header('Location: courses');
+      header('Location: /courses');
     }
   }
   //Regular pages
