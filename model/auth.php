@@ -169,9 +169,8 @@ function _ldap_connect($username, $password){
   if(version_compare(phpversion(), '7.0.5') > 0){
     ldap_set_option($ldap_conn, LDAP_OPT_X_TLS_REQUIRE_CERT, 0);
   }
-  ldap_start_tls($ldap_conn);
 
-  if($ldap_conn){
+  if($ldap_conn && ldap_start_tls($ldap_conn)){
     if(@ldap_bind($ldap_conn, $username.'@'.LDAP_DOMAIN, $password)){
       return $ldap_conn;
     }
