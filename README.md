@@ -28,7 +28,7 @@ Port 3306: MySQL (Only needed open if running on different server)
 ### Dependencies
 Apache >= 2.4 (Ealier versions most likely work, but haven't been tested)  
 MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaDB should work too)  
-PHP    >= 5.4 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
+PHP    >= 7.0 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
 
 ### Configuration file (config.php)
 LDAP_SERVER: FQDN or IP address of the LDAP server.  
