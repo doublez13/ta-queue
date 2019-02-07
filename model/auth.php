@@ -162,8 +162,7 @@ function _ldap_connect($username, $password){
     return NULL;
   }
 
-  global $ldap_servers;
-  foreach($ldap_servers as $ldap_server){
+  foreach(LDAP_SERVERS as $ldap_server){
     $fp = fsockopen($ldap_server, 389, $errno, $errstr, 5); //Check if the LDAP server is up
     if (!$fp){
       continue;
