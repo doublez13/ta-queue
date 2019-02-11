@@ -192,7 +192,7 @@ function deq_stu($username, $course_id){
     return -3;
   }
 
-  $query = "DELETE queue from queue NATURAL JOIN courses
+  $query = "DELETE FROM queue
             WHERE username=? AND course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
