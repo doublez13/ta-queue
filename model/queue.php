@@ -76,7 +76,8 @@ function get_queue($course_id){
     return -1;
   }
   while($entry = mysqli_fetch_assoc($result)){
-    $return["TAs"][] = $entry;
+    $TA = $entry['username'];
+    $return["TAs"][$TA] = $entry;
   }
 
 
@@ -91,7 +92,8 @@ function get_queue($course_id){
     return -1;
   }
   while($entry = mysqli_fetch_assoc($result)){
-    $return["queue"][] = $entry;
+    $student = $entry['username'];
+    $return["queue"][$student] = $entry;
   }
   $return["queue_length"] = count($return["queue"]);
 

@@ -313,16 +313,7 @@ function render_ta_view(dataParsed){
       });
     }
 
-    var TAs_on_duty = dataParsed.TAs;
-    var on_duty     = false;
-    for(var entry = 0; entry < TAs_on_duty.length; entry++){
-      if(TAs_on_duty[entry].username == my_username){
-        on_duty = true;
-        break;
-      }
-    } 
-
-    if(!on_duty) {
+    if(!(my_username in dataParsed.TAs)) {//Checks if the TA is on duty
       document.getElementById("duty_button").className="btn btn-success";
       $("#duty_button").text("Go On Duty");
       $("#duty_button").click(function(event){
@@ -367,20 +358,12 @@ function render_ta_view(dataParsed){
 }
 
 //View for students
-//Note admin users that are NOT registered as a
+//NOTE: admin users that are NOT registered as a
 //TA for the course get this view.
 function render_student_view(dataParsed){
   var queue = dataParsed.queue;
   
-  var in_queue = false;
-  var session;
-  for(session in queue){
-    if(my_username == queue[session]["username"]){
-      in_queue = true;
-      break;
-    }
-  }
- 
+  var in_queue = my_username in queue;
   var state = dataParsed.state; 
   if(state == "closed" || (state == "frozen" && !in_queue )){
     $("#join_button").hide();
@@ -399,7 +382,7 @@ function render_student_view(dataParsed){
   }
 
   $("#join_button").unbind("click");
-  if(!in_queue){//Not in queue
+  if(!in_queue){ //Student not in queue
     document.getElementById("join_button").className="margin-top-5 btn btn-success";
     $("#join_button").text("Enter Queue");
     $("#join_button").click(function( event ) {
@@ -407,7 +390,7 @@ function render_student_view(dataParsed){
       dialog.dialog( "open" );
     });
   }
-  else{ //In queue
+  else{ //Student in queue
     document.getElementById("join_button").className="margin-top-5 btn btn-danger";
     $("#join_button").text("Exit Queue");
     $("#join_button").click(function( event ) {
@@ -439,18 +422,18 @@ function render_queue_table(dataParsed){
     if(TAs[TA].helping != null){
       helping[TAs[TA].helping] = {}; //Maps student being helped to info about their session in the queue
       helping[TAs[TA].helping]["duration"] = TAs[TA].duration;  //Time student has been helped
-      helping[TAs[TA].helping]["TA"] = TAs[TA].username;        //Username of TA helping student
-      helping[TAs[TA].helping]["TA_full"] = TAs[TA].full_name;  //Full name of TA helping student
+      helping[TAs[TA].helping]["TA"]       = TA;                //Username of TA helping student
+      helping[TAs[TA].helping]["TA_full"]  = TAs[TA].full_name;  //Full name of TA helping student
     }
   }
   
   
   var time_lim = dataParsed.time_lim;
 
-  var i = 1;
+  var i = 1; //NOTE: The indexing starts at 1
   var row;
   for(row in queue){
-    let username  = queue[row].username;
+    let username  = row;
     let full_name = queue[row].full_name;
     var Location  = queue[row].location;
     var question  = queue[row].question;
@@ -460,7 +443,6 @@ function render_queue_table(dataParsed){
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + Location + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + question + "</td>" +
                       "</tr>");
-    i++;
 
     var TA_full = ""; 
     if( username in helping ){
@@ -496,14 +478,14 @@ function render_queue_table(dataParsed){
       }else{ //Student is not being helped
         var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
-          enqueue_ta(course_id); //TODO:Make this cleaner. 
+          enqueue_ta(course_id); //TODO:Race condition 
           help_student(course_id, username);
         });
       }
 
       // MOVE UP BUTTON
       var increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up"> <i class="fa fa-arrow-up"></i>  </button></div>');
-      if(row == 0){
+      if(i == 1){
         increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up" disabled=true> <i class="fa fa-arrow-up"></i>  </button></div>');
       }
       increase_button.click(function(event){
@@ -512,7 +494,7 @@ function render_queue_table(dataParsed){
 
       // MOVE DOWN BUTTON
       var decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
-      if(row == dataParsed.queue_length -1){
+      if(i == dataParsed.queue_length){
         decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
       }
       decrease_button.click(function(event){
@@ -541,7 +523,7 @@ function render_queue_table(dataParsed){
       var td = $("<td class='col-sm-3'></td>");
       if(username === my_username){ // Only add the move down button if it's the user's row
         var decrease_button = $('<div align="right"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
-        if(row == dataParsed.queue_length -1){
+        if(i == dataParsed.queue_length){
           decrease_button = $('<div align="right"><button class="btn btn-primary" disabled=true title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
         }
         decrease_button.click(function(event){
@@ -556,6 +538,7 @@ function render_queue_table(dataParsed){
     }
 
     $('#queue_body').append(new_row);
+    i++
   }
 }
 
