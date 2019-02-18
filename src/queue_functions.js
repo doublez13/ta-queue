@@ -61,8 +61,6 @@ $(document).ready(function(){
 
   $("#title").text(course);
   my_username = localStorage.username;
-  first_name  = localStorage.first_name;
-  last_name   = localStorage.last_name;
 
   var url = "../api/user/"+my_username+"/courses";
   var get_req = $.get(url);
