@@ -22,6 +22,7 @@ function return_JSON_error($err_code){
   );
   return array(
     "authenticated" => True,
+    "username"      => $username,
     "error" => $err_codes[$err_code]
   );
 }

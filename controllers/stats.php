@@ -85,6 +85,7 @@ function course_stats($course_id){
   }else{
     $return = array(
       "authenticated" => True,
+      "username"      => $username,
       "stats"         => $stats,
       "usage"         => $usage
        );
@@ -111,6 +112,7 @@ function ta_stats($course_id){
   }else{
     $return = array(
       "authenticated"    => True,
+      "username"         => $username,
       "ta_proportions"   => $usage,
       "avg_ta_help_time" => $ta_avg_help_time
     );

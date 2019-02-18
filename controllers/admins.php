@@ -63,18 +63,21 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 if ( is_int($res) && $res ){
   $return = array(
     "authenticated" => True,
+    "username"      => $username,
     "error" => "Unable to update admins group"
   );
   http_response_code(500);
 }elseif(is_null($res)){
   $return = array(
     "authenticated" => True,
+    "username"      => $username,
     "error" => "Generic SQL error"
   );
   http_response_code(500);
 }else{
   $return = array(
     "authenticated" => True,
+    "username"      => $username,
     $field => $text
   );
   http_response_code(200);

@@ -59,9 +59,10 @@ switch( $endpoint ){
       die();
     }
 
-    $_SESSION["username"]     = $username;
-    $return["authenticated"]  = True;
-    $return["is_admin"]       = $is_admin;
+    $_SESSION["username"]    = $username;
+    $return["authenticated"] = True;
+    $return["username"]      = $username;
+    $return["is_admin"]      = $is_admin;
 
     http_response_code(200);
     break;

@@ -188,6 +188,7 @@ switch( $endpoint ){
             http_response_code(422);
             $return = array(
               "authenticated" => True,
+              "username"      => $username,
               "error" => "Missing course_id, question, or location"
             );
             echo json_encode($return);
@@ -315,6 +316,7 @@ if($res){
 }else{
   $return = array(
     "authenticated" => True,
+    "username"      => $username,
     "success" => $text
   );
   if(isset($ret)){//Any additional info

@@ -36,7 +36,8 @@ switch($endpoint){
           http_response_code(500);
         }else{
           $return = array(
-            "authenticated" => True,
+            "authenticated"   => True,
+            "username"        => $username,
             "student_courses" => $user_courses['student'],
             "ta_courses"      => $user_courses['ta']
           );
@@ -84,6 +85,7 @@ switch($endpoint){
         }else{
           $return = array(
             "authenticated" => True,
+            "username"      => $username,
             "success" => "Course Added Successfully"
           );
           http_response_code(200);
@@ -122,6 +124,7 @@ switch($endpoint){
         else{
           $return = array(
             "authenticated" => True,
+            "username"      => $username,
             "success" => "Student Course Removed Successfully"
           );
           http_response_code(200);
@@ -144,6 +147,7 @@ switch($endpoint){
         }else{
           $return = array(
             "authenticated" => True,
+            "username"      => $username,
             "student_info" => $stud_info
           );
           http_response_code(200);
@@ -162,6 +166,7 @@ switch($endpoint){
         }else{
           $return = array(
             "authenticated" => True,
+            "username"      => $username,
             "success" => "User deleted"
           );
           http_response_code(200);
