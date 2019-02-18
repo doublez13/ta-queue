@@ -74,6 +74,7 @@ switch($endpoint){
 echo json_encode($return);
 
 function course_stats($course_id){
+  global $username;
   $dates = check_date();
 
   $stats = get_course_stats($course_id, $dates[0], $dates[1]);
@@ -101,6 +102,7 @@ function user_stats(){
 }
 
 function ta_stats($course_id){
+  global $username;
   $dates = check_date();
 
   $usage             = get_ta_proportions($course_id, $dates[0], $dates[1]);
