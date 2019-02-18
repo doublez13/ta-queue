@@ -1,4 +1,4 @@
-username = localStorage.username;
+var username;
 is_admin = localStorage.is_admin == "true";
 
 get_all_courses();
@@ -10,6 +10,7 @@ function get_all_courses(){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     var allCourses = dataParsed.all_courses;
+    username       = dataParsed.username;
 
     var $url = "../api/user/"+username+"/courses";
     var $get = $.get( $url );

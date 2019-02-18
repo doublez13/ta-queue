@@ -60,35 +60,37 @@ $(document).ready(function(){
   });
 
   $("#title").text(course);
-  my_username = localStorage.username;
 
-  var url = "../api/user/"+my_username+"/courses";
-  var get_req = $.get(url);
+  var url = "../api/courses";
+  var get_req = $.get(url);  
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    is_TA = false;
-    if($.inArray(course, Object.keys(dataParsed['ta_courses'])) != -1){
-      is_TA = true;
+    my_username    = dataParsed.username;
+    //Check if the course they're requesting exists
+    if(course in dataParsed['all_courses']){
+      course_id = dataParsed['all_courses'][course]['course_id'];
+    }else{
+      window.location = '/';
     }
 
-    var url = "../api/courses";
+    var url = "../api/user/"+my_username+"/courses";
     var get_req = $.get(url);
     var done = function(data){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      //Check if the course they're requesting exists
-      if(course in dataParsed['all_courses']){
-        course_id = dataParsed['all_courses'][course]['course_id'];
-      }else{
-        window.location = '/';
+      is_TA = false;
+      if($.inArray(course, Object.keys(dataParsed['ta_courses'])) != -1){
+        is_TA = true;
       }
+
       get_queue(course_id);
       setInterval(get_queue, 5000, course_id);
     };
     get_req.done(done);
   };
   get_req.done(done); 
+
 });
 
 //This function is called every X seconds,
@@ -534,7 +536,7 @@ function render_queue_table(dataParsed){
     }
 
     $('#queue_body').append(new_row);
-    i++
+    i++;
   }
 }
 
