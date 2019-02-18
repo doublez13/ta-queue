@@ -59,7 +59,7 @@
     <a style="color: #e8002b; font-size:130%;" href="https://webhandin.eng.utah.edu/cade/create_account/index.php" target="_blank">No CADE account? Create one here.</a>
   </div>
   <div class="padding-top-10" style="text-align: center;">
-    <a style="color: #e8002b; font-size:150%;" href="https://github.com/doublez13/suzie-queue" target="_blank">REPORT BUGS HERE (PULL REQUESTS WELCOME!)</a>
+    <a style="color: #e8002b; font-size:150%;" href="https://github.com/doublez13/suzie-queue" target="_blank">REPORT BUGS OR SUGGESTIONS HERE</a>
   </div>
 
 
