@@ -10,10 +10,22 @@
 
 $path_split = explode("/", $path);
 
+$is_admin = is_admin($username);
+if(is_null($is_admin)){
+  $return = array(
+    "authenticated" => True,
+    "username"      => $username,
+    "error" => "Generic SQL error"
+  );
+  http_response_code(500);
+  echo json_encode($return);
+  die();
+}
+
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Get the course list
     if ( isset($path_split[3])  ){  //Admin endpoint: Get information on specific course
-      if (!is_admin($username)){
+      if (!$is_admin){
         http_response_code(403);
         echo json_encode( forbidden() );
         die();
@@ -36,7 +48,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
         $text   = $res; 
       }
     }else{                          //Get all availible courses
-      if (is_admin($username)){
+      if ($is_admin){
         $res = get_all_courses();
       }else{
         $res = get_enabled_courses();
@@ -46,7 +58,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     break;
   case "PUT":  //Edit a course
-    if (!is_admin($username)){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -58,7 +70,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     $_POST['course_name'] = $path_split[3]; //Fall through
   case "POST": //Create a course
-    if (!is_admin($username)){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -96,7 +108,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text  = "Course created/updated"; 
     break;
   case "DELETE": //Delete a course
-    if (!is_admin($username)){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -125,6 +137,7 @@ if ( is_int($res) && $res ){
   $return = array(
     "authenticated" => True,
     "username"      => $username,
+    "admin"         => $is_admin,
     "error" => "Generic SQL error"
   );
   http_response_code(500);
@@ -132,6 +145,7 @@ if ( is_int($res) && $res ){
   $return = array(
     "authenticated" => True,
     "username"      => $username,
+    "admin"         => $is_admin,
     $field => $text
   );
   http_response_code(200);

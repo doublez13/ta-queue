@@ -4,7 +4,7 @@ var my_username;
 var first_name;
 var last_name;
 var course_id;
-var is_admin = localStorage.is_admin == "true";
+var is_admin;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -67,6 +67,8 @@ $(document).ready(function(){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
     my_username    = dataParsed.username;
+    is_admin       = dataParsed.admin;
+
     //Check if the course they're requesting exists
     if(course in dataParsed['all_courses']){
       course_id = dataParsed['all_courses'][course]['course_id'];

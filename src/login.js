@@ -17,7 +17,6 @@ login = function( event ) {
     var dataParsed = JSON.parse(dataString);
     if(dataParsed.authenticated){
       //TODO: check for dataParsed.error
-      localStorage.setItem("is_admin",   dataParsed.is_admin);
 
       //let the router figure out where to send us
       location.reload();
