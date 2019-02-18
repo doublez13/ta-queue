@@ -416,17 +416,16 @@ function render_queue_table(dataParsed){
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Question</th>" +
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>TA</th>" +
                             "<th class='col-sm-3'></th> </tr>");
+  
+  //Reverse map from student to TA helping them
+  //TODO: Consider returning this information in the API
   var helping = {};
   var TA;
-  for(TA in TAs ){
+  for(TA in TAs){
     if(TAs[TA].helping != null){
-      helping[TAs[TA].helping] = {}; //Maps student being helped to info about their session in the queue
-      helping[TAs[TA].helping]["duration"] = TAs[TA].duration;  //Time student has been helped
-      helping[TAs[TA].helping]["TA"]       = TA;                //Username of TA helping student
-      helping[TAs[TA].helping]["TA_full"]  = TAs[TA].full_name;  //Full name of TA helping student
+      helping[TAs[TA].helping] = TA; //Username of TA helping student
     }
   }
-  
   
   var time_lim = dataParsed.time_lim;
 
@@ -445,11 +444,11 @@ function render_queue_table(dataParsed){
                       "</tr>");
 
     var TA_full = ""; 
-    if( username in helping ){
+    if(username in helping){
       new_row.css("background-color", "#99ccff");//  b3ffb3
-      TA_full = helping[username]["TA_full"];
+      TA_full = TAs[helping[username]]["full_name"];
       if(time_lim > 0){
-        var duration = helping[username]["duration"];
+        var duration = TAs[helping[username]]["duration"];
         var fields = duration.split(':');
         duration = parseInt(fields[0])*3600 + parseInt(fields[1])*60 + parseInt(fields[2]);
         var time_rem = time_lim*60-duration;
@@ -464,9 +463,8 @@ function render_queue_table(dataParsed){
 
     if(is_TA) {
       // HELP BUTTON
-      if( username in helping ){ //Student is currently being helped
-        var TA_helping_them = helping[username]["TA"];
-        if(my_username === TA_helping_them){ //The TA is currently helping student
+      if(username in helping){ //Student is currently being helped
+        if(my_username === helping[username]){ //The TA is currently helping a current student
           var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
           help_button.click(function(event){
             release_ta(course_id);
