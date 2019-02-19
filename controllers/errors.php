@@ -9,6 +9,7 @@
 
 //Error codes returned by the model
 function return_JSON_error($err_code){
+  global $username;
   $err_codes = array(
     -1 => "Generic SQL error",
     -2 => "Course does not exist",
@@ -28,30 +29,49 @@ function return_JSON_error($err_code){
 }
 
 function invalid_method($allowed_method){
-  return  array(
-    "error" => "Only $allowed_method is allowed"
+  global $username;
+  $ret =  array(
+    "authenticated" => False,
+    "error"         => "Only $allowed_method is allowed"
   );
+  if(isset($username)){ //Possible to get this error without being authed
+    $ret["authenticated"] = True;
+    $ret["username"]      = $username;
+  }
+  return $ret;
 }
 
 function missing_auth(){
   return  array(
     "authenticated" => False,
-    "error" => "No username and/or password specified"
+    "error"         => "No username and/or password specified"
   );
 }
 
 function forbidden(){ //403
+  global $username;
   return array(
-    "authenticated" => True,
-    "error" => "Forbidden"
+    "authenticated" => False,
+    "error"         => "Forbidden"
   );
+  if(isset($username)){ //Possible to get this error without being authed
+    $ret["authenticated"] = True;
+    $ret["username"]      = $username;
+  }
+  return $ret;
 }
 
 //Generic error
 function json_err($err){
-  return array(
-    "authenticated" => True,
-    "error" => $err
+  global $username;
+  $ret = array(
+    "authenticated" => False,
+    "error"         => $err
   );
+  if(isset($username)){ //Possible to get this error without being authed
+    $ret["authenticated"] = True;
+    $ret["username"]      = $username;
+  }
+  return $ret;
 }
 ?>
