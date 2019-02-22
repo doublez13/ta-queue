@@ -76,20 +76,8 @@ $(document).ready(function(){
       window.location = '/';
     }
 
-    var url = "../api/user/"+my_username+"/courses";
-    var get_req = $.get(url);
-    var done = function(data){
-      var dataString = JSON.stringify(data);
-      var dataParsed = JSON.parse(dataString);
-      is_TA = false;
-      if($.inArray(course, Object.keys(dataParsed['ta_courses'])) != -1){
-        is_TA = true;
-      }
-
-      get_queue(course_id);
-      setInterval(get_queue, 5000, course_id);
-    };
-    get_req.done(done);
+    get_queue(course_id);
+    setInterval(get_queue, 5000, course_id);
   };
   get_req.done(done); 
 
@@ -103,6 +91,7 @@ function get_queue(course_id) {
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
+    is_TA = dataParsed["role"] == "ta";
     renderView(dataParsed);
   };
   var fail = function(data){

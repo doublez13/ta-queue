@@ -72,10 +72,13 @@ switch( $endpoint ){
         $stud_courses = $user_courses['student'];
         if(in_array($course_id, $ta_courses)){         //TA
           $ret = get_queue($course_id);
+          $role = "ta" ;
         }elseif(in_array($course_id, $stud_courses)){  //Student
           $ret = get_queue($course_id);
+          $role = "student";
         }elseif(is_admin($username)){                  //Admin
           $ret = get_queue($course_id);
+          $role = "admin";
         }else{                                         //Not in course
           http_response_code(403);
           echo json_encode( forbidden() );
@@ -90,7 +93,8 @@ switch( $endpoint ){
     $text = "Queue fetched";
     $res = $ret;
     if(!is_int($ret)){
-      $res = 0; 
+      $res = 0;
+      $ret["role"] = $role;
     }
     break;
 
