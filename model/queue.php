@@ -31,7 +31,7 @@ function get_queue($course_id){
   $return = array();
 
   #Get the state of the queue, if its not here, it must be closed
-  $query  = "SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown
+  $query  = "SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown, course_name
              FROM queue_state RIGHT JOIN courses ON queue_state.course_id = courses.course_id
              WHERE courses.course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
@@ -44,9 +44,10 @@ function get_queue($course_id){
     return -2; //Nonexistant Course
   }else{
     $entry = mysqli_fetch_assoc($result);
-    $return["state"]    = $entry["state"];
-    $return["time_lim"] = intval($entry["time_lim"]);
-    $return["cooldown"] = intval($entry["cooldown"]);
+    $return["course_name"] = $entry["course_name"];
+    $return["state"]       = $entry["state"];
+    $return["time_lim"]    = intval($entry["time_lim"]);
+    $return["cooldown"]    = intval($entry["cooldown"]);
   }
 
 
