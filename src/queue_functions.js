@@ -1,8 +1,5 @@
 var dialog;
-var form;
 var my_username;
-var first_name;
-var last_name;
 var course_id;
 var is_admin;
 
