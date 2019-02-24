@@ -16,8 +16,12 @@ $(document).ready(function(){
       course = decodeURIComponent(pair[1]);
       break;
     }
+    if(pair[0] == "course_id"){
+      course_id = decodeURIComponent(pair[1]);
+      break;
+    }
   }
-  if(typeof course === 'undefined'){
+  if(typeof course === 'undefined' && typeof course_id === 'undefined'){
     window.location ='/';
   }
 
@@ -54,32 +58,29 @@ $(document).ready(function(){
     }
   });
 
-  $("#stats_button").click(function( event ) {
-    event.preventDefault();
-    window.location = "stats?course="+course;
-  });
+  if(typeof course_id == 'undefined'){
+    var url = "../api/courses";
+    var get_req = $.get(url);
+    var done = function(data){
+      var dataString = JSON.stringify(data);
+      var dataParsed = JSON.parse(dataString);
+      my_username    = dataParsed.username;
 
-  $("#title").text(course);
+      //Check if the course they're requesting exists
+      if(course in dataParsed['all_courses']){
+        course_id = dataParsed['all_courses'][course]['course_id'];
+      }else{
+        window.location = '/';
+      }
 
-  var url = "../api/courses";
-  var get_req = $.get(url);  
-  var done = function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    my_username    = dataParsed.username;
-    is_admin       = dataParsed.admin;
-
-    //Check if the course they're requesting exists
-    if(course in dataParsed['all_courses']){
-      course_id = dataParsed['all_courses'][course]['course_id'];
-    }else{
-      window.location = '/';
-    }
-
+      get_queue(course_id);
+      setInterval(get_queue, 5000, course_id);
+    };
+    get_req.done(done);
+  }else{
     get_queue(course_id);
     setInterval(get_queue, 5000, course_id);
-  };
-  get_req.done(done); 
+  }
 
 });
 
@@ -91,7 +92,18 @@ function get_queue(course_id) {
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    is_TA = dataParsed["role"] == "ta";
+    //NOTE: They can be an admin and a TA
+    //In this case is_TA = true, is_admin = false
+    is_TA    = dataParsed["role"] == "ta";
+    is_admin = dataParsed["role"] == "admin";
+    var course_name = dataParsed["course_name"]
+    $("#title").text(course_name);
+
+    $("#stats_button").click(function( event ) {
+      event.preventDefault();
+      window.location = "stats?course="+course_name;
+    });
+
     renderView(dataParsed);
   };
   var fail = function(data){
@@ -103,6 +115,8 @@ function get_queue(course_id) {
       //enroll them with no access code
       if(error == "Forbidden"){
         enrollCourse(course_id, null);
+      }else if(error == "Course does not exist"){
+        window.location = '/';
       }else{
         alert(dataParsed.error);
         window.location = '/';

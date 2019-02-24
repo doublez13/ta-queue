@@ -51,7 +51,7 @@ function renderCourseTables(allCourses, myCourses) {
     tableRow.append(rowCell);
 
     if(is_admin){                                       //They're an admin
-      var URI = encodeURI("queue?course="+course_name);
+      var URI = encodeURI("queue?course_id="+course_id);
       var url = "./edit_course?course="+course_name;
       var onclick = "window.location='"+url+"'";
 
