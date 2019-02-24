@@ -367,6 +367,7 @@ function render_student_view(dataParsed){
 
   $("#join_button").unbind("click");
   if(!in_queue){ //Student not in queue
+    $("#edit_question_button").hide();
     document.getElementById("join_button").className="margin-top-5 btn btn-success";
     $("#join_button").text("Enter Queue");
     $("#join_button").click(function( event ) {
@@ -383,7 +384,15 @@ function render_student_view(dataParsed){
         dequeue_student(course_id, my_username);
       }
     });
+    $("#edit_question_button").unbind("click");
+    $("#edit_question_button").text("Edit Question/Location");
+    $("#edit_question_button").click(function( event ) {
+      event.preventDefault();
+      dialog.dialog( "open" );
+    });
+    $("#edit_question_button").show();
   }
+
   $("#join_button").show();
 }
 

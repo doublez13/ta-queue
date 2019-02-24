@@ -49,6 +49,7 @@
       </div>
 
       <button class="margin-top-5 btn btn-success" id="join_button" style="display: none"></button>
+      <button class="margin-top-5 btn btn-primary" id="edit_question_button" style="display: none"></button>
 
       <div class="col-xs-12 margin-top-15 padding-0" align="left">
         <form id="time_form" title="(minutes)" style="display: none">

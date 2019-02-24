@@ -149,13 +149,13 @@ function enq_stu($username, $course_id, $question, $location){
 
   $query = "INSERT INTO queue (username, course_id, question, location)
             VALUES (?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE question=?";
+            ON DUPLICATE KEY UPDATE question=?, location=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "sisss", $username, $course_id, $question, $location, $question);
+  mysqli_stmt_bind_param($stmt, "sissss", $username, $course_id, $question, $location, $question, $location);
 
   $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
