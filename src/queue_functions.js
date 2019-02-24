@@ -31,25 +31,7 @@ $(document).ready(function(){
     width: 350,
     modal: true,
     buttons: {
-      "Enter Queue": function() {
-	      var lab_location = document.getElementById("location").value;
-	      var question = document.getElementById("question").value;
-        var cont = true;
-        document.getElementById('location').style.borderColor = "black";
-        document.getElementById('question').style.borderColor = "black";
-        if(lab_location == ""){
-          document.getElementById('location').style.borderColor = "red";
-          cont = false;
-        }
-        if(question == ""){
-          document.getElementById('question').style.borderColor = "red";
-          cont = false;
-        }
-        if(cont){
-	        enqueue_student(course_id, question, lab_location);
-	        dialog.dialog( "close" );
-        }
-      },
+      "Enter Queue": enterQueuePrompt,
       Cancel: function() {
         dialog.dialog( "close" );
         document.getElementById('location').style.borderColor = "black";
@@ -64,7 +46,6 @@ $(document).ready(function(){
     var done = function(data){
       var dataString = JSON.stringify(data);
       var dataParsed = JSON.parse(dataString);
-      my_username    = dataParsed.username;
 
       //Check if the course they're requesting exists
       if(course in dataParsed['all_courses']){
@@ -94,8 +75,9 @@ function get_queue(course_id) {
     var dataParsed = JSON.parse(dataString);
     //NOTE: They can be an admin and a TA
     //In this case is_TA = true, is_admin = false
-    is_TA    = dataParsed["role"] == "ta";
-    is_admin = dataParsed["role"] == "admin";
+    is_TA       = dataParsed["role"] == "ta";
+    is_admin    = dataParsed["role"] == "admin";
+    my_username = dataParsed.username;
     var course_name = dataParsed["course_name"]
     $("#title").text(course_name);
 
@@ -698,3 +680,23 @@ function enrollCourse(course_id, code) {
   posting.done(done);
   posting.fail( function(data){ window.location = '/'; });
 }
+
+enterQueuePrompt = function() {
+  var lab_location = document.getElementById("location").value;
+  var question = document.getElementById("question").value;
+  var cont = true;
+  document.getElementById('location').style.borderColor = "black";
+  document.getElementById('question').style.borderColor = "black";
+  if(lab_location == ""){
+    document.getElementById('location').style.borderColor = "red";
+    cont = false;
+  }
+  if(question == ""){
+    document.getElementById('question').style.borderColor = "red";
+    cont = false;
+  }
+  if(cont){
+    enqueue_student(course_id, question, lab_location);
+    dialog.dialog( "close" );
+  }
+};
