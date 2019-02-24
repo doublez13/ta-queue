@@ -98,14 +98,15 @@ function renderMyCourseTable(courses, role) {
 
   var course;
   for(course in courses) {
-    var desc     = courses[course]['description'];
-    var tableRow = $('<tr>');
-    var rowCell  = $('<td>');
+    var desc      = courses[course]['description'];
+    var course_id = courses[course]['course_id'];
+    var tableRow  = $('<tr>');
+    var rowCell   = $('<td>');
     rowCell.attr("title", desc);
     rowCell.text(course);
     tableRow.append(rowCell);
     tableRow.append($('<td>').text(role));
-    var URI = encodeURI("queue?course="+course);
+    var URI = encodeURI("queue?course_id="+course_id);
     tableRow.append( '<td> <a href="'+URI+'"> <button class="btn btn-primary" style="width: 100%;" ><span>Go</span> </button></a> </td> '  );
     table.append(tableRow);
   }
