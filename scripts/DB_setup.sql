@@ -111,6 +111,11 @@ CREATE TRIGGER log_student_entry AFTER INSERT ON queue FOR EACH ROW
 INSERT INTO student_log (username, course_id, question, location) 
 VALUES (NEW.username, NEW.course_id, NEW.question, NEW.location);
 
+--Trigger for question/location update--
+CREATE TRIGGER update_question_location AFTER UPDATE ON queue FOR EACH ROW
+UPDATE student_log SET question = NEW.question, location = NEW.location
+WHERE username=OLD.username AND course_id=OLD.course_id ORDER BY id DESC LIMIT 1;
+
 --Trigger for exit from queue--
 CREATE TRIGGER log_student_exit AFTER DELETE ON queue FOR EACH ROW
 UPDATE student_log SET exit_tmstmp = CURRENT_TIMESTAMP 
