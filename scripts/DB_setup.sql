@@ -164,9 +164,15 @@ CREATE TRIGGER log_queue_state AFTER INSERT ON queue_state FOR EACH ROW
 INSERT INTO queue_state_log (course_id, state)
 VALUES (NEW.course_id, NEW.state);
 
+delimiter //
 CREATE TRIGGER log_queue_state2 AFTER UPDATE ON queue_state FOR EACH ROW
-INSERT INTO queue_state_log (course_id, state)
-VALUES (NEW.course_id, NEW.state);
+BEGIN
+  IF NEW.state != OLD.state THEN
+    INSERT INTO queue_state_log (course_id, state) VALUES (NEW.course_id, NEW.state);
+  END IF;
+END;
+//
+delimiter ;
 
 --Trigger for Queue Close--
 CREATE TRIGGER log_queue_close AFTER DELETE ON queue_state FOR EACH ROW
