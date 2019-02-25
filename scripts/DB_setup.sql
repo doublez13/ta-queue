@@ -46,6 +46,7 @@ create table queue_state(
   state         ENUM('open','frozen') NOT NULL,
   time_lim      int UNSIGNED DEFAULT 0 NOT NULL,
   cooldown      int UNSIGNED DEFAULT 0 NOT NULL,
+  quest_public  BOOLEAN DEFAULT true NOT NULL,
   primary key (course_id),
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE
 );

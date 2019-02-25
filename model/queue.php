@@ -17,7 +17,7 @@ require_once 'config.php';
  *         int -1 on general error
  *         int -2 on nonexistent course
  */
-function get_queue($course_id){
+function get_queue($course_id, $role){
   if(!is_numeric($course_id)){
     return -1; //Eliminates the risk of SQL injection without the overhead of prepared queries
   }
@@ -29,9 +29,10 @@ function get_queue($course_id){
 
   #Build return array
   $return = array();
+  $return["role"] = $role;
 
   #Get the state of the queue, if its not here, it must be closed
-  $query  = "SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown, course_name
+  $query  = "SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown, quest_public, course_name
              FROM queue_state RIGHT JOIN courses ON queue_state.course_id = courses.course_id
              WHERE courses.course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
@@ -44,10 +45,11 @@ function get_queue($course_id){
     return -2; //Nonexistant Course
   }else{
     $entry = mysqli_fetch_assoc($result);
-    $return["course_name"] = $entry["course_name"];
-    $return["state"]       = $entry["state"];
-    $return["time_lim"]    = intval($entry["time_lim"]);
-    $return["cooldown"]    = intval($entry["cooldown"]);
+    $return["course_name"]  = $entry["course_name"];
+    $return["state"]        = $entry["state"];
+    $return["time_lim"]     = intval($entry["time_lim"]);
+    $return["cooldown"]     = intval($entry["cooldown"]);
+    $return["quest_public"] = boolval($entry["quest_public"]);
   }
 
 
@@ -67,7 +69,7 @@ function get_queue($course_id){
 
 
   #Get the state of the TAs
-  $return["TAs"]      = [];
+  $return["TAs"] = [];
   $query  = "SELECT ta_status.username, (SELECT TIMEDIFF(NOW(), ta_status.state_tmstmp)) as duration, users.full_name, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping
              FROM ta_status INNER JOIN users on ta_status.username = users.username
              WHERE course_id='".$course_id."'";
@@ -83,8 +85,12 @@ function get_queue($course_id){
 
 
   #Get the actual queue
-  $return["queue"]    = [];
-  $query  = "SELECT queue.username, users.full_name, queue.question, queue.location
+  $return["queue"] = [];
+  $quest_public = "";
+  if($return["quest_public"] || $role == "ta" || $role == "admin"){
+    $quest_public = "queue.question,";
+  }
+  $query  = "SELECT queue.username, users.full_name, ".$quest_public." queue.location
              FROM queue INNER JOIN users on queue.username = users.username
              WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
@@ -493,6 +499,49 @@ function set_cooldown($time_lim, $course_id){
     return -1;
   }
   mysqli_stmt_bind_param($stmt, "ii", $time_lim, $course_id);
+  $ret = 0;
+  if(!mysqli_stmt_execute($stmt)){
+    $ret = -1;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $ret;
+}
+
+/**
+ * Set whether or not questions are visible to students.
+ *
+ * @param  boolean $quest_public
+ * @param  int    $course_id
+ * @return int 0  on success,
+ *         int -1 on general error
+ *         int -2 on nonexistent course
+ *         int -3 on closed course
+ */
+function set_quest_vis($quest_public, $course_id){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  $queue_state = get_queue_state($course_id);
+  if($queue_state < 0){
+    mysqli_close($sql_conn);
+    return $queue_state;
+  }elseif($queue_state == "closed"){
+    mysqli_close($sql_conn);
+    return -3;
+  }
+
+  $query = "UPDATE queue_state SET quest_public = ?
+            WHERE course_id=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return -1;
+  }
+  mysqli_stmt_bind_param($stmt, "ii", $quest_public, $course_id);
   $ret = 0;
   if(!mysqli_stmt_execute($stmt)){
     $ret = -1;

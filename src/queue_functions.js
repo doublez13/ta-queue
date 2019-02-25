@@ -251,6 +251,7 @@ function render_ta_view(dataParsed){
   $("#freeze_button").unbind("click");
   $("#time_form").unbind("submit");
   $("#cooldown_form").unbind("submit");
+  $("#quest_public_checkbox").unbind("click");
 
   var queue_state = dataParsed.state;
   if(queue_state == "closed"){
@@ -264,6 +265,7 @@ function render_ta_view(dataParsed){
     $("#freeze_button").hide();
     $("#time_form").hide();
     $("#cooldown_form").hide();
+    $("#quest_public_form").hide();
   }else{ //open or frozen
     document.getElementById("state_button").className="btn btn-danger";
     $("#state_button").text("Close Queue");
@@ -337,6 +339,15 @@ function render_ta_view(dataParsed){
       var limit = $(this).find( "input[id='cooldown_input']" ).val();
       set_cooldown(course_id, limit);
     });
+
+    document.getElementById("quest_public_checkbox").checked = dataParsed.quest_public;
+    $("#quest_public_form").show();
+    $("#quest_public_checkbox").click(function(event){
+      event.preventDefault();
+      var quest_public = document.getElementById("quest_public_checkbox").checked;
+      set_quest_public(course_id, quest_public);
+    });
+
   }
   $("#state_button").show();
 }
@@ -401,12 +412,17 @@ function render_queue_table(dataParsed){
   var queue = dataParsed.queue;
   var TAs   = dataParsed.TAs;
 
+  var question_heading = "Question";
+  if(!is_TA && !is_admin && !dataParsed.quest_public){
+    question_heading = "Questions Hidden";
+  }
+
   $("#queue_body").empty();
   $('#queue_body').append("<tr style='background: none;'>" +
                             "<th class='col-sm-1' align='left'>Pos.</th>"+
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Student</th>" +
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Location</th>" +
-                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Question</th>" +
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>"+question_heading+"</th>" +
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>TA</th>" +
                             "<th class='col-sm-3'></th> </tr>");
   
@@ -428,13 +444,18 @@ function render_queue_table(dataParsed){
     let username  = row;
     let full_name = queue[row].full_name;
     var Location  = queue[row].location;
-    var question  = queue[row].question;
+
+    var question = "";
+    if("question" in queue[row]){ //Questions are not public
+      question = queue[row].question;
+    }
+
     var new_row = $("<tr>" +
                       "<td class='col-sm-1' align='left'>" + i + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + full_name + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + Location + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + question + "</td>" +
-                      "</tr>");
+                    "</tr>");
 
     var TA_full = ""; 
     if(username in helping){
@@ -643,6 +664,12 @@ function set_limit(course_id, limit){
 function set_cooldown(course_id, limit){
   var url = "../api/queue/"+course_id+"/settings";
   var posting = $.post( url, { setting: "cooldown", time_lim: limit.toString() } );
+  posting.done(done);
+  posting.fail(fail);
+}
+function set_quest_public(course_id, quest_public){
+  var url = "../api/queue/"+course_id+"/settings";
+  var posting = $.post( url, { setting: "quest_public", quest_public: quest_public } );
   posting.done(done);
   posting.fail(fail);
 }

@@ -63,12 +63,16 @@
         </form>
         <form id="cooldown_form" title="Queue reentry wait time (minutes)" style="display: none">
           <label for="cooldown_input" >Cool-down Time</label>
-            <div class="input-group" style='width:8em'>
-              <input type="number" min="0" id="cooldown_input" class="form-control">
-              <span class="input-group-btn">
+          <div class="input-group" style='width:8em'>
+            <input type="number" min="0" id="cooldown_input" class="form-control">
+            <span class="input-group-btn">
               <button class="btn btn-success" type="submit">Set</button>
             </span>
           </div>
+        </form>
+        <form id="quest_public_form" title="Questions visible to students" style="display: none">
+          <label for="quest_public_checkbox" >Questions visible to students</label>
+          <input type="checkbox" id="quest_public_checkbox" checked>
         </form>
         <button class="btn btn-primary" style="width: 100%" id="stats_button"> <i class="fa fa-database"></i> Course Stats</button>
       </div>

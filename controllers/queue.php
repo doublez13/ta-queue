@@ -71,19 +71,17 @@ switch( $endpoint ){
         $ta_courses   = $user_courses['ta'];
         $stud_courses = $user_courses['student'];
         if(in_array($course_id, $ta_courses)){         //TA
-          $ret = get_queue($course_id);
           $role = "ta" ;
         }elseif(in_array($course_id, $stud_courses)){  //Student
-          $ret = get_queue($course_id);
           $role = "student";
         }elseif(is_admin($username)){                  //Admin
-          $ret = get_queue($course_id);
           $role = "admin";
         }else{                                         //Not in course
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
         }
+        $ret = get_queue($course_id, $role);
         break;
       default:
         http_response_code(405);
@@ -94,7 +92,6 @@ switch( $endpoint ){
     $res = $ret;
     if(!is_int($ret)){
       $res = 0;
-      $ret["role"] = $role;
     }
     break;
 
@@ -113,7 +110,7 @@ switch( $endpoint ){
           die();
         }
         $setting = $_POST['setting'];
-        switch( $setting ){ //Right now we just support time_lim and cooldown
+        switch( $setting ){ //Right now we just support time_lim, cooldown and quest_public
           case "time_lim":
             if (!isset($_POST['time_lim']) || !is_numeric($_POST['time_lim']) || $_POST['time_lim'] < 0 ){
               http_response_code(422);
@@ -129,6 +126,15 @@ switch( $endpoint ){
               die();
             }
             $res = set_cooldown( $_POST['time_lim'], $course_id);     
+            break;
+          case "quest_public":
+            if (!isset($_POST['quest_public'])){
+              http_response_code(422);
+              echo json_encode( json_err("Missing or bad boolean") );
+              die();
+            }
+            $quest_public = filter_var( $_POST['quest_public'], FILTER_VALIDATE_BOOLEAN);
+            $res = set_quest_vis($quest_public, $course_id);
             break;
           default:
             http_response_code(422);
