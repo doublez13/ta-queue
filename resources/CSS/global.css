@@ -232,8 +232,7 @@ a:hover
 
 /* === Start Miscellaneous CSS (Source: Taylor Davenport) === */
 
-/*The below screwed up other page headers so it is applied only on queue.php*/
-/*.jumbotron {padding:0px !important;}*/
+.jumbotron {padding:0px !important; margin-top: -20px !important; margin-bottom: 10px !important; opacity: 0.75 !important;}
 
 /*#duty_button, #freeze_button, #state_button, #join_button, #stats_button {*/
     /*width:175px;*/

@@ -18,8 +18,8 @@
 <body>
   <?php include('./view/navbar.php'); ?>
 
-  <div class="jumbotron jumbotron-billboard" style="margin-top: -20px; opacity: 0.75;">
-    <div style="margin-top:  -40px; margin-bottom: -40px; text-align: center;">
+  <div class="jumbotron jumbotron-billboard">
+    <div style="text-align: center;">
       <h1 style="color: #404040; text-shadow: 2px 2px #000000;">Team Suzie Queue</h1>
       <img src="./resources/img/Untitled-1.png" alt="Suzie Queue Logo" style="height:70px;">
     </div>

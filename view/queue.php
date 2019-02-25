@@ -18,7 +18,7 @@
 <body>
   <?php include('./view/navbar.php'); ?>
 
-  <div class="jumbotron jumbotron-billboard padding-left-20 padding-right-20 flex flex-column flex-alignItems-center flex-noShrink" style="margin-top: -20px; margin-bottom: 10px; opacity: 0.75; padding:0px;">
+  <div class="jumbotron jumbotron-billboard padding-left-20 padding-right-20 flex flex-column flex-alignItems-center flex-noShrink">
     <h1 id="title" style="color: #404040; text-shadow: 2px 2px #000000; word-wrap: break-word; text-align: center; margin-top: 10px; margin-bottom: 0px;">Queue</h1>
     <div class="flex flex-justifyContent-center flex-alignItems-center"  style="margin-top: -10px; margin-bottom: 0px;">
       <h4 class="margin-left-10 margin-right-10" id="queue_state" style="color: #404040;"></h4>|
