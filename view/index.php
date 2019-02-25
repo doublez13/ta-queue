@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Index</title>
   <?php
-   include('./view/head.html');
+   include('./view/head.php');
 
    $includes = ["./src/login.js"];
    foreach($includes as $include){

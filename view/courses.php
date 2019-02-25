@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Courses</title>
   <?php
-   include('./view/head.html');
+   include('./view/head.php');
 
    $includes = ["./src/courses.js", "./src/logout.js"];
    foreach($includes as $include){

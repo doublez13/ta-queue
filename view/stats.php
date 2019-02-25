@@ -4,7 +4,7 @@
 <head>
   <title>TA Help Queue - Stats</title>
   <?php
-   include('./view/head.html');
+   include('./view/head.php');
 
    $includes = ["./src/stats_graph.js", "./src/logout.js"];
    foreach($includes as $include){
