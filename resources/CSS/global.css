@@ -8,10 +8,6 @@ body
   background-repeat: no-repeat;
   background-size:100% 1920px;
 
-  //background-image: url("https://pbs.twimg.com/media/DHShiXcV0AEMT1_.jpg");
-  //background-repeat: no-repeat, repeat;
-  //background-size: cover;
-
   /* Additions made by Taylor Davenport  */
   flex-direction: column !important; -webkit-flex-flow: column !important;
   display: -webkit-box; display: -ms-flexbox; display: flex;
@@ -99,152 +95,14 @@ a:hover
   right: 0;
 }
 
-#chunky-buttons a {
-    float: left;
-    display: inline-block;
-    position: relative;
-    margin: 0;
-    margin-top: 8px;
-    margin-left: 6px;
-}
-
-.chunky {
-    position: relative;
-    width: 125px;
-    height: 65px;
-    background: transparent;
-    margin: 0 auto;
-    padding-top: 2px;
-    padding-left: 2px;
-}
-
-
-/* ===[ Begin Chunky Button ]=== */
-
-.chunky a {
-    /* Normal State */
-    padding: 4px 15px 7px 15px;
-    width: auto;
-    height: auto;
-    color: #fff;
-    font-family: Arial, Helvetica, sans-serif;
-    font-size: 16px;
-    font-weight: bold;
-    font-style: normal;
-    font-smoothing: antialiased;
-    -webkit-font-smoothing: antialiased;
-    -moz-font-smoothing: antialiased;
-    -o-font-smoothing: antialiased;
-    -ms-font-smoothing: antialiased;
-    text-decoration: none;
-    text-shadow: 0 -1px 1px rgba(0,0,0,0.50);
-    border-radius: 3px;
-    -webkit-border-radius: 3px;
-    -moz-border-radius: 3px;
-    -o-border-radius: 3px;
-    -ms-border-radius: 3px;
-    border: 1px solid rgba(0,0,0,0.50);
-    border-top: 1px solid rgba(0,0,0,0.001);
-    box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.10);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.10);
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.10);
-    -o-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.10);
-    -ms-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.10);
-    cursor: pointer;
-}
-
-.chunky a:hover {
-    /* Hover State */
-    box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.25);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.25);
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.25);
-    -o-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.25);
-    -ms-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.25);
-    -webkit-animation: glow 1s infinite ease-in-out;
-    cursor: pointer;
-}
-
-.chunky a:active {
-    /* Active State (clicked on) */
-    padding: 6px 15px 5px 15px;
-    border-top: 1px solid rgba(0,0,0,0.55);
-    box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 2px 1px rgba(255,255,255,0.50), inset 0px 1px 4px rgba(0,0,0,0.35), inset 0px -14px 14px rgba(255,255,255,0.10);
-    -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 2px 1px rgba(255,255,255,0.50), inset 0px 1px 4px rgba(0,0,0,0.35), inset 0px -14px 14px rgba(255,255,255,0.10);
-    -moz-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 2px 1px rgba(255,255,255,0.50), inset 0px 1px 4px rgba(0,0,0,0.35), inset 0px -14px 14px rgba(255,255,255,0.10);
-    -o-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 2px 1px rgba(255,255,255,0.50), inset 0px 1px 4px rgba(0,0,0,0.35), inset 0px -14px 14px rgba(255,255,255,0.10);
-    -ms-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 2px 1px rgba(255,255,255,0.50), inset 0px 1px 4px rgba(0,0,0,0.35), inset 0px -14px 14px rgba(255,255,255,0.10);
-    -webkit-animation: none;
-    cursor: pointer !important;
-}
-
-/* ===[ End Chunky Button ]=== */
-
-
-/* ===[ Start Chunky Button Background Color ]=== */
-
-.chunky23 a { background: #990000 }
-
-/* ===[ End Chunky Button Background Color ]=== */
-
-
-/* ===[ Start Glow Animation ]=== */
-
-@-webkit-keyframes glow { 
-    0% {
-        box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.35);
-        -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.35);
-        -moz-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.35);
-        -o-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.35);
-        -ms-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.35);
-    }
-
-    100% {
-        box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.18);
-        -webkit-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.18);
-        -moz-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.18);
-        -o-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.18);
-        -ms-box-shadow: 0 0 10px rgba(0,0,0,0.35), 0px 1px 3px rgba(0,0,0,0.18), inset 0px -3px 0px rgba(0,0,0,0.35), inset 0px 14px 14px rgba(255,255,255,0.18);
-    }
-}
-
-/* ===[ End Glow Animation ]=== */
-
-
-/* ===[ Start Rollover TA buttons ]=== */
-
-/*TO ENABLE: ADD 'rollOverText' IN THE TA BUTTON GROUP CLASS LIST*/
-
-/*#queue{*/
-
-/*}*/
-
-/*#queue .rollOverText{*/
-    /*display:none;*/
-/*}*/
-
-/*#queue tr:hover .rollOverText{*/
-    /*display:block;*/
-/*}*/
-
-/* ===[ End Rollover TA buttons ]=== */
-
-
 
 /* === Start Miscellaneous CSS (Source: Taylor Davenport) === */
 
 .jumbotron {padding:0px !important; margin-top: -20px !important; margin-bottom: 10px !important; opacity: 0.75 !important;}
 
-/*#duty_button, #freeze_button, #state_button, #join_button, #stats_button {*/
-    /*width:175px;*/
-/*}*/
+#announcements-wrapper {max-height:225px;}
 
-@media (min-width: 768px) and (orientation: landscape)
-{
-    #onDutyTA-wrapper, #announcements-wrapper {height:225px;}
-
-    .table-scrollOnOverflow-sm {overflow-y:auto;}
-}
-/*#announcements-wrapper td {word-break: break-all;} !*CORRECTS HORIZONTAL SCROLLBAR FOR A LONG STRING OF CONTINUOUS CHARACTERS, BUT BREAKS IN WORDS*!*/
+.table-scrollOnOverflow-sm {overflow-y:auto;}
 
 .bgColor-grey-1 {background-color:#eee;}
 
