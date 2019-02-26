@@ -40,11 +40,11 @@
     <form class="form" id="login_form" style="text-align:center; width: 350px; margin: auto; position: relative;">
       <div class="form-group">
         <label class="sr-only" for="Login">Login</label>
-        <input class="form-control" id="Login" name="username" type="text" pattern="[a-zA-Z0-9]+" placeholder="User Name" required autofocus>
+        <input class="form-control" id="Login" name="username" type="text" placeholder="Username" required autofocus>
       </div>
       <div class="form-group">
         <label class="sr-only" for="password">Password</label>
-        <input class="form-control" id="password" name="password" type="password" minlength="8"  placeholder="Password" required>
+        <input class="form-control" id="password" name="password" type="password" placeholder="Password" required>
       </div>
       <button id="saveForm" name="saveForm" type="submit" value="Submit" class="btn btn-primary">Sign in</button>
     </form>
