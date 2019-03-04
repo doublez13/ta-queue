@@ -51,6 +51,11 @@ function admin_modify() {
               admin.push({"username": current.username, "full_name": current.full_name});
             }
             deferred.resolve(admin);
+          },
+          error: function(xhr){
+            if(xhr.status == 403){
+               window.location = '/';
+            }
           }
         });
         return deferred.promise();
