@@ -64,7 +64,7 @@ function get_admins(){
     return NULL;
   }
 
-  $query = "SELECT username FROM users WHERE admin=1";
+  $query = "SELECT username, full_name FROM users WHERE admin=1";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
     mysqli_close($sql_conn);
@@ -73,7 +73,7 @@ function get_admins(){
 
   $admins = [];
   while($admin = mysqli_fetch_assoc($result)){
-    $admins[] = $admin["username"];
+    $admins[$admin["username"]] = $admin;
   }
 
   mysqli_close($sql_conn);
@@ -93,7 +93,7 @@ function is_admin($username){
   if(is_null($admins)){
     return NULL;
   }
-  return in_array($username, $admins);
+  return in_array($username, array_keys($admins));
 }
 
 /**
