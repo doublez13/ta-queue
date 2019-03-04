@@ -66,9 +66,6 @@
                   <label>Access Code</label>
                   <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
                   
-                  <label>TA usernames (space delimited)</label>
-                  <input type="text" id="TAs" placeholder="space separated list of usernames">
-
                   <label>Description</label>
                   <textarea id="description" placeholder="Course description" style="height:100px"></textarea>
 
@@ -78,6 +75,7 @@
                 <div class="padding-bottom-10">
                   <button id="create_course_button" class="btn btn-success" type="submit"></button>
                   <button id="delete_course_button" class="btn btn-warning" type="submit">Delete Course</button>
+                  <button id="edit_ta_button" class="btn btn-primary" type="submit">Edit TAs</button>
                 </div>
               </form>
 

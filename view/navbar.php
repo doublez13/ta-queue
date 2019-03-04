@@ -41,7 +41,7 @@
                     <a class="dropdown-item" href="new_course">Create Course</a>
                   </li>
                   <li>
-                    <a class="dropdown-item" href="group_mod">Admins</a>
+                    <a class="dropdown-item" href="group_mod?type=admin">Admins</a>
                   </li>
                 </ul>
               </div>

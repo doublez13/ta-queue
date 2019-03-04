@@ -1,3 +1,4 @@
+var doneURL;
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
   var query = window.location.search.substring(1);
@@ -15,21 +16,27 @@ $(document).ready(function(){
     document.getElementById("panel_title").innerHTML = "New Course";
     document.getElementById("create_course_button").innerText= "Create Course";
     document.getElementById("delete_course_button").style.display = "none";
+    document.getElementById("edit_ta_button").style.display = "none";
     $("#create_course").submit( create_course );
     doneMsg = "Course successfully created";
   }else{                             //Edit exsisting course
     document.getElementById("page_title").innerHTML  = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
     document.getElementById("course_name").disabled  = true;
-    document.getElementById("create_course_button").innerText= "Edit Course";
+    document.getElementById("create_course_button").innerText= "Done";
    
     var url_course_id = course_name_to_id(url_course_name);
     get_course(url_course_id);
-    get_TAs(url_course_id); 
 
     $("#create_course").submit( create_course );
     $("#delete_course_button").click( delete_course );
     doneMsg = "Course successfully modified";
+    doneURL = "./";
+    $("#edit_ta_button").click(function( event ) {
+      event.preventDefault();
+      window.location = "group_mod?type=ta&course_id="+url_course_id;
+    });
+
   }
 });
 
@@ -121,84 +128,39 @@ function course_name_to_id(course_name){
   return course_id;
 }
 
-//TODO: Fix the ugliness in these two functions!!
-//Get the TA List
-function get_TAs(course_id){
-  var url = "../api/courses/"+course_id+'/ta';
-  $.get( url, function(data) {
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    dataParsed.TAs.forEach(function(TA){
-      TAs.value += TA + ' ';
-    });
-  }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied
-}
-
-//Update the TA List
+//Add the instructor to the TA list
 //TODO: Courses can't have forward slashes in names
 function edit_TAs(course_id){
-  var TAString = document.getElementById("TAs").value.trim();
-  var newTAs   = TAString.split(" ").filter(v=>v!='');
+  var add = [];
+  //TODO: This is such a hack
+  //Instead of plumbing a professor role into the model and controller,
+  //we simply add the professor to the TA list so they'll automatically
+  //inherit TA permissions.
+  //Currently the professor attribute isn't used in the backend, but I'd 
+  //like to eventually allow professors to edit their own course, and 
+  //have access to a wider range of stats
+  var professor = document.getElementById("professor").value;
+  add.push(professor);
 
-  //Get all current TAs
-  var $url = "../api/courses/"+course_id+"/ta";
-  var $get = $.get( $url );
-  $get.done(function(data){
-    var dataString = JSON.stringify(data);
-    var dataParsed = JSON.parse(dataString);
-    var currentTAs = dataParsed.TAs;
-
-    //Diff the lists
-    var add = [];
-    var del = [];
-    currentTAs.forEach(function(item, index) {
-      if(newTAs.indexOf(item) == -1){
-        del.push(item);
-      }
+  //Do any adding if necessary
+  var error = 0;
+  add.forEach( function(item, index) {
+    $.ajax({
+      async: false,
+      method: "POST",
+      url: "../api/user/"+item+"/courses/"+course_id+"/ta"
+    }).fail(function(data){
+       var dataString = JSON.stringify(data.responseJSON);
+       var dataParsed = JSON.parse(dataString);
+       alert("Adding " + item + ": " +dataParsed["error"]);
+       error = 1;
     });
-
-    newTAs.forEach(function(item, index) { 
-      if(currentTAs.indexOf(item) == -1){
-        add.push(item);
-      } 
-    });
-    //TODO: This is such a hack
-    //Instead of plumbing a professor role into the model and controller,
-    //we simply add the professor to the TA list so they'll automatically
-    //inherit TA permissions.
-    //Currently the professor attribute isn't used in the backend, but I'd 
-    //like to eventually allow professors to edit their own course, and 
-    //have access to a wider range of stats
-    var professor = document.getElementById("professor").value;
-    add.push(professor);
-
-    //Do any removal if necessary
-    del.forEach( function(item, index) {
-      $.ajax({
-        async: false,
-        method: "DELETE",
-        url: "../api/user/"+item+"/courses/"+course_id+"/ta"
-      });
-    });
-    
-    //Do any adding if necessary
-    var error = 0;
-    add.forEach( function(item, index) {
-      $.ajax({
-        async: false,
-        method: "POST",
-        url: "../api/user/"+item+"/courses/"+course_id+"/ta"
-      }).fail(function(data){
-         var dataString = JSON.stringify(data.responseJSON);
-         var dataParsed = JSON.parse(dataString);
-         alert("Adding " + item + ": " +dataParsed["error"]);
-         error = 1;
-      });
-    });
-    if(!error){
-      alert(doneMsg);
-      window.location = "./courses";
-    }
-
   });
+  if(!error){
+    if(doneURL !== undefined){
+      window.location = doneURL;
+    }else{
+      window.location = "./group_mod?type=ta&course_id="+course_id;
+    }
+  }
 }

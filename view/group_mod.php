@@ -38,6 +38,8 @@
             <h3 id="panel_title" class="panel-title" style="font-size:20px; text-align: center"></h3>
           </div><!--panel-heading-->
           <div id="jsGrid"></div>
+
+
         </div><!--panel-->
       </div><!--col-sm-8-->
     </div><!--row-->

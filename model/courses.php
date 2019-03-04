@@ -159,7 +159,7 @@ function get_tas($course_id){
     return NULL;
   }
 
-  $query = "SELECT username FROM courses NATURAL JOIN enrolled WHERE course_id=? AND role='ta'";
+  $query = "SELECT username, full_name FROM courses NATURAL JOIN enrolled NATURAL JOIN users WHERE course_id=? AND role='ta'";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -171,11 +171,11 @@ function get_tas($course_id){
     mysqli_close($sql_conn);
     return NULL;
   }
-  mysqli_stmt_bind_result($stmt, $username);
 
   $tas = array();
-  while(mysqli_stmt_fetch($stmt)){
-    $tas[] = $username;
+  $result = mysqli_stmt_get_result($stmt);
+  while($ta = mysqli_fetch_assoc($result)){
+    $tas[$ta["username"]] = $ta;
   }
 
   mysqli_stmt_close($stmt);
