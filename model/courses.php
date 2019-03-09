@@ -184,6 +184,43 @@ function get_tas($course_id){
 }
 
 /**
+ * Returns an array of students enrolled in course_id
+ *
+ * @param string $course_id
+ * @return array of students enrolled in course_id
+ *         null on error
+ */
+function get_students($course_id){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return NULL;
+  }
+
+  $query = "SELECT username, full_name FROM courses NATURAL JOIN enrolled NATURAL JOIN users WHERE course_id=? AND role='student'";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, "i", $course_id);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+
+  $students = array();
+  $result   = mysqli_stmt_get_result($stmt);
+  while($stud = mysqli_fetch_assoc($result)){
+    $students[$stud["username"]] = $stud;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return $students;
+}
+
+/**
  * Get courses that the user is a TA for
  *
  * @param string $username

@@ -33,15 +33,22 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       $course_id = $path_split[3];
 
       if ( isset($path_split[4]) ){//Get list of TAs
-        if($path_split[4] != "ta"){
-          http_response_code(422);
-          echo json_encode( json_err("Invalid Endpoint") );
-          die();
+        switch($path_split[4]){
+          case "ta":
+            $res   = get_tas($course_id);  
+            $field = "TAs";
+            $text  = $res;
+            break;
+          case "students":
+            $res   = get_students($course_id); 
+            $field = "students";
+            $text  = $res;
+            break;
+          default:
+            http_response_code(422);
+            echo json_encode( json_err("Invalid Endpoint") );
+            die();
         }
-        $res    = get_tas($course_id);  
-        $field  = "TAs";
-        $text   = $res;
-
       }else{ //Get course settings
         $res    = get_course($course_id);
         $field  = "parameters";

@@ -17,6 +17,7 @@ $(document).ready(function(){
     document.getElementById("create_course_button").innerText= "Create Course";
     document.getElementById("delete_course_button").style.display = "none";
     document.getElementById("edit_ta_button").style.display = "none";
+    document.getElementById("edit_stud_button").style.display = "none";
     $("#create_course").submit( create_course );
     doneMsg = "Course successfully created";
   }else{                             //Edit exsisting course
@@ -36,7 +37,10 @@ $(document).ready(function(){
       event.preventDefault();
       window.location = "group_mod?type=ta&course_id="+url_course_id;
     });
-
+    $("#edit_stud_button").click(function( event ) {
+      event.preventDefault();
+      window.location = "group_mod?type=student&course_id="+url_course_id;
+    });
   }
 });
 

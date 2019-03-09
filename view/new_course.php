@@ -76,6 +76,7 @@
                   <button id="create_course_button" class="btn btn-success" type="submit"></button>
                   <button id="delete_course_button" class="btn btn-warning" type="submit">Delete Course</button>
                   <button id="edit_ta_button" class="btn btn-primary" type="submit">Edit TAs</button>
+                  <button id="edit_stud_button" class="btn btn-primary" type="submit">Edit Students</button>
                 </div>
               </form>
 

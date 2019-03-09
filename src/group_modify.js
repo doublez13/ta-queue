@@ -12,6 +12,8 @@ $(document).ready(function(){
   }
   if(type=="ta" && course_id !== undefined){
     ta_modify(course_id);
+  }else if(type=="student" && course_id !== undefined){
+    student_modify(course_id);   
   }else if(type=="admin"){
     admin_modify();
   }
@@ -157,3 +159,68 @@ function ta_modify(course_id) {
   });
 }
 
+function student_modify(course_id) {
+  $("#panel_title").text("Students");
+  $("#jsGrid").jsGrid({
+    width: "100%",
+    height: "auto",
+
+    editing: false,
+    sorting: true,
+    paging: true,
+    pageSize: 15,
+    autoload: true,
+    inserting: true,
+
+    deleteConfirm: "Are you sure you want to remove this user as a student?",
+
+    controller: {
+      loadData: function(filter){
+        var deferred = $.Deferred();
+        $.ajax({
+          type: "GET",
+          url: "/api/courses/"+course_id+"/students",
+          dataType: "json",
+          data: filter,
+          success: function(response) {
+            var studs = [];
+            var row;
+            for(row in response.students){
+              var current = response.students[row];
+              studs.push({"username": current.username, "full_name": current.full_name});
+            }
+            deferred.resolve(studs);
+          }
+        });
+        return deferred.promise();
+      },
+      insertItem: function(item) {
+        var username = item['username']
+        $.ajax({
+          type: "POST",
+          async: false,
+          url: "/api/user/"+username+"/courses/"+course_id+"/student",
+          error: function() {
+            alert("User does not exist");
+          }
+        });
+        $("#jsGrid").jsGrid("loadData");
+      },
+      deleteItem: function(item) {
+        var username = item['username']
+        return $.ajax({
+          type: "DELETE",
+          async: false,
+          url: "/api/user/"+username+"/courses/"+course_id+"/student"
+        });
+      },
+     },
+
+    fields: [
+      { type: "text", name: "username", title: "Username", validate: "required" },
+      { type: "text", name: "full_name", title: "Full Name", readOnly: true},
+      { type: "control"}
+    ]
+
+  });
+}
