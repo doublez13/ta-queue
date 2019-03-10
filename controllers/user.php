@@ -36,10 +36,11 @@ switch($endpoint){
           http_response_code(500);
         }else{
           $return = array(
-            "authenticated"   => True,
-            "username"        => $username,
-            "student_courses" => $user_courses['student'],
-            "ta_courses"      => $user_courses['ta']
+            "authenticated"      => True,
+            "username"           => $username,
+            "ta_courses"         => $user_courses['ta'],
+            "student_courses"    => $user_courses['student'],
+            "instructor_courses" => $user_courses['instructor'],
           );
           http_response_code(200);
         }
@@ -73,9 +74,18 @@ switch($endpoint){
             die();
           }
           $res = add_ta_course($req_username, $course_id);
-        }else{
+        }
+        elseif($role == "instructor"){
+          if (!is_admin($username)){ //Must be an admin to add user as instructor
+            http_response_code(403);
+            echo json_encode( forbidden() );
+            die();
+          }
+          $res = add_instructor_course($req_username, $course_id);
+        }
+        else{
           http_response_code(422);
-          echo json_encode( json_err("Invalid Role: student or ta only") );
+          echo json_encode( json_err("Invalid Role: student, ta, or instructor are valid") );
           die();
         }
         
@@ -111,9 +121,12 @@ switch($endpoint){
           $res = rem_stud_course($req_username, $course_id);
         }elseif($role == "ta"){
           $res = rem_ta_course($req_username, $course_id);
-        }else{
+        }elseif($role == "instructor"){
+          $res = rem_instructor_course($req_username, $course_id);
+        }
+        else{
           http_response_code(422);
-          echo json_encode( json_err("Invalid Role: student or ta only") );
+          echo json_encode( json_err("Invalid Role: student, ta, or instructor are valid") );
           die();
         }
 
@@ -142,7 +155,7 @@ switch($endpoint){
       case "GET":
         $stud_info = get_info($req_username);
         if (is_null($stud_info)){
-          $return = json_err("Unable to retrieve info from LDAP");
+          $return = json_err("Unable to retrieve info from SQL or LDAP");
           http_response_code(500);
         }else{
           $return = array(

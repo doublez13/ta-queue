@@ -44,7 +44,7 @@
 
       <h3>Student</h3>
       <p style="font-size: 17px">
-        On the Courses page, students may enroll in any course. At the professor's discretion, some courses may require an access code to enroll.
+        On the Courses page, students may enroll in any course. At the instructor's discretion, some courses may require an access code to enroll.
       </p>
 
       <h3>Teaching Assistant</h3>

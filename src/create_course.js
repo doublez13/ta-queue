@@ -1,4 +1,4 @@
-var doneURL;
+var new_course;
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
   var query = window.location.search.substring(1);
@@ -12,15 +12,18 @@ $(document).ready(function(){
     }
   }
   if(typeof url_course_name === 'undefined'){ //Create new course
+    new_course = true;
     document.getElementById("page_title").innerHTML = "New Course";
     document.getElementById("panel_title").innerHTML = "New Course";
     document.getElementById("create_course_button").innerText= "Create Course";
     document.getElementById("delete_course_button").style.display = "none";
+    document.getElementById("edit_instr_button").style.display = "none";
     document.getElementById("edit_ta_button").style.display = "none";
     document.getElementById("edit_stud_button").style.display = "none";
     $("#create_course").submit( create_course );
     doneMsg = "Course successfully created";
   }else{                             //Edit exsisting course
+    new_course = false;
     document.getElementById("page_title").innerHTML  = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
     document.getElementById("course_name").disabled  = true;
@@ -32,7 +35,6 @@ $(document).ready(function(){
     $("#create_course").submit( create_course );
     $("#delete_course_button").click( delete_course );
     doneMsg = "Course successfully modified";
-    doneURL = "./";
     $("#edit_ta_button").click(function( event ) {
       event.preventDefault();
       window.location = "group_mod?type=ta&course_id="+url_course_id;
@@ -40,6 +42,10 @@ $(document).ready(function(){
     $("#edit_stud_button").click(function( event ) {
       event.preventDefault();
       window.location = "group_mod?type=student&course_id="+url_course_id;
+    });
+    $("#edit_instr_button").click(function( event ) {
+      event.preventDefault();
+      window.location = "group_mod?type=instructor&course_id="+url_course_id;
     });
   }
 });
@@ -52,7 +58,6 @@ create_course = function( event ) {
   var posting = $.post( url, { course_name: $form.find( "input[id='course_name']" ).val(), 
                                depart_pref: $form.find( "input[id='depart_pref']" ).val(),
                                course_num:  $form.find( "input[id='course_num']" ).val(),
-                               professor:   $form.find( "input[id='professor']" ).val(),
                                access_code: $form.find( "input[id='access_code']" ).val(),
                                enabled:     document.getElementById('enabled').checked,
                                description: $('#description').val(),
@@ -61,18 +66,16 @@ create_course = function( event ) {
   var new_course_name = $form.find( "input[id='course_name']" ).val();
   posting.done(function(data){ //Modify the course, then modify the TAs
     var new_course_id = course_name_to_id(new_course_name);
-    edit_TAs(new_course_id)
+    if(new_course){
+      window.location = "./edit_course?course="+new_course_name;
+    }else{
+      window.location = "./group_mod?type=ta&course_id="+course_id;
+    }
   });
   posting.fail(function(data){
     var dataString = JSON.stringify(data.responseJSON);
     var dataParsed = JSON.parse(dataString);
-    var error_msg  = dataParsed["error"];
-    if(error_msg == "User does not exist"){
-      alert("Instructor does not exist"); //Little bit more specific
-    }
-    else{
-      alert(dataParsed["error"]);
-    }
+    alert(dataParsed["error"]);
   });
 }
 
@@ -103,7 +106,7 @@ function get_course(course_id){
   $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    var attributes = ["course_name", "depart_pref", "course_num", "description", "professor", "access_code", "enabled"];
+    var attributes = ["course_name", "depart_pref", "course_num", "description", "access_code", "enabled"];
     attributes.forEach(function(attribute){
       if(attribute in dataParsed.parameters){
         if(attribute == "enabled"){
@@ -130,41 +133,4 @@ function course_name_to_id(course_name){
     course_id = allCourses[course_name]['course_id'];
   });
   return course_id;
-}
-
-//Add the instructor to the TA list
-//TODO: Courses can't have forward slashes in names
-function edit_TAs(course_id){
-  var add = [];
-  //TODO: This is such a hack
-  //Instead of plumbing a professor role into the model and controller,
-  //we simply add the professor to the TA list so they'll automatically
-  //inherit TA permissions.
-  //Currently the professor attribute isn't used in the backend, but I'd 
-  //like to eventually allow professors to edit their own course, and 
-  //have access to a wider range of stats
-  var professor = document.getElementById("professor").value;
-  add.push(professor);
-
-  //Do any adding if necessary
-  var error = 0;
-  add.forEach( function(item, index) {
-    $.ajax({
-      async: false,
-      method: "POST",
-      url: "../api/user/"+item+"/courses/"+course_id+"/ta"
-    }).fail(function(data){
-       var dataString = JSON.stringify(data.responseJSON);
-       var dataParsed = JSON.parse(dataString);
-       alert("Adding " + item + ": " +dataParsed["error"]);
-       error = 1;
-    });
-  });
-  if(!error){
-    if(doneURL !== undefined){
-      window.location = doneURL;
-    }else{
-      window.location = "./group_mod?type=ta&course_id="+course_id;
-    }
-  }
 }

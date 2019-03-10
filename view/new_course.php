@@ -56,16 +56,13 @@
                   <input type="text" id="depart_pref" placeholder="e.g. &quot;CS&quot;" maxlength="16" required>
                 </div>
                 <div class="col-sm-6 padding-top-15 padding-left-0 padding-right-0">
-                  <label>Instructor Username</label>
-                  <input type="text" id="professor" placeholder="username of instructor" maxlength="128" required>
+                  <label>Access Code</label>
+                  <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
 
                   <label>Course Number</label>
                   <input type="text" id="course_num" placeholder="e.g. &quot;4400&quot;" maxlength="16" required>
                 </div>
                 <div class="col-sm-12 padding-left-0 padding-right-0">
-                  <label>Access Code</label>
-                  <input type="text" id="access_code" placeholder="(optional) 16 character max" maxlength="16">
-                  
                   <label>Description</label>
                   <textarea id="description" placeholder="Course description" style="height:100px"></textarea>
 
@@ -75,6 +72,7 @@
                 <div class="padding-bottom-10">
                   <button id="create_course_button" class="btn btn-success" type="submit"></button>
                   <button id="delete_course_button" class="btn btn-warning" type="submit">Delete Course</button>
+                  <button id="edit_instr_button" class="btn btn-primary" type="submit">Edit Instructors</button>
                   <button id="edit_ta_button" class="btn btn-primary" type="submit">Edit TAs</button>
                   <button id="edit_stud_button" class="btn btn-primary" type="submit">Edit Students</button>
                 </div>

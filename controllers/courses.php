@@ -34,6 +34,11 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 
       if ( isset($path_split[4]) ){//Get list of TAs
         switch($path_split[4]){
+          case "instructors":
+            $res   = get_instructors($course_id);
+            $field = "instructors";
+            $text  = $res;
+            break;
           case "ta":
             $res   = get_tas($course_id);  
             $field = "TAs";
@@ -70,7 +75,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       echo json_encode( forbidden() );
       die();
     }
-    if ( !isset($path_split[3]) ){
+    if (!isset($path_split[3])){
       http_response_code(422);
       echo json_encode( json_err("Missing course_name") );
       die();
@@ -83,9 +88,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || 
-        !isset($_POST['course_num'])  || !isset($_POST['professor'])   ||
-        !isset($_POST['enabled']))
-    {
+        !isset($_POST['course_num'])  || !isset($_POST['enabled'])){
       http_response_code(422);
       echo json_encode( json_err("Missing required parameters") );
       die();
@@ -94,7 +97,6 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $course_name = trim(filter_var($_POST['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
     $depart_pref = trim(filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
     $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    $professor   = filter_var($_POST['professor'],   FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $enabled     = filter_var($_POST['enabled'],     FILTER_VALIDATE_BOOLEAN);
 
     if ($_POST['description']){
@@ -110,7 +112,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
 
     //new_course is used both for creating and modifying courses
-    $res   = new_course($course_name, $depart_pref, $course_num, $description, $professor, $acc_code, $enabled);
+    $res   = new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled);
     $field = "success";
     $text  = "Course created/updated"; 
     break;

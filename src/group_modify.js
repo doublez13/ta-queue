@@ -10,7 +10,9 @@ $(document).ready(function(){
       course_id = decodeURIComponent(pair[1]);
     }
   }
-  if(type=="ta" && course_id !== undefined){
+  if(type=="instructor" && course_id !== undefined){
+    instructor_modify(course_id);
+  }else if(type=="ta" && course_id !== undefined){
     ta_modify(course_id);
   }else if(type=="student" && course_id !== undefined){
     student_modify(course_id);   
@@ -80,6 +82,72 @@ function admin_modify() {
           type: "DELETE",
           async: false,
           url: "/api/admins/"+username
+        });
+      },
+     },
+
+    fields: [
+      { type: "text", name: "username", title: "Username", validate: "required" },
+      { type: "text", name: "full_name", title: "Full Name", readOnly: true},
+      { type: "control"}
+    ]
+
+  });
+}
+
+function instructor_modify(course_id) {
+  $("#panel_title").text("Instructors");
+  $("#jsGrid").jsGrid({
+    width: "100%",
+    height: "auto",
+
+    editing: false,
+    sorting: true,
+    paging: true,
+    pageSize: 15,
+    autoload: true,
+    inserting: true,
+
+    deleteConfirm: "Are you sure you want to remove this user as an instructor?",
+
+    controller: {
+      loadData: function(filter){
+        var deferred = $.Deferred();
+        $.ajax({
+          type: "GET",
+          url: "/api/courses/"+course_id+"/instructors",
+          dataType: "json",
+          data: filter,
+          success: function(response) {
+            var instructors = [];
+            var row;
+            for(row in response.instructors){
+              var current = response.instructors[row];
+              instructors.push({"username": current.username, "full_name": current.full_name});
+            }
+            deferred.resolve(instructors);
+          }
+        });
+        return deferred.promise();
+      },
+      insertItem: function(item) {
+        var username = item['username']
+        $.ajax({
+          type: "POST",
+          async: false,
+          url: "/api/user/"+username+"/courses/"+course_id+"/instructor",
+          error: function() {
+            alert("User does not exist");
+          }
+        });
+        $("#jsGrid").jsGrid("loadData");
+      },
+      deleteItem: function(item) {
+        var username = item['username']
+        return $.ajax({
+          type: "DELETE",
+          async: false,
+          url: "/api/user/"+username+"/courses/"+course_id+"/instructor"
         });
       },
      },

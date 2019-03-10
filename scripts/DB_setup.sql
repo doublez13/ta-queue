@@ -21,19 +21,17 @@ create table courses(
   depart_pref VARCHAR(16) NOT NULL,
   course_num  VARCHAR(16) NOT NULL,
   course_name VARCHAR(128) UNIQUE,
-  professor   VARCHAR(128), 
   description TEXT,
   access_code VARCHAR(16),
   enabled     BOOLEAN DEFAULT true NOT NULL,
   primary key (course_id),
-  foreign key (professor) references users(username) ON DELETE SET NULL
 );
 
 --Students enrolled in course as student or TA;
 create table enrolled(
   username    VARCHAR(256),
   course_id   int NOT NULL,
-  role        ENUM('student','ta') NOT NULL,
+  role        ENUM('student','ta','instructor') NOT NULL,
   primary key (username, course_id),
   foreign key (username) references users(username) ON DELETE CASCADE,
   foreign key (course_id) references courses(course_id) ON DELETE CASCADE

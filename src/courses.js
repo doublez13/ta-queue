@@ -31,8 +31,10 @@ function renderCourseTables(allCourses, myCourses) {
     document.getElementById('all_courses_paragraph').innerHTML = "<b>Admin Interface: View/Edit Courses</b>";
   }else{
     document.getElementById('all_courses_paragraph').innerHTML = "<b>Enroll/Leave your courses here.</b>";
-    var stud_courses = myCourses.student_courses;
-    var ta_courses   = myCourses.ta_courses;
+    var instructor_courses   = myCourses.instructor_courses;
+    var ta_courses           = myCourses.ta_courses;
+    var stud_courses         = myCourses.student_courses;
+    renderMyCourseTable(instructor_courses, "Instructor");
     renderMyCourseTable(ta_courses, "TA");
     renderMyCourseTable(stud_courses, "Student");
   }

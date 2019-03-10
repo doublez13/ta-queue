@@ -72,7 +72,7 @@ function get_queue(course_id) {
     var dataParsed = JSON.parse(dataString);
     //NOTE: They can be an admin and a TA
     //In this case is_TA = true, is_admin = false
-    is_TA       = dataParsed["role"] == "ta";
+    is_TA       = dataParsed["role"] == "ta" || dataParsed["role"] == "instructor";
     is_admin    = dataParsed["role"] == "admin";
     my_username = dataParsed.username;
     var course_name = dataParsed["course_name"]

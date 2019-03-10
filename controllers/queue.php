@@ -20,11 +20,22 @@ if(isset($path_split[4])){
   $endpoint = $path_split[4];
 }
 
+$user_courses = get_user_courses2($username);
+if(is_null($user_courses)){
+  http_response_code(500);
+  echo json_encode(json_err("Internal Server Error"));
+  die();
+}
+$is_instr = in_array($course_id, $user_courses['instructor']);
+$is_ta    = in_array($course_id, $user_courses['ta']);
+$is_stud  = in_array($course_id, $user_courses['student']);
+
+
 switch( $endpoint ){
   case "announcements":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
-        if (!in_array($course_id, get_user_courses2($username)['ta'])){
+        if (!($is_ta || $is_instr)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -39,7 +50,7 @@ switch( $endpoint ){
         $text = "Announcement posted";
         break;
       case "DELETE":
-        if (!in_array($course_id, get_user_courses2($username)['ta'])){
+        if (!($is_ta || $is_instr)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -67,16 +78,15 @@ switch( $endpoint ){
         //For now, these return the same information.
         //Later, we may want the TAs to see more,
         //or the students to see less.
-        $user_courses = get_user_courses2($username);
-        $ta_courses   = $user_courses['ta'];
-        $stud_courses = $user_courses['student'];
-        if(in_array($course_id, $ta_courses)){         //TA
-          $role = "ta" ;
-        }elseif(in_array($course_id, $stud_courses)){  //Student
+        if($is_instr){                       //Instructor
+          $role = "instructor";
+        }elseif($is_ta){                     //TA
+          $role = "ta";
+        }elseif($is_stud){                   //Student
           $role = "student";
-        }elseif(is_admin($username)){                  //Admin
+        }elseif(is_admin($username)){        //Admin
           $role = "admin";
-        }else{                                         //Not in course
+        }else{                               //Not in course
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -99,7 +109,7 @@ switch( $endpoint ){
   case "settings":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
-        if (!in_array($course_id, get_user_courses2($username)['ta'])){
+        if (!($is_ta || $is_instr)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -154,7 +164,7 @@ switch( $endpoint ){
   case "state":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
-        if (!in_array($course_id, get_user_courses2($username)['ta'])){
+        if (!($is_ta || $is_instr)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -192,9 +202,14 @@ switch( $endpoint ){
 
   case "student":
     if (!isset($path_split[5])){//  /api/queue/course_id/student
+      if (!$is_stud){
+        http_response_code(403);
+        echo json_encode( forbidden() );
+        die();
+      }
       switch($_SERVER['REQUEST_METHOD']){
         case "POST":
-          if( !isset($_POST["question"]) || !isset($_POST["location"]) || !$_POST["question"] || !$_POST["location"]){
+          if(!isset($_POST["question"]) || !isset($_POST["location"]) || !$_POST["question"] || !$_POST["location"]){
             http_response_code(422);
             $return = array(
               "authenticated" => True,
@@ -211,7 +226,7 @@ switch( $endpoint ){
           break;
         default:
           http_response_code(405);
-          echo json_encode( invalid_method("POST or DELETE") );
+          echo json_encode( invalid_method("POST") );
           die();
       }
     }else{ //  /api/queue/course_id/student/username
@@ -219,7 +234,7 @@ switch( $endpoint ){
       if (!isset($path_split[6])){
         switch($_SERVER['REQUEST_METHOD']){
           case "DELETE":
-            if ($student != $username && !in_array($course_id, get_user_courses2($username)['ta'])){ //Not a TA
+            if ($student != $username && !($is_ta || $is_instr)){ //Not a TA
               http_response_code(403);
               echo json_encode( forbidden() );
               die();
@@ -229,7 +244,7 @@ switch( $endpoint ){
             break;
           default:
             http_response_code(405);
-            echo json_encode( invalid_method("POST or DELETE") );
+            echo json_encode( invalid_method("DELETE") );
             die();
         }
       }else{//  /api/queue/course_id/student/username/operation
@@ -238,7 +253,7 @@ switch( $endpoint ){
           case "help":
             switch( $_SERVER['REQUEST_METHOD'] ){
               case "POST":
-                if (!in_array($course_id, get_user_courses2($username)['ta'])){
+                if (!($is_ta || $is_instr)){
                   http_response_code(403);
                   echo json_encode( forbidden() );
                   die();
@@ -263,7 +278,7 @@ switch( $endpoint ){
                 $direction = $_POST['direction'];
                 switch( $direction ){
                   case "up":
-                    if (!in_array($course_id, get_user_courses2($username)['ta'])){//Only need to be a TA to move up, not down
+                    if (!($is_ta || $is_instr)){//Only need to be a TA to move up, not down
                       http_response_code(403);
                       echo json_encode( forbidden() );
                       die();
@@ -271,7 +286,7 @@ switch( $endpoint ){
                     $res = increase_stud_priority($student, $course_id);
                     break;
                   case "down":
-                    if(!in_array($course_id, get_user_courses2($username)['ta']) && $student != $username ){
+                    if(!($is_ta || $is_instr) && $student != $username ){
                       http_response_code(403);
                       echo json_encode( forbidden() );
                       die();
@@ -299,7 +314,7 @@ switch( $endpoint ){
   case "ta":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "POST":
-        if (!in_array($course_id, get_user_courses2($username)['ta'])){
+        if (!($is_ta || $is_instr)){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
