@@ -10,9 +10,21 @@
 
 $path_split = explode("/", $path);
 
+$is_admin = is_admin($username);
+if(is_null($is_admin)){
+  $return = array(
+    "authenticated" => True,
+    "username"      => $username,
+    "error" => "Internal Server Error"
+  );
+  http_response_code(500);
+  echo json_encode($return);
+  die();
+}
+
 switch( $_SERVER['REQUEST_METHOD'] ){
   case "GET": //Retrieve a list of the admins
-    if (!is_admin($username)){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -22,7 +34,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text  = $res;
     break;
   case "POST": //Add a user to the admins group
-    if (!is_admin($username)){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();
@@ -38,7 +50,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $text  = "Added to admin group";
     break;
   case "DELETE": //Remove a user from the admins group
-    if (!is_admin($username)){
+    if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
       die();

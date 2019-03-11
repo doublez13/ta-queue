@@ -20,7 +20,7 @@ if($req_username != $username && !is_admin($username)){
   echo json_encode( forbidden() );
   die();
 }
-$endpoint     = "info";
+$endpoint = "info";
 if(isset($path_split[4])){
   $endpoint = $path_split[4];
 }
@@ -167,7 +167,12 @@ switch($endpoint){
         }
         break;
       case "DELETE":
-        if (!is_admin($username)){
+        $is_admin = is_admin($username);
+        if (is_null($is_admin)){
+          $return = json_err("Unable to determine admin status");
+          http_response_code(500);
+        }
+        if (!$is_admin){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();
@@ -187,7 +192,7 @@ switch($endpoint){
         break;
       default:
         http_response_code(405);
-        echo json_encode( invalid_method("GET") );
+        echo json_encode( invalid_method("GET, DELETE") );
         die();
     }
 }

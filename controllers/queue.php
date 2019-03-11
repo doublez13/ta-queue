@@ -30,7 +30,6 @@ $is_instr = in_array($course_id, $user_courses['instructor']);
 $is_ta    = in_array($course_id, $user_courses['ta']);
 $is_stud  = in_array($course_id, $user_courses['student']);
 
-
 switch( $endpoint ){
   case "announcements":
     switch( $_SERVER['REQUEST_METHOD'] ){
