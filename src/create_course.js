@@ -65,7 +65,6 @@ create_course = function( event ) {
 
   var new_course_name = $form.find( "input[id='course_name']" ).val();
   posting.done(function(data){ //Modify the course, then modify the TAs
-    var new_course_id = course_name_to_id(new_course_name);
     if(new_course){
       window.location = "./edit_course?course="+new_course_name;
     }else{
