@@ -14,8 +14,21 @@ if(empty($path_split[3])){
   echo json_encode( json_err("Missing username") );
   die();
 }
+
+$is_admin = is_admin($username);
+if(is_null($is_admin)){
+  $return = array(
+    "authenticated" => True,
+    "username"      => $username,
+    "error" => "Internal Server Error"
+  );
+  http_response_code(500);
+  echo json_encode($return);
+  die();
+}
+
 $req_username = strtolower($path_split[3]); //requested username converted to lower case
-if($req_username != $username && !is_admin($username)){
+if($req_username != $username && !$is_admin){
   http_response_code(403);
   echo json_encode( forbidden() );
   die();
@@ -68,7 +81,7 @@ switch($endpoint){
         if($role == "student"){
           $res = add_stud_course($req_username, $course_id, $acc_code);
         }elseif($role == "ta"){
-          if (!is_admin($username)){ //Must be an admin to add user as TA
+          if (!$is_admin){ //Must be an admin to add user as TA
             http_response_code(403);
             echo json_encode( forbidden() );
             die();
@@ -76,7 +89,7 @@ switch($endpoint){
           $res = add_ta_course($req_username, $course_id);
         }
         elseif($role == "instructor"){
-          if (!is_admin($username)){ //Must be an admin to add user as instructor
+          if (!$is_admin){ //Must be an admin to add user as instructor
             http_response_code(403);
             echo json_encode( forbidden() );
             die();
@@ -167,11 +180,6 @@ switch($endpoint){
         }
         break;
       case "DELETE":
-        $is_admin = is_admin($username);
-        if (is_null($is_admin)){
-          $return = json_err("Unable to determine admin status");
-          http_response_code(500);
-        }
         if (!$is_admin){
           http_response_code(403);
           echo json_encode( forbidden() );

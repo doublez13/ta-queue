@@ -14,8 +14,8 @@ if(empty($path_split[3])){
   echo json_encode( json_err("No course_id specified") );
   die();
 }
-$course_id   = $path_split[3];
-$endpoint    = "queue";
+$course_id = $path_split[3];
+$endpoint  = "queue";
 if(isset($path_split[4])){
   $endpoint = $path_split[4];
 }
