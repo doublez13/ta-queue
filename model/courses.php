@@ -3,7 +3,7 @@ require_once 'config.php';
 require_once 'auth.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
- * Copyright (c) 2018 Zane Zakraisek
+ * Copyright (c) 2019 Zane Zakraisek
  *
  * Functions for courses.
  */
@@ -205,7 +205,6 @@ function get_stud_courses($username){
 
 /**
  * Get courses that the user has joined as an instructor
- * TODO: ADD CHECK FOR COURSE
  * @param string $username
  * @return int 0 on success
  *             -1 on fail
@@ -230,7 +229,6 @@ function rem_instructor_course($username, $course_id){
 
 /**
  * Get courses that the user has joined as a TA
- * TODO: ADD CHECK FOR COURSE
  * @param string $username
  * @return int 0 on success
  *             -1 on fail
@@ -255,7 +253,6 @@ function rem_ta_course($username, $course_id){
 
 /**
  * Add user to course as a student
- * TODO: ADD CHECKS FOR COURSE AND USER
  * @param string $username
  * @param string $course_id
  * @return int 0 on success,
@@ -453,7 +450,6 @@ function get_enrolled($course_id, $role){
 /**
  * Add user to course as role
  * Replaces the role if already enrolled
- * TODO: ADD CHECKS FOR COURSE AND USER
  * @param string $username
  * @param string $course_id
  * @return int 0 on success,
@@ -469,11 +465,22 @@ function add_user_course($username, $course_id, $role){
     return -8;
   }
 
-  #TODO: Check role validity
+  if(!in_array($role, array("student", "ta", "instructor"))) {
+    return -1;
+  }
 
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
+  }
+
+  $res = check_course_id($course_id, $sql_conn);
+  if($res == -1){
+    mysqli_close($sql_conn);
+    return -1; //SQL error
+  }elseif($res == 0){
+    mysqli_close($sql_conn);
+    return -2; //Nonexistant course
   }
 
   $query = "REPLACE enrolled (username, course_id, role) VALUES ( ?, ?, ?)";
