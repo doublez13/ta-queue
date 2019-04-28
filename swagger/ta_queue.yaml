@@ -69,19 +69,14 @@ paths:
             properties:
               username:
                 type: "string"
-                # example: "c00lperson"
               first_name:
                 type: "string"
-                # example: "Morgan"
               last_name:
                 type: "string"
-                # example: "Thompson"
               authenticated:
                 type: "boolean"
-                # example: true
               is_admin:
                 type: "boolean"
-                # example: true
         401:
           description: "Username and/or password is incorrect"
           schema:
@@ -116,6 +111,10 @@ paths:
               success:
                 type: "string"
                 example: "User logged out"
+        405:
+          description: "Invalid HTTP request method"
+          schema:
+            $ref: '#/definitions/bad_method'
 
   /admins:
     get:
