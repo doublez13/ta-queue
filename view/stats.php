@@ -15,9 +15,9 @@
   ?>
   
   <!-- Highcharts CDN -->
-  <script src="https://code.highcharts.com/highcharts.src.js" integrity="sha384-Ie8nPVDf+IwWRLfEGCAHobo1Sku8ISZ/YttJ+E2ocYm9lmhVw7Ogr7+CZkqAR80w" crossorigin="anonymous"></script>
-  <script src="https://code.highcharts.com/modules/exporting.src.js" integrity="sha384-yiacmVyZb6JBcKWly5alEUpp7eFWMsej8gFl+mMjGIbu3MPtgIBpy7asjNCTDi38" crossorigin="anonymous"></script>
-  <script src="https://code.highcharts.com/highcharts-3d.src.js" integrity="sha384-T4aQ+IF74ri66aGDrlfJ9ksWOJvvFpv5tNDCk8AQOhR9l6CwkmdsHheNQnxrdwr4" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts.src.js" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/modules/exporting.src.js" crossorigin="anonymous"></script>
+  <script src="https://code.highcharts.com/highcharts-3d.src.js" crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment.js" integrity="sha384-jTMy6EIZUv6UQkT/OrJic59RKQRr8cYNcNBBsHUAlAdKt3sSMfCaf5V2YE97wLkB" crossorigin="anonymous"></script>
 </head>
 
