@@ -32,7 +32,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       }
       $course_id = $path_split[3];
 
-      if ( isset($path_split[4]) ){//Get list of TAs
+      if ( isset($path_split[4]) ){//Get list of enrolled (students, TAs, instructors)
         switch($path_split[4]){
           case "instructors":
             $res   = get_instructors($course_id);
