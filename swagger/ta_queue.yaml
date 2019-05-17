@@ -92,7 +92,7 @@ paths:
         500:
           description: "Server-side error"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
   /logout:
     post:
       summary: "Logout a user"
@@ -130,27 +130,31 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
-              admins:
+              username:
+                type: "string"
+              admin:
                 type: "object"
                 properties:
                   username:
                     type: "string"
+                  full_name:
+                    type: "string"
         401:
           description: "Not authenticated"
           schema:
-            $ref: '#/definitions/not_authenticated'
+            #$ref: '#/definitions/not_authenticated'
         403:
           description: "Forbidden"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
         405:
           description: "Invalid HTTP request method"
           schema:
-            $ref: '#/definitions/bad_method'
+            #$ref: '#/definitions/bad_method'
         500:
           description: "Server-side error"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
 
   /admins/{username}:
     post:
@@ -161,7 +165,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "username of user to delete"
+        description: "username of user to add"
         type: "string"
         required: true
       responses:
@@ -172,27 +176,26 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
-              student_info:
-                type: "object"
-                properties:
-                  username:
-                    type: "string"
+              username:
+                type: "string"
+              success:
+                type: "string"
         401:
           description: "Not authenticated"
           schema:
-            $ref: '#/definitions/not_authenticated'
+            #$ref: '#/definitions/not_authenticated'
         403:
           description: "Forbidden"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
         405:
           description: "Invalid HTTP request method"
           schema:
-            $ref: '#/definitions/bad_method'
+            #$ref: '#/definitions/bad_method'
         500:
           description: "Server-side error"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
     delete:
       summary: "Remove a user from the admin group"
       description: "Remove a user from the admin group"
@@ -201,7 +204,7 @@ paths:
       parameters:
       - name: "username"
         in: "path"
-        description: "username of user to delete"
+        description: "username of user to remove"
         type: "string"
         required: true
       responses:
@@ -212,25 +215,26 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
-              student_info:
-                type: "object"
-                properties:
+              username:
+                type: "string"
+              success:
+                type: "string"
         401:
           description: "Not authenticated"
           schema:
-            $ref: '#/definitions/not_authenticated'
+            #$ref: '#/definitions/not_authenticated'
         403:
           description: "Forbidden"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
         405:
           description: "Invalid HTTP request method"
           schema:
-            $ref: '#/definitions/bad_method'
+            #$ref: '#/definitions/bad_method'
         500:
           description: "Server-side error"
           schema:
-            $ref: '#/definitions/error'
+            #$ref: '#/definitions/error'
 
 
   /user/{username}:
@@ -363,7 +367,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /user/{username}/courses/{course}/{role}:
+  /user/{username}/courses/{course_id}/{role}:
     post:
       summary: "Enroll user in a course as student or TA"
       description: "Enroll the user in the specified course with the specified access code (if required)."
@@ -379,10 +383,10 @@ paths:
         description: "username of student"
         type: "string"
         required: true
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "role"
         in: "path"
@@ -390,6 +394,7 @@ paths:
         enum:
         - "student"
         - "ta"
+        - "instructor"
         required: true
       - name: "acc_code"
         in: "formData"
@@ -431,9 +436,9 @@ paths:
         description: "username"
         type: "string"
         required: true
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
+        description: "The ID of the course"
         type: "string"
         required: true
       - name: "role"
@@ -442,6 +447,7 @@ paths:
         enum:
         - "student"
         - "ta"
+        - "instructor"
         required: true
       responses:
         200:
@@ -466,7 +472,7 @@ paths:
             $ref: '#/definitions/error'
 
  
-  /queue/{course}:
+  /queue/{course_id}:
     get:
       summary: "Get a queue"
       description: "Get the queue state for the specified course including info regarding the TAs on duty, course announcements, and the TA time limit per student."
@@ -477,10 +483,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       responses:
         200:
@@ -490,14 +496,25 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
+              username:
+                type: "string"
+              success:
+                type: "string"
+              role:
+                type: "string"
+              course_name:
+                type: "string"
               state:
                 type: "string"
+                enum: ["open", "closed", "frozen"]
                 description: "open, closed, or frozen"
               time_lim:
-                type: "string"
-                description: "TA time limit per student"
-              queue_length:
                 type: "integer"
+                description: "TA time limit per student"
+              cooldown:
+                type: "integer"
+              quest_public:
+                type: "boolean"
               announcements:
                 type: "array"
                 items:
@@ -540,6 +557,8 @@ paths:
                       type: "string"
                     location:
                       type: "string"
+              queue_length:
+                type: "integer"
         401:
           description: "Not authenticated"
           schema:
@@ -574,7 +593,7 @@ paths:
       - name: "course_id"
         in: "path"
         description: "Course ID number"
-        type: "string"
+        type: "integer"
         required: true
       - name: "question"
         in: "formData"
@@ -621,7 +640,7 @@ paths:
       - name: "course_id"
         in: "path"
         description: "Course ID number"
-        type: "string"
+        type: "integer"
         required: true
       - name: "username"
         in: "path"
@@ -650,7 +669,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /queue/{course}/student/{username}/help:
+  /queue/{course_id}/student/{username}/help:
     post:
       summary: "Help a user (TA)"
       description: "Set the TA's status to helping the specified user in the specified course. A TA can only help one user at a time; a new user will override the current one. **The TA must be on duty in the specified course.**"
@@ -661,10 +680,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "username"
         in: "path"
@@ -698,7 +717,7 @@ paths:
             $ref: '#/definitions/error'
 
 
-  /queue/{course}/student/{username}/position:
+  /queue/{course_id}/student/{username}/position:
     post:
       summary: "Changes a user's position in the queue"
       description: "Move the specified student one spot up or down in the specified course. **TAs can only move their own students, and students can only move themselves down**"
@@ -709,10 +728,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "student"
         in: "path"
@@ -749,7 +768,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /queue/{course}/state:
+  /queue/{course_id}/state:
     post:
       summary: "Change the state of a queue (TA)"
       description: "Open, close, or freeze the queue for the specified course."
@@ -760,10 +779,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "state"
         in: "formData"
@@ -800,7 +819,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
       
-  /queue/{course}/settings:
+  /queue/{course_id}/settings:
     post:
       summary: "Change a setting in the queue"
       description: "Current queue settings are time_lim and cooldown. Set with the specified positive integer the maximum amount of time (minutes) for each setting. No time limit is assumed if it is not set. **The queue must be open.**"
@@ -811,10 +830,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "setting"
         in: "formData"
@@ -854,7 +873,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/{course}/ta:
+  /queue/{course_id}/ta:
     post:
       summary: "Put TA on duty (TA) and free TA"
       description: "Put the TA on duty for the specified course.**The queue must be open.** In the TA is already on duty, this will free them."
@@ -865,10 +884,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       responses:
         200:
@@ -905,10 +924,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       responses:
         200:
@@ -936,7 +955,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /queue/{course}/announcements:
+  /queue/{course_id}/announcements:
     post:
       summary: "Post an announcement (TA)"
       description: "Post the specified announcement for the specified course."
@@ -947,10 +966,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "announcement"
         in: "formData"
@@ -982,7 +1001,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /queue/{course}/announcements/{id}:
+  /queue/{course_id}/announcements/{id}:
     delete:
       summary: "Delete an announcement (TA)"
       description: "Delete the announcement for the specified course with the specified ID."
@@ -993,10 +1012,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. CS 4400: Computer Systems)"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "id"
         in: "path"
@@ -1028,6 +1047,7 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+
 
   /stats/course/{course}:
     get:
@@ -1108,6 +1128,8 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
+
+
   /courses:
     get:
       summary: "Get all courses"
@@ -1122,13 +1144,23 @@ paths:
             properties:
               authenticated:
                 type: "boolean"
+              username:
+                type: "string"
+              admin:
+                type: "boolean"
               all_courses:
                 type: "object"
-                description: "hashmap: course name -> {access code required -> bool}"
+                description: "course name -> {attribute -> value}"
                 additionalProperties:
                   type: "object"
                   properties:
                     acc_req:
+                      type: "boolean"
+                    course_id:
+                      type: "integer"
+                    description:
+                      type: "string"
+                    enabled:
                       type: "boolean"
         401:
           description: "Not authenticated"
@@ -1206,17 +1238,17 @@ paths:
           description: "Server-side error"
           schema:
             $ref: '#/definitions/error'
-  /courses/{course}:
+  /courses/{course_id}:
     get:
       summary: "Get all settings for a course"
       description: "Get all the settings for a course (e.g. \"CS 4150: Algorithms"
       tags:
         - "Courses"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       responses:
         200:
@@ -1261,10 +1293,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       - name: "depart_pref"
         in: "formData"
@@ -1325,10 +1357,10 @@ paths:
       produces:
         - "application/json"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name to delete (e.g. \"CS 5555: Intro to the Number Five\")"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
         required: true
       responses:
         200:
@@ -1356,17 +1388,25 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-  /courses/{course}/ta:
+  /courses/{course_id}/{role}:
     get:
-      summary: "Get all TAs for a course"
+      summary: "Get all users of type role for a course"
       description: "Get all the TAs for a course (e.g. \"CS 4150: Algorithms"
       tags:
         - "Courses"
       parameters:
-      - name: "course"
+      - name: "course_id"
         in: "path"
-        description: "full course name (e.g. \"CS 5555: Intro to the Number Five\")"
-        type: "string"
+        description: "The ID of the course"
+        type: "integer"
+        required: true
+      - name: "role"
+        in: "path"
+        description: "The role of the users to return"
+        enum:
+        - "instructors"
+        - "ta"
+        - "students"
         required: true
       responses:
         200:
