@@ -31,7 +31,7 @@ MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaD
 PHP    >= 7.0 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
 
 ### Configuration file (config.php)
-LDAP_SERVER: FQDN or IP address of the LDAP server.  
+LDAP_SERVERS: Array of FQDNs or IP addresses of the LDAP servers.  
 LDAP_DOMAIN: Active Directory domain FQDN.  
 BIND_USER:   User to bind to LDAP with. Simple username, not DN format.  
 BIND_PASSWD: Password for BIND_USER.  
