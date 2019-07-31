@@ -14,10 +14,10 @@
    }
   ?>
 
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" />
-  <link type="text/css" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" />
-     
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.css" integrity="sha384-FANc0lm1AdWuiUkSMYxBxLFUvidZ7pRJO1AuBAfeViE4Q+frQYW5mDHrTt3FeBw8" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid-theme.min.css" integrity="sha384-/HgoqTJg9K/cC9jt0ds5CDTasJyiigTXQT1VQknBRLnh4ud/915dApA0G0bDOfER" crossorigin="anonymous">
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jsgrid/1.5.3/jsgrid.min.js" integrity="sha384-fJUy9UkxvbaEoX982Lz2GVXfixLrgbslonJJpy3u6e9w3w87kECVrQcj9LI24aWv" crossorigin="anonymous"></script>
 </head>
 
 <body>
