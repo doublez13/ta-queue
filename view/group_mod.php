@@ -38,7 +38,7 @@
             <h3 id="panel_title" class="panel-title" style="font-size:20px; text-align: center"></h3>
           </div><!--panel-heading-->
           <div id="jsGrid"></div>
-          <button id="done_button" class="btn btn-primary" type="submit" onclick="window.location = '/';">Done</button>
+          <button id="done_button" class="btn btn-primary" type="submit">Done</button>
         </div><!--panel-->
       </div><!--col-sm-8-->
     </div><!--row-->

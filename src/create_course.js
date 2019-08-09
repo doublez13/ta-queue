@@ -4,14 +4,19 @@ $(document).ready(function(){
   var query = window.location.search.substring(1);
   var vars = query.split("&");
   var url_course_name;
+  var url_course_id;
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
     if(pair[0] == "course"){
       url_course_name = decodeURIComponent(pair[1]);
       break;
     }
+    if(pair[0] == "course_id"){
+      url_course_id = decodeURIComponent(pair[1]);
+      break;
+    }
   }
-  if(typeof url_course_name === 'undefined'){ //Create new course
+  if(typeof url_course_name === 'undefined' && typeof url_course_id === 'undefined'){ //Create new course
     new_course = true;
     document.getElementById("page_title").innerHTML = "New Course";
     document.getElementById("panel_title").innerHTML = "New Course";
@@ -28,8 +33,11 @@ $(document).ready(function(){
     document.getElementById("panel_title").innerHTML = "Edit Course";
     document.getElementById("course_name").disabled  = true;
     document.getElementById("create_course_button").innerText= "Done";
-   
-    var url_course_id = course_name_to_id(url_course_name);
+
+    if(typeof url_course_id === 'undefined'){
+      url_course_id = course_name_to_id(url_course_name);
+    }
+
     get_course(url_course_id);
 
     $("#create_course").submit( create_course );
@@ -68,7 +76,7 @@ create_course = function( event ) {
     if(new_course){
       window.location = "./edit_course?course="+new_course_name;
     }else{
-      window.location = "./group_mod?type=ta&course_id="+course_id;
+      window.location = "/";
     }
   });
   posting.fail(function(data){

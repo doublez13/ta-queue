@@ -10,16 +10,28 @@ $(document).ready(function(){
       course_id = decodeURIComponent(pair[1]);
     }
   }
+
+  if(type=="admin"){
+    $("#done_button").click(function( event ) {
+      event.preventDefault();
+      window.location = "/";
+    });
+    admin_modify();
+    return;
+  }
+
+  $("#done_button").click(function( event ) {
+    event.preventDefault();
+    window.location = "edit_course?course_id="+course_id;
+  });
+
   if(type=="instructor" && course_id !== undefined){
     instructor_modify(course_id);
   }else if(type=="ta" && course_id !== undefined){
     ta_modify(course_id);
   }else if(type=="student" && course_id !== undefined){
     student_modify(course_id);   
-  }else if(type=="admin"){
-    admin_modify();
-  }
-  else{
+  }else{
     window.location = './';
   }
 });
