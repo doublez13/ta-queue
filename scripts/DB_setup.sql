@@ -9,7 +9,6 @@ create table users(
   first_name  VARCHAR(32) NOT NULL,
   last_name   VARCHAR(32) NOT NULL,
   full_name   VARCHAR(64) NOT NULL,
-  enabled     BOOLEAN DEFAULT true NOT NULL,
   admin       BOOLEAN DEFAULT false NOT NULL,
   first_login TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   last_login  TIMESTAMP,

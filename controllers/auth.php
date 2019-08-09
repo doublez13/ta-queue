@@ -59,12 +59,6 @@ switch( $endpoint ){
       die();
     }
 
-    if(!$return["is_enabled"]){
-      http_response_code(403);
-      echo json_encode( json_err("Your account on the queue is disabled") );
-      die();
-    }
-
     $_SESSION["username"]    = $username;
     $return["authenticated"] = True;
     $return["username"]      = $username;

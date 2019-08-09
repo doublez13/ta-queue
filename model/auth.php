@@ -41,8 +41,7 @@ function get_info($username){
     if(is_null($info)){
       return NULL;
     }
-    $info['is_admin']   = 0;
-    $info['is_enabled'] = 1;
+    $info['is_admin'] = False;
   }
 
   #Touches the user entry in the sql table
@@ -121,6 +120,9 @@ function revoke_admin($username){
  * Deletes a user in the database.
  *
  * @param string $username
+ * @param string $first
+ * @param string $last
+ * @param string $full
  * @return int 0 on success
  *         int 1 on fail
  */
@@ -146,28 +148,6 @@ function del_user($username){
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
   return 0;
-}
-
-/**
- * Enables a user account
- *
- * @param string username
- * @return int 0 on success
- *         int 1 on fail
- */
-function enable_user($username){
-    return enable_disable_user($username, 1);
-}
-
-/**
- * Disables a user account
- *
- * @param string username
- * @return int 0 on success
- *         int 1 on fail
- */
-function disable_user($username){
-  return enable_disable_user($username, 0);
 }
 
 ######### HELPER METHODS #########
@@ -314,42 +294,6 @@ function admin_access($username, $admin){
 }
 
 /**
- * Enables or disabled a user account
- *
- * @param string $username
- * @param int $enabled
- * @return int 0 on success
- *         int 1 on fail
- */
-function enable_disable_user($username, $enabled){
-  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
-  if(!$sql_conn){
-    return 1;
-  }
-
-  if(is_null(get_info($username))){
-    return 1;
-  }
-
-  $query = "UPDATE users SET enabled=? WHERE username=?";
-  $stmt  = mysqli_prepare($sql_conn, $query);
-  if(!$stmt){
-    mysqli_close($sql_conn);
-    return 1;
-  }
-  mysqli_stmt_bind_param($stmt, 'is', $enabled, $username);
-  if(!mysqli_stmt_execute($stmt)){
-    mysqli_stmt_close($stmt);
-    mysqli_close($sql_conn);
-    return 1;
-  }
-
-  mysqli_stmt_close($stmt);
-  mysqli_close($sql_conn);
-  return 0;
-}
-
-/**
  * Returns an array of information on the user from SQL
  *
  * @param string $username samaccountname
@@ -362,7 +306,7 @@ function get_info_sql($username){
     return NULL;
   }
 
-  $query = "SELECT username, first_name, last_name, full_name, enabled, admin FROM users WHERE username=?";
+  $query = "SELECT username, first_name, last_name, full_name, admin FROM users WHERE username=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -375,7 +319,7 @@ function get_info_sql($username){
     return NULL;
   }
 
-  mysqli_stmt_bind_result($stmt, $username, $first_name, $last_name, $full_name, $enabled, $admin);
+  mysqli_stmt_bind_result($stmt, $username, $first_name, $last_name, $full_name, $admin);
   if(!mysqli_stmt_fetch($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -390,8 +334,7 @@ function get_info_sql($username){
     'first_name' => $first_name,
     'last_name'  => $last_name,
     'full_name'  => $full_name,
-    'is_admin'   => $admin,
-    'is_enabled' => $enabled
+    'is_admin'   => $admin
   );
 }
 
