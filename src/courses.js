@@ -34,11 +34,16 @@ function renderCourseTables(allCourses, myCourses) {
     var instructor_courses   = myCourses.instructor_courses;
     var ta_courses           = myCourses.ta_courses;
     var stud_courses         = myCourses.student_courses;
-    renderMyCourseTable(instructor_courses, "Instructor");
-    renderMyCourseTable(ta_courses, "TA");
-    renderMyCourseTable(stud_courses, "Student");
+    $("#my_course_table").hide();
+    if(Object.keys(instructor_courses).length + Object.keys(ta_courses).length + Object.keys(stud_courses).length){
+      renderMyCourseTable(instructor_courses, "Instructor");
+      renderMyCourseTable(ta_courses, "TA");
+      renderMyCourseTable(stud_courses, "Student");
+      $("#my_course_table").show();
+    }
   }
 
+  $("#course_table").hide();
   var course_name;
   for(course_name in allCourses) {
     var course_id = allCourses[course_name]['course_id'];
@@ -92,10 +97,10 @@ function renderCourseTables(allCourses, myCourses) {
 
     $('#all_courses_body').append(tableRow);
   }
+  $("#course_table").show();
 }
 
 function renderMyCourseTable(courses, role) {
-  $("#my_course_table").show();
   var table = $('#my_courses_body');
 
   var course;
