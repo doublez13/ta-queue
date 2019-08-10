@@ -32,7 +32,11 @@ function get_queue($course_id, $role){
   $return["role"] = $role;
 
   #Get the state of the queue, if its not here, it must be closed
-  $query  = "SELECT IFNULL(state, 'closed') AS state, time_lim, cooldown, quest_public, course_name
+  $query  = "SELECT IFNULL(state, 'closed') AS state,
+                    IFNULL(time_lim, 0) as time_lim,
+                    IFNULL(cooldown, 0) as cooldown,
+                    IFNULL(quest_public, true) as quest_public,
+                    course_name
              FROM queue_state RIGHT JOIN courses ON queue_state.course_id = courses.course_id
              WHERE courses.course_id ='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
