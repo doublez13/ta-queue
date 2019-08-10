@@ -101,7 +101,7 @@ function admin_modify() {
     fields: [
       { type: "text", name: "username", title: "Username", validate: "required" },
       { type: "text", name: "full_name", title: "Full Name", readOnly: true},
-      { type: "control"}
+      { type: "control", editButton: false}
     ]
 
   });
@@ -167,7 +167,7 @@ function instructor_modify(course_id) {
     fields: [
       { type: "text", name: "username", title: "Username", validate: "required" },
       { type: "text", name: "full_name", title: "Full Name", readOnly: true},
-      { type: "control"}
+      { type: "control", editButton: false}
     ]
 
   });
@@ -233,7 +233,7 @@ function ta_modify(course_id) {
     fields: [
       { type: "text", name: "username", title: "Username", validate: "required" },
       { type: "text", name: "full_name", title: "Full Name", readOnly: true},
-      { type: "control"}
+      { type: "control", editButton: false}
     ]
 
   });
@@ -299,7 +299,7 @@ function student_modify(course_id) {
     fields: [
       { type: "text", name: "username", title: "Username", validate: "required" },
       { type: "text", name: "full_name", title: "Full Name", readOnly: true},
-      { type: "control"}
+      { type: "control", editButton: false}
     ]
 
   });
