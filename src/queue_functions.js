@@ -362,6 +362,7 @@ function render_student_view(dataParsed){
   var state = dataParsed.state; 
   if(state == "closed" || (state == "frozen" && !in_queue )){
     $("#join_button").hide();
+    $("#edit_question_button").hide();
     return;
   }
 
