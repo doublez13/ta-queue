@@ -59,7 +59,7 @@ function renderCourseTables(allCourses, myCourses) {
 
     if(is_admin){                                       //They're an admin
       var URI = encodeURI("queue?course_id="+course_id);
-      var url = "./edit_course?course="+course_name;
+      var url = "./edit_course?course_id="+course_id;
       var onclick = "window.location='"+url+"'";
 
       var td = $("<td class='col-sm-2'></td>");
