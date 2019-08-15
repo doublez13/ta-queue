@@ -69,7 +69,7 @@
       </p>
       
       <p style="font-size: 17px">
-        This queue was built as our senior project for the 2017/2018 year. When we started this project, none of us had any web experience, but were vaguely familiar with some common web practices. We decided early on that we'd employ the common MVC web architecture for our project. One choice (mistake?) that separated us from the other web oriented teams was writing everything from scratch. Instead of using a common framwork like Ruby on Rails, we wrote the entire project from the ground up. In fact, the entire backend was written using nothing more than the standard PHP libraries. Although this was a fantastic learning experience, the majority of our time was spent writing boiler plate framework code.
+        This queue was built as our senior project for the 2017/2018 year. When we started this project, none of us had any web experience, but were vaguely familiar with some common web practices. We decided early on that we'd employ the common MVC web architecture for our project. One choice (mistake?) that separated us from the other web oriented teams was writing everything from scratch. Instead of using a common framework like Ruby on Rails, we wrote the entire project from the ground up. In fact, the entire backend was written using nothing more than the standard PHP libraries. Although this was a fantastic learning experience, the majority of our time was spent writing boiler plate framework code.
       </p>
       
       <h3 style="text-decoration: underline;">Queue Components</h3>
