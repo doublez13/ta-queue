@@ -62,7 +62,7 @@ function renderCourseTables(allCourses, myCourses) {
       var url = "./edit_course?course_id="+course_id;
       var onclick = "window.location='"+url+"'";
 
-      var td = $("<td class='col-sm-2'></td>");
+      var td = $("<td class='col-xs-3 col-sm-2'></td>");
       var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
       var go_button;
       if(enabled == 1){
