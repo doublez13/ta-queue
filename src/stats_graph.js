@@ -51,7 +51,7 @@ function get_course_stats(course) {
   if(!start_date || !end_date){
     var d = new Date();
     var curr_year  = d.getFullYear();
-    var curr_month = d.getMonth();
+    var curr_month = d.getMonth()+1;//Month is 0 indexed
     var curr_day   = d.getDate();
     if(curr_month < 5 || (curr_month == 5 && curr_day <= 9)){
       start_date = curr_year+'-01-01';
