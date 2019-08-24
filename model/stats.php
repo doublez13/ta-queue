@@ -283,18 +283,18 @@ function get_ta_log_for_course($ta_username, $course_name, $start_date, $end_dat
 }
 
 /**
- * Returns a list of common statistics for course_name. If no dates are
+ * Returns a list of common statistics for course_id. If no dates are
  * specified, stats for the entire history of the queue are returned. If start_date is
  * specified, stats from start_date (inclusive) to the present are returned. If start_date and
  * end_date are specified, stats from start_date (inclusive) to end_date (exclusive) are returned.
  *
- * @param string $course_name
+ * @param string $course_id
  * @param string $start_date enter queue timestamp (inclusive)
  * @param string $end_date enter queue timestamp (exclusive)
  * @return array of course stats
  *         int -1 on error
  */
-function get_course_stats($course_name, $start_date, $end_date){
+function get_course_stats($course_id, $start_date, $end_date){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
@@ -306,7 +306,7 @@ function get_course_stats($course_name, $start_date, $end_date){
               ROUND(AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp)))    , 0)  AS avg_help_time,
               ROUND(STDDEV(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp))) , 0)  AS stddev_help_time
               FROM student_log
-              WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)";
+              WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=?";
 
   // Append date ranges if necessary
   if(!is_null($start_date))
@@ -324,11 +324,11 @@ function get_course_stats($course_name, $start_date, $end_date){
   // BETTER WAY TO DO THIS IN A SINGLE FUNCTION CALL?
   if(!is_null($start_date))
     if(!is_null($end_date))
-      mysqli_stmt_bind_param($stmt, 'sss', $course_name, $start_date, $end_date);
+      mysqli_stmt_bind_param($stmt, 'sss', $course_id, $start_date, $end_date);
     else
-      mysqli_stmt_bind_param($stmt, 'ss', $course_name, $start_date);
+      mysqli_stmt_bind_param($stmt, 'ss', $course_id, $start_date);
   else
-    mysqli_stmt_bind_param($stmt, 's', $course_name);
+    mysqli_stmt_bind_param($stmt, 's', $course_id);
 
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
@@ -351,13 +351,13 @@ function get_course_stats($course_name, $start_date, $end_date){
  * specified, a log from start_date (inclusive) to the present is returned. If start_date and
  * end_date are specified, a log from start_date (inclusive) to end_date (exclusive) is returned.
  *
- * @param string $course_name
+ * @param string $course_id
  * @param string $start_date enter queue timestamp (inclusive)
  * @param string $end_date enter queue timestamp (exclusive)
  * @return array of course usage stats by day
  *         int -1 on error
  */
-function get_course_usage_by_day($course_name, $start_date, $end_date){
+function get_course_usage_by_day($course_id, $start_date, $end_date){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
@@ -374,7 +374,7 @@ function get_course_usage_by_day($course_name, $start_date, $end_date){
   $query = "SELECT
             (SELECT full_name FROM users WHERE username = helped_by) AS helped_by, DATE(enter_tmstmp), COUNT(*)
             FROM student_log
-            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
+            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=?" . $range_condition .
            "GROUP BY DATE(enter_tmstmp), helped_by";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -385,11 +385,11 @@ function get_course_usage_by_day($course_name, $start_date, $end_date){
   // BETTER WAY TO DO THIS IN A SINGLE FUNCTION CALL?
   if(!is_null($start_date))
     if (!is_null($end_date))
-      mysqli_stmt_bind_param($stmt, 'sss', $course_name, $start_date, $end_date);
+      mysqli_stmt_bind_param($stmt, 'sss', $course_id, $start_date, $end_date);
     else
-      mysqli_stmt_bind_param($stmt, 'ss', $course_name, $start_date);
+      mysqli_stmt_bind_param($stmt, 'ss', $course_id, $start_date);
   else
-    mysqli_stmt_bind_param($stmt, 's', $course_name);
+    mysqli_stmt_bind_param($stmt, 's', $course_id);
 
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
@@ -485,13 +485,13 @@ function get_course_avg_help_time($course_name, $start_date, $end_date){
  * specified, a log from start_date (inclusive) to the present is returned. If start_date and
  * end_date are specified, a log from start_date (inclusive) to end_date (exclusive) is returned.
  *
- * @param string $course_name
+ * @param string $course_id
  * @param string $start_date enter queue timestamp (inclusive)
  * @param string $end_date enter queue timestamp (exclusive)
  * @return array of course usage stats by day
  *         int -1 on error
  */
-function get_ta_proportions($course_name, $start_date, $end_date){
+function get_ta_proportions($course_id, $start_date, $end_date){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
@@ -508,7 +508,7 @@ function get_ta_proportions($course_name, $start_date, $end_date){
   $query = "SELECT
             (SELECT full_name FROM users WHERE username = helped_by) AS helped_by, COUNT(*)
             FROM student_log
-            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
+            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=?" . $range_condition .
            "GROUP BY helped_by";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -519,11 +519,11 @@ function get_ta_proportions($course_name, $start_date, $end_date){
   // BETTER WAY TO DO THIS IN A SINGLE FUNCTION CALL?
   if(!is_null($start_date)){
     if (!is_null($end_date))
-      mysqli_stmt_bind_param($stmt, 'sss', $course_name, $start_date, $end_date);
+      mysqli_stmt_bind_param($stmt, 'sss', $course_id, $start_date, $end_date);
     else
-      mysqli_stmt_bind_param($stmt, 'ss', $course_name, $start_date);
+      mysqli_stmt_bind_param($stmt, 'ss', $course_id, $start_date);
   }else
-    mysqli_stmt_bind_param($stmt, 's', $course_name);
+    mysqli_stmt_bind_param($stmt, 's', $course_id);
 
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
@@ -544,7 +544,7 @@ function get_ta_proportions($course_name, $start_date, $end_date){
   return $result;
 }
 
-function get_ta_avg_help_time($course_name, $start_date, $end_date){
+function get_ta_avg_help_time($course_id, $start_date, $end_date){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
@@ -561,7 +561,7 @@ function get_ta_avg_help_time($course_name, $start_date, $end_date){
   $query = "SELECT
             (SELECT full_name FROM users WHERE username = helped_by) AS TA,
             AVG(TIME_TO_SEC(TIMEDIFF(exit_tmstmp, help_tmstmp))) AS avg_help_time FROM student_log
-            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=(SELECT course_id FROM courses where course_name=?)" . $range_condition .
+            WHERE exit_tmstmp !='0' AND help_tmstmp !='0' AND course_id=?" . $range_condition .
            "GROUP BY TA";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -572,11 +572,11 @@ function get_ta_avg_help_time($course_name, $start_date, $end_date){
   // BETTER WAY TO DO THIS IN A SINGLE FUNCTION CALL?
   if(!is_null($start_date)){
     if (!is_null($end_date))
-      mysqli_stmt_bind_param($stmt, 'sss', $course_name, $start_date, $end_date);
+      mysqli_stmt_bind_param($stmt, 'sss', $course_id, $start_date, $end_date);
     else
-      mysqli_stmt_bind_param($stmt, 'ss', $course_name, $start_date);
+      mysqli_stmt_bind_param($stmt, 'ss', $course_id, $start_date);
   }else
-    mysqli_stmt_bind_param($stmt, 's', $course_name);
+    mysqli_stmt_bind_param($stmt, 's', $course_id);
 
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);

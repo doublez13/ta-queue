@@ -75,12 +75,12 @@ function get_queue(course_id) {
     is_TA       = dataParsed["role"] == "ta" || dataParsed["role"] == "instructor";
     is_admin    = dataParsed["role"] == "admin";
     my_username = dataParsed.username;
-    var course_name = dataParsed["course_name"]
+    var course_name = dataParsed["course_name"];
     $("#title").text(course_name);
 
     $("#stats_button").click(function( event ) {
       event.preventDefault();
-      window.location = "stats?course="+course_name;
+      window.location = "stats?course_id="+course_id;
     });
 
     renderView(dataParsed);

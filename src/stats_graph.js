@@ -7,15 +7,15 @@ $(document).ready(function(){
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
-	  if(pair[0] == "course"){
-      course = decodeURIComponent(pair[1]);
+    if(pair[0] == "course_id"){
+      course_id = decodeURIComponent(pair[1]);
       break;
-	  }
+    }
   }
-  if(typeof course === 'undefined'){
+  if(typeof course_id === 'undefined'){
     window.location ='./my_courses';
   }
-  get_course_stats(course);
+  get_course_stats(course_id);
 });
 
 $(document).on("change", "#stats_selector", function(e){
@@ -33,17 +33,17 @@ $(document).on("change", "#end_date", function(e){
 
 function choose_stats(stat){
   if(stat == "num_student"){
-    get_course_stats(course);
+    get_course_stats(course_id);
   }else if(stat == "ta_proportions"){
-    get_ta_stats(course);
+    get_ta_stats(course_id);
   }else if(stat == "ta_avg_help_time"){
-    get_ta_avg_help_time(course);
+    get_ta_avg_help_time(course_id);
   }
 }
 
 
-function get_course_stats(course) {
-  var url = "../api/stats/course/"+course;
+function get_course_stats(course_id) {
+  var url = "../api/stats/course/"+course_id;
 
   var start_date = document.getElementById("start_date").value; 
   var end_date   = document.getElementById("end_date").value;
@@ -78,8 +78,8 @@ function get_course_stats(course) {
   });
 };
 
-function get_ta_stats(course) {
-  var url = "../api/stats/ta/"+course;
+function get_ta_stats(course_id) {
+  var url = "../api/stats/ta/"+course_id;
 
   var start_date = document.getElementById("start_date").value;
   var end_date   = document.getElementById("end_date").value;
@@ -114,8 +114,8 @@ function get_ta_stats(course) {
   });
 };
 
-function get_ta_avg_help_time(course){
-  var url = "../api/stats/ta/"+course;
+function get_ta_avg_help_time(course_id){
+  var url = "../api/stats/ta/"+course_id;
 
   var start_date = document.getElementById("start_date").value;
   var end_date   = document.getElementById("end_date").value;
