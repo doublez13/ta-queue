@@ -182,6 +182,7 @@ function stud_helped_per_day_column_chart(course_data) {
   	    scalable: false
       },
       type: 'datetime',
+      minRange: (24 * 3600 * 1000 * 5),
       labels: {
   	    formatter: function() {
           return Highcharts.dateFormat('%y-%b-%d', this.value);
