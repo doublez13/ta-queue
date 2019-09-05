@@ -88,12 +88,34 @@ function get_admins(){
  *         false if not queue admin
  */
 function is_admin($username){
-  $admins = get_admins();
-
-  if(is_null($admins)){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
     return NULL;
   }
-  return in_array($username, array_keys($admins));
+
+  $query = "SELECT admin FROM users WHERE username=?";
+  $stmt  = mysqli_prepare($sql_conn, $query);
+  if(!$stmt){
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_param($stmt, "s", $username);
+  if(!mysqli_stmt_execute($stmt)){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+  mysqli_stmt_bind_result($stmt, $admin);
+  if(mysqli_stmt_fetch($stmt) == NULL){
+    mysqli_stmt_close($stmt);
+    mysqli_close($sql_conn);
+    return NULL;
+  }
+
+  mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+
+  return boolval($admin);
 }
 
 /**
