@@ -59,9 +59,9 @@ function get_queue($course_id, $role){
 
   #Get the announcements
   $return["announcements"] = [];
-  $query  = "SELECT id, announcement, (SELECT full_name FROM users WHERE username = announcements.poster) AS poster, tmstmp
-             FROM announcements WHERE course_id ='".$course_id."'
-             ORDER BY id DESC";
+  $query  = "SELECT announcements.id, announcements.announcement, users.full_name as poster, announcements.tmstmp 
+             FROM announcements INNER JOIN users ON announcements.poster=users.username WHERE course_id='".$course_id."' 
+             ORDER BY id DESC;";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
     mysqli_close($sql_conn);
