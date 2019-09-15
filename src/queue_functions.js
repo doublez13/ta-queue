@@ -92,7 +92,8 @@ function get_queue(course_id) {
       var error = dataParsed.error;
       //If they're not enrolled in the course, attempt to
       //enroll them with no access code
-      if(error == "Forbidden"){
+      if(error == "Forbidden" && dataParsed.authenticated){
+        my_username = dataParsed.username;
         enrollCourse(course_id, null);
       }else if(error == "Course does not exist"){
         window.location = '/';

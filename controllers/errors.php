@@ -50,7 +50,7 @@ function missing_auth(){
 
 function forbidden(){ //403
   global $username;
-  return array(
+  $ret = array(
     "authenticated" => False,
     "error"         => "Forbidden"
   );
