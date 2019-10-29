@@ -2,6 +2,7 @@ var dialog;
 var my_username;
 var course_id;
 var is_admin;
+var location_heading;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -20,6 +21,15 @@ $(document).ready(function(){
   }
   if(typeof course === 'undefined' && typeof course_id === 'undefined'){
     window.location ='/';
+  }
+
+  //THIS IS A HORRIBLE HACK AND WILL BE REMOVED SOON
+  //We'll change this to use a boolean returned from the queue endpoint
+  location_heading = "Location";
+  if(course_id == 233){
+    location_heading = "Course";
+    document.getElementById('location_label').innerHTML = "Course";
+    document.getElementById('location').placeholder = "ME1000";
   }
 
   dialog = $( "#dialog-form" ).dialog({
@@ -398,7 +408,7 @@ function render_student_view(dataParsed){
       }
     });
     $("#edit_question_button").unbind("click");
-    $("#edit_question_button").text("Edit Question/Location");
+    $("#edit_question_button").text("Edit Entry");
     $("#edit_question_button").click(function( event ) {
       event.preventDefault();
       dialog.dialog( "open" );
@@ -423,7 +433,7 @@ function render_queue_table(dataParsed){
   $('#queue_body').append("<tr style='background: none;'>" +
                             "<th class='col-sm-1' align='left'>Pos.</th>"+
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Student</th>" +
-                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>Location</th>" +
+                            "<th class='col-sm-2' align='left' style='word-wrap: break-word'>"+location_heading+"</th>" +
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>"+question_heading+"</th>" +
                             "<th class='col-sm-2' align='left' style='word-wrap: break-word'>TA</th>" +
                             "<th class='col-sm-3'></th> </tr>");
