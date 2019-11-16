@@ -582,9 +582,9 @@ function get_courses($enabled_only){
     return NULL;
   }
 
-  $query = "SELECT course_id, course_name, access_code, description, enabled FROM courses ORDER BY depart_pref, course_name";
+  $query = "SELECT course_id, course_name, access_code, description, enabled, generic FROM courses ORDER BY depart_pref, course_name";
   if($enabled_only){
-    $query = "SELECT course_id, course_name, access_code, description, enabled FROM courses WHERE enabled=true ORDER BY depart_pref, course_name";
+    $query = "SELECT course_id, course_name, access_code, description, enabled, generic FROM courses WHERE enabled=true ORDER BY depart_pref, course_name";
   }
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
@@ -598,7 +598,8 @@ function get_courses($enabled_only){
     $courses += [ $entry["course_name"] => array("acc_req"     => $acc_req,
                                                  "course_id"   => $entry["course_id"],
                                                  "description" => $entry["description"],
-                                                 "enabled"     => $entry["enabled"]
+                                                 "enabled"     => boolval($entry["enabled"]),
+                                                 "generic"     => boolval($entry["generic"])
                                                 ) ];
   }
 
