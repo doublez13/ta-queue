@@ -10,16 +10,12 @@ $(document).ready(function(){
   var vars = query.split("&");
   for (var i=0;i<vars.length;i++) {
     var pair = vars[i].split("=");
-    if(pair[0] == "course"){
-      course = decodeURIComponent(pair[1]);
-      break;
-    }
     if(pair[0] == "course_id"){
       course_id = decodeURIComponent(pair[1]);
       break;
     }
   }
-  if(typeof course === 'undefined' && typeof course_id === 'undefined'){
+  if(typeof course_id === 'undefined'){
     window.location ='/';
   }
 
@@ -47,29 +43,8 @@ $(document).ready(function(){
     }
   });
 
-  if(typeof course_id == 'undefined'){
-    var url = "../api/courses";
-    var get_req = $.get(url);
-    var done = function(data){
-      var dataString = JSON.stringify(data);
-      var dataParsed = JSON.parse(dataString);
-
-      //Check if the course they're requesting exists
-      if(course in dataParsed['all_courses']){
-        course_id = dataParsed['all_courses'][course]['course_id'];
-      }else{
-        window.location = '/';
-      }
-
-      get_queue(course_id);
-      setInterval(get_queue, 5000, course_id);
-    };
-    get_req.done(done);
-  }else{
-    get_queue(course_id);
-    setInterval(get_queue, 5000, course_id);
-  }
-
+  get_queue(course_id);
+  setInterval(get_queue, 5000, course_id);
 });
 
 //This function is called every X seconds,
