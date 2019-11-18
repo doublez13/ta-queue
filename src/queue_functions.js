@@ -19,15 +19,6 @@ $(document).ready(function(){
     window.location ='/';
   }
 
-  //THIS IS A HORRIBLE HACK AND WILL BE REMOVED SOON
-  //We'll change this to use a boolean returned from the queue endpoint
-  location_heading = "Location";
-  if(course_id == 233){
-    location_heading = "Course";
-    document.getElementById('location_label').innerHTML = "Course";
-    document.getElementById('location').placeholder = "ME1000";
-  }
-
   dialog = $( "#dialog-form" ).dialog({
     autoOpen: false,
     height: 350,
@@ -55,6 +46,14 @@ function get_queue(course_id) {
   var done = function(data){
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
+
+    location_heading = "Location";
+    if(dataParsed["generic"]){
+      location_heading = "Course";
+      document.getElementById('location_label').innerHTML = "Course";
+      document.getElementById('location').placeholder = "ME1000";
+    }
+
     //NOTE: They can be an admin and a TA
     //In this case is_TA = true, is_admin = false
     is_TA       = dataParsed["role"] == "ta" || dataParsed["role"] == "instructor";
