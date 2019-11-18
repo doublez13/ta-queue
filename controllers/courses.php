@@ -88,7 +88,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || 
-        !isset($_POST['course_num'])  || !isset($_POST['enabled'])){
+        !isset($_POST['course_num'])  || !isset($_POST['enabled']) ||
+        !isset($_POST['generic']) ){
       http_response_code(422);
       echo json_encode( json_err("Missing required parameters") );
       die();
@@ -98,6 +99,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $depart_pref = trim(filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
     $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $enabled     = filter_var($_POST['enabled'],     FILTER_VALIDATE_BOOLEAN);
+    $generic     = filter_var($_POST['generic'],     FILTER_VALIDATE_BOOLEAN);
 
     if ($_POST['description']){
       $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
@@ -112,7 +114,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
 
     //new_course is used both for creating and modifying courses
-    $res   = new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled);
+    $res   = new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled, $generic);
     $field = "success";
     $text  = "Course created/updated"; 
     break;

@@ -68,6 +68,9 @@
 
                   <label>Enabled</label>
                   <input type="checkbox" id="enabled" checked>
+
+                  <label>Generic</label>
+                  <input type="checkbox" id="generic">
                 </div>
                 <div class="padding-bottom-10">
                   <button id="create_course_button" class="btn btn-success" type="submit"></button>

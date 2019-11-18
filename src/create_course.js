@@ -26,7 +26,6 @@ $(document).ready(function(){
     new_course = false;
     document.getElementById("page_title").innerHTML  = "Edit Course";
     document.getElementById("panel_title").innerHTML = "Edit Course";
-    document.getElementById("course_name").disabled  = true;
     document.getElementById("create_course_button").innerText= "Done";
 
     get_course(url_course_id);
@@ -59,6 +58,7 @@ create_course = function( event ) {
                                course_num:  $form.find( "input[id='course_num']" ).val(),
                                access_code: $form.find( "input[id='access_code']" ).val(),
                                enabled:     document.getElementById('enabled').checked,
+                               generic:     document.getElementById('generic').checked,
                                description: $('#description').val(),
                              } );
 
@@ -103,16 +103,21 @@ function get_course(course_id){
   $.get( url, function(data) {
     var dataString = JSON.stringify(data);
     var dataParsed = JSON.parse(dataString);
-    var attributes = ["course_name", "depart_pref", "course_num", "description", "access_code", "enabled"];
+    var attributes = ["course_name", "depart_pref", "course_num", "description", "access_code", "enabled", "generic"];
     attributes.forEach(function(attribute){
       if(attribute in dataParsed.parameters){
-        if(attribute == "enabled"){
-          document.getElementById('enabled').checked = dataParsed.parameters[attribute];
+        if(attribute == "enabled" || attribute == "generic"){
+          document.getElementById(attribute).checked = dataParsed.parameters[attribute];
         }else{
           document.getElementById(attribute).value = dataParsed.parameters[attribute];
         }
       }
     });
+    //Disable the fields that we don't allow editing
+    document.getElementById("course_name").disabled  = true;
+    document.getElementById("depart_pref").disabled  = true;
+    document.getElementById("course_num").disabled  = true;
+    document.getElementById("generic").disabled  = true;
   }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied
 }
 

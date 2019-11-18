@@ -40,21 +40,22 @@ function get_all_courses(){
  *             -1 generic error
  *             -8 user does not exist
  */
-function new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled){
+function new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled, $generic){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
   }
 
-  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, access_code, enabled)
-            VALUES (?, ?, ?, ?, ?, ?)
+  $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, access_code, enabled, generic)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
             ON DUPLICATE KEY UPDATE description=?, access_code=?, enabled=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  mysqli_stmt_bind_param($stmt, "sssssissi", $depart_pref, $course_num, $course_name, $description, $acc_code, $enabled, $description, $acc_code, $enabled);
+  #NOTE: We only update description, access_code, and enabled. All other fields are locked after creation
+  mysqli_stmt_bind_param($stmt, "sssssiissi", $depart_pref, $course_num, $course_name, $description, $acc_code, $enabled, $generic, $description, $acc_code, $enabled);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -109,7 +110,7 @@ function get_course($course_id){
   if(!$sql_conn){
     return null;
   }
-  $query = "SELECT depart_pref, course_num, course_name, description, access_code, enabled FROM courses WHERE course_id=?";
+  $query = "SELECT depart_pref, course_num, course_name, description, access_code, enabled, generic FROM courses WHERE course_id=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -121,7 +122,7 @@ function get_course($course_id){
     mysqli_close($sql_conn);
     return null;
   }
-  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $description, $access_code, $enabled);
+  mysqli_stmt_bind_result($stmt, $depart_pref, $course_num, $course_name, $description, $access_code, $enabled, $generic);
   if(mysqli_stmt_fetch($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -131,7 +132,8 @@ function get_course($course_id){
                  "course_id"   => $course_id,
                  "description" => $description,
                  "access_code" => $access_code,
-                 "enabled"     => $enabled
+                 "enabled"     => $enabled,
+                 "generic"     => $generic
            );
   }
   return null;
@@ -535,7 +537,7 @@ function rem_user_course($username, $course_id, $role){
 }
 
 /**
- * Returns true if the course is open, false if closed
+ * Returns true if the course is enabled, false if disabled
  * NULL on error
  *
  * @param int    $course_id
