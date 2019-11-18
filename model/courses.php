@@ -270,7 +270,7 @@ function add_stud_course($username, $course_id, $acc_code){
     return -1;
   }
   $real_acc_code = get_course_acc_code($course_id, $sql_conn);
-  if($real_acc_code == -1 ){//TODO: Nothing stopping -1 from being an access code
+  if($real_acc_code === -1 ){//Since -1 could be an access code, use the identical operator
     mysqli_close($sql_conn);
     return -1;//error
   } elseif(!is_null($real_acc_code) &&  $acc_code != $real_acc_code){
