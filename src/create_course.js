@@ -22,6 +22,10 @@ $(document).ready(function(){
     document.getElementById("edit_ta_button").style.display = "none";
     document.getElementById("edit_stud_button").style.display = "none";
     done_msg = "Course successfully created";
+    $("#generic").click(function( event ) {
+      document.getElementById('course_num').value = "";
+      document.getElementById("course_num").disabled = document.getElementById('generic').checked;
+    });
   }else{                             //Edit exsisting course
     new_course = false;
     document.getElementById("page_title").innerHTML  = "Edit Course";
