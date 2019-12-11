@@ -101,15 +101,13 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     $generic     = filter_var($_POST['generic'],     FILTER_VALIDATE_BOOLEAN);
 
     $course_num = null;
-    if(!$generic){
+    if (!$generic){
       if (!isset($_POST['course_num'])){
-        $course_num = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-      }
-      else{
         http_response_code(422);
         echo json_encode( json_err("Missing required parameters") );
         die();
       }
+      $course_num = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     }
 
     $description = null;
