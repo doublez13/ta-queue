@@ -80,7 +80,8 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       echo json_encode( json_err("Missing course_name") );
       die();
     }
-    $_POST['course_name'] = $path_split[3]; //Fall through
+    $_POST['course_name'] = $path_split[3];
+    //Fall through
   case "POST": //Create a course
     if (!$is_admin){
       http_response_code(403);
@@ -88,8 +89,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       die();
     }
     if (!isset($_POST['course_name']) || !isset($_POST['depart_pref']) || 
-        !isset($_POST['course_num'])  || !isset($_POST['enabled']) ||
-        !isset($_POST['generic']) ){
+        !isset($_POST['enabled'])     || !isset($_POST['generic'])){
       http_response_code(422);
       echo json_encode( json_err("Missing required parameters") );
       die();
@@ -97,20 +97,29 @@ switch( $_SERVER['REQUEST_METHOD'] ){
 
     $course_name = trim(filter_var($_POST['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
     $depart_pref = trim(filter_var($_POST['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
-    $course_num  = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
     $enabled     = filter_var($_POST['enabled'],     FILTER_VALIDATE_BOOLEAN);
     $generic     = filter_var($_POST['generic'],     FILTER_VALIDATE_BOOLEAN);
 
+    $course_num = null;
+    if(!$generic){
+      if (!isset($_POST['course_num'])){
+        $course_num = filter_var($_POST['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+      }
+      else{
+        http_response_code(422);
+        echo json_encode( json_err("Missing required parameters") );
+        die();
+      }
+    }
+
+    $description = null;
     if ($_POST['description']){
       $description = filter_var($_POST['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
-    }else{
-      $description = null;
     }
-    
+
+    $acc_code = null;
     if ($_POST['access_code']){
       $acc_code = $_POST['access_code'];
-    }else{
-      $acc_code = null;
     }
 
     //new_course is used both for creating and modifying courses
