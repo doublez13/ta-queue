@@ -19,7 +19,7 @@ create table users(
 create table courses(
   course_id int NOT NULL AUTO_INCREMENT,
   depart_pref VARCHAR(16) NOT NULL,
-  course_num  VARCHAR(16) NOT NULL,
+  course_num  VARCHAR(16),
   course_name VARCHAR(128) UNIQUE,
   description TEXT,
   access_code VARCHAR(16),
