@@ -47,15 +47,14 @@ function get_queue($course_id, $role){
   if(!mysqli_num_rows($result)){
     mysqli_close($sql_conn);
     return -2; //Nonexistant Course
-  }else{
-    $entry = mysqli_fetch_assoc($result);
-    $return["course_name"]  = $entry["course_name"];
-    $return["generic"]      = boolval($entry["generic"]);
-    $return["state"]        = $entry["state"];
-    $return["time_lim"]     = intval($entry["time_lim"]);
-    $return["cooldown"]     = intval($entry["cooldown"]);
-    $return["quest_public"] = boolval($entry["quest_public"]);
   }
+  $entry = mysqli_fetch_assoc($result);
+  $return["course_name"]  = $entry["course_name"];
+  $return["generic"]      = boolval($entry["generic"]);
+  $return["state"]        = $entry["state"];
+  $return["time_lim"]     = intval($entry["time_lim"]);
+  $return["cooldown"]     = intval($entry["cooldown"]);
+  $return["quest_public"] = boolval($entry["quest_public"]);
 
 
   #Get the announcements
