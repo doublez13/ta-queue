@@ -339,7 +339,6 @@ function get_user_courses($username){
     return NULL;
   }
 
-  #TODO: Consider switching this to a subquery instead of a join
   $query = "SELECT course_name, course_id, description, role FROM courses NATURAL JOIN enrolled WHERE username=? AND enabled=true";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
@@ -383,7 +382,6 @@ function get_user_courses2($username){
     return NULL;
   }
 
-  #TODO: Consider switching this to a subquery instead of a join
   $query = "SELECT course_id, role FROM courses NATURAL JOIN enrolled WHERE username=? AND enabled=true";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
