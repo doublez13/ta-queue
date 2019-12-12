@@ -13,11 +13,12 @@ session_start();
 $REQUEST_URI = $_SERVER['REQUEST_URI'];
 $path        = urldecode(parse_url($REQUEST_URI, PHP_URL_PATH));
 
+require_once './model/config.php';
+
 //////// REQUESTS FOR API ////////
 if( substr($path, 0, 5) === '/api/' ){
   header('Content-Type: application/json');
 
-  require_once './model/config.php';
   require_once './model/auth.php';
   require_once './model/courses.php';
   require_once './model/queue.php';

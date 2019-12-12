@@ -1,6 +1,4 @@
 <?php
-require_once 'config.php';
-require_once 'queue.php';
 /**
  * SPDX-License-Identifier: GPL-3.0-or-later
  * Copyright (c) 2018 Zane Zakraisek
