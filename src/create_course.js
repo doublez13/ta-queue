@@ -69,7 +69,7 @@ create_course = function( event ) {
   posting.done(function(data){
     alert(done_msg);
     if(new_course){
-      new_course_id   = course_name_to_id($form.find( "input[id='course_name']" ).val());
+      var new_course_id = course_name_to_id($form.find( "input[id='course_name']" ).val());
       window.location = "./edit_course?course_id="+new_course_id;
     }else{
       window.location = "/";
