@@ -1,5 +1,6 @@
 #!/usr/bin/php
 <?php
+require_once '../model/config.php';
 require_once '../model/queue.php';
 
 #Warm up the cache
