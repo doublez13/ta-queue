@@ -4,6 +4,7 @@ var course_id;
 var is_admin;
 var location_heading;
 var last_position_prev = -1;
+var top_announce_prev = -1
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -34,6 +35,8 @@ $(document).ready(function(){
       }
     }
   });
+
+  notify_grant();
   get_queue(course_id);
   setInterval(get_queue, 5000, course_id);
 });
@@ -166,6 +169,8 @@ function render_ann_box(anns){
                            '<th class="flex-noShrink" style="width:100px;">Time</th>' +
                            '<th class="flex-noShrink" style="width:180px;">Poster</th>' +
                            '<th>Announcement</th> </tr>');
+
+  var top_announce = 0;
   var ann;
   for(ann in anns){
     var date = anns[ann]["tmstmp"].split(" ")[0];
@@ -199,7 +204,13 @@ function render_ann_box(anns){
     }
 
     $('#anns_body').append(new_row);
+    top_announce = Math.max(announcement_id, top_announce);//Find the latest announcement id
   }
+
+  if(top_announce_prev != -1 && top_announce > top_announce_prev){
+    notify("New Announcement");
+  }
+  top_announce_prev = top_announce;
 
   // show new announcement form if TA
   if(is_TA){
@@ -541,11 +552,8 @@ function render_queue_table(dataParsed){
     last_position = queue[row].position;
   }//for loop iterating queue
 
-  if(is_TA){
-    notify_grant();
-    if(last_position_prev != -1 && last_position > last_position_prev){
-      notify("New Student in Queue");
-    }
+  if(is_TA && last_position_prev != -1 && last_position > last_position_prev){
+    notify("New Student in Queue");
   }
   last_position_prev = last_position;
 }
