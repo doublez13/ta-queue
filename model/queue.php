@@ -73,9 +73,9 @@ function get_queue($course_id, $role){
 
   #Get the state of the TAs
   $return["TAs"] = [];
-  $query  = "SELECT ta_status.username, (SELECT TIMEDIFF(NOW(), ta_status.state_tmstmp)) as duration, users.full_name, (SELECT username FROM queue WHERE position=helping LIMIT 1) as helping
-             FROM ta_status INNER JOIN users on ta_status.username = users.username
-             WHERE course_id='".$course_id."'";
+  $query  = "SELECT ta_status.username, TIMEDIFF(NOW(), ta_status.state_tmstmp) as duration, users.full_name, queue.username as helping 
+             FROM ta_status INNER JOIN users on ta_status.username = users.username LEFT JOIN queue on ta_status.helping = queue.position
+             WHERE ta_status.course_id='".$course_id."'";
   $result = mysqli_query($sql_conn, $query);
   if(!$result){
     mysqli_close($sql_conn);
