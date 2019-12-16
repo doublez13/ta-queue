@@ -6,7 +6,7 @@
   <?php
    include('./view/head.php');
 
-   $includes = ["./src/queue_functions.js", "./src/logout.js"];
+   $includes = ["./src/queue_functions.js", "./src/logout.js", "./src/notification.js"];
    foreach($includes as $include){
      $filemtime = filemtime($include);
      $source    = $include.'?ver='.$filemtime;

@@ -3,6 +3,7 @@ var my_username;
 var course_id;
 var is_admin;
 var location_heading;
+var last_position_prev = -1;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
@@ -33,7 +34,6 @@ $(document).ready(function(){
       }
     }
   });
-
   get_queue(course_id);
   setInterval(get_queue, 5000, course_id);
 });
@@ -424,6 +424,7 @@ function render_queue_table(dataParsed){
   
   var time_lim = dataParsed.time_lim;
 
+  var last_position = 0;
   var i = 1; //NOTE: The indexing starts at 1
   var row;
   for(row in queue){
@@ -537,7 +538,16 @@ function render_queue_table(dataParsed){
 
     $('#queue_body').append(new_row);
     i++;
+    last_position = queue[row].position;
+  }//for loop iterating queue
+
+  if(is_TA){
+    notify_grant();
+    if(last_position_prev != -1 && last_position > last_position_prev){
+      notify("New Student in Queue");
+    }
   }
+  last_position_prev = last_position;
 }
 
 

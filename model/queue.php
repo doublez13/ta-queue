@@ -93,7 +93,7 @@ function get_queue($course_id, $role){
   if($return["quest_public"] || $role == "ta" || $role == "admin"){
     $quest_public = "queue.question,";
   }
-  $query  = "SELECT queue.username, users.full_name, ".$quest_public." queue.location
+  $query  = "SELECT queue.position, queue.username, users.full_name, ".$quest_public." queue.location
              FROM queue INNER JOIN users on queue.username = users.username
              WHERE course_id ='".$course_id."' ORDER BY position";
   $result = mysqli_query($sql_conn, $query);
