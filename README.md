@@ -54,11 +54,13 @@ The public API is documented according to the Swagger 2.0 specification. The doc
 The queue currently makes use of College of Engineering CADE accounts. Any student that has a CADE account can log into the queue using their CADE credentials, and their personal information will automatically be pulled from the servers. Students without a CADE account can create one here: https://webhandin.eng.utah.edu/cade/create_account/index.php
 
 ### Roles
-The queue currently has three major roles: Student, Teaching Assistant and Administrator
+The queue currently has four major roles: Student, Teaching Assistant, Instructor, and Administrator. The first three groups are mutually exclusive, and enrolling in one will remove any previous enrollment in the others.
 #### Student
 On the Courses page, students may enroll in any course. If desired, Administrators may require an access code in order to enroll in a course, or see any statistics. 
 #### Teaching Assistant
-Corresponding to each course is a TA group. If a user is in the group for that course, the user is then granted TA permissions for that course, and may not register as a student. If the user was already enrolled as a student in the course before being added to the TA group, they are automatically unenrolled as a student, and maintain their TA role.
+Corresponding to each course is a TA group. If a user is in the group for that course, the user is then granted TA permissions for that course, and may not register as a student.
+### Instructor
+Each course also has an instructors group. This group currently inherits all permissions granted to TAs, but will have access to a wider variety of statistics.
 #### Administrator
 The queue also has an administrator group defined. If a user is in this group, the user is granted administrative permissions. In this case, the Admin dropdown menu appears which allows them to create courses.  
 NOTE: Administrators also have access to a wider range of statistics. Unfortunately these are not visible graphically yet.
