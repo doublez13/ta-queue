@@ -4,7 +4,7 @@ var course_id;
 var is_admin;
 var location_heading;
 var last_position_prev = -1;
-var top_announce_prev = -1
+var top_announce_prev = -1;
 
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
