@@ -67,10 +67,18 @@ switch( $endpoint ){
     http_response_code(200);
     break;
   case "logout":
-    if ($_SERVER['REQUEST_METHOD'] !== "POST"){
+    if ($_SERVER['REQUEST_METHOD'] !== "POST" && $_SERVER['REQUEST_METHOD'] !== "GET"){
       http_response_code(405);
-      echo json_encode( invalid_method("POST") );
+      echo json_encode( invalid_method("POST or GET") );
       die();
+    }
+
+    if(AUTH == 'CAS'){
+      require_once $phpcas_path . '/CAS.php';
+      phpCAS::client(CAS_VERSION_3_0, $cas_host, $cas_port, $cas_context);
+      if(phpCAS::isAuthenticated()){
+        phpCAS::logout();
+      }
     }
 
     //Clear session variables

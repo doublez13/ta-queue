@@ -14,12 +14,12 @@ $REQUEST_URI = $_SERVER['REQUEST_URI'];
 $path        = urldecode(parse_url($REQUEST_URI, PHP_URL_PATH));
 
 require_once './model/config.php';
+require_once './model/auth.php';
 
 //////// REQUESTS FOR API ////////
 if( substr($path, 0, 5) === '/api/' ){
   header('Content-Type: application/json');
 
-  require_once './model/auth.php';
   require_once './model/courses.php';
   require_once './model/queue.php';
   require_once './controllers/errors.php';
@@ -29,11 +29,11 @@ if( substr($path, 0, 5) === '/api/' ){
     die();
   }
 
-  if(!is_authenticated()){ //Trying to access protected endpoint, not authenticated.
+  //Authentication required beyond this point
+  if(!is_authenticated()){
     invalid_auth_reply();
     die();
   }
-
   $username = $_SESSION['username']; //NOTE: This is always lowercase
 
   $controller = explode("/", $path)[2];
@@ -65,25 +65,32 @@ else{
   if(is_open_page($path)){
     require_once $source;
   }
-  elseif(is_root_dir($path)){
-    if(!is_authenticated()){
+  if(!is_authenticated()){
+    if(AUTH == 'CAS'){
+      require_once $phpcas_path . '/CAS.php';
+
+      phpCAS::client(CAS_VERSION_3_0, $cas_host, $cas_port, $cas_context);
+      phpCAS::setCasServerCACert($cas_server_ca_cert_path);
+      phpCAS::forceAuthentication();
+
+      $username  = strtolower(phpCAS::getUser());
+      if(is_null(get_info($username))){
+        echo "User authenticated but information could not be obtained";
+        die();
+      }
+
+      $_SESSION["username"] = $username;
+      header('Location: /');
+    }elseif(AUTH == 'LDAP'){
       require_once './view/index.php';
-    }elseif(is_redirect()){
-      $url = $_SESSION['redirect_url'];
-      unset($_SESSION['redirect_url']);
-      header("Location: $url");
-    }else{
-      header('Location: /courses');
+    }
+    else{
+      echo "Invalid server auth config: Must be CAS or LDAP";
     }
   }
-  //Not authenticated
-  elseif(!is_authenticated()){
-    $_SESSION['redirect_url'] = $REQUEST_URI;
-    header('Location: /');
-  }
-  //Admin access needed
+  //Authentication required beyond this point
+  //Admin Page
   elseif(is_admin_page($path)){
-    require_once './model/auth.php';
     $username  = $_SESSION['username'];
     if(is_admin($username)){
       require_once $source;
@@ -104,9 +111,6 @@ else{
 function is_authenticated(){
   return isset($_SESSION['username']);
 }
-function is_redirect(){
-  return isset($_SESSION['redirect_url']);
-}
 function is_open_page($path){
   return $path == '/about'       ||
          $path == '/help';
@@ -114,9 +118,6 @@ function is_open_page($path){
 function is_login_endpoint($path){
   return $path == '/api/login'   ||
          $path == '/api/logout';
-}
-function is_root_dir($path){
-  return $path == '/';
 }
 function is_admin_page($path){
   return $path == '/new_course'   ||

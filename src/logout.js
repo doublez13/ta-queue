@@ -1,6 +1,4 @@
 function logout(){
-  var $get_req = $.post("../api/logout");
-  $get_req.done( function(data) {
-    window.location = '/';
-  });
+  window.location = '/api/logout';
+  //TODO: redirect back to login page when using LDAP
 }
