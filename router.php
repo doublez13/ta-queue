@@ -65,7 +65,7 @@ else{
   if(is_open_page($path)){
     require_once $source;
   }
-  if(!is_authenticated()){
+  elseif(!is_authenticated()){
     if(AUTH == 'CAS'){
       require_once $phpcas_path . '/CAS.php';
 
@@ -83,8 +83,7 @@ else{
       header('Location: /');
     }elseif(AUTH == 'LDAP'){
       require_once './view/index.php';
-    }
-    else{
+    }else{
       echo "Invalid server auth config: Must be CAS or LDAP";
     }
   }
