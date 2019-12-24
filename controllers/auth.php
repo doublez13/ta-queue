@@ -13,15 +13,7 @@ $endpoint = $path_split[2];
 
 switch( $endpoint ){
   case "login":
-    //Wipe any existing session, but back up and restore
-    //redirect_url if it exists
-    if(isset($_SESSION["redirect_url"])){
-      $redirect_url = $_SESSION["redirect_url"];
-    }
     $_SESSION = array();
-    if(isset($redirect_url)){
-      $_SESSION["redirect_url"] = $redirect_url;
-    }
 
     if ($_SERVER['REQUEST_METHOD'] !== "POST"){
       http_response_code(405);
