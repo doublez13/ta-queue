@@ -10,9 +10,10 @@ define("SQL_USER",    "");
 define("SQL_PASSWD",  "");
 define("DATABASE",    "");
 
+define("HELP_EMAIL",  "");
+
 //Auth must be LDAP or CAS
 define("AUTH", "");
-
 if(AUTH == "CAS"){
   $phpcas_path = '';
   $cas_host = '';

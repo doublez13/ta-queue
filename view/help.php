@@ -33,7 +33,7 @@
 
       <h1 class="padding-top-20" style="color: #cc0000">Access Control</h1>
       <p style="font-size: 17px">
-        TA privileges are granted via the course settings page. To be able to modify the settings for a course, a user must be a member of the Admin group. Admin access may be granted by sending an email to opers@eng.utah.edu.
+      TA privileges are granted via the course settings page. To be able to modify the settings for a course, a user must be a member of the Admin group. Admin access may be granted by sending an email to <?php echo HELP_EMAIL; ?>.
       </p>
 
       <h1 class="padding-top-20" style="color: #cc0000">User Roles</h1>
