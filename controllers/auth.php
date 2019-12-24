@@ -13,6 +13,16 @@ $endpoint = $path_split[2];
 
 switch( $endpoint ){
   case "login":
+    if(AUTH == 'CAS'){
+      http_response_code(403);
+      $return = array(
+        "authenticated" => False,
+        "error" => "Login endpoint disabled due to CAS authentication"
+      );
+      echo json_encode($return);
+      die();
+    }
+
     $_SESSION = array();
 
     if ($_SERVER['REQUEST_METHOD'] !== "POST"){
