@@ -1,6 +1,5 @@
 var new_course;
 var url_course_id;
-var done_msg
 $(document).ready(function(){
   //GET parsing snippet from CHRIS COYIER
   var query = window.location.search.substring(1);
@@ -21,7 +20,6 @@ $(document).ready(function(){
     document.getElementById("edit_instr_button").style.display = "none";
     document.getElementById("edit_ta_button").style.display = "none";
     document.getElementById("edit_stud_button").style.display = "none";
-    done_msg = "Course successfully created";
     $("#generic").click(function( event ) {
       document.getElementById('course_num').value = "";
       document.getElementById("course_num").disabled = document.getElementById('generic').checked;
@@ -35,7 +33,6 @@ $(document).ready(function(){
     get_course(url_course_id);
 
     $("#delete_course_button").click( delete_course );
-    done_msg = "Course successfully modified";
     $("#edit_ta_button").click(function( event ) {
       event.preventDefault();
       window.location = "group_mod?type=ta&course_id="+url_course_id;
@@ -67,7 +64,6 @@ create_course = function( event ) {
                              } );
 
   posting.done(function(data){
-    alert(done_msg);
     if(new_course){
       var new_course_id = course_name_to_id($form.find( "input[id='course_name']" ).val());
       window.location = "./edit_course?course_id="+new_course_id;
