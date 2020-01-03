@@ -10,7 +10,7 @@ info:
     name: "GPL 3"
     url: "https://www.gnu.org/licenses/gpl-3.0.en.html"
 
-host: "ta-queue.eng.utah.edu"
+host: "ta-queue.utah.edu"
 basePath: "/api"
 schemes:
 - "https"
