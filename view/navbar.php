@@ -15,6 +15,7 @@
 
       <!-- Collect the nav links, forms, and other content for toggling -->
       <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
         <ul class="nav navbar-nav navbar-left">
           <li><a href="./about">About</a></li>
           <li><a href="./help" target="_blank">Help</a></li>
@@ -22,13 +23,11 @@
         </ul>
 
         <ul class="nav navbar-nav navbar-right">
-        <?php require_once('./model/auth.php'); 
-        if( isset($_SESSION["username"]) ){ 
+        <?php require_once('./model/auth.php');
+        if( isset($_SESSION["username"]) ){
           if( is_admin($_SESSION["username"]) ){ ?>
-            <li class="nav-item dropdown" id="admin_menu">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                Admin
-              </a>
+            <li class="dropdown" id="admin_menu">
+              <a class="dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Admin</a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                 <li><a href="new_course">Create Course</a></li>
                 <li><a href="group_mod?type=admin">Admins</a></li>
@@ -40,8 +39,8 @@
         <?php }else{ ?>
           <li><a href="/">Home</a></li>
         <?php } ?>
-  
         </ul>
+
       </div><!-- /.navbar-collapse -->
     </div><!-- /.container-fluid -->
   </nav>  
