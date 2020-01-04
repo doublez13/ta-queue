@@ -35,16 +35,10 @@
               <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 Admin
               </a>
-              <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <ul>
-                  <li>
-                    <a class="dropdown-item" href="new_course">Create Course</a>
-                  </li>
-                  <li>
-                    <a class="dropdown-item" href="group_mod?type=admin">Admins</a>
-                  </li>
-                </ul>
-              </div>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a href="new_course">Create Course</a></li>
+                <li><a href="group_mod?type=admin">Admins</a></li>
+              </ul>
             </li>
           <?php } ?>
           <li>
