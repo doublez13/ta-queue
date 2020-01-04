@@ -48,6 +48,7 @@ function admin_modify() {
     pageSize: 15,
     autoload: true,
     inserting: true,
+    selecting: false,
 
     deleteConfirm: "Are you sure you want to remove this user from the admin group?",
 
@@ -119,6 +120,7 @@ function instructor_modify(course_id) {
     pageSize: 15,
     autoload: true,
     inserting: true,
+    selecting: false,
 
     deleteConfirm: "Are you sure you want to remove this user as an instructor?",
 
@@ -185,6 +187,7 @@ function ta_modify(course_id) {
     pageSize: 15,
     autoload: true,
     inserting: true,
+    selecting: false,
 
     deleteConfirm: "Are you sure you want to remove this user as a TA?",
 
@@ -251,6 +254,7 @@ function student_modify(course_id) {
     pageSize: 15,
     autoload: true,
     inserting: true,
+    selecting: false,
 
     deleteConfirm: "Are you sure you want to remove this user as a student?",
 
