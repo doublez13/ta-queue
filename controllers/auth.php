@@ -79,7 +79,7 @@ switch( $endpoint ){
       require_once $phpcas_path . '/CAS.php';
       phpCAS::client(CAS_VERSION_3_0, $cas_host, $cas_port, $cas_context);
       if(phpCAS::isAuthenticated()){
-        phpCAS::logout();
+        phpCAS::logoutWithRedirectService("https://".SRV_HOSTNAME);
       }
     }
 

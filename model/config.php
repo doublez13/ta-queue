@@ -1,4 +1,6 @@
 <?php
+define("SRV_HOSTNAME", "");
+
 define("LDAP_SERVERS",[]);
 define("LDAP_DOMAIN", "");
 define("BIND_USER",   "");
