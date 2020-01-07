@@ -54,7 +54,7 @@ function get_queue(course_id) {
     if(dataParsed["generic"]){
       location_heading = "Course";
       document.getElementById('location_label').innerHTML = "Course";
-      document.getElementById('location').placeholder = "ME1000";
+      document.getElementById('location').placeholder = "ME EN 2010";
     }
 
     //NOTE: They can be an admin and a TA
