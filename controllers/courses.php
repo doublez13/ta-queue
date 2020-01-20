@@ -69,7 +69,7 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       $text  = $res;
     }
     break;
-  case "PUT":  //Edit a course
+  case "PATCH":  //Edit a course
     if (!$is_admin){
       http_response_code(403);
       echo json_encode( forbidden() );
@@ -77,11 +77,39 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     if (!isset($path_split[3])){
       http_response_code(422);
-      echo json_encode( json_err("Missing course_name") );
+      echo json_encode( json_err("Missing course_id") );
       die();
     }
-    $_POST['course_name'] = $path_split[3];
-    //Fall through
+    $course_id = $path_split[3];
+
+    #Looks like this is a semi-common way of accessing form data, maybe there's a better method than this.
+    parse_str(file_get_contents('php://input'), $_PATCH);
+
+    $parameters = [];
+    if (isset($_PATCH['depart_pref'])){
+      $parameters['depart_pref'] = trim(filter_var($_PATCH['depart_pref'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
+    }
+    if (isset($_PATCH['course_num'])){
+      #TODO: Don't allow updating this field if generic course. Currently enforced by the view, but not ideal.
+      $parameters['course_num'] = filter_var($_PATCH['course_num'],  FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    }
+    if (isset($_PATCH['course_name'])){
+      $parameters['course_name'] = trim(filter_var($_PATCH['course_name'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH));
+    }
+    if (isset($_PATCH['description'])){
+      $parameters['description'] = filter_var($_PATCH['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+    }
+    if (isset($_PATCH['access_code'])){
+      $parameters['access_code'] = $_PATCH['access_code'];
+    }
+    if (isset($_PATCH['enabled'])){
+      $parameters['enabled'] = filter_var($_PATCH['enabled'], FILTER_VALIDATE_BOOLEAN);
+    }
+
+    $res   = edit_course($course_id, $parameters);
+    $field = "success";
+    $text  = "Course updated";
+    break;
   case "POST": //Create a course
     if (!$is_admin){
       http_response_code(403);
@@ -120,10 +148,9 @@ switch( $_SERVER['REQUEST_METHOD'] ){
       $acc_code = $_POST['access_code'];
     }
 
-    //new_course is used both for creating and modifying courses
-    $res   = new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled, $generic);
+    $res   = add_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled, $generic);
     $field = "success";
-    $text  = "Course created/updated"; 
+    $text  = "Course created";
     break;
   case "DELETE": //Delete a course
     if (!$is_admin){

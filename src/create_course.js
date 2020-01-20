@@ -24,6 +24,7 @@ $(document).ready(function(){
       document.getElementById('course_num').value = "";
       document.getElementById("course_num").disabled = document.getElementById('generic').checked;
     });
+    $("#create_course").submit( create_course );
   }else{                             //Edit exsisting course
     new_course = false;
     document.getElementById("page_title").innerHTML  = "Edit Course";
@@ -45,8 +46,8 @@ $(document).ready(function(){
       event.preventDefault();
       window.location = "group_mod?type=instructor&course_id="+url_course_id;
     });
+    $("#create_course").submit( update_course );
   }
-  $("#create_course").submit( create_course );
 });
 
 create_course = function( event ) {
@@ -72,6 +73,32 @@ create_course = function( event ) {
     }
   });
   posting.fail(function(data){
+    var dataString = JSON.stringify(data.responseJSON);
+    var dataParsed = JSON.parse(dataString);
+    alert(dataParsed["error"]);
+  });
+}
+
+update_course = function( event ){
+  event.preventDefault();
+  
+  //TODO: only send fields that have changed
+  var $form = $(this);
+  var update = $.ajax({
+                 method: "PATCH",
+                 url: "../api/courses/"+url_course_id,
+                 data: {course_name: $form.find( "input[id='course_name']" ).val(),
+                        depart_pref: $form.find( "input[id='depart_pref']" ).val(),
+                        course_num:  $form.find( "input[id='course_num']" ).val(),
+                        access_code: $form.find( "input[id='access_code']" ).val(),
+                        enabled:     document.getElementById('enabled').checked,
+                        description: $('#description').val()
+                 }
+               });
+  update.done(function(data){
+    window.location = "./courses";
+  });
+  update.fail(function(data){
     var dataString = JSON.stringify(data.responseJSON);
     var dataParsed = JSON.parse(dataString);
     alert(dataParsed["error"]);
@@ -113,11 +140,10 @@ function get_course(course_id){
         }
       }
     });
-    //Disable the fields that we don't allow editing
-    document.getElementById("course_name").disabled  = true;
-    document.getElementById("depart_pref").disabled  = true;
-    document.getElementById("course_num").disabled  = true;
+    //Currently we don't allow toggling "generic"
     document.getElementById("generic").disabled  = true;
+    //We don't allow setting a course_num if the course is generic
+    document.getElementById("course_num").disabled = document.getElementById('generic').checked;
   }).fail(function(data){window.location = "./courses"}); //Silent redirect to course page on error or access denied
 }
 

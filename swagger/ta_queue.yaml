@@ -1283,7 +1283,7 @@ paths:
           schema:
             $ref: '#/definitions/error'
 
-    put:
+    patch:
       summary: "Edit an existing course"
       description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n"
       tags:
@@ -1302,26 +1302,32 @@ paths:
         in: "formData"
         description: "department prefix (e.g. \"CS\" or \"ME\")"
         type: "string"
-        required: true
+        required: false
       - name: "course_num"
         in: "formData"
         description: "course number (e.g. \"5555\")"
         type: "string"
-        required: true
+        required: false
       - name: "professor"
         in: "formData"
         description: "username of professor"
         type: "string"
-        required: true
+        required: false
       - name: "description"
         in: "formData"
         description: "description of the course"
         type: "string"
-        required: true
+        required: false
       - name: "acc_code"
         in: "formData"
         description: "access code to enroll (optional; 16 character max)"
         type: "string"
+        required: false
+      - name: "enabled"
+        in: "formData"
+        description: "is course enabled or not"
+        type: "boolean"
+        required: false
       responses:
         200:
           description: "Success"

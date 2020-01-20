@@ -36,24 +36,21 @@ function get_all_courses(){
  * @param string $acc_code, null if none
  * @return int 0  on success
  *             -1 generic error
- *             -8 user does not exist
  */
-function new_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled, $generic){
+function add_course($course_name, $depart_pref, $course_num, $description, $acc_code, $enabled, $generic){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return -1;
   }
 
   $query = "INSERT INTO courses (depart_pref, course_num, course_name, description, access_code, enabled, generic)
-            VALUES (?, ?, ?, ?, ?, ?, ?)
-            ON DUPLICATE KEY UPDATE description=?, access_code=?, enabled=?";
+            VALUES (?, ?, ?, ?, ?, ?, ?)";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return -1;
   }
-  #NOTE: We only update description, access_code, and enabled. All other fields are locked after creation
-  mysqli_stmt_bind_param($stmt, "sssssiissi", $depart_pref, $course_num, $course_name, $description, $acc_code, $enabled, $generic, $description, $acc_code, $enabled);
+  mysqli_stmt_bind_param($stmt, "sssssii", $depart_pref, $course_num, $course_name, $description, $acc_code, $enabled, $generic);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -61,6 +58,72 @@ function new_course($course_name, $depart_pref, $course_num, $description, $acc_
   }
 
   mysqli_stmt_close($stmt);
+  mysqli_close($sql_conn);
+  return 0;
+}
+
+/**
+ * Edits a course in the database
+ *
+ * @param int    $course_id
+ * @param array  $parameters
+ * @return int 0  on success
+ *             -1 generic error
+ */
+function edit_course($course_id, $parameters){
+  $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
+  if(!$sql_conn){
+    return -1;
+  }
+
+  #####SQL TRANSACTION#####
+  mysqli_autocommit($sql_conn, false);
+  foreach($parameters as $key => $value){
+    $key_type = 's'; #The bind param type
+    switch($key){
+      case "depart_pref":
+        $query = "UPDATE courses SET depart_pref=? WHERE course_id=?";
+        break;
+      case "course_num":
+        $query = "UPDATE courses SET course_num=? WHERE course_id=?";
+        break;
+      case "course_name":
+        $query = "UPDATE courses SET course_name=? WHERE course_id=?";
+        break;
+      case "description":
+        $query = "UPDATE courses SET description=? WHERE course_id=?";
+        break;
+      case "access_code":
+        $query = "UPDATE courses SET access_code=? WHERE course_id=?";
+        break;
+      case "enabled":
+        $key_type = 'i';
+        $query = "UPDATE courses SET enabled=? WHERE course_id=?";
+        break;
+      default:
+        mysqli_rollback($sql_conn);
+        mysqli_close($sql_conn);
+        return -1; #TODO: Better error code
+    }
+
+    $stmt = mysqli_prepare($sql_conn, $query);
+    if(!$stmt){
+      mysqli_rollback($sql_conn);
+      mysqli_close($sql_conn);
+      return -1;
+    }
+    mysqli_stmt_bind_param($stmt, $key_type."i", $value, $course_id);
+    if(!mysqli_stmt_execute($stmt)){
+      mysqli_rollback($sql_conn);
+      mysqli_stmt_close($stmt);
+      mysqli_close($sql_conn);
+      return -1;
+    }
+    mysqli_stmt_close($stmt);
+  }
+  mysqli_commit($sql_conn);
+  #########################
+
   mysqli_close($sql_conn);
   return 0;
 }
