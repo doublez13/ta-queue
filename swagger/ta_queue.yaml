@@ -1176,7 +1176,7 @@ paths:
             $ref: '#/definitions/error'
     post:
       summary: "Create a new course"
-      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n"
+      description: "Create a new course with the specified info."
       tags:
         - "Courses"
       consumes:
@@ -1199,11 +1199,6 @@ paths:
         description: "course number (e.g. \"5555\")"
         type: "string"
         required: true
-      - name: "professor"
-        in: "formData"
-        description: "username of professor"
-        type: "string"
-        required: true
       - name: "description"
         in: "formData"
         description: "description of the course"
@@ -1213,6 +1208,16 @@ paths:
         in: "formData"
         description: "access code to enroll (optional; 16 character max)"
         type: "string"
+      - name: "enabled"
+        in: "formData"
+        description: "is course enabled"
+        type: "boolean"
+        required: true
+      - name: "generic"
+        in: "formData"
+        description: "is course generic"
+        type: "boolean"
+        required: true
       responses:
         200:
           description: "Success"
@@ -1285,7 +1290,7 @@ paths:
 
     patch:
       summary: "Edit an existing course"
-      description: "Create a new course with the specified info.\n**Requirements:**\n- *professor* must be an actual username\n"
+      description: "Edit an existing course. Only fields needing updates need to be sent."
       tags:
         - "Courses"
       consumes:
@@ -1306,11 +1311,6 @@ paths:
       - name: "course_num"
         in: "formData"
         description: "course number (e.g. \"5555\")"
-        type: "string"
-        required: false
-      - name: "professor"
-        in: "formData"
-        description: "username of professor"
         type: "string"
         required: false
       - name: "description"
