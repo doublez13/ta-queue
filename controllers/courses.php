@@ -98,9 +98,15 @@ switch( $_SERVER['REQUEST_METHOD'] ){
     }
     if (isset($_PATCH['description'])){
       $parameters['description'] = filter_var($_PATCH['description'], FILTER_SANITIZE_STRING, FILTER_FLAG_STRIP_HIGH);
+      if(empty($_PATCH['description'])){
+        $parameters['description'] = null;
+      }
     }
     if (isset($_PATCH['access_code'])){
       $parameters['access_code'] = $_PATCH['access_code'];
+      if(empty($_PATCH['access_code'])){
+        $parameters['access_code'] = null;
+      }
     }
     if (isset($_PATCH['enabled'])){
       $parameters['enabled'] = filter_var($_PATCH['enabled'], FILTER_VALIDATE_BOOLEAN);
