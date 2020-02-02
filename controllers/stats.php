@@ -28,7 +28,7 @@ switch($endpoint){
     switch($_SERVER['REQUEST_METHOD']){
       case "GET":
         $student = strtolower($path_split[4]); //username of student converted to lower case
-        if(!in_array($course_id, get_user_courses2($username)['ta']) && $student != $username){ //Not a TA
+        if(get_user_role($username, $course_id)  != "ta" && $student != $username){ //Not a TA
           http_response_code(403);
           echo json_encode( forbidden() );
           die();

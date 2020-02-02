@@ -20,15 +20,18 @@ if(isset($path_split[4])){
   $endpoint = $path_split[4];
 }
 
-$user_courses = get_user_courses2($username);
-if(is_null($user_courses)){
+$role = get_user_role($username, $course_id);
+if(is_null($role)){
   http_response_code(500);
   echo json_encode(json_err("Internal Server Error"));
   die();
 }
-$is_instr = in_array($course_id, $user_courses['instructor']);
-$is_ta    = in_array($course_id, $user_courses['ta']);
-$is_stud  = in_array($course_id, $user_courses['student']);
+$is_instr = $role == "instructor";
+$is_ta    = $role == "ta";
+$is_stud  = $role == "student";
+if($role == "none" && is_admin($username)){
+  $role = "admin";
+}
 
 switch( $endpoint ){
   case "announcements":
@@ -74,18 +77,7 @@ switch( $endpoint ){
   case "queue":
     switch( $_SERVER['REQUEST_METHOD'] ){
       case "GET":
-        //For now, these return the same information.
-        //Later, we may want the TAs to see more,
-        //or the students to see less.
-        if($is_instr){                       //Instructor
-          $role = "instructor";
-        }elseif($is_ta){                     //TA
-          $role = "ta";
-        }elseif($is_stud){                   //Student
-          $role = "student";
-        }elseif(is_admin($username)){        //Admin
-          $role = "admin";
-        }else{                               //Not in course
+        if($role == "none"){
           http_response_code(403);
           echo json_encode( forbidden() );
           die();

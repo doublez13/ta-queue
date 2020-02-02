@@ -388,7 +388,7 @@ function get_course_acc_code($course_id, $sql_conn){
 }
 
 /**
- * Get courses where the user has role
+ * Get courses where the user has a role
  *
  * @param string $username
  * @return array of courses the user is a member of with that role
@@ -431,44 +431,38 @@ function get_user_courses($username){
 }
 
 /**
- * Get courses the user is enrolled in
+ * Get the role of the user in the course
  *
  * @param string $username
- * @return array of courses the user is a member of with that role
+ * @param int    $course_id
+ * @return string The user's role in the course {student, ta, instructor, none}
  *         null on error
  */
-function get_user_courses2($username){
+function get_user_role($username, $course_id){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return NULL;
   }
 
-  $query = "SELECT course_id, role FROM courses NATURAL JOIN enrolled WHERE username=? AND enabled=true";
+  $query = "SELECT role FROM courses NATURAL JOIN enrolled WHERE username=? AND course_id=? AND enabled=true";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return NULL;
   }
-  mysqli_stmt_bind_param($stmt, "s", $username);
+  mysqli_stmt_bind_param($stmt, "si", $username, $course_id);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
     return NULL;
   }
-  mysqli_stmt_bind_result($stmt, $course_id, $role);
-
-  #TODO: Return course_name as well
-  $courses               = array();
-  $courses['instructor'] = array();
-  $courses['student']    = array();
-  $courses['ta']         = array();
-  while(mysqli_stmt_fetch($stmt)){
-    $courses[$role][] = $course_id;
-  }
+  $role = "none";
+  mysqli_stmt_bind_result($stmt, $role);
+  mysqli_stmt_fetch($stmt);
 
   mysqli_stmt_close($stmt);
   mysqli_close($sql_conn);
-  return $courses;
+  return $role;
 }
 
 /**
