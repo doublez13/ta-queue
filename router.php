@@ -64,8 +64,9 @@ else{
   //Open access pages
   if(is_open_page($path)){
     require_once $source;
+    die();
   }
-  elseif(!is_authenticated()){
+  if(!is_authenticated()){
     if(AUTH == 'CAS'){
       require_once $phpcas_path . '/CAS.php';
 
@@ -80,16 +81,17 @@ else{
       }
 
       $_SESSION["username"] = $username;
-      header('Location: /');
     }elseif(AUTH == 'LDAP'){
       require_once './view/index.php';
+      die();
     }else{
       echo "Invalid server auth config: Must be CAS or LDAP";
+      die();
     }
   }
-  //Authentication required beyond this point
-  //Admin Page
-  elseif(is_admin_page($path)){
+  //Authenticated beyond this point
+  //Admin Pages
+  if(is_admin_page($path)){
     $username  = $_SESSION['username'];
     if(is_admin($username)){
       require_once $source;
