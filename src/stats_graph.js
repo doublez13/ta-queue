@@ -74,6 +74,10 @@ function get_course_stats(course_id) {
     var new_arr = dataParsed.map((element) => {
       return [Date.parse(element.date), element.students_helped, element.helped_by]
     });
+    if(new_arr.length < 5){
+       not_enough_stats();
+       return;
+    }
     stud_helped_per_day_column_chart(new_arr);
   });
 };
@@ -110,6 +114,10 @@ function get_ta_stats(course_id) {
     var new_arr = dataParsed.map((element) => {
       return [element.students_helped, element.helped_by]
     });
+    if(new_arr.length < 5){
+       not_enough_stats();
+       return;
+    }
     ta_proportions_pie_chart(new_arr);
   });
 };
@@ -146,6 +154,10 @@ function get_ta_avg_help_time(course_id){
     var new_arr = dataParsed.map((element) => {
       return [element.TA, element.avg_help_time]
     });
+    if(new_arr.length < 5){
+       not_enough_stats();
+       return;
+    }
     ta_avg_help_time_column_chart(new_arr);
   });
 }
@@ -273,3 +285,10 @@ function ta_avg_help_time_column_chart(course_data) {
       colorByPoint: true}]
   });
 };
+
+function not_enough_stats(){
+  $('#container').html("");
+  var img = document.createElement("img");
+  img.src = "./resources/img/no_stats.jpg";
+  $('#container').append(img);
+}
