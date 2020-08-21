@@ -290,5 +290,7 @@ function not_enough_stats(){
   $('#container').html("");
   var img = document.createElement("img");
   img.src = "./resources/img/no_stats.jpg";
+  img.className += "img-responsive";
+  img.className += " center-block";
   $('#container').append(img);
 }
