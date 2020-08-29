@@ -448,6 +448,11 @@ function render_queue_table(dataParsed){
       question = queue[row].question;
     }
 
+    if("email" in queue[row]){ //TAs can see the user's email address
+      email = queue[row].email;
+      full_name += "<br> <a href='mailto:"+email+"'>"+email+"</a>";
+    }
+
     var new_row = $("<tr>" +
                       "<td class='col-sm-1' align='left'>" + i + "</td>" +
                       "<td class='col-sm-2' align='left' style='word-wrap:break-word'>" + full_name + "</td>" +

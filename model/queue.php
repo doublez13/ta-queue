@@ -90,7 +90,7 @@ function get_queue($course_id, $role){
   #Get the actual queue
   $return["queue"] = [];
   $quest_public = "";
-  if($return["quest_public"] || $role == "ta" || $role == "admin"){
+  if($return["quest_public"] || $role == "ta" || $role == "instructor" || $role == "admin"){
     $quest_public = "queue.question,";
   }
   $query  = "SELECT queue.position, queue.username, users.full_name, ".$quest_public." queue.location
@@ -103,6 +103,9 @@ function get_queue($course_id, $role){
   }
   while($entry = mysqli_fetch_assoc($result)){
     $student = $entry['username'];
+    if($role =='ta' || $role == "instructor" || $role == 'admin'){ #TODO: Placeholder for now until we start storing this in the DB
+      $entry['email'] = $student.'@utah.edu';
+    }
     $return["queue"][$student] = $entry;
   }
   $return["queue_length"] = count($return["queue"]);
