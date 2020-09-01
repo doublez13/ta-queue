@@ -44,7 +44,7 @@ function get_info($username){
   }
 
   #Touches the user entry in the sql table
-  if(touch_user($info['username'], $info['first_name'], $info['last_name'], $info['full_name'])){
+  if(touch_user($info['username'], $info['first_name'], $info['last_name'], $info['full_name'], $info['email'])){
     return NULL;
   }
   return $info;
@@ -249,24 +249,25 @@ function srch_by_sam($sam){
  * @param string $first
  * @param string $last
  * @param string $full
+ * @param string $email
  * @return int 0 on success
  *         int 1 on fail
  */
-function touch_user($username, $first, $last, $full){
+function touch_user($username, $first, $last, $full, $email){
   $sql_conn = mysqli_connect(SQL_SERVER, SQL_USER, SQL_PASSWD, DATABASE);
   if(!$sql_conn){
     return 1;
   }
 
-  $query = "INSERT INTO users (username, first_name, last_name, full_name, last_login)
-            VALUES (?, ?, ?, ?, NOW())
+  $query = "INSERT INTO users (username, first_name, last_name, full_name, email, last_login)
+            VALUES (?, ?, ?, ?, ?, NOW())
             ON DUPLICATE KEY UPDATE last_login=NOW()";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
     return 1;
   }
-  mysqli_stmt_bind_param($stmt, 'ssss', $username, $first, $last, $full);
+  mysqli_stmt_bind_param($stmt, 'sssss', $username, $first, $last, $full, $email);
   if(!mysqli_stmt_execute($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -327,7 +328,7 @@ function get_info_sql($username){
     return NULL;
   }
 
-  $query = "SELECT username, first_name, last_name, full_name, admin FROM users WHERE username=?";
+  $query = "SELECT username, first_name, last_name, full_name, admin, email FROM users WHERE username=?";
   $stmt  = mysqli_prepare($sql_conn, $query);
   if(!$stmt){
     mysqli_close($sql_conn);
@@ -340,7 +341,7 @@ function get_info_sql($username){
     return NULL;
   }
 
-  mysqli_stmt_bind_result($stmt, $username, $first_name, $last_name, $full_name, $admin);
+  mysqli_stmt_bind_result($stmt, $username, $first_name, $last_name, $full_name, $admin, $email);
   if(!mysqli_stmt_fetch($stmt)){
     mysqli_stmt_close($stmt);
     mysqli_close($sql_conn);
@@ -355,7 +356,8 @@ function get_info_sql($username){
     'first_name' => $first_name,
     'last_name'  => $last_name,
     'full_name'  => $full_name,
-    'is_admin'   => $admin
+    'is_admin'   => $admin,
+    'email'      => $email
   );
 }
 
@@ -372,11 +374,12 @@ function get_info_ldap($username){
     return NULL;
   }
 
-  if(!(array_key_exists('givenname', $result) && array_key_exists('sn', $result))){
+  if(!(array_key_exists('givenname', $result) && array_key_exists('sn', $result) && array_key_exists('mail', $result))){
     return NULL;
   }
   $first_name = $result['givenname'][0];
   $last_name  = $result['sn'][0];
+  $email      = $result['mail'][0];
 
   $first_name = ucwords(strtolower($first_name));
   $last_name  = ucwords(strtolower($last_name));
@@ -385,7 +388,8 @@ function get_info_ldap($username){
     'username'   => $username,
     'first_name' => $first_name,
     'last_name'  => $last_name,
-    'full_name'  => $first_name.' '.$last_name
+    'full_name'  => $first_name.' '.$last_name,
+    'email'      => $email
   );
 }
 ?>
