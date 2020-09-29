@@ -449,7 +449,7 @@ function render_queue_table(dataParsed){
     }
 
     if("email" in queue[row]){ //TAs can see the user's email address
-      email = queue[row].email;
+      var email = queue[row].email;
       full_name += "<br> <a href='mailto:"+email+"'>"+email+"</a>";
     }
 
