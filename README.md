@@ -31,6 +31,7 @@ MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaD
 PHP    >= 7.0 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
 
 ### Configuration file (config.php)
+SRV_HOSTNAME: Name of the server running the queue. Used for CAS logout redirect.  
 LDAP_SERVERS: Array of FQDNs or IP addresses of the LDAP servers.  
 LDAP_DOMAIN: Active Directory domain FQDN.  
 BIND_USER:   User to bind to LDAP with. Simple username, not DN format.  
@@ -40,6 +41,8 @@ SQL_SERVER:  FQDN or IP address of the MySQL server.
 SQL_USER:    User to connect to MySQL with.  
 SQL_PASSWD:  Password for SQL_USER.  
 DATABASE:    Database for the queue.  
+HELP_EMAIL:  Email address for support.  
+AUTH:        CAS or LDAP (only used for auth, info still comes from LDAP).  
 
 ### MySQL Database Setup
 In the resources directory at the root of the project is the DB_setup.sql file that initializes the queue database. Simply set the database name at the top of the file to match what's set in the config.php file. In a mysql shell, the script can be ran using 'mysql> source path/to/DB_setup.sql'.
