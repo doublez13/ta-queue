@@ -62,7 +62,7 @@ The queue currently has four major roles: Student, Teaching Assistant, Instructo
 On the Courses page, students may enroll in any course. If desired, Administrators may require an access code in order to enroll in a course, or see any statistics. 
 #### Teaching Assistant
 Corresponding to each course is a TA group. If a user is in the group for that course, the user is then granted TA permissions for that course, and may not register as a student.
-### Instructor
+#### Instructor
 Each course also has an instructors group. This group currently inherits all permissions granted to TAs, but will have access to a wider variety of statistics.
 #### Administrator
 The queue also has an administrator group defined. If a user is in this group, the user is granted administrative permissions. In this case, the Admin dropdown menu appears which allows them to create courses.  
