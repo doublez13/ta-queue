@@ -53,9 +53,6 @@ The public API is documented according to the Swagger 2.0 specification. The doc
 #
 ## User Documentation
 
-### Account Creation
-The queue currently makes use of College of Engineering CADE accounts. Any student that has a CADE account can log into the queue using their CADE credentials, and their personal information will automatically be pulled from the servers. Students without a CADE account can create one here: https://webhandin.eng.utah.edu/cade/create_account/index.php
-
 ### Roles
 The queue currently has four major roles: Student, Teaching Assistant, Instructor, and Administrator. The first three groups are mutually exclusive, and enrolling in one will remove any previous enrollment in the others.
 #### Student
