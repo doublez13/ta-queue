@@ -6,7 +6,7 @@
 
 
 ## Technical Documentation and Setup
-This project is an attempt to write a TA queue with a better looking, more reliable, and feature rich system. Starting from scratch, we are building a new queue using standard web technologies. On the front end, the queue is making use of jQuery, CSS5, and Bootstrap. The backend is written entirely using the standard PHP libraries, storing all data in a MySQL database, and utilizing LDAP for authentication.
+This project is an attempt to write a TA queue with a better looking, more reliable, and feature rich system. Starting from scratch, we are building a new queue using standard web technologies. On the front end, the queue is making use of jQuery, CSS5, and Bootstrap. The backend is written entirely using the standard PHP libraries, storing all data in a MySQL database, and utilizing CAS or LDAP for authentication.
 
 ### Example Setup
 The queue is written to allow for a fairly flexible setup. At the most basic level, the queue is hosted on a standard web server like Apache or NGINX. Additionally, all the data is stored in a MySQL database. Finally, all user authentication and information is handled by an external Active Directory (LDAP) server.
@@ -18,7 +18,7 @@ The queue requires a web server for hosting. We have chosen to test against Apac
 All SQL code is written using the standard php-mysql library. As so, a MySQL server is needed for all the backend data. At this point in time (2018), MaraiDB is considered a drop in replacement for MySQL, and should work as well. On our testing setup, we host a MariaDB server on the same machine as the web server. However, the code is written so that these two servers are not coupled, and may reside on different machines. In this case, the corresponding SQL port(s) will need to be opened on the machine hosting the database. When the SQL server resides on the same machine as the web server, localhost may be entered for the SQL_SERVER global variable in the config.php file, and no corresponding firewall ports need to be opened for SQL.
 
 ### LDAP Server
-All authentication and user information is handled by Active Directory using the standard php-ldap library. Because of this, switching to a different Active Directory domain is as simple as modifying the config.php file. All authentication is done using LDAP by simply attempting to bind to the LDAP server with the given username and password. Additionally, all user information (currently first and last name) is pulled from LDAP and stored locally in SQL the first time a user logs in. When creating a course, all authorization is done via Active Directory usernames, and is checked for validity on submit. Because of the sensitive information going over the network, all LDAP traffic must use TLS. Lastly, it is important to note that user passwords are NEVER stored anywhere on the server. They are simply forwarded to Active Directory server.
+All authentication and user information is handled by Active Directory using the standard php-ldap library. Because of this, switching to a different Active Directory domain is as simple as modifying the config.php file. All user information is pulled from LDAP and stored locally in SQL the first time a user logs in. Because of the sensitive information going over the network, all LDAP traffic must use TLS. Optionally, authentication can be handled using LDAP by simply attempting to bind to the LDAP server with the given username and password. Lastly, it is important to note that user passwords are NEVER stored anywhere on the server. If LDAP authentication is enabled, the credentials are simply forwarded to Active Directory server.
 
 ### Network Ports on the Server
 Port 80:   HTTP redirect  
@@ -31,6 +31,7 @@ MySQL  >= 5.5 (Ealier versions most likely work, but haven't been tested. MariaD
 PHP    >= 7.0 (PHP 7.0.5 or later recommended for utilizing some features of php-ldap)
 
 ### Configuration file (config.php)
+SRV_HOSTNAME: Name of the server running the queue. Used for CAS logout redirect.  
 LDAP_SERVERS: Array of FQDNs or IP addresses of the LDAP servers.  
 LDAP_DOMAIN: Active Directory domain FQDN.  
 BIND_USER:   User to bind to LDAP with. Simple username, not DN format.  
@@ -40,6 +41,8 @@ SQL_SERVER:  FQDN or IP address of the MySQL server.
 SQL_USER:    User to connect to MySQL with.  
 SQL_PASSWD:  Password for SQL_USER.  
 DATABASE:    Database for the queue.  
+HELP_EMAIL:  Email address for support.  
+AUTH:        CAS or LDAP (only used for auth, info still comes from LDAP).  
 
 ### MySQL Database Setup
 In the resources directory at the root of the project is the DB_setup.sql file that initializes the queue database. Simply set the database name at the top of the file to match what's set in the config.php file. In a mysql shell, the script can be ran using 'mysql> source path/to/DB_setup.sql'.
@@ -50,16 +53,13 @@ The public API is documented according to the Swagger 2.0 specification. The doc
 #
 ## User Documentation
 
-### Account Creation
-The queue currently makes use of College of Engineering CADE accounts. Any student that has a CADE account can log into the queue using their CADE credentials, and their personal information will automatically be pulled from the servers. Students without a CADE account can create one here: https://webhandin.eng.utah.edu/cade/create_account/index.php
-
 ### Roles
 The queue currently has four major roles: Student, Teaching Assistant, Instructor, and Administrator. The first three groups are mutually exclusive, and enrolling in one will remove any previous enrollment in the others.
 #### Student
 On the Courses page, students may enroll in any course. If desired, Administrators may require an access code in order to enroll in a course, or see any statistics. 
 #### Teaching Assistant
 Corresponding to each course is a TA group. If a user is in the group for that course, the user is then granted TA permissions for that course, and may not register as a student.
-### Instructor
+#### Instructor
 Each course also has an instructors group. This group currently inherits all permissions granted to TAs, but will have access to a wider variety of statistics.
 #### Administrator
 The queue also has an administrator group defined. If a user is in this group, the user is granted administrative permissions. In this case, the Admin dropdown menu appears which allows them to create courses.  
