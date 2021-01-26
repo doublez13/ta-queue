@@ -380,15 +380,20 @@ function get_info_ldap($username){
   $first_name = $result['givenname'][0];
   $last_name  = $result['sn'][0];
   $email      = $result['mail'][0];
+  $full_name  = $first_name.' '.$last_name;
+  if(array_key_exists('displayname', $result)){
+    $full_name  = $result['displayname'][0];
+  }
 
   $first_name = ucwords(strtolower($first_name));
   $last_name  = ucwords(strtolower($last_name));
+  $full_name  = ucwords(strtolower($full_name));
 
   return array(
     'username'   => $username,
     'first_name' => $first_name,
     'last_name'  => $last_name,
-    'full_name'  => $first_name.' '.$last_name,
+    'full_name'  => $full_name,
     'email'      => $email
   );
 }
