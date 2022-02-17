@@ -114,7 +114,6 @@ else{
 //
 //This function DOES NOT force a CAS auth.
 function attempt_silent_cas_auth(){
-  error_log("SLOOOOOOOOOOOOOOOOOOOOOOOOOOWWWWWWWWWWWWWWWWWWWWW PATH");
   global $phpcas_path, $cas_host, $cas_context, $cas_port, $cas_server_ca_cert_path;
   require_once $phpcas_path . '/CAS.php';
 
