@@ -30,7 +30,7 @@ if( substr($path, 0, 5) === '/api/' ){
   }
 
   //Authentication required beyond this point
-  if(!is_authenticated()){
+  if(!is_authenticated() && !attempt_silent_cas_auth()){
     invalid_auth_reply();
     die();
   }
@@ -107,6 +107,32 @@ else{
   else{
     header('Location: /courses');
   }
+}
+
+//Check to see if the user is authenticated with CAS,
+//and authenticate locally on the queue if so.
+//
+//This function DOES NOT force a CAS auth.
+function attempt_silent_cas_auth(){
+  error_log("SLOOOOOOOOOOOOOOOOOOOOOOOOOOWWWWWWWWWWWWWWWWWWWWW PATH");
+  global $phpcas_path, $cas_host, $cas_context, $cas_port, $cas_server_ca_cert_path;
+  require_once $phpcas_path . '/CAS.php';
+
+  phpCAS::client(CAS_VERSION_3_0, $cas_host, $cas_port, $cas_context);
+  phpCAS::setCasServerCACert($cas_server_ca_cert_path);
+  $auth = phpCAS::checkAuthentication();
+
+  if($auth){
+    $username = strtolower(phpCAS::getUser());
+    if(is_null(get_info($username))){
+      echo "User authenticated but information could not be obtained";
+      die();
+    }
+
+    $_SESSION["username"] = $username;
+    return true;
+  }
+  return false;
 }
 
 function is_authenticated(){
