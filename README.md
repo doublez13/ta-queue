@@ -1,10 +1,5 @@
 # Teaching Queue
 
-[![Language grade: JavaScript](https://img.shields.io/lgtm/grade/javascript/g/doublez13/suzie-queue.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/doublez13/suzie-queue/context:javascript)
-
-[![Total alerts](https://img.shields.io/lgtm/alerts/g/doublez13/suzie-queue.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/doublez13/suzie-queue/alerts/)
-
-
 ## Technical Documentation and Setup
 This project is an attempt to write a TA queue with a better looking, more reliable, and feature rich system. Starting from scratch, we are building a new queue using standard web technologies. On the front end, the queue is making use of jQuery, CSS5, and Bootstrap. The backend is written entirely using the standard PHP libraries, storing all data in a MySQL database, and utilizing CAS or LDAP for authentication.
 
