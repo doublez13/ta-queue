@@ -482,16 +482,16 @@ function render_queue_table(dataParsed){
       // HELP BUTTON
       if(username in helping){ //Student is currently being helped
         if(my_username === helping[username]){ //The TA is currently helping a current student
-          var help_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
+          var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping"> <i class="fa fa-undo"></i>  </button></div>');
           help_button.click(function(event){
             release_ta(course_id);
           });
         }
         else{ //The student is currently being helped, but not by this TA, so don't let them end the other TA's help session
-          var help_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Stop Helping" disabled=true> <i class="fa fa-undo"></i>  </button></div>');
+          var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Stop Helping" disabled=true> <i class="fa fa-undo"></i>  </button></div>');
         }
       }else{ //Student is not being helped
-        var help_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
+        var help_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Help Student"><i class="glyphicon glyphicon-hand-left"></i></button></div>');
         help_button.click(function(event){//If a TA helps a user, but isn't on duty, put them on duty
           enqueue_ta(course_id); //TODO:Race condition 
           help_student(course_id, username);
@@ -499,32 +499,32 @@ function render_queue_table(dataParsed){
       }
 
       // MOVE UP BUTTON
-      var increase_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Move Up"> <i class="fa fa-arrow-up"></i>  </button></div>');
+      var increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up"> <i class="fa fa-arrow-up"></i>  </button></div>');
       if(i == 1){
-        increase_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Move Up" disabled=true> <i class="fa fa-arrow-up"></i>  </button></div>');
+        increase_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Up" disabled=true> <i class="fa fa-arrow-up"></i>  </button></div>');
       }
       increase_button.click(function(event){
         inc_priority(course_id, username); 
       });
 
       // MOVE DOWN BUTTON
-      var decrease_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
+      var decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down"> <i class="fa fa-arrow-down"></i>  </button></div>');
       if(i == dataParsed.queue_length){
-        decrease_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
+        decrease_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Move Down" disabled=true> <i class="fa fa-arrow-down"></i>  </button></div>');
       }
       decrease_button.click(function(event){
         dec_priority(course_id, username);
       });
 
       // REMOVE BUTTON
-      var dequeue_button = $('<div class="btn-group col" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
+      var dequeue_button = $('<div class="btn-group" role="group"><button class="btn btn-primary" title="Remove"> <i class="fa fa-close"></i>  </button></div>');
       dequeue_button.click(function(event) {
           dequeue_student(course_id, username);
       });
 
       // Create TA button group that spans entire td width and append it to the new row
       var td = $("<td class='col-sm-3'></td>");
-      var button_group = $("<div class='btn-group btn-group-justified container' role='group' aria-label='...'></div>");
+      var button_group = $("<div class='btn-group btn-group-justified' role='group' aria-label='...'></div>");
       button_group.append(help_button);
       button_group.append(increase_button);
       button_group.append(decrease_button);
